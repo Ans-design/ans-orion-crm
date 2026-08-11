@@ -155,20 +155,23 @@ try {
 
     run('npx prisma db push --accept-data-loss', { DATABASE_URL: demoDbUrl });
 
+    // Démo légère par défaut (build Vercel < timeout). Full seed : VERCEL_FULL_DEMO=true
+    const fullDemo = process.env.VERCEL_FULL_DEMO === 'true';
     run('npm run seed', { DATABASE_URL: demoDbUrl });
-
-    run('npm run seed:demo', { DATABASE_URL: demoDbUrl });
-
-    run('npx tsx --require dotenv/config scripts/seed-stock-runner.ts', { DATABASE_URL: demoDbUrl });
-
-    run('npx tsx --require dotenv/config scripts/seed-phase3-runner.ts', { DATABASE_URL: demoDbUrl });
-
-    run('npx tsx --require dotenv/config scripts/seed-phase4-runner.ts', { DATABASE_URL: demoDbUrl });
-    if (fs.existsSync(path.join(process.cwd(), 'data', 'ANS_ORION_FUSION_METIER_POS_STOCK_PRIX_COMPLET.xlsx'))) {
-      run('npx tsx --require dotenv/config scripts/import-fusion-excel.ts', {
-        DATABASE_URL: demoDbUrl,
-        FUSION_XLSX_PATH: path.join(process.cwd(), 'data', 'ANS_ORION_FUSION_METIER_POS_STOCK_PRIX_COMPLET.xlsx'),
-      });
+    if (fullDemo) {
+      console.log('VERCEL_FULL_DEMO=true — seeds étendus');
+      run('npm run seed:demo', { DATABASE_URL: demoDbUrl });
+      run('npx tsx --require dotenv/config scripts/seed-stock-runner.ts', { DATABASE_URL: demoDbUrl });
+      run('npx tsx --require dotenv/config scripts/seed-phase3-runner.ts', { DATABASE_URL: demoDbUrl });
+      run('npx tsx --require dotenv/config scripts/seed-phase4-runner.ts', { DATABASE_URL: demoDbUrl });
+      if (fs.existsSync(path.join(process.cwd(), 'data', 'ANS_ORION_FUSION_METIER_POS_STOCK_PRIX_COMPLET.xlsx'))) {
+        run('npx tsx --require dotenv/config scripts/import-fusion-excel.ts', {
+          DATABASE_URL: demoDbUrl,
+          FUSION_XLSX_PATH: path.join(process.cwd(), 'data', 'ANS_ORION_FUSION_METIER_POS_STOCK_PRIX_COMPLET.xlsx'),
+        });
+      }
+    } else {
+      console.log('Démo légère Vercel — seed de base uniquement (pas phase3/4/fusion).');
     }
 
     if (!fs.existsSync(demoDbPath)) {
