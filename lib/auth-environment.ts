@@ -73,11 +73,20 @@ export function isPublicSignupEnabled(): boolean {
   return true;
 }
 
-/** Comptes matricule Orion v29 — désactivés en prod ; exigent ORION_V29_PASSWORDS_JSON. */
+/** Comptes matricule Orion v29 — désactivés en prod Neon ; OK sur sandbox Vercel démo. */
 export function isV29MatriculeAuthEnabled(): boolean {
+  if (process.env.ALLOW_V29_AUTH === 'false') return false;
+  // Vercel sans Neon (test en ligne) : activer si JSON mots de passe présent
+  const vercelDemoSandbox =
+    Boolean(process.env.VERCEL) && process.env.USE_PRODUCTION_DB !== 'true';
+  if (vercelDemoSandbox) {
+    return (
+      process.env.ALLOW_V29_AUTH === 'true'
+      || Boolean(process.env.ORION_V29_PASSWORDS_JSON?.trim())
+    );
+  }
   if (isProductionDeploy()) return false;
   if (isPublicPreviewDeploy()) return false;
-  if (process.env.ALLOW_V29_AUTH === 'false') return false;
   if (process.env.ALLOW_V29_AUTH === 'true') return true;
   if (isDemoLoginFeaturesEnabled()) return true;
   return false;

@@ -166,12 +166,20 @@ try {
       DEMO_MODE: 'true',
       USE_PRODUCTION_DB: 'false',
       SEED_ADMIN_PASSWORD:
-        process.env.SEED_ADMIN_PASSWORD || 'orion-vercel-demo-admin-12chars',
+        process.env.SEED_ADMIN_PASSWORD || 'Demo2026!',
       SEED_DEMO_PASSWORD:
-        process.env.SEED_DEMO_PASSWORD || 'orion-vercel-demo-user-12chars',
+        process.env.SEED_DEMO_PASSWORD || 'Demo2026!',
       SEED_ADMIN_EMAIL: process.env.SEED_ADMIN_EMAIL || 'admin@ansdesign.mg',
       SEED_DEMO_EMAIL: process.env.SEED_DEMO_EMAIL || 'demo@ansdesign.mg',
+      // Comptes employés v29 (matricule + email) — fourni via env Vercel
+      ORION_V29_PASSWORDS_JSON: process.env.ORION_V29_PASSWORDS_JSON || '',
+      ALLOW_V29_AUTH: 'true',
     };
+    if (!seedEnv.ORION_V29_PASSWORDS_JSON) {
+      console.warn('ORION_V29_PASSWORDS_JSON absent — seuls admin/demo seront créés.');
+    } else {
+      console.log('ORION_V29_PASSWORDS_JSON détecté — seed de tous les comptes employés.');
+    }
     run('npm run seed', seedEnv);
     if (fullDemo) {
       console.log('VERCEL_FULL_DEMO=true — seeds étendus');
