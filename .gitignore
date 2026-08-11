@@ -79,3 +79,6 @@ build-log*.txt
 erreurs-typescript.txt
 recherche-pointage-rh.txt
 provision-exit.txt
+
+.vercel
+.env*
