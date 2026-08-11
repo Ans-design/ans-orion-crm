@@ -131,6 +131,8 @@ export function isRateLimitCriticalKey(key: string): boolean {
 /** Environnement où le store distribué est requis pour les clés critiques. */
 export function requiresDistributedRateLimitStore(): boolean {
   if (process.env.ALLOW_MEMORY_RATE_LIMIT === 'true') return false;
+  // Sandbox Vercel démo (SQLite) — pas d’Upstash : mémoire OK
+  if (process.env.VERCEL && process.env.USE_PRODUCTION_DB !== 'true') return false;
   if (process.env.RATE_LIMIT_REQUIRE_DISTRIBUTED === 'true') return true;
   if (process.env.VERCEL === '1') return true;
   if (process.env.VERCEL_ENV === 'production' || process.env.VERCEL_ENV === 'preview') return true;
