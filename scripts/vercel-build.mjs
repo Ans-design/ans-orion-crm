@@ -157,16 +157,31 @@ try {
 
     // Démo légère par défaut (build Vercel < timeout). Full seed : VERCEL_FULL_DEMO=true
     const fullDemo = process.env.VERCEL_FULL_DEMO === 'true';
-    run('npm run seed', { DATABASE_URL: demoDbUrl });
+    const seedEnv = {
+      DATABASE_URL: demoDbUrl,
+      // seed.ts refuse NODE_ENV=production — forcer contexte local pour la démo Vercel
+      NODE_ENV: 'development',
+      APP_ENV: 'local',
+      LOCAL_DEV: 'true',
+      DEMO_MODE: 'true',
+      USE_PRODUCTION_DB: 'false',
+      SEED_ADMIN_PASSWORD:
+        process.env.SEED_ADMIN_PASSWORD || 'orion-vercel-demo-admin-12chars',
+      SEED_DEMO_PASSWORD:
+        process.env.SEED_DEMO_PASSWORD || 'orion-vercel-demo-user-12chars',
+      SEED_ADMIN_EMAIL: process.env.SEED_ADMIN_EMAIL || 'admin@ansdesign.mg',
+      SEED_DEMO_EMAIL: process.env.SEED_DEMO_EMAIL || 'demo@ansdesign.mg',
+    };
+    run('npm run seed', seedEnv);
     if (fullDemo) {
       console.log('VERCEL_FULL_DEMO=true — seeds étendus');
-      run('npm run seed:demo', { DATABASE_URL: demoDbUrl });
-      run('npx tsx --require dotenv/config scripts/seed-stock-runner.ts', { DATABASE_URL: demoDbUrl });
-      run('npx tsx --require dotenv/config scripts/seed-phase3-runner.ts', { DATABASE_URL: demoDbUrl });
-      run('npx tsx --require dotenv/config scripts/seed-phase4-runner.ts', { DATABASE_URL: demoDbUrl });
+      run('npm run seed:demo', seedEnv);
+      run('npx tsx --require dotenv/config scripts/seed-stock-runner.ts', seedEnv);
+      run('npx tsx --require dotenv/config scripts/seed-phase3-runner.ts', seedEnv);
+      run('npx tsx --require dotenv/config scripts/seed-phase4-runner.ts', seedEnv);
       if (fs.existsSync(path.join(process.cwd(), 'data', 'ANS_ORION_FUSION_METIER_POS_STOCK_PRIX_COMPLET.xlsx'))) {
         run('npx tsx --require dotenv/config scripts/import-fusion-excel.ts', {
-          DATABASE_URL: demoDbUrl,
+          ...seedEnv,
           FUSION_XLSX_PATH: path.join(process.cwd(), 'data', 'ANS_ORION_FUSION_METIER_POS_STOCK_PRIX_COMPLET.xlsx'),
         });
       }
