@@ -31,9 +31,10 @@ orion.env
 prisma/dev.db*
 prisma/demo.db*
 prisma/prisma/
-auth
-auth-wal
-auth-shm
+# SQLite NextAuth local (racine uniquement — ne pas ignorer lib/auth ni components/auth)
+/auth
+/auth-wal
+/auth-shm
 
 # Tests / E2E artefacts
 playwright-report/
