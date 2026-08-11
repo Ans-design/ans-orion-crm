@@ -40,6 +40,7 @@ tsconfig.tsbuildinfo
 build-log*.txt
 npx
 ,
-auth
-auth-wal
-auth-shm
+# SQLite NextAuth local (racine uniquement)
+/auth
+/auth-wal
+/auth-shm
