@@ -1,0 +1,206 @@
+{
+  "_notice": "Fichier de configuration de la sidebar Administration — éditable sans code. Modifiez label, description, href directement. Ne pas changer les 'id' (utilisés en interne). Les sections avec hidden:true sont des alias internes, ne pas les afficher.",
+  "_usage": "Chaque section (macro) est un groupe visible dans la sidebar. Chaque item est un lien sous cette section. Pour ajouter un item : copiez un bloc existant, changez id/label/description/href.",
+
+  "macros": [
+    {
+      "id": "overview",
+      "label": "Vue d'ensemble",
+      "description": "Santé catalogue, priorités, écarts POS et supervision globale",
+      "items": [
+        {
+          "id": "vue-ensemble",
+          "label": "Vue d'ensemble",
+          "description": "Cockpit : état du catalogue, alertes prioritaires, écarts prix POS.",
+          "href": "/administration/vue-ensemble"
+        }
+      ]
+    },
+    {
+      "id": "matieres",
+      "label": "Matières",
+      "description": "Supports bruts",
+      "items": [
+        {
+          "id": "materials",
+          "label": "Matières",
+          "description": "Supports bruts de production",
+          "href": "/administration/catalogue-prix-stock?studio=matieres"
+        },
+        {
+          "id": "parametres-formats",
+          "label": "Formats papier & faces",
+          "description": "Formats et faces d'impression",
+          "href": "/administration/parametres-formats-papier"
+        },
+        {
+          "id": "equivalences-matieres",
+          "label": "Équivalences & papier épais",
+          "description": "Équivalences et grammages",
+          "href": "/administration/equivalences-matieres"
+        },
+        {
+          "id": "matieres-vierges",
+          "label": "Matières vierges",
+          "description": "Prix d'achat matières",
+          "href": "/administration/matieres-vierges"
+        }
+      ]
+    },
+    {
+      "id": "prix-articles",
+      "label": "Articles finis",
+      "description": "Produits POS",
+      "items": [
+        {
+          "id": "prix-articles",
+          "label": "Articles finis",
+          "description": "Catalogue produits complets → sync Commercial / POS",
+          "href": "/administration/prix-articles"
+        }
+      ]
+    },
+    {
+      "id": "formules",
+      "label": "Formules & moteurs",
+      "description": "Moteurs de calcul automatique des prix, paliers de remise et constructeur de formules",
+      "items": [
+        {
+          "id": "formulas",
+          "label": "Formules & moteurs",
+          "description": "Moteurs de tarification automatique — ISF, flyers, carterie, grand format. Paliers de remise par quantité. Constructeur de formules no-code.",
+          "href": "/administration/catalogue-prix-stock?studio=calculs&tab=engines"
+        },
+        {
+          "id": "apercus-pos",
+          "label": "Aperçus POS",
+          "description": "Assets preview par article — aperçu local aligné DB / moteurs (pas catalogue TS).",
+          "href": "/administration/apercus"
+        },
+        {
+          "id": "modeles-articles",
+          "label": "Modèles d'articles",
+          "description": "Templates articles réutilisables — structure, options et publication.",
+          "href": "/administration/modeles-articles"
+        },
+        {
+          "id": "goodies-admin",
+          "label": "Goodies",
+          "description": "Modèles goodies, techniques d'impression, suppléments — synchronisation automatique vers le POS.",
+          "href": "/administration/goodies"
+        },
+        {
+          "id": "textile-admin",
+          "label": "Textile",
+          "description": "Supports vierges textile, techniques de marquage, main d'œuvre, Lambahoany (m²).",
+          "href": "/administration/textile"
+        },
+        {
+          "id": "impression-sf",
+          "label": "Impression sans finition",
+          "description": "Tarifs impression standard (flyer, affiche, brochure…) sans option de finition.",
+          "href": "/administration/impression-sf"
+        }
+      ]
+    },
+    {
+      "id": "production",
+      "label": "Production & Flux",
+      "description": "Statuts métier, gammes de fabrication et synchronisation GPAO",
+      "items": [
+        {
+          "id": "production-flux",
+          "label": "Production & Flux",
+          "description": "Workflow de production : étapes, transitions, règles et synchronisation GPAO.",
+          "href": "/administration/production-flux"
+        },
+        {
+          "id": "synchronisation",
+          "label": "Synchronisation",
+          "description": "Centre sync : drift catalogue/prix/POS, resync et diagnostics.",
+          "href": "/administration/synchronisation"
+        }
+      ]
+    },
+    {
+      "id": "temps",
+      "label": "Temps & capacités",
+      "description": "Vitesses moyennes atelier : conception, impression, finitions, CQ — délais fiables.",
+      "items": [
+        {
+          "id": "estimation-temps",
+          "label": "Temps & capacités",
+          "description": "Grille vitesse / durée par opération atelier (conception, finitions, CQ).",
+          "href": "/administration/estimation-temps"
+        }
+      ]
+    },
+    {
+      "id": "org",
+      "label": "Organisation",
+      "description": "Utilisateurs, rôles, permissions, sites, alertes, audit et paramètres système",
+      "items": [
+        {
+          "id": "users",
+          "label": "Permissions",
+          "description": "Matrice modules × rôles × utilisateurs — cocher / décocher les accès.",
+          "href": "/admin/permissions"
+        },
+        {
+          "id": "roles",
+          "label": "Rôles",
+          "description": "Groupes fonctionnels et profils métier (admin, commercial, production, logistique…).",
+          "href": "/administration/roles-permissions"
+        },
+        {
+          "id": "variables",
+          "label": "Variables",
+          "description": "Variables de tarification globales (TVA, BAT, coefficients) — source Admin.",
+          "href": "/administration/variables"
+        },
+        {
+          "id": "sites",
+          "label": "Annexes & sites",
+          "description": "Multi-établissements, points de vente, adresses.",
+          "href": "/admin/annexes"
+        },
+        {
+          "id": "banners",
+          "label": "Bandeaux alertes",
+          "description": "Messages de maintenance affichés à tous les utilisateurs (ex: fermeture exceptionnelle).",
+          "href": "/admin/ticker"
+        },
+        {
+          "id": "logistique",
+          "label": "Logistique & transporteurs",
+          "description": "Transporteurs, zones de livraison et paramètres livraison.",
+          "href": "/administration/logistique"
+        },
+        {
+          "id": "data-management",
+          "label": "Gestion des données",
+          "description": "Import, export et maintenance des données métier (catalogue, prix, stock…).",
+          "href": "/administration/data-management"
+        },
+        {
+          "id": "versions",
+          "label": "Versions",
+          "description": "Historique de toutes les publications et modifications de configuration.",
+          "href": "/administration/backoffice?tab=versions&module=flux"
+        },
+        {
+          "id": "audit",
+          "label": "Audit log",
+          "description": "Traçabilité complète des actions administrateur (qui a fait quoi et quand).",
+          "href": "/administration/backoffice?tab=audit&module=audit"
+        },
+        {
+          "id": "settings",
+          "label": "Paramètres POS",
+          "description": "Feature flags caisse — config métier dans Formules / Articles finis / Matières.",
+          "href": "/administration/backoffice?tab=pos-functions&module=settings"
+        }
+      ]
+    }
+  ]
+}

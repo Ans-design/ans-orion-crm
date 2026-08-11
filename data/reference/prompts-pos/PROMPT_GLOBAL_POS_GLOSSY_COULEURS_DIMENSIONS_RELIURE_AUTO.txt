@@ -1,0 +1,513 @@
+PROMPT GLOBAL — CORRECTIONS POS : GLOSSY, COULEURS MATIÈRE, DIMENSIONS PERSONNALISÉES ET RELIURE AUTOMATIQUE — ANS ORION
+
+Contexte :
+On corrige plusieurs règles globales du POS ANS ORION. Ces règles doivent être appliquées sur tous les articles concernés, pas seulement sur l’interface visible.
+
+Objectif :
+1. Supprimer le grammage 350g pour toutes les matières Glossy dans toute la POS.
+2. Faire en sorte que les couleurs de matière/palette n’aient aucun impact sur le prix.
+3. Supprimer tous les champs texte inutiles dans les formats, tailles et dimensions personnalisées.
+4. Automatiser les types/références de reliure selon les règles métier : nombre de pages/feuilles, recto ou recto-verso, grammage, épaisseur papier, épaisseur du dos, capacité de reliure.
+
+IMPORTANT :
+Ne pas corriger seulement le frontend.
+Toutes les corrections doivent être synchronisées avec :
+- POS
+- Base de données
+- Admin / Back-office
+- ProductOptionGroup
+- ProductOptionValue
+- ProductVariant
+- PriceFormula
+- BusinessRule
+- StockRule
+- QuoteLine
+- OrderLine
+- InvoiceLine
+- ProductionTask
+- Cockpit
+- Seeds
+- Tests
+
+============================================================
+1. GLOSSY : SUPPRIMER 350G PARTOUT
+============================================================
+
+Dans toute la POS ANS ORION, la matière “Glossy” ne doit pas proposer 350g.
+
+Action obligatoire :
+- Supprimer “Glossy 350g” dans tous les articles POS.
+- Supprimer “350g” des choix de grammage lorsque la matière sélectionnée est Glossy.
+- Supprimer ou désactiver les variantes Glossy 350g dans l’admin.
+- Supprimer Glossy 350g des seeds et des données initiales.
+- Supprimer Glossy 350g des formules de prix.
+- Supprimer Glossy 350g des règles stock.
+- Supprimer Glossy 350g des nouveaux devis, commandes, factures et fiches production.
+
+Règle :
+Les anciens devis peuvent garder Glossy 350g uniquement comme snapshot historique.
+Mais Glossy 350g ne doit plus être sélectionnable dans les nouvelles ventes.
+
+À vérifier :
+- POS
+- Admin matières
+- Admin prix
+- Admin stock
+- Seeds
+- Catalogue articles
+- Devis
+- Facture
+- Production
+- Cockpit
+
+Tests :
+- Choisir Glossy dans plusieurs articles POS.
+- Vérifier que 350g n’apparaît jamais.
+- Vérifier qu’un refresh, seed ou redéploiement ne le fait pas revenir.
+
+============================================================
+2. COULEURS DE MATIÈRE / PALETTE : AUCUN IMPACT SUR LE PRIX
+============================================================
+
+Dans tous les articles POS, les couleurs de matière ou de palette ne doivent pas impacter le prix.
+
+Cela concerne les couleurs physiques ou visuelles de matière, par exemple :
+- couleur du doypack ;
+- couleur de t-shirt ;
+- couleur textile ;
+- couleur tote bag ;
+- couleur gobelet ;
+- couleur papier si elle est simplement esthétique ;
+- couleur de palette ;
+- couleur de support ;
+- couleur de matière.
+
+IMPORTANT :
+Ne pas confondre avec le mode colorimétrique d’impression.
+Cette règle ne concerne PAS :
+- CMJN ;
+- Noir seul ;
+- Pantone ;
+- impression quadri ;
+- impression 1 couleur ;
+- impression recto-verso ;
+- nombre de couleurs d’impression ;
+- technique d’impression.
+
+Règle métier :
+- La couleur de matière/palette est une information descriptive.
+- Elle doit être affichée dans le récapitulatif, devis, commande et production.
+- Elle ne doit pas modifier le prix.
+- Elle ne doit pas déclencher de supplément.
+- Elle ne doit pas modifier la formule de prix.
+- Elle ne doit pas modifier la surface.
+- Elle ne doit pas modifier le stock sauf si le stock est réellement géré par couleur.
+
+Cas stock :
+Si le stock est géré par couleur, la couleur peut impacter la disponibilité du stock, mais pas le prix.
+Exemple :
+- T-shirt rouge disponible : 20 pièces
+- T-shirt noir disponible : 10 pièces
+Le prix reste identique, mais l’alerte stock dépend de la couleur.
+
+Action obligatoire :
+- Retirer les coefficients de prix liés aux couleurs de matière/palette.
+- Supprimer les suppléments couleur matière.
+- Vérifier toutes les formules de prix.
+- Garder la couleur dans les snapshots commerciaux et production.
+- Vérifier que la couleur ne change pas le total du panier.
+
+Tests :
+- Sélectionner plusieurs couleurs pour un même article.
+- Vérifier que le prix ne change pas.
+- Vérifier que seul le stock peut changer si stock par couleur activé.
+- Vérifier devis, facture, production et cockpit.
+
+============================================================
+3. DIMENSIONS / TAILLES / FORMATS PERSONNALISÉS : SUPPRIMER LES CHAMPS TEXTE INUTILES
+============================================================
+
+Dans toutes les dimensions personnalisées, tailles personnalisées ou formats personnalisés, il ne doit pas y avoir de champ texte pour écrire manuellement le format si les champs numériques existent déjà.
+
+Supprimer partout le bloc inutile de type :
+- “Dimensions personnalisées”
+- champ texte “Format”
+- zone texte “Autres précisions : forme, contraintes de production...”
+- tout champ libre qui redemande le format alors que Longueur et Largeur sont déjà présentes.
+
+Règle :
+Pour un format personnalisé, l’utilisateur doit saisir uniquement :
+- Longueur L
+- Largeur l
+
+Selon la règle d’unité du projet :
+- Petit format / format standard / articles hors grand format : mm
+- Grand format : cm
+
+Exemples à corriger :
+- Autocollant prédécoupé
+- Étiquette prédécoupée
+- Sticker
+- Vinyle
+- Calendrier
+- Marque-page
+- Chevalet
+- Sac papier
+- Gobelet si zone impression partielle
+- Livres avec format personnalisé
+- Tout article POS avec format personnalisé
+
+Exception :
+Les articles à matrice/développé complexe peuvent avoir des champs nécessaires spécifiques :
+- boîte personnalisée ;
+- sac papier ;
+- chevalet 3D ;
+- packaging ;
+- cylindre/cube/pyramide.
+Mais même dans ces cas, ne pas afficher un champ texte “Format” redondant si les dimensions numériques existent.
+
+Résultat attendu dans l’interface :
+- Bouton ou choix “Format personnalisé”
+- Champs numériques Longueur / Largeur visibles
+- Aucun champ texte “Format”
+- Aucune zone texte “Autres précisions” obligatoire dans la section dimensions
+
+Si un détail spécial est réellement nécessaire :
+- le placer dans un champ séparé “Instructions production” ou “Détails spéciaux”
+- uniquement quand l’article en a besoin
+- ne pas l’utiliser pour remplacer les dimensions numériques
+
+Tests :
+- Ouvrir tous les articles avec format personnalisé.
+- Vérifier que le bloc texte inutile n’apparaît plus.
+- Vérifier que Longueur et Largeur restent visibles.
+- Vérifier que la surface est calculée automatiquement.
+- Vérifier que le panier, devis, facture et production utilisent Longueur × Largeur.
+
+============================================================
+4. SURFACE ET MATIÈRE BRUTE SUR FORMATS PERSONNALISÉS
+============================================================
+
+Quand un article utilise Longueur × Largeur, calculer automatiquement :
+
+Si en mm :
+surface_reelle_m2 = longueur_mm × largeur_mm / 1 000 000
+
+Si en cm :
+surface_reelle_m2 = longueur_cm × largeur_cm / 10 000
+
+Pour les articles à plat avec marge de chute :
+longueur_brute_mm = longueur_mm + 100
+largeur_brute_mm = largeur_mm + 100
+surface_brute_m2 = longueur_brute_mm × largeur_brute_mm / 1 000 000
+
+surface_brute_totale_m2 = surface_brute_m2 × quantité
+
+Afficher dans le récapitulatif :
+- dimensions client ;
+- surface réelle ;
+- marge de chute si applicable ;
+- dimensions brutes ;
+- surface brute ;
+- quantité ;
+- surface brute totale ;
+- prix automatique.
+
+============================================================
+5. RELIURE : TYPE ET RÉFÉRENCE AUTOMATIQUES
+============================================================
+
+Pour tous les articles qui utilisent une reliure comme finition, le type et la référence de reliure doivent être calculés automatiquement selon les règles métier.
+
+Articles concernés :
+- livres ;
+- brochures ;
+- carnets ;
+- blocs-notes ;
+- agendas ;
+- calendriers à feuillets ;
+- chevalets de bureau avec feuillets ;
+- documents reliés ;
+- tout article POS avec reliure/spirale/agrafage/dos carré collé.
+
+Objectif :
+L’utilisateur ne doit pas choisir une référence de reliure au hasard.
+Le système doit proposer ou sélectionner automatiquement la reliure compatible selon :
+- nombre de pages ;
+- nombre de feuilles ;
+- recto ou recto-verso ;
+- grammage papier ;
+- épaisseur papier ;
+- épaisseur totale du document ;
+- type de couverture ;
+- format ;
+- orientation ;
+- limite technique de la reliure.
+
+============================================================
+6. CONVERSION PAGES → FEUILLES
+============================================================
+
+Le système doit distinguer pages et feuilles.
+
+Règles :
+- Recto seul : 40 pages = 40 feuilles.
+- Recto-verso : 40 pages = 20 feuilles.
+- Si le nombre de pages est impair en recto-verso, arrondir au nombre de feuilles supérieur.
+
+Formule :
+Si recto :
+nombre_feuilles = nombre_pages
+
+Si recto-verso :
+nombre_feuilles = ceil(nombre_pages / 2)
+
+Afficher clairement :
+- nombre de pages ;
+- mode recto / recto-verso ;
+- nombre de feuilles calculé.
+
+============================================================
+7. CALCUL AUTOMATIQUE D’ÉPAISSEUR
+============================================================
+
+Le système doit calculer automatiquement l’épaisseur du document.
+
+Base :
+épaisseur_feuille_mm = valeur selon matière + grammage
+
+L’admin doit permettre de configurer une table :
+- matière ;
+- grammage ;
+- épaisseur par feuille en mm ;
+- actif/inactif.
+
+Formule :
+epaisseur_bloc_mm = nombre_feuilles × epaisseur_feuille_mm
+
+Si couverture :
+epaisseur_totale_mm = epaisseur_bloc_mm + epaisseur_couverture_recto + epaisseur_couverture_verso
+
+Si dos carré collé :
+epaisseur_dos_mm = epaisseur_totale_mm
+
+Afficher dans le récapitulatif :
+- nombre de feuilles ;
+- épaisseur par feuille ;
+- épaisseur bloc ;
+- épaisseur couverture ;
+- épaisseur totale ;
+- référence de reliure proposée.
+
+============================================================
+8. RÈGLES AUTOMATIQUES PAR TYPE DE RELIURE
+============================================================
+
+A. Piqûre à cheval :
+- Le nombre de pages doit être multiple de 4.
+- Si non multiple de 4, afficher alerte et proposer d’ajouter des pages blanches.
+- Adaptée aux documents fins.
+- Si épaisseur trop grande, proposer spirale ou dos carré collé.
+
+B. Agrafage :
+- Sélectionner automatiquement la référence d’agrafe selon l’épaisseur.
+- Exemples de références à configurer admin :
+  - 23/6
+  - 23/8
+  - 23/10
+  - 23/13
+  - 23/15
+  - 23/17
+  - 23/20
+  - 23/23
+- Chaque référence doit avoir une capacité min/max en mm ou en nombre de feuilles.
+
+C. Spirale :
+- Sélectionner automatiquement le diamètre de spirale selon l’épaisseur.
+- Exemples de références à configurer admin :
+  - 6 mm
+  - 8 mm
+  - 10 mm
+  - 12 mm
+  - 14 mm
+  - 16 mm
+  - 18 mm
+  - 20 mm
+  - 22 mm
+  - 25 mm
+  - 28 mm
+  - 32 mm
+- Chaque diamètre doit avoir une capacité min/max en mm.
+
+D. Dos carré collé :
+- Interdire si le nombre de feuilles ou l’épaisseur est insuffisant.
+- Règle déjà demandée : ne pas autoriser dos carré collé si moins de 40 pages sur papier 80g.
+- Calculer automatiquement l’épaisseur du dos.
+- Afficher l’épaisseur du dos dans le récapitulatif.
+- Si insuffisant, proposer spirale, agrafage ou piqûre à cheval selon compatibilité.
+
+E. Reliure métallique / anneaux :
+- Sélectionner la référence selon épaisseur.
+- Bloquer si épaisseur hors capacité.
+- Afficher la référence proposée.
+
+============================================================
+9. ADMIN / BACK-OFFICE POUR RELIURE
+============================================================
+
+Créer ou corriger les tables admin :
+
+BindingRule :
+- binding_type
+- min_thickness_mm
+- max_thickness_mm
+- min_sheets
+- max_sheets
+- min_pages
+- max_pages
+- requires_pages_multiple_of_4
+- allowed_formats
+- allowed_orientations
+- is_active
+
+BindingReference :
+- binding_type
+- reference_label
+- diameter_mm
+- staple_reference
+- min_capacity_mm
+- max_capacity_mm
+- min_sheets
+- max_sheets
+- unit_price
+- setup_price
+- is_active
+
+PaperThickness :
+- material
+- grammage
+- thickness_mm
+- is_active
+
+Règle :
+Les références de reliure doivent venir de l’admin.
+Ne pas hardcoder uniquement dans le frontend.
+
+============================================================
+10. PRIX RELIURE AUTOMATIQUE
+============================================================
+
+Le prix de reliure doit être calculé automatiquement.
+
+Formule :
+prix_reliure =
+prix_reference_reliure
++ prix_pose_reliure
++ coefficient_epaisseur
++ minimum_reliure si applicable
+
+Le prix total de l’article doit inclure :
+- prix matière ;
+- prix impression ;
+- prix finition ;
+- prix reliure automatique ;
+- prix façonnage ;
+- minimum production ;
+- marge commerciale.
+
+============================================================
+11. SNAPSHOT DEVIS / COMMANDE / FACTURE
+============================================================
+
+Chaque ligne concernée doit sauvegarder :
+- nombre de pages ;
+- recto / recto-verso ;
+- nombre de feuilles calculé ;
+- matière ;
+- grammage ;
+- épaisseur feuille ;
+- épaisseur bloc ;
+- épaisseur couverture ;
+- épaisseur totale ;
+- type de reliure proposé ;
+- référence de reliure ;
+- prix reliure ;
+- version de formule.
+
+Un changement futur de règle ne doit pas modifier les anciens devis.
+
+============================================================
+12. STOCK ET PRODUCTION RELIURE
+============================================================
+
+Le stock doit tenir compte :
+- papier intérieur ;
+- couverture ;
+- consommable reliure ;
+- spirale ;
+- agrafes ;
+- colle ;
+- anneaux ;
+- autres accessoires.
+
+La fiche production doit afficher :
+- nombre de pages ;
+- nombre de feuilles ;
+- recto/recto-verso ;
+- épaisseur totale ;
+- type de reliure ;
+- référence exacte ;
+- instructions de reliure ;
+- alertes techniques si nécessaire.
+
+============================================================
+13. TESTS OBLIGATOIRES
+============================================================
+
+Créer ou corriger les tests :
+
+Glossy :
+- Glossy 350g n’apparaît plus dans aucun article.
+- Glossy 350g ne revient pas après seed ou refresh.
+
+Couleurs :
+- Changer une couleur de matière ne change pas le prix.
+- Changer une couleur peut changer seulement la disponibilité stock si stock par couleur activé.
+
+Dimensions personnalisées :
+- Le champ texte “Format” est supprimé.
+- La zone “Autres précisions” est supprimée de la section dimensions.
+- Longueur et Largeur restent visibles.
+- Surface réelle et brute calculées automatiquement.
+
+Reliure :
+- Pages → feuilles calculé correctement.
+- Recto et recto-verso fonctionnent.
+- Épaisseur calculée selon grammage.
+- Référence spirale proposée automatiquement.
+- Référence agrafe proposée automatiquement.
+- Dos carré collé bloqué si insuffisant.
+- Piqûre à cheval exige multiple de 4 pages.
+- Prix reliure calculé automatiquement.
+- Devis sauvegarde snapshot.
+- Production reçoit la référence exacte.
+
+Commandes :
+- npm run lint
+- npm run build
+- tests disponibles
+
+============================================================
+14. RÉSULTAT ATTENDU
+============================================================
+
+Après correction :
+- Glossy 350g est supprimé partout.
+- Les couleurs de matière/palette n’impactent plus les prix.
+- Les formats/dimensions personnalisés n’ont plus de champ texte inutile.
+- Les dimensions personnalisées utilisent uniquement Longueur × Largeur.
+- Les surfaces sont calculées automatiquement.
+- Les reliures sont calculées automatiquement selon pages, feuilles, recto/verso, grammage et épaisseur.
+- Les références de reliure compatibles sont proposées automatiquement.
+- Le prix de reliure est automatique.
+- Le POS, l’admin, la base, le stock, les devis, les factures, la production et le cockpit sont synchronisés.

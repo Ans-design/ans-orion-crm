@@ -1,0 +1,304 @@
+﻿/**
+ * Inventaire physique stock — grille compacte · pastels · zéro cadre
+ */
+
+.stock-inv {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stock-inv__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 0.85rem 0.95rem;
+  border: none !important;
+  border-radius: var(--radius-card, 12px);
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, #2563eb 10%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #f0f7ff 100%);
+}
+
+html.dark .stock-inv__header {
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, #2563eb 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #2563eb 4%);
+}
+
+.stock-inv__intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.stock-inv__icon {
+  flex-shrink: 0;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: var(--radius-card, 7px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, #2563eb 12%, transparent);
+  color: #1d4ed8;
+}
+
+html.dark .stock-inv__icon {
+  color: #93c5fd;
+}
+
+.stock-inv__title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .stock-inv__title {
+  color: #f1f5f9;
+}
+
+.stock-inv__desc {
+  margin: 0.15rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--text-muted, #64748b);
+}
+
+.stock-inv__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.stock-inv__drift-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  background: color-mix(in srgb, #f59e0b 16%, transparent);
+  color: #c2410c;
+}
+
+html.dark .stock-inv__drift-badge {
+  color: #fdba74;
+}
+
+.stock-inv-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+  max-height: min(70vh, 36rem);
+  overflow: auto;
+  padding: 0.1rem;
+}
+
+@media (min-width: 640px) {
+  .stock-inv-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .stock-inv-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+.stock-inv-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-height: 100%;
+  padding: 0.8rem 0.9rem;
+  border: none !important;
+  border-radius: var(--radius-card, 12px);
+  background: var(--bg-card, #fff);
+  box-shadow: none;
+  transition: background 0.15s ease;
+}
+
+html:not(.dark) .stock-inv-card {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.03),
+    0 8px 20px -14px rgba(15, 23, 42, 0.14);
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #64748b 7%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #f8fafc 100%);
+}
+
+html.dark .stock-inv-card {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 94%, #fff 2.5%);
+}
+
+html:not(.dark) .stock-inv-card--drift {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #f59e0b 14%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #fffbeb 55%, #fff7ed 100%);
+}
+
+html.dark .stock-inv-card--drift {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #f59e0b 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #f59e0b 4%);
+}
+
+.stock-inv-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.stock-inv-card__sku {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-muted, #64748b);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stock-inv-card__unit {
+  flex-shrink: 0;
+  display: inline-flex;
+  padding: 0.12rem 0.4rem;
+  border-radius: 9999px;
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, #2563eb 12%, transparent);
+  color: #1d4ed8;
+}
+
+html.dark .stock-inv-card__unit {
+  color: #93c5fd;
+}
+
+.stock-inv-card__label {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .stock-inv-card__label {
+  color: #f1f5f9;
+}
+
+.stock-inv-card__cat {
+  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+}
+
+.stock-inv-card__qty {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  margin-top: 0.15rem;
+}
+
+.stock-inv-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-card, 7px);
+  background: color-mix(in srgb, var(--text-muted, #64748b) 6%, transparent);
+}
+
+html.dark .stock-inv-field {
+  background: color-mix(in srgb, #fff 5%, transparent);
+}
+
+.stock-inv-field--input {
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 6%, transparent);
+}
+
+html.dark .stock-inv-field--input {
+  background: color-mix(in srgb, #ff1e56 10%, transparent);
+}
+
+.stock-inv-field__lab {
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted, #64748b);
+}
+
+.stock-inv-field__val {
+  font-size: 0.95rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .stock-inv-field__val {
+  color: #e2e8f0;
+}
+
+.stock-inv-input {
+  width: 100%;
+  min-height: 1.85rem;
+  padding: 0.2rem 0.4rem;
+  border: none !important;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--text-main, #0f172a);
+  background: color-mix(in srgb, #fff 85%, transparent);
+  outline: none;
+}
+
+html.dark .stock-inv-input {
+  color: #f8fafc;
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 80%, #fff 6%);
+}
+
+.stock-inv-input:focus-visible {
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 28%, transparent));
+}
+
+.stock-inv-card__delta {
+  margin: 0.1rem 0 0;
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+.stock-inv-card__delta.is-plus {
+  color: #059669;
+}
+
+.stock-inv-card__delta.is-minus {
+  color: #dc2626;
+}
+
+html.dark .stock-inv-card__delta.is-plus { color: #34d399; }
+html.dark .stock-inv-card__delta.is-minus { color: #f87171; }
+
+.stock-inv-card__ok {
+  margin: 0.1rem 0 0;
+  font-size: 0.65rem;
+  font-weight: 650;
+  color: var(--text-muted, #64748b);
+}

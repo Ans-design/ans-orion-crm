@@ -1,0 +1,96 @@
+PROMPT ARTICLE — PLATEAU OUVERT / TRAY — ANS ORION
+
+Travaille uniquement sur la structure “Plateau ouvert / Tray” dans le module POS Boîte personnalisée.
+
+OBJECTIF :
+Créer une structure de plateau ouvert, sans couvercle.
+Le calcul doit être basé sur le fond + les côtés relevés.
+
+CHAMPS POS :
+- Longueur intérieure L en mm
+- Profondeur / largeur intérieure P en mm
+- Hauteur H en mm
+- Matière
+- Grammage
+- Épaisseur estimée
+- Type de coins
+- Quantité
+- Impression
+- Finition
+- Bleed
+- Marge de chute matière
+- Format compatible
+- Poses par feuille
+- Surface facturée
+
+VARIABLES :
+- L = longueur intérieure
+- P = profondeur / largeur intérieure
+- H = hauteur des côtés
+- bleed = fond perdu, valeur par défaut 3 mm
+- marge_chute = 50 mm sur chaque côté
+
+FORMULE :
+développé_net_largeur = L + 2H
+développé_net_hauteur = P + 2H
+
+largeur_imprimable = développé_net_largeur + 2 × bleed
+hauteur_imprimable = développé_net_hauteur + 2 × bleed
+
+largeur_brute_finale = largeur_imprimable + 100 mm
+hauteur_brute_finale = hauteur_imprimable + 100 mm
+
+surface_brute_m2 = largeur_brute_finale × hauteur_brute_finale / 1 000 000
+poids_matiere_g = surface_brute_m2 × grammage
+
+OPTIONS COINS :
+- coins collés
+- coins agrafés
+- coins emboîtés
+- sans collage visible
+
+RÈGLES MÉTIER :
+- Pas de couvercle.
+- Structure ouverte.
+- Prévoir finition des coins selon choix.
+- Ne pas proposer de grammage inférieur ou égal à 250g.
+- Utiliser uniquement PCB, PCM, Glossy, Papier spécial invitation, SBS, FBB ou Kraft épais en 300g, 350g, 400g.
+
+RÉCAPITULATIF À AFFICHER :
+- Structure : Plateau ouvert
+- Dimensions L × P × H
+- Matière
+- Grammage
+- Épaisseur estimée
+- Type de coins
+- Développé net
+- Bleed
+- Marge de chute matière +50 mm sur 4 côtés
+- Dimension brute finale
+- Surface brute
+- Format compatible
+- Poses par feuille
+- Taux de chute
+- Prix unitaire
+- Total
+
+SYNCHRONISATION :
+Appliquer cette structure dans :
+- POS
+- Base de données
+- Admin
+- Prix
+- Stock
+- Devis
+- Commande
+- Facture
+- Production
+- Cockpit
+- Tests
+
+TESTS :
+- Vérifier développé_net_largeur = L + 2H.
+- Vérifier développé_net_hauteur = P + 2H.
+- Vérifier options de coins.
+- Vérifier marge +50 mm sur 4 côtés.
+- Vérifier format, poses, stock et devis.

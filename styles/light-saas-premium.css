@@ -1,0 +1,690 @@
+/**
+ * ANS ORION — Mode clair SaaS (couche finale, stable)
+ * Tokens + surfaces ciblées. Pas de règles globales destructrices.
+ * Scope : html:not(.dark) uniquement.
+ */
+
+html:not(.dark) {
+  --bg-app: #f4f7fb;
+  --bg-page: #f4f7fb;
+  --bg-shell: #f4f7fb;
+  --bg-main: #f4f7fb;
+  --bg-warm-subtle: #f4f7fb;
+  --bg-sidebar: #ffffff;
+  --bg-header: #ffffff;
+  --bg-card: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-card-2: #f8fafc;
+  --bg-card-soft: #f1f5f9;
+  --bg-hover: #eef2f7;
+  --bg-active: #ffe8ef;
+  --ans-light-bg: #f4f7fb;
+  --ans-light-sidebar: #ffffff;
+  --ans-light-topbar: #ffffff;
+  --ans-light-card: #ffffff;
+  --cps-bg: #f4f7fb;
+  --ab2-bg: #f4f7fb;
+  --oat-page: #f4f7fb;
+  --oat-card: #ffffff;
+  --oat-header: #f8fafc;
+  --oat-row: #ffffff;
+  --oat-row-hover: #f1f5f9;
+
+  /* Tailwind primary = HSL ; CSS custom = hex */
+  --primary: #ff174d;
+  --primary-foreground: #ffffff;
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground-hsl: 0 0% 100%;
+  --app-text: #0f172a;
+  --app-muted: #64748b;
+  --app-border: #e2e8f0;
+  --app-surface: #ffffff;
+  --app-disabled-bg: #f1f5f9;
+  --app-disabled-text: #64748b;
+
+  --background: 210 33% 97%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --muted: 210 30% 96%;
+  --muted-foreground: 215 16% 40%;
+  --accent: 210 30% 96%;
+  --border: 214 24% 92%;
+  --input: 214 24% 92%;
+
+  /* Ombres unifiées mode clair — .card / .card-organic */
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+  --shadow-hover: 0 6px 10px -2px rgba(15, 23, 42, 0.05), 0 14px 22px -4px rgba(15, 23, 42, 0.1);
+  --shadow-card-unified: var(--shadow-card);
+
+  --radius-ui: 10px;
+  --radius: 7px;
+  --radius-md: 10px;
+  --radius-lg: 10px;
+  --orion-radius: 7px;
+  --orion-radius-sm: 10px;
+
+  --border-soft: #eef2f7;
+  --border-normal: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+}
+
+html:not(.dark) body {
+  background-color: #f4f7fb !important;
+  color: #0f172a;
+}
+
+/* Shell / pages */
+html:not(.dark) .cps-theme,
+html:not(.dark) .ab2-shell,
+html:not(.dark) .orion-catalogue-workspace,
+html:not(.dark) .ab2-options-workspace,
+html:not(.dark) .orion-viewport {
+  background: #f4f7fb !important;
+  color: #0f172a;
+}
+
+/* Sidebar shell / actifs → styles/sidebar-modern.css */
+
+html:not(.dark) .orion-nav-strip-leaf-active {
+  background: color-mix(in srgb, #FF174D 12%, transparent) !important;
+  color: #C91443 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Header */
+html:not(.dark) .orion-cockpit-header {
+  background: #ffffff;
+  border-bottom: 1px solid #eef2f7;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+html:not(.dark) .cockpit-search {
+  background: #f4f7fb !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+/* Cards — blanc + ombre (sans contours sombres) */
+html:not(.dark) .orion-card:not(.orion-kpi-saas),
+html:not(.dark) .orion-card-interactive,
+html:not(.dark) .ui-card,
+html:not(.dark) .orion-ds-card:not(.orion-kpi-saas),
+html:not(.dark) .orion-ds-panel,
+html:not(.dark) .dashboard-chart-card,
+html:not(.dark) .ans-card-premium,
+html:not(.dark) .orion-surface-card,
+html:not(.dark) .orion-surface-panel,
+html:not(.dark) [data-slot='card'],
+html:not(.dark) .orion-master-data-card,
+html:not(.dark) .orion-table-wrap,
+html:not(.dark) .ui-table-wrap {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+html:not(.dark) .orion-card-interactive:hover {
+  box-shadow: var(--shadow-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* Bloc utilitaire Tailwind encore bordé (rapports, listes…) */
+html:not(.dark) .orion-page .bg-card.border,
+html:not(.dark) .orion-viewport .bg-card.border,
+html:not(.dark) .orion-page [class*='border-border'].rounded-\[7px\],
+html:not(.dark) .orion-viewport .rounded-\[7px\].border.border-border {
+  border-color: transparent !important;
+  box-shadow: var(--shadow-card) !important;
+  background: #ffffff !important;
+}
+
+html:not(.dark) .orion-ds-metric:not(.orion-kpi-saas) {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* Hover : ombre seulement — exclure KPI pastels (règle dédiée) */
+html:not(.dark) .dashboard-chart-card:hover,
+html:not(.dark) .orion-ds-card--interactive:hover,
+html:not(.dark) .orion-ds-metric:not(.orion-kpi-saas):hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* KPI pastels unis — pas de dégradé (!important pour white-only / anti-contours) */
+html:not(.dark) .orion-kpi-saas.orion-kpi-tint-brand,
+html:not(.dark) .orion-ds-metric.orion-kpi-tint-brand {
+  background: #fff5f8 !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+html:not(.dark) .orion-kpi-saas.orion-kpi-tint-success,
+html:not(.dark) .orion-ds-metric.orion-kpi-tint-success {
+  background: #f0fdf4 !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+html:not(.dark) .orion-kpi-saas.orion-kpi-tint-gold,
+html:not(.dark) .orion-ds-metric.orion-kpi-tint-gold {
+  background: #fffbeb !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+html:not(.dark) .orion-kpi-saas.orion-kpi-tint-info,
+html:not(.dark) .orion-ds-metric.orion-kpi-tint-info {
+  background: #f0f9ff !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+html:not(.dark) .orion-kpi-saas.orion-kpi-tint-danger,
+html:not(.dark) .orion-ds-metric.orion-kpi-tint-danger {
+  background: #fff1f2 !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+html:not(.dark) .orion-kpi-saas.orion-kpi-tint-neutral,
+html:not(.dark) .orion-ds-metric.orion-kpi-tint-neutral {
+  background: #f8fafc !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+html:not(.dark) .orion-kpi-saas:hover {
+  box-shadow: var(--shadow-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* Pleine largeur = même enveloppe que CockpitActions (pas auto-fill → colonnes fantômes) */
+html:not(.dark) .dashboard-kpi-grid {
+  display: grid;
+  width: 100%;
+  gap: var(--grid-gap, 0.75rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  html:not(.dark) .dashboard-kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  html:not(.dark) .dashboard-kpi-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  html:not(.dark) .dashboard-kpi-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Tables */
+html:not(.dark) thead,
+html:not(.dark) thead th,
+html:not(.dark) .orion-admin-table thead th,
+html:not(.dark) .ab2-table th,
+html:not(.dark) .mp-table th,
+html:not(.dark) .orion-master-data-header,
+html:not(.dark) .orion-master-data-header-cell {
+  background: #f8fafc;
+  color: #64748b;
+  border-color: #eef2f7;
+}
+
+html:not(.dark) tbody tr:hover td,
+html:not(.dark) .orion-master-data-row.is-data:hover,
+html:not(.dark) .orion-master-data-row.is-data:hover .orion-master-data-cell {
+  background: #f1f5f9;
+}
+
+/* Tabs catalogue uniquement (pas tous les role=tab) */
+html:not(.dark) .orion-catalogue-studio-secondary-tabs {
+  background: #eef2f7;
+  border-radius: var(--orion-radius, 7px);
+  padding: 4px;
+  border: none;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+html:not(.dark) .orion-catalogue-studio-secondary-tabs button {
+  background: transparent;
+  border: none;
+  border-radius: var(--orion-radius, 7px);
+  color: #64748b;
+  min-height: 36px;
+  padding-inline: 0.85rem;
+}
+
+html:not(.dark) .orion-catalogue-studio-secondary-tabs button.active {
+  background: #ffffff;
+  color: #ff174d;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Disabled lisibles — jamais opacity trop basse / texte blanc */
+html:not(.dark) button:disabled,
+html:not(.dark) [aria-disabled='true'],
+html.dark button:disabled,
+html.dark [aria-disabled='true'] {
+  opacity: 0.85 !important;
+  cursor: not-allowed !important;
+}
+
+html:not(.dark) button:disabled:not(.bg-primary):not(.ans-btn-primary):not([class*='bg-primary']):not(.cmd-node-rail__node),
+html:not(.dark) [aria-disabled='true']:not(.bg-primary):not(.ans-btn-primary):not(.cmd-node-rail__node) {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) button.bg-primary:disabled,
+html:not(.dark) .ans-btn-primary:disabled,
+html:not(.dark) .ans-btn-primary[aria-disabled='true'] {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
+  filter: none !important;
+  opacity: 0.85 !important;
+}
+
+html.dark button:disabled:not(.bg-primary):not(.ans-btn-primary):not(.cmd-node-rail__node),
+html.dark [aria-disabled='true']:not(.bg-primary):not(.ans-btn-primary):not(.cmd-node-rail__node) {
+  background: #1e293b !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+}
+
+html.dark button.bg-primary:disabled,
+html.dark .ans-btn-primary:disabled,
+html.dark .ans-btn-primary[aria-disabled='true'] {
+  background: #1e293b !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+  filter: none !important;
+  opacity: 0.85 !important;
+}
+
+/* Primary buttons (shadcn bg-primary) — fond rouge garanti */
+html:not(.dark) button.bg-primary:not(:disabled),
+html:not(.dark) .bg-primary:not(:disabled) {
+  background-color: #ff174d !important;
+  color: #ffffff !important;
+}
+
+html.dark button.bg-primary:not(:disabled),
+html.dark .bg-primary:not(:disabled) {
+  background-color: #ff174d !important;
+  color: #ffffff !important;
+}
+
+/* Inputs */
+html:not(.dark) input:not([type='checkbox']):not([type='radio']):not([type='range']),
+html:not(.dark) select,
+html:not(.dark) textarea,
+html:not(.dark) .ab2-input,
+html:not(.dark) .cps-input {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--orion-radius, 7px);
+  color: #0f172a;
+}
+
+html:not(.dark) input:focus,
+html:not(.dark) select:focus,
+html:not(.dark) textarea:focus {
+  border-color: rgba(255, 23, 77, 0.45);
+  box-shadow: 0 0 0 3px rgba(255, 23, 77, 0.12);
+}
+
+/* Admin / CPS tokens */
+html:not(.dark) .ab2-shell {
+  --ab2-bg: #f4f7fb;
+  --ab2-surface: #ffffff;
+  --ab2-surface-2: #f8fafc;
+  --oat-page: #f4f7fb;
+  --oat-card: #ffffff;
+  --oat-header: #f8fafc;
+  background: #f4f7fb;
+}
+
+html:not(.dark) .cps-theme {
+  --cps-bg: #f4f7fb;
+  --cps-surface: #ffffff;
+  --cps-shadow: var(--shadow-card);
+  background: #f4f7fb;
+}
+
+html:not(.dark) .orion-catalogue-nav,
+html:not(.dark) .orion-catalogue-studio,
+html:not(.dark) .orion-catalogue-summary {
+  background: #ffffff;
+  border: none;
+  box-shadow: var(--shadow-card);
+  border-radius: var(--orion-radius, 7px);
+}
+
+html:not(.dark) .orion-catalogue-nav-item.is-active {
+  background: #ffe8ef;
+  color: #C91443;
+  border-radius: var(--orion-radius, 7px);
+}
+
+html:not(.dark) .orion-welcome-saas {
+  background: #ffffff !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  border: none !important;
+}
+
+html:not(.dark) .dashboard-header {
+  background: #ffffff !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  border: none !important;
+}
+
+html:not(.dark) .cockpit-badge {
+  background: #f4f7fb !important;
+  border: 1px solid #eef2f7 !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  color: #334155 !important;
+}
+
+/* Badges pastels */
+html:not(.dark) .orion-badge-success,
+html:not(.dark) .badge-success {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+  border-color: transparent !important;
+}
+html:not(.dark) .orion-badge-danger,
+html:not(.dark) .badge-danger {
+  background: #ffe4e6 !important;
+  color: #C91443 !important;
+  border-color: transparent !important;
+}
+html:not(.dark) .orion-badge-warn,
+html:not(.dark) .badge-warning {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+  border-color: transparent !important;
+}
+html:not(.dark) .orion-badge-info,
+html:not(.dark) .badge-info {
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+  border-color: transparent !important;
+}
+
+/* Dropdowns / popovers clair */
+html:not(.dark) [data-radix-popper-content-wrapper] [role='menu'],
+html:not(.dark) [data-radix-popper-content-wrapper] [role='listbox'],
+html:not(.dark) .orion-cockpit-header [class*='absolute'][class*='shadow'] {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--orion-radius, 7px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+/* Modales / drawers clair */
+html:not(.dark) [role='dialog'],
+html:not(.dark) [data-state='open'][role='dialog'] {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: var(--orion-radius, 7px);
+}
+
+/* KPI icon pastilles (clair) */
+html:not(.dark) .orion-kpi-icon {
+  border-radius: 9999px;
+}
+html:not(.dark) .orion-kpi-icon--brand {
+  background: #ffe4ec !important;
+  color: #ff174d !important;
+}
+html:not(.dark) .orion-kpi-icon--success {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+}
+html:not(.dark) .orion-kpi-icon--gold {
+  background: #fef3c7 !important;
+  color: #d97706 !important;
+}
+html:not(.dark) .orion-kpi-icon--info {
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+}
+html:not(.dark) .orion-kpi-icon--danger {
+  background: #ffe4e6 !important;
+  color: #C91443 !important;
+}
+html:not(.dark) .orion-kpi-icon--neutral {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+/* ─── Mode sombre — polish final (hiérarchie + KPI unis) ─── */
+html.dark .orion-kpi-saas,
+html.dark .orion-ds-metric {
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  box-shadow: none !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  color: #f8fafc !important;
+  background-image: none !important;
+}
+
+html.dark .orion-kpi-saas:not([class*='orion-kpi-tint']),
+html.dark .orion-ds-metric:not([class*='orion-kpi-tint']) {
+  background: #071021 !important;
+}
+
+html.dark .orion-kpi-saas.orion-kpi-tint-brand,
+html.dark .orion-ds-metric.orion-kpi-tint-brand {
+  background: color-mix(in srgb, #071021 88%, #ff1e56 12%) !important;
+  background-image: none !important;
+}
+html.dark .orion-kpi-saas.orion-kpi-tint-success,
+html.dark .orion-ds-metric.orion-kpi-tint-success {
+  background: color-mix(in srgb, #071021 90%, #10b981 10%) !important;
+  background-image: none !important;
+}
+html.dark .orion-kpi-saas.orion-kpi-tint-gold,
+html.dark .orion-ds-metric.orion-kpi-tint-gold {
+  background: color-mix(in srgb, #071021 88%, #f59e0b 12%) !important;
+  background-image: none !important;
+}
+html.dark .orion-kpi-saas.orion-kpi-tint-info,
+html.dark .orion-ds-metric.orion-kpi-tint-info {
+  background: color-mix(in srgb, #071021 88%, #2563eb 12%) !important;
+  background-image: none !important;
+}
+html.dark .orion-kpi-saas.orion-kpi-tint-danger,
+html.dark .orion-ds-metric.orion-kpi-tint-danger {
+  background: color-mix(in srgb, #071021 88%, #ef4444 12%) !important;
+  background-image: none !important;
+}
+html.dark .orion-kpi-saas.orion-kpi-tint-neutral,
+html.dark .orion-ds-metric.orion-kpi-tint-neutral {
+  background: color-mix(in srgb, #071021 92%, #64748b 8%) !important;
+  background-image: none !important;
+}
+
+html.dark .orion-kpi-saas:hover {
+  transform: translateY(-1px);
+}
+
+html.dark .orion-kpi-icon--brand {
+  background: rgba(255, 23, 77, 0.18) !important;
+  color: #ff8fa8 !important;
+}
+html.dark .orion-kpi-icon--success {
+  background: rgba(34, 197, 94, 0.16) !important;
+  color: #4ade80 !important;
+}
+html.dark .orion-kpi-icon--gold {
+  background: rgba(250, 204, 21, 0.14) !important;
+  color: #facc15 !important;
+}
+html.dark .orion-kpi-icon--info {
+  background: rgba(255, 23, 77, 0.16) !important;
+  color: #ff6b8a !important;
+}
+html.dark .orion-kpi-icon--danger {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #fb7185 !important;
+}
+html.dark .orion-kpi-icon--neutral {
+  background: rgba(148, 163, 184, 0.12) !important;
+  color: #94a3b8 !important;
+}
+
+html.dark .dashboard-header,
+html.dark .orion-welcome-saas {
+  background: #071021 !important;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  box-shadow: none !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+html.dark .cockpit-search {
+  background: #050a18 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #e2e8f0 !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+html.dark .cockpit-badge {
+  background: #050a18 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: #cbd5e1 !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+/* Header icon buttons */
+html:not(.dark) .orion-cockpit-header > div button.p-2,
+html:not(.dark) .orion-header-icon-btn {
+  border-radius: var(--orion-radius, 7px);
+  background: #f4f7fb;
+  color: #64748b;
+}
+html:not(.dark) .orion-cockpit-header > div button.p-2:hover,
+html:not(.dark) .orion-header-icon-btn:hover {
+  background: #eef2f7;
+  color: #0f172a;
+}
+
+html.dark .orion-cockpit-header > div button.p-2,
+html.dark .orion-header-icon-btn {
+  border-radius: var(--orion-radius, 7px);
+  background: #050a18;
+  color: #94a3b8;
+}
+html.dark .orion-cockpit-header > div button.p-2:hover,
+html.dark .orion-header-icon-btn:hover {
+  background: #0b1830;
+  color: #f8fafc;
+}
+
+/* Filet de sécurité — aucun disabled trop pâle (Tailwind opacity-40/50) */
+html:not(.dark) :is(button, a, input, select, textarea)[disabled],
+html:not(.dark) :is(button, a)[aria-disabled='true'] {
+  opacity: 0.85 !important;
+}
+
+html.dark :is(button, a, input, select, textarea)[disabled],
+html.dark :is(button, a)[aria-disabled='true'] {
+  opacity: 0.85 !important;
+}
+
+/* Empty / loading surfaces */
+html:not(.dark) .orion-empty-state,
+html:not(.dark) [data-empty-state] {
+  color: #64748b;
+}
+
+html.dark .orion-empty-state,
+html.dark [data-empty-state] {
+  color: #94a3b8;
+}
+
+/* Scrollbars subtils (WebKit) */
+html:not(.dark) .orion-viewport ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: var(--orion-radius, 7px);
+}
+html.dark .orion-viewport ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: var(--orion-radius, 7px);
+}
+
+/* Cartes unifiées mode clair — .card / .card-organic */
+html:not(.dark) .card,
+html:not(.dark) .card-organic,
+html:not(.dark) .orion-surface-card-soft,
+html:not(.dark) .orion-surface-card-elevated,
+html:not(.dark) .orion-surface-card,
+html:not(.dark) .orion-ds-card:not(.orion-kpi-saas) {
+  background-color: #ffffff !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  border: none !important;
+}
+
+html:not(.dark) .card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+html:not(.dark) .card-organic,
+html:not(.dark) .orion-surface-card-soft,
+html:not(.dark) .orion-surface-card-elevated,
+html:not(.dark) .orion-surface-card,
+html:not(.dark) .orion-ds-card:not(.orion-kpi-saas) {
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* CTA primaire — suit l’accent utilisateur (Apparence) */
+html:not(.dark) .ans-btn-primary:not(:disabled):not([aria-disabled='true']) {
+  background: linear-gradient(
+    135deg,
+    var(--primary-hover, var(--accent-primary-hover, #C91443)) 0%,
+    var(--primary, var(--accent-primary, #ff174d)) 55%,
+    color-mix(in srgb, var(--primary, #ff174d) 70%, white) 100%
+  ) !important;
+  color: var(--on-primary, #ffffff) !important;
+}
+
+html.dark .ans-btn-primary:not(:disabled):not([aria-disabled='true']) {
+  background: linear-gradient(
+    135deg,
+    var(--primary-hover, #C91443) 0%,
+    var(--primary, #ff174d) 60%,
+    color-mix(in srgb, var(--primary, #ff174d) 75%, white) 100%
+  ) !important;
+  color: var(--on-primary, #ffffff) !important;
+}

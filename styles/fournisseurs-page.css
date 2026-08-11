@@ -1,0 +1,205 @@
+﻿/**
+ * Fournisseurs — grille 2 colonnes, cartes compactes, zéro filet
+ */
+
+.fournisseurs-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.fournisseurs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+}
+
+@media (min-width: 768px) {
+  .fournisseurs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .fournisseurs-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.fournisseur-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 100%;
+  padding: 0.95rem 1rem;
+  text-align: left;
+  border: none !important;
+  border-radius: var(--radius-card, 12px);
+  background: var(--bg-card, #fff);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+html:not(.dark) .fournisseur-card {
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+html.dark .fournisseur-card {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 94%, #fff 2.5%);
+  box-shadow: none;
+}
+
+.fournisseur-card:hover {
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 4.5%, var(--bg-card, #fff));
+}
+
+.fournisseur-card:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand-primary, #cc0033) 45%, transparent);
+  outline-offset: 2px;
+}
+
+.fournisseur-card__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.fournisseur-card__avatar {
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--radius-card, 7px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  color: var(--brand-primary, #cc0033);
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 12%, transparent);
+  border: none;
+}
+
+.fournisseur-card__identity {
+  min-width: 0;
+  flex: 1;
+}
+
+.fournisseur-card__name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text-main, #0f172a);
+  line-height: 1.25;
+}
+
+html.dark .fournisseur-card__name {
+  color: #f1f5f9;
+}
+
+.fournisseur-card__code {
+  margin: 0.15rem 0 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.65rem;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  color: var(--text-muted, #64748b);
+}
+
+.fournisseur-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+
+.fournisseur-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.45rem;
+  border-radius: 9999px;
+  border: none;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.fournisseur-badge--actif {
+  background: color-mix(in srgb, #10b981 14%, transparent);
+  color: #059669;
+}
+
+.fournisseur-badge--inactif {
+  background: color-mix(in srgb, #64748b 14%, transparent);
+  color: #64748b;
+}
+
+html.dark .fournisseur-badge--actif {
+  color: #34d399;
+}
+
+.fournisseur-badge--cat {
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 10%, transparent);
+  color: var(--brand-primary, #cc0033);
+}
+
+.fournisseur-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+}
+
+.fournisseur-card__meta li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.fournisseur-card__meta span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fournisseur-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.55rem;
+  border: none;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text-muted, #64748b) 12%, transparent);
+}
+
+.fournisseur-card__orders {
+  font-size: 0.75rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .fournisseur-card__orders {
+  color: #e2e8f0;
+}
+
+.fournisseur-card__hint {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--brand-primary, #cc0033);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.fournisseur-card:hover .fournisseur-card__hint {
+  opacity: 1;
+}

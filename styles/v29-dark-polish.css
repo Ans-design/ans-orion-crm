@@ -1,0 +1,86 @@
+/**
+ * Dark mode — surfaces métier critiques (HTML v29 tokens adaptés ORION).
+ * Complète le thème existant sans le remplacer.
+ */
+
+html.dark .ans-card-premium,
+html.dark .bg-card {
+  background-color: var(--bg-card, #071021) !important;
+  background-image: none !important;
+  border-color: transparent;
+}
+
+html.dark table thead th,
+html.dark .orion-table thead th {
+  background: #22253a;
+  color: #a8b0c0;
+  border-color: transparent;
+}
+
+html.dark table tbody td,
+html.dark .orion-table tbody td {
+  border-color: transparent;
+  color: #e8eaf0;
+}
+
+html.dark table tbody tr:hover,
+html.dark .orion-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+html.dark .fc,
+html.dark input.fc,
+html.dark select.fc,
+html.dark textarea.fc,
+html.dark input[type='text'],
+html.dark input[type='number'],
+html.dark input[type='search'],
+html.dark input[type='email'],
+html.dark input[type='password'],
+html.dark select,
+html.dark textarea {
+  background-color: #22253a;
+  border-color: transparent;
+  color: #e8eaf0;
+}
+
+html.dark .fc:focus,
+html.dark input:not(.talk-input):focus,
+html.dark select:focus,
+html.dark textarea:not(.talk-input):focus {
+  border-color: var(--border-focus-field, color-mix(in srgb, #94a3b8 40%, transparent));
+  outline: none;
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #94a3b8 32%, transparent));
+}
+
+html.dark [role='dialog'] .ans-card-premium,
+html.dark [data-radix-dialog-content],
+html.dark .DialogContent {
+  background: #1a1d27;
+  border-color: rgba(255, 255, 255, 0.04);
+  color: #e8eaf0;
+}
+
+html.dark .badge,
+html.dark .bg-muted {
+  background-color: #22253a;
+  color: #c5cad6;
+  border-color: transparent;
+}
+
+html.dark .border-border {
+  border-color: transparent;
+}
+
+html.dark .text-muted-foreground {
+  color: #8b93a7;
+}
+
+/* Gantt / planning blocks remain readable */
+html.dark .gg-block {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+html.dark .gantt-now-line {
+  background: #5b8cff !important;
+}

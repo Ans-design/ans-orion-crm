@@ -1,0 +1,147 @@
+/**
+ * ANS ORION — En-têtes modules densifiés (tous modules)
+ * kicker 9px · titre 14–15px · description 1 ligne 11px · padding bas.
+ * Évite les « billboards » text-2xl / longs paragraphes.
+ */
+
+/* ── Titres page (hors POS Soft hero produit) ── */
+.orion-viewport:not(:has(.pos-soft-shell)) main h1,
+.orion-viewport:not(:has(.pos-soft-shell)) [role='main'] h1,
+.orion-viewport .orion-ds-page-title,
+.orion-viewport .orion-module-header__title,
+.orion-viewport .orion-admin-page-title,
+.orion-viewport .ab2-page-title,
+.orion-viewport h1.font-display,
+.orion-viewport h1.text-2xl,
+.orion-viewport h1.text-xl,
+.orion-viewport h1.text-3xl,
+.cps-theme h1,
+.cps-admin-header h1,
+.ab2-shell h1,
+.ab2-shell .ab2-page-title {
+  font-size: 0.875rem !important; /* 14 */
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 !important;
+}
+
+@media (min-width: 768px) {
+  .orion-viewport:not(:has(.pos-soft-shell)) main h1,
+  .orion-viewport .orion-ds-page-title,
+  .orion-viewport .orion-module-header__title,
+  .cps-theme h1,
+  .cps-admin-header h1 {
+    font-size: 0.9375rem !important; /* 15 */
+  }
+}
+
+/* ── Ligne titre + actions : pas de grande marge ── */
+.orion-viewport .orion-ds-page-header,
+.orion-viewport .orion-module-header,
+.orion-viewport .cps-admin-header,
+.orion-viewport .ab2-page-header,
+.orion-viewport main > header,
+.orion-viewport [role='main'] > header {
+  padding-top: 0.15rem !important;
+  padding-bottom: 0.35rem !important;
+  margin-bottom: 0.35rem !important;
+  gap: 0.35rem !important;
+}
+
+/* ── Kickers discrets ── */
+.orion-viewport .orion-module-header__kicker,
+.orion-viewport .ab2-page-kicker,
+.orion-viewport .mt-eyebrow,
+.orion-viewport header p.text-\[11px\].uppercase {
+  font-size: 0.5625rem !important; /* 9 */
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  line-height: 1.15 !important;
+  margin: 0 0 0.08rem !important;
+  color: var(--text-muted, #64748b) !important;
+}
+
+/* Accents marque sur kickers administration */
+.cps-admin-header .orion-module-header__kicker,
+.cps-admin-header .mt-eyebrow {
+  color: var(--brand-primary, #ff174d) !important;
+}
+
+/* ── Descriptions / sous-titres : 1 ligne max, 11px — jamais un bloc billboard ── */
+.orion-viewport .orion-ds-page-desc,
+.orion-viewport .orion-module-header__desc,
+.orion-viewport .ab2-page-subtitle,
+.orion-viewport .cps-admin-header p:not(.orion-module-header__kicker):not(.mt-eyebrow),
+.orion-viewport main > header p:not(.orion-module-header__kicker):not([class*='kicker']):not(.uppercase),
+.orion-viewport header p.text-sm,
+.orion-viewport header p.max-w-2xl,
+.orion-viewport header p.max-w-xl {
+  font-size: 0.6875rem !important; /* 11 */
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  margin: 0.1rem 0 0 !important;
+  max-width: 36rem !important;
+  color: var(--text-muted, #64748b) !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Mode compact PageHeader : description déjà absente du DOM ; filet de sécurité CSS */
+.orion-module-header--compact .orion-module-header__desc,
+.orion-ds-page-header--compact .orion-ds-page-desc,
+.cps-admin-header--matieres-tarifs .orion-module-header__desc,
+.cps-admin-header--studio-prix .cps-admin-header__subtitle-studio,
+.cps-admin-header--dense p:not(.orion-module-header__kicker) {
+  display: none !important;
+}
+
+/* ── Bandeaux d’aide sous modules : 1 ligne ── */
+.orion-viewport .orion-module-help-banner {
+  padding: 0.35rem 0.65rem !important;
+  font-size: 0.6875rem !important;
+  line-height: 1.3 !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.orion-viewport .orion-module-help-banner p {
+  margin: 0 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* ── Breadcrumbs : moins de place ── */
+.orion-viewport nav[aria-label='breadcrumb'],
+.orion-viewport .orion-ds-page-header__crumb {
+  margin-bottom: 0.25rem !important;
+  font-size: 0.625rem !important;
+}
+
+/* ── Chip méta collé au titre ── */
+.orion-viewport .orion-module-header__chip {
+  height: 1.25rem !important;
+  font-size: 0.625rem !important;
+  padding: 0 0.4rem !important;
+}
+
+/* Phone : titre encore plus bas */
+@media (max-width: 767.98px) {
+  .orion-viewport:not(:has(.pos-soft-shell)) main h1,
+  .orion-viewport .orion-module-header__title,
+  .cps-theme h1 {
+    font-size: 0.8125rem !important; /* 13 */
+  }
+
+  .orion-viewport main > header p:not(.orion-module-header__kicker),
+  .orion-viewport .orion-ds-page-desc {
+    display: none !important;
+  }
+}

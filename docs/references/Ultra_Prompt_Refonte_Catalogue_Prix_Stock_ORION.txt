@@ -1,0 +1,1420 @@
+ULTRA-PROMPT MAÎTRE — REFONTE COMPLÈTE ET FIABILISATION
+ORION / ADMINISTRATION / CATALOGUE, PRIX & STOCK
+Version consolidée — 15 juillet 2026
+
+======================================================================
+0. MODE D’EMPLOI DU PRÉSENT PROMPT
+======================================================================
+
+Tu interviens comme architecte logiciel senior, expert ERP/POS, expert UX/UI
+backoffice, spécialiste des moteurs tarifaires, des stocks, des migrations de
+données et de la qualité logicielle.
+
+Ce document constitue une spécification d’exécution complète. Il doit être
+traité par tranches successives. Ne lance pas toutes les modifications en une
+seule opération aveugle.
+
+Règle d’exécution obligatoire :
+
+1. Auditer l’existant avant de modifier.
+2. Cartographier les pages, composants, routes, tables, API, services,
+   permissions, imports, exports, calculs et dépendances touchés.
+3. Présenter brièvement le périmètre exact de la tranche courante.
+4. Implémenter uniquement cette tranche.
+5. Exécuter les tests adaptés.
+6. Corriger toutes les régressions trouvées.
+7. Fournir les fichiers modifiés, migrations, tests et résultats.
+8. Attendre la validation avant de passer à la tranche suivante si le travail
+   est réalisé de manière interactive.
+
+Le but n’est pas de maquiller l’interface. Il faut corriger l’architecture,
+supprimer les redondances, rendre les données fiables et produire un
+backoffice simple à administrer sans intervention permanente d’un développeur.
+
+======================================================================
+1. CONTEXTE ET PROBLÈMES CONSTATÉS
+======================================================================
+
+Le domaine « Catalogue, Prix & Stock » présente actuellement trop de pages,
+de sous-menus, de cartes et de tableaux qui répètent les mêmes informations.
+
+Exemples de problèmes observés :
+
+- Le tableau de bord répète « Matières & formats », « Prix & règles »,
+  « Options & finitions », « Import / Export », « Diagnostics » et
+  « Historique », alors que ces éléments existent déjà dans le menu de gauche.
+- « Matières », « Prix contexte » et « Stock & Achats » affichent plusieurs
+  vues ou tableaux qui reposent en réalité sur le même référentiel matière.
+- Des données de matières et de formats réapparaissent dans « Prix & règles ».
+- « Options & finitions » occupe un domaine principal alors qu’il s’agit de
+  règles tarifaires et de prestations associées aux articles.
+- Des options exclusivement dédiées au POS sont répétées dans plusieurs
+  écrans : « Options POS », « Apparence POS », ordre POS, activation POS,
+  publication POS, visibilité POS, etc.
+- Les statuts « Brouillon » et « Publié » ajoutent un workflow inutile.
+- Les boutons d’action sont dupliqués, encadrés par de petites capsules et
+  rendent les tableaux visuellement chargés.
+- Certaines colonnes sont séparées par des traits rouges agressifs.
+- Les corbeilles ne sont pas uniformes ou ne restaurent pas correctement les
+  éléments supprimés.
+- Le sens de « Prix base » est ambigu : coût d’achat, prix d’une matière
+  vierge, prix imprimé ou tarif d’un article fini.
+- Des outils techniques tels que migration de source, reconstruction d’index
+  ou synchronisations locales prennent trop de place dans l’interface métier.
+
+La refonte doit résoudre ces problèmes sans casser les formules existantes,
+les règles métier, les historiques, les stocks, les références, les commandes
+ou la synchronisation avec le POS.
+
+======================================================================
+2. OBJECTIF FINAL
+======================================================================
+
+Construire un centre d’administration unique, cohérent et fiable dans lequel :
+
+- chaque donnée possède une seule source de vérité ;
+- une matière physique n’est enregistrée qu’une seule fois ;
+- les stocks, achats, coûts et prix de cette matière sont visibles depuis une
+  seule grille maître ;
+- les formules tarifaires référencent les matières sans les recopier ;
+- les options et finitions font partie de « Prix & règles » ;
+- le POS consomme automatiquement les données validées, sans micro-paramètres
+  POS dispersés dans le backoffice ;
+- le tableau de bord montre des indicateurs et actions réels, pas des raccourcis
+  qui dupliquent le menu ;
+- les suppressions utilisent un soft-delete fiable, restaurable et traçable ;
+- les écrans restent sobres, rapides, lisibles, responsives et accessibles ;
+- un administrateur autorisé peut modifier prix, matières, règles, seuils,
+  options et finitions sans modifier le code.
+
+======================================================================
+3. ARCHITECTURE FONCTIONNELLE CIBLE
+======================================================================
+
+Réduire le menu interne « DOMAINES » à cinq entrées principales maximum :
+
+1. Tableau de bord
+   Sous-titre : Santé du catalogue et priorités
+
+2. Matières, formats & stock
+   Sous-titre : Référentiel, achats, prix et quantités
+
+3. Prix & règles
+   Sous-titre : Articles, formules, options et finitions
+
+4. Import / Export
+   Sous-titre : Modèles, contrôles et mises à jour
+
+5. Historique & corbeille
+   Sous-titre : Journal, restauration et audit
+
+À supprimer comme domaines autonomes :
+
+- Options & finitions ;
+- Diagnostics, si ses informations sont intégrées au tableau de bord et au
+  journal technique ;
+- les sous-pages redondantes Prix contexte et Stock & Achats ;
+- tout domaine qui ne fait que reproduire une partie d’une autre grille.
+
+Ne pas recréer les domaines supprimés sous forme de grosses cartes dans le
+tableau de bord. Le menu sert à naviguer ; le tableau de bord sert à piloter.
+
+======================================================================
+4. FRONTIÈRES MÉTIER À RESPECTER ABSOLUMENT
+======================================================================
+
+4.1. MATIÈRES, FORMATS & STOCK
+
+Ce domaine contient exclusivement les ressources physiques, supports vierges,
+variantes, unités, formats physiques et informations logistiques.
+
+Exemples :
+
+- papier offset, couché, glossy, PCB, PCM, autocopiant ;
+- vinyle, autocollant, PVC, bâche en rouleau ;
+- textile vierge, T-shirt coton, sweat, casquette ;
+- stylo vierge, mug vierge, objet publicitaire ;
+- plaques Acrylic/Akilux, supports grand format ;
+- formats normalisés et personnalisés ;
+- grammages, épaisseurs, laizes, tailles et couleurs ;
+- coût d’achat, prix de vente vierge, prix standard avec impression ;
+- stock disponible, réservé, engagé, seuil, unité d’achat et fournisseur.
+
+Ce domaine ne doit pas contenir les formules complètes des produits finis,
+les paliers commerciaux des articles, les règles de reliure, la composition
+d’un livre personnalisé ou les configurations d’interface POS.
+
+4.2. PRIX & RÈGLES
+
+Ce domaine contient exclusivement la logique tarifaire et les produits vendus :
+
+- catalogue des articles finis ou personnalisables ;
+- prix fixes des prestations et articles non bruts ;
+- formules de calcul ;
+- règles métier ;
+- équivalences et dépendances ;
+- paliers de quantité et remises ;
+- marges et arrondis ;
+- options payantes ;
+- finitions et façonnage ;
+- reliures, découpe, collage, pelliculage, plastification, dorure, vernis,
+  œillets, numérotation, etc. ;
+- simulateur et tests de prix.
+
+Une formule peut sélectionner une matière provenant de « Matières, formats &
+stock » au moyen de son identifiant stable. Elle ne doit jamais recréer une
+copie locale de cette matière.
+
+4.3. SYNCHRONISATION ENTRE LES DEUX DOMAINES
+
+La nuance doit être visible et réelle :
+
+- Matières = ce que l’entreprise achète, possède, transforme ou imprime.
+- Prix & règles = comment l’entreprise calcule et vend un article ou une
+  prestation en utilisant ces matières.
+
+Les deux domaines partagent des identifiants et des services de lecture, mais
+pas des formulaires ou tables de données dupliqués.
+
+Exemple concret :
+
+- « Papier couché 170 g » est créé une seule fois dans Matières.
+- Son coût d’achat, son prix vierge, son stock et son unité sont gérés dans
+  Matières.
+- « Livre A4 personnalisé » est créé dans Prix & règles.
+- Sa formule référence le papier 170 g, la couverture, le nombre de feuilles,
+  l’impression, la reliure et la finition.
+- Si le coût du papier évolue, les simulations et prix dépendants sont signalés
+  ou recalculés selon la politique définie, sans recopier la matière.
+
+======================================================================
+5. SOURCE DE VÉRITÉ ET MODÈLE DE DONNÉES
+======================================================================
+
+Ne pas confondre fusion d’interface et dénormalisation dangereuse de la base.
+La grille peut être unifiée tout en conservant des entités normalisées.
+
+Créer ou consolider un modèle conceptuel équivalent à :
+
+- Material : identité stable de la matière/support ;
+- MaterialVariant : grammage, épaisseur, laize, taille, couleur ou variante ;
+- FormatDefinition : formats normalisés/personnalisés et unités ;
+- MaterialPrice : coût, prix vierge, prix imprimé, contexte et période ;
+- StockItem : disponible, réservé, engagé, seuil, emplacement ;
+- StockMovement : entrée, sortie, correction, consommation, retour ;
+- PurchaseRecord : fournisseur, quantité, coût, date, document ;
+- Product : article fini/personnalisable ;
+- PricingFormula : formule versionnée ;
+- BusinessRule : condition, priorité, effet et période ;
+- OptionOrFinishing : option, finition, prix, contraintes et unité ;
+- QuantityTier : seuils et remises ;
+- AuditEvent : historique des changements ;
+- SoftDeletedRecord : suppression logique et métadonnées de restauration.
+
+Les noms exacts peuvent suivre le code existant, mais les responsabilités ne
+doivent plus être mélangées.
+
+Contraintes de données :
+
+- identifiants immuables ;
+- références uniques, normalisées et vérifiées côté serveur ;
+- clés étrangères réelles entre produits, matières, options et formules ;
+- montants stockés avec un type décimal ou entier adapté, jamais en float ;
+- unité et devise explicites ;
+- dates de validité pour les prix lorsqu’elles existent ;
+- horodatage et auteur pour chaque modification sensible ;
+- aucune suppression physique directe depuis une liste métier ;
+- prévention des doublons par règles d’unicité métier ;
+- migration idempotente et réexécutable en sécurité.
+
+Référence automatique : conserver ou fiabiliser la convention existante basée
+sur les cinq premières lettres normalisées du nom, puis grammage/épaisseur et
+couleur lorsqu’ils existent. Gérer les collisions avec un suffixe stable. Ne
+pas modifier silencieusement les anciennes références déjà utilisées par les
+commandes ou historiques.
+
+======================================================================
+6. TABLEAU DE BORD : REMPLACER LES DOUBLONS PAR DU VRAI PILOTAGE
+======================================================================
+
+Supprimer toutes les cartes qui reproduisent simplement les sous-menus :
+
+- Catalogue ;
+- Matières & formats ;
+- Prix & règles ;
+- Options & finitions ;
+- Import / Export ;
+- Diagnostics ;
+- Historique.
+
+Le tableau de bord doit répondre en quelques secondes à quatre questions :
+
+1. Le catalogue est-il exploitable maintenant ?
+2. Quels problèmes empêchent de vendre ou produire ?
+3. Quelles données ont changé récemment ?
+4. Quelle action prioritaire l’administrateur doit-il effectuer ?
+
+Contenu cible recommandé :
+
+A. Bandeau KPI compact et cliquable
+
+- Articles actifs et tarifables ;
+- Matières/variantes actives ;
+- Couverture tarifaire en pourcentage ;
+- Stocks sous seuil et ruptures ;
+- Formules invalides ou incomplètes ;
+- Anomalies bloquantes ;
+- Échecs de synchronisation ;
+- doublons confirmés.
+
+Chaque KPI doit :
+
+- provenir des données réelles ;
+- avoir une définition claire ;
+- ouvrir directement une liste filtrée utile ;
+- distinguer information, avertissement et blocage ;
+- ne jamais afficher un chiffre décoratif.
+
+B. File des priorités
+
+Afficher une liste ordonnée par gravité et impact, par exemple :
+
+- prix vierge manquant ;
+- prix imprimé manquant pour une matière utilisée ;
+- article sans formule et sans prix fixe ;
+- formule référant une matière archivée ;
+- rupture sur une matière utilisée par des commandes actives ;
+- seuil de stock non défini ;
+- conflit de référence ;
+- import partiellement rejeté ;
+- synchronisation échouée.
+
+Chaque ligne doit contenir : objet, cause, impact, date, responsable éventuel
+et action « Corriger » menant à l’endroit exact.
+
+C. Santé des données
+
+Afficher une synthèse utile : complétude, cohérence, fraîcheur et intégrité des
+références. Ne pas afficher des boutons techniques permanents au premier plan.
+« Migrer source unique », « Rebuild index » ou autres opérations internes
+doivent être retirés du tableau de bord métier et placés dans une zone de
+maintenance protégée, réservée au super-administrateur, avec confirmation et
+journalisation.
+
+D. Activité récente
+
+- dernières modifications de prix ;
+- imports récents ;
+- suppressions et restaurations ;
+- mouvements de stock inhabituels ;
+- changements de formule ;
+- synchronisations et résultats.
+
+E. Tendances utiles, uniquement si les données sont fiables
+
+- évolution du nombre de ruptures ;
+- taux de couverture des prix ;
+- matières les plus consommées ;
+- articles touchés par une hausse de coût.
+
+Éviter les graphiques décoratifs. Une petite table priorisée vaut mieux qu’un
+graphique sans décision associée.
+
+======================================================================
+7. MATIÈRES, FORMATS & STOCK : GRILLE MAÎTRE UNIFIÉE
+======================================================================
+
+Supprimer les trois vues redondantes « Matières », « Prix contexte » et
+« Stock & Achats » au profit d’une seule page et d’une seule grille maître.
+
+Une ligne représente une matière ou variante vendable/consommable unique.
+Les achats et mouvements restent des enregistrements liés, accessibles dans un
+tiroir de détail, sans produire une seconde liste principale concurrente.
+
+7.1. COLONNES DE LA GRILLE
+
+Prévoir les groupes de colonnes suivants, avec sélection de colonnes :
+
+Identité :
+
+- Matière ;
+- Famille ;
+- Type de caractéristique ;
+- Valeur ;
+- Référence principale ;
+- unité de gestion ;
+- format ;
+- grammage ;
+- épaisseur ;
+- laize ;
+- taille ;
+- couleur.
+
+Tarification :
+
+- Coût d’achat HT ou coût moyen pondéré ;
+- Prix vierge HT : prix de la matière/support sans impression ;
+- Prix avec impression HT : prix standard de la matière imprimée, si pertinent ;
+- contexte tarifaire ou résumé des contextes ;
+- marge indicative calculée ;
+- date de dernière mise à jour tarifaire.
+
+Stock et achat :
+
+- Stock physique ;
+- Stock réservé ;
+- Stock disponible calculé ;
+- Unité de stock ;
+- Seuil d’alerte ;
+- État de stock ;
+- Fournisseur principal ;
+- Dernier prix d’achat ;
+- Date du dernier achat ;
+- Emplacement.
+
+Suivi :
+
+- Utilisation par des articles/formules ;
+- anomalies ;
+- dernière modification ;
+- auteur ;
+- actions.
+
+Ne pas forcer toutes les colonnes à l’écran simultanément. Conserver 5 à 8
+colonnes essentielles visibles par défaut, puis proposer :
+
+- choix de colonnes ;
+- vues enregistrées ;
+- groupes de colonnes ;
+- largeur ajustable ;
+- en-tête fixe ;
+- première colonne fixe ;
+- défilement horizontal limité à la grille ;
+- densité confortable/compacte.
+
+Vue par défaut conseillée : Matière, Caractéristique, Référence, Prix vierge,
+Prix imprimé, Stock disponible, Seuil, Alertes, Actions.
+
+7.2. CLARIFICATION OBLIGATOIRE DES PRIX
+
+Ne plus utiliser « Prix base » sans définition. Employer les libellés précis :
+
+- Coût d’achat : montant payé au fournisseur ;
+- Prix vierge : prix de vente sans impression/personnalisation ;
+- Prix imprimé : tarif standard incluant l’impression de base ;
+- Prix article : tarif final calculé dans Prix & règles ;
+- Coût calculé : somme des coûts utilisée pour contrôler la marge.
+
+Chaque champ doit afficher : devise Ar, unité applicable, HT/TTC si le système
+le gère, source de la valeur et date d’effet.
+
+Pour une matière ayant plusieurs prix par contexte, ne pas dupliquer la matière
+dans la grille. Afficher une synthèse et ouvrir un panneau « Tarification » qui
+liste les contextes. Les contextes doivent rester liés à l’identifiant de la
+matière/variante.
+
+7.3. FICHE OU TIROIR DE DÉTAIL
+
+Au clic sur une matière, ouvrir une fiche ou un tiroir clair avec :
+
+- identité et caractéristiques ;
+- formats et unités ;
+- tarification ;
+- stock par emplacement ;
+- historique des achats ;
+- mouvements de stock ;
+- articles et formules qui utilisent la matière ;
+- journal des modifications.
+
+Ne pas ouvrir une modale sombre surdimensionnée avec un scroll interne mal
+maîtrisé. Utiliser le design global du backoffice, un tiroir latéral large ou
+une page de détail responsive. Les actions principales doivent rester visibles.
+
+7.4. FORMULAIRE MATIÈRE
+
+Supprimer totalement :
+
+- Statut publication « Brouillon/Publié » ;
+- bouton « Enregistrer et publier » ;
+- badge Brouillon ;
+- réglages POS redondants.
+
+Conserver seulement un état opérationnel utile : Actif ou Archivé. L’archivage
+ne doit pas remplacer la corbeille ; il sert à retirer volontairement une
+matière de l’usage futur tout en conservant ses liens historiques.
+
+Le formulaire doit comporter :
+
+- nom matière ;
+- famille ;
+- type de caractéristique ;
+- valeur et unité ;
+- référence générée ou contrôlée ;
+- format/grammage/épaisseur/laize/taille/couleur selon la famille ;
+- coût d’achat ;
+- prix vierge ;
+- prix imprimé si applicable ;
+- unité de stock ;
+- stock initial uniquement lors de la création, sous forme de mouvement ;
+- seuil d’alerte ;
+- fournisseur facultatif ;
+- notes internes ;
+- état Actif/Archivé.
+
+Masquer automatiquement les champs non pertinents selon la famille. Ne pas
+afficher grammage, épaisseur, laize, taille et couleur en même temps si la
+matière n’en a pas besoin.
+
+7.5. ACTIONS DE LIGNE
+
+Corriger les boutons dupliqués et les capsules visibles autour des pictogrammes.
+
+Utiliser une seule barre d’actions par ligne :
+
+- modifier ;
+- dupliquer, uniquement si cette fonction est réellement nécessaire ;
+- archiver/réactiver ;
+- déplacer vers la corbeille.
+
+Exigences visuelles :
+
+- pictogrammes seuls ;
+- aucun contour permanent ;
+- aucune capsule arrondie permanente ;
+- aucun fond permanent ;
+- alignement et espacement réguliers ;
+- couleur neutre, rouge uniquement pour la suppression ;
+- survol discret ;
+- tooltip explicite ;
+- zone cliquable accessible d’au moins 32 × 32 px sans cadre visible ;
+- focus clavier visible et conforme ;
+- aucun pictogramme répété pour la même action.
+
+Exigences fonctionnelles :
+
+- empêcher le double déclenchement ;
+- afficher un état de chargement ;
+- désactiver pendant la requête ;
+- message de succès ou erreur précis ;
+- mise à jour immédiate et cohérente de la ligne ;
+- annulation possible via la corbeille.
+
+======================================================================
+8. PRIX & RÈGLES : RECONSTRUCTION DU MODULE
+======================================================================
+
+Le module ne doit plus recopier le référentiel matières. Il orchestre les
+articles, tarifs, formules, règles métier, options et finitions.
+
+8.1. STRUCTURE INTERNE CIBLE
+
+Remplacer la mosaïque trop longue de « Familles de calcul » par une navigation
+interne courte et stable :
+
+1. Articles & tarifs
+2. Formules & règles
+3. Options & finitions
+4. Paliers & marges
+5. Simulateur & validation
+
+Les familles comme Impression petit format, Flyers, Carterie, Publications,
+Grand format, Vente directe, Packaging boîtes, Soft packaging et Sac papier
+ne doivent pas toutes apparaître comme gros blocs permanents. Les conserver
+comme filtres, catégories ou modèles de formule au sein des écrans appropriés.
+
+8.2. ARTICLES & TARIFS
+
+Présenter une grille propre avec, par défaut :
+
+- Article ;
+- Catégorie ;
+- Mode de calcul : prix fixe ou formule ;
+- Prix fixe, lorsque applicable ;
+- Formule active ;
+- nombre de matières référencées ;
+- état opérationnel ;
+- alertes ;
+- dernière modification ;
+- actions.
+
+Supprimer :
+
+- colonne Brouillon/Publié ;
+- décompte de brouillons ;
+- filtre Brouillon ;
+- filtre Publié ;
+- publication manuelle ;
+- lignes verticales rouges entre les colonnes ;
+- badges et informations POS redondants ;
+- colonne POS si elle ne porte qu’un voyant de publication ;
+- bouton « Options POS » ;
+- onglet « Apparence POS » ;
+- onglet ou filtre « Ordre POS » ;
+- toggles POS répétés dans chaque option ;
+- paramètres d’affichage POS qui existent déjà ailleurs.
+
+Conserver un état simple Actif/Archivé et les alertes de validité tarifaire.
+
+8.3. CRÉATION D’UN ARTICLE
+
+Refondre la fenêtre « Nouvel article » :
+
+- ne pas créer en brouillon par défaut ;
+- supprimer « Statut catalogue » Brouillon/Publié ;
+- générer l’identifiant de manière sûre, tout en autorisant une référence
+  contrôlée si le métier l’exige ;
+- demander le libellé ;
+- choisir la catégorie ;
+- choisir l’unité de vente ;
+- choisir Prix fixe ou Formule ;
+- afficher Prix fixe seulement si ce mode est choisi ;
+- afficher le sélecteur de formule seulement si ce mode est choisi ;
+- lier les matières par identifiant depuis le référentiel unique ;
+- lier options et finitions depuis le même module Prix & règles ;
+- proposer Actif/Archivé ;
+- utiliser un seul bouton « Enregistrer » ;
+- valider côté client et surtout côté serveur ;
+- expliquer précisément les erreurs.
+
+Un article actif doit être utilisable lorsque sa configuration est complète.
+S’il est incomplet, le serveur refuse l’activation et liste les champs ou liens
+manquants. Il ne faut pas remplacer cette validation par un statut Brouillon.
+
+8.4. FORMULES & RÈGLES
+
+Permettre à l’administrateur autorisé de gérer sans code :
+
+- variables ;
+- constantes ;
+- choix de matière ;
+- consommation par unité ;
+- format ;
+- recto/verso ;
+- quantité ;
+- nombre de pages ou feuilles selon le cas ;
+- surface réelle et surface facturée ;
+- laize ;
+- pertes et chutes ;
+- temps ou coût de production si présent ;
+- option et finition ;
+- marge ;
+- arrondi ;
+- minimum facturable ;
+- paliers ;
+- conditions et exclusions.
+
+Les formules doivent être versionnées. Une version utilisée par une ancienne
+commande ne doit pas être réécrite rétroactivement. Toute nouvelle version doit
+indiquer auteur, date, motif, différences et date d’effet.
+
+Prévoir un langage ou constructeur de règles sécurisé : pas d’évaluation de
+code arbitraire, pas d’expression non validée, pas de division par zéro, pas de
+valeur NaN, négative ou infinie.
+
+8.5. OPTIONS & FINITIONS INTÉGRÉES
+
+Supprimer « Options & finitions » du menu principal et l’intégrer dans l’onglet
+« Options & finitions » de Prix & règles.
+
+Créer un référentiel unique couvrant :
+
+- libellé ;
+- famille ;
+- type : option, finition, façonnage, reliure, découpe, etc. ;
+- référence ;
+- unité de calcul ;
+- prix fixe ou formule ;
+- formats autorisés ;
+- quantité minimale/maximale ;
+- nombre de pages/feuilles minimal/maximal si applicable ;
+- compatibilités ;
+- exclusions ;
+- état Actif/Archivé ;
+- historique ;
+- actions ;
+- corbeille.
+
+Supprimer de cette liste :
+
+- Statut published/draft ;
+- colonne POS ;
+- bouton « Sync POS » local ;
+- « Compléter Finitions depuis catalogue » si cette action crée des doublons.
+
+Si des finitions existent déjà dans plusieurs tables, effectuer une migration
+avec rapprochement, rapport de doublons et conservation des références. Ne pas
+supprimer une donnée ambiguë automatiquement.
+
+8.6. PALIERS & MARGES
+
+Centraliser :
+
+- paliers de quantité ;
+- remises ou surcharges ;
+- marge cible ;
+- marge minimale ;
+- minimum de facturation ;
+- règles d’arrondi ;
+- dates d’effet.
+
+Afficher clairement la différence entre coût, prix calculé, remise, marge et
+prix final. Toute règle doit indiquer sur quels articles, familles ou formules
+elle s’applique.
+
+8.7. SIMULATEUR & VALIDATION
+
+Ajouter un simulateur métier capable de :
+
+- choisir un article ;
+- saisir quantité, format et options ;
+- sélectionner une matière ;
+- afficher chaque étape du calcul ;
+- montrer coût matière, impression, finition, marge, arrondi et prix final ;
+- indiquer la version de formule utilisée ;
+- détecter une valeur manquante ;
+- comparer le résultat avant/après une modification ;
+- enregistrer des cas de test métier ;
+- empêcher l’activation d’une formule qui échoue sur des cas critiques.
+
+Le détail de calcul doit être lisible par un administrateur, pas seulement par
+un développeur.
+
+======================================================================
+9. RÈGLES MÉTIER EXISTANTES À PRÉSERVER ET À TESTER
+======================================================================
+
+Ne pas réinventer les calculs déjà validés. Les inventorier, les documenter et
+les couvrir par des tests de non-régression. Parmi les règles connues :
+
+9.1. Matière et grammage
+
+- Séparer strictement le choix de matière du choix de grammage.
+- Exemple : choisir PCM/PCB/Glossy, puis 130 g ou 170 g.
+- Papier 90 g, journal ou autocopiant : base offset 80 g + 20 Ar, selon la
+  règle existante à confirmer dans les données.
+- PCB/PCM/Glossy 90–135 g : même prix selon la grille existante.
+- 135–180 g : supplément de 50 Ar selon la règle existante.
+- 300–400 g : supplément de 100 Ar selon la règle existante.
+- Au-delà de 400 g : contre-collé basé sur impression 300 g + papier vierge,
+  selon la règle existante.
+- Autocollant, PVC translucide et sublimation : recto uniquement.
+
+9.2. Petits formats, base A4
+
+- A5 = A4 / 2 (sans découpe ; +50 Ar découpe seulement si format < A5) ;
+- A6 = A4 / 4 + 50 Ar ;
+- DL = A4 / 3 + 50 Ar ;
+- A7 = A4 / 8 + 50 Ar ;
+- A4+ = A4 + 100 Ar ;
+- A3 = A4 × 2 ;
+- A3+ = A3 + 200 Ar ;
+- format personnalisé : choisir le format supérieur applicable, par exemple
+  200 × 250 mm vers A4.
+
+Ces montants et équivalences doivent être comparés aux données actives avant
+migration. En cas de divergence, produire un rapport ; ne pas écraser la règle
+en production sans validation métier.
+
+9.3. Grand format
+
+- saisie longueur × largeur en cm ;
+- surface réelle distincte de la surface facturée ;
+- calcul lié à la laize ;
+- si min(L,l) >= laize - 30 cm, appliquer la laize supérieure selon la règle ;
+- si un côté correspond exactement à la laize, ne pas arrondir inutilement ;
+- pas de profondeur pour le grand format ;
+- formats A0 à A6 et personnalisé ;
+- pas de SRA3 dans le grand format ;
+- inclure la laize 240 cm lorsqu’elle existe ;
+- bâches regroupées par matière/variante ;
+- dos noir, blanc ou gris géré comme caractéristique ;
+- seul le dos blanc peut autoriser le recto/verso si telle est la règle active ;
+- œillets : placements manuels multiples, jusqu’à 20 points.
+
+9.4. Finitions
+
+- coins arrondis : limiter le nombre de coins ;
+- dorure : formats A6 à A3+ ; supprimer verso seul/zone si non pertinent ;
+- vernis : option simple, formats A6 à A0 ;
+- pelliculage : supprimer soft-touch si non utilisé ; conserver mat à chaud et
+  brillant selon la grille active ;
+- plastification : A6 à A3, deux faces automatiques ;
+- reliures : utiliser le nombre de feuilles lorsque le métier raisonne en
+  feuilles ;
+- piqûre à cheval : multiple de 4 pages ;
+- dos carré : minimum 40 pages en 80 g selon la règle active ;
+- afficher les références spirale/agrafes ;
+- calculer l’épaisseur du dos.
+
+Chaque règle doit avoir au moins : cas nominal, limite basse, limite haute,
+valeur manquante, combinaison interdite et test de non-régression.
+
+======================================================================
+10. SUPPRESSION DU WORKFLOW BROUILLON/PUBLIÉ
+======================================================================
+
+Retirer intégralement « Brouillon » et « Publié » pour :
+
+- matières ;
+- variantes ;
+- articles ;
+- options ;
+- finitions ;
+- filtres ;
+- KPI ;
+- badges ;
+- formulaires ;
+- exports/imports ;
+- API publiques ou internes, après migration de compatibilité ;
+- boutons « Enregistrer et publier », « Publier » et « Dépublier ».
+
+Remplacer ce workflow par :
+
+- validation de complétude ;
+- état Actif/Archivé ;
+- erreurs bloquantes précises ;
+- synchronisation automatique des données actives et valides.
+
+Migration :
+
+- les anciens éléments Publiés valides deviennent Actifs ;
+- les Brouillons complets peuvent devenir Actifs après rapport de migration ;
+- les Brouillons incomplets restent inactifs ou à corriger, mais le mot
+  « Brouillon » disparaît ;
+- aucune donnée n’est supprimée automatiquement ;
+- produire un rapport avant/après avec nombre d’éléments par résultat.
+
+======================================================================
+11. SUPPRESSION DES OPTIONS POS REDONDANTES
+======================================================================
+
+Supprimer des écrans de gestion métier :
+
+- Options POS ;
+- Apparence POS ;
+- ordre POS local ;
+- visibilité POS répétée ;
+- activation POS répétée ;
+- toggles POS par champ ou option ;
+- statut de publication POS ;
+- boutons Sync POS dans chaque sous-module ;
+- paramètres qui reproduisent la configuration centrale du catalogue.
+
+Le POS doit recevoir automatiquement le catalogue actif et valide au moyen du
+service de synchronisation central. Si certains réglages de présentation sont
+réellement indispensables, les regrouper dans un seul emplacement global de
+configuration du POS, hors des fiches de matières, formules et finitions.
+
+Conserver au maximum une action globale « Synchroniser le POS » comme outil de
+récupération manuelle réservé aux utilisateurs autorisés. Le fonctionnement
+normal doit être automatique, idempotent et observable.
+
+Ne pas supprimer une donnée utilisée par le POS sans cartographier sa vraie
+utilité. Migrer les informations indispensables vers la configuration centrale,
+puis retirer les duplications visuelles et techniques.
+
+======================================================================
+12. CORBEILLE UNIFIÉE, RESTAURATION ET HISTORIQUE
+======================================================================
+
+Toutes les corbeilles doivent reposer sur le même moteur et les mêmes règles.
+Ne pas créer une implémentation indépendante pour matières, articles, options,
+finitions ou formules.
+
+12.1. SOFT-DELETE
+
+Toute suppression depuis une liste doit :
+
+- renseigner deletedAt ;
+- renseigner deletedBy ;
+- conserver l’identifiant et les relations ;
+- accepter un motif facultatif ou obligatoire selon la sensibilité ;
+- retirer l’élément des listes actives ;
+- envoyer l’élément dans la corbeille ;
+- écrire un événement d’audit ;
+- ne pas effacer physiquement la donnée.
+
+12.2. CORBEILLE CENTRALE
+
+Dans « Historique & corbeille », prévoir les onglets :
+
+- Journal ;
+- Corbeille.
+
+La corbeille doit permettre :
+
+- recherche ;
+- filtre par type d’objet ;
+- filtre par auteur ;
+- filtre par période ;
+- affichage du nom, référence, type, date, auteur et dépendances ;
+- sélection multiple ;
+- restauration unitaire ;
+- restauration multiple ;
+- suppression définitive unitaire ;
+- suppression définitive multiple ;
+- export de la liste ;
+- actualisation ;
+- pagination ;
+- état vide correct.
+
+12.3. RESTAURATION
+
+Avant restauration :
+
+- vérifier les collisions de référence ;
+- vérifier si la famille ou matière parente existe ;
+- vérifier les dépendances supprimées ;
+- proposer une résolution contrôlée ;
+- restaurer dans une transaction ;
+- réindexer et resynchroniser les données concernées ;
+- journaliser l’opération ;
+- confirmer clairement le résultat.
+
+Si une dépendance est aussi dans la corbeille, proposer :
+
+- restaurer l’ensemble ;
+- restaurer seulement l’objet si possible ;
+- annuler.
+
+12.4. SUPPRESSION DÉFINITIVE
+
+Réserver la purge aux rôles autorisés. Exiger :
+
+- confirmation explicite ;
+- résumé des impacts ;
+- saisie d’un mot de confirmation pour les suppressions sensibles ou groupées ;
+- contrôle des dépendances ;
+- journal d’audit non supprimable ;
+- retour détaillé en cas de succès partiel.
+
+Ne jamais appeler « Supprimer sélection » une action de soft-delete et une
+purge définitive sans les distinguer. Employer « Mettre à la corbeille » dans
+les listes et « Supprimer définitivement » dans la corbeille.
+
+======================================================================
+13. DESIGN UX/UI ET SYSTÈME DE TABLEAUX
+======================================================================
+
+13.1. PRINCIPES GÉNÉRAUX
+
+- Interface claire, professionnelle, légère et cohérente avec ORION.
+- Réduire les grands espaces vides et les cartes imbriquées.
+- Éviter une accumulation de contours arrondis.
+- Utiliser la couleur rose/rouge de marque pour l’action principale et l’état
+  actif, pas pour séparer toutes les cellules.
+- Hiérarchie typographique nette.
+- Espacement régulier sur une grille cohérente.
+- Une seule action primaire par zone.
+- Actions secondaires discrètes.
+- États loading, succès, avertissement, erreur et vide soignés.
+- Animations courtes, utiles et respectueuses de prefers-reduced-motion.
+
+13.2. TABLEAUX
+
+Interdiction de conserver les traits rouges verticaux entre les colonnes.
+
+Style cible :
+
+- en-tête sur fond gris très clair ;
+- séparateurs horizontaux fins et neutres ;
+- aucune bordure verticale agressive ;
+- survol de ligne subtil ;
+- ligne sélectionnée clairement mais sobrement ;
+- alignement à gauche pour textes ;
+- alignement à droite pour montants et quantités ;
+- nombres avec séparateurs de milliers ;
+- devise Ar affichée de manière homogène ;
+- cellules non renseignées avec « — », jamais une valeur trompeuse ;
+- troncature avec tooltip pour les références longues ;
+- hauteur de ligne cohérente ;
+- header sticky ;
+- pagination ou virtualisation pour les grandes listes ;
+- filtres persistants dans l’URL ou l’état de vue ;
+- recherche avec debounce ;
+- tri serveur cohérent ;
+- export respectant les filtres actifs.
+
+13.3. BARRES D’OUTILS
+
+Éviter les actions dupliquées en haut, dans une seconde barre et dans chaque
+onglet. Définir :
+
+- action primaire contextuelle ;
+- import/export dans le domaine prévu ou un menu secondaire ;
+- actualisation discrète ;
+- actions groupées visibles uniquement après sélection ;
+- choix de colonnes ;
+- filtres avancés repliables.
+
+13.4. RESPONSIVE ET ACCESSIBILITÉ
+
+- navigation clavier complète ;
+- labels accessibles pour les pictogrammes ;
+- contraste conforme WCAG AA ;
+- focus visible ;
+- aucune information portée uniquement par la couleur ;
+- tableau transformé en liste ou colonnes prioritaires sur petit écran ;
+- modales/tiroirs piégeant correctement le focus ;
+- boutons tactiles suffisamment grands sans ajouter de cadres visuels ;
+- messages d’erreur liés aux champs concernés.
+
+======================================================================
+14. IMPORT / EXPORT ET ADMINISTRATION SANS CODE
+======================================================================
+
+Le module Import / Export doit utiliser le même référentiel et ne jamais créer
+une seconde vérité.
+
+Prévoir des modèles distincts et documentés :
+
+- matières/variantes ;
+- prix et contextes ;
+- stocks initiaux ou corrections ;
+- articles ;
+- formules/règles ;
+- options/finitions ;
+- paliers.
+
+Fonctions obligatoires :
+
+- téléchargement du modèle actuel ;
+- dictionnaire des colonnes et unités ;
+- analyse préalable sans écriture ;
+- aperçu des ajouts, modifications, archives et erreurs ;
+- détection des doublons ;
+- validation des références étrangères ;
+- contrôle des unités et montants ;
+- rapport ligne par ligne ;
+- confirmation avant application ;
+- transaction ou stratégie de reprise sûre ;
+- journal de l’import ;
+- export des lignes rejetées avec motif ;
+- possibilité de corriger puis réimporter ;
+- aucune suppression implicite non confirmée.
+
+Les imports doivent supporter ajout et mise à jour par identifiant/référence.
+Une suppression ne doit être possible que par une colonne d’action explicite,
+puis passer par le soft-delete.
+
+======================================================================
+15. SYNCHRONISATION ET RECALCUL
+======================================================================
+
+Mettre en place un flux de données clair :
+
+Administration / base de référence
+    -> moteur de validation
+    -> moteur de tarification
+    -> catalogue actif
+    -> POS et autres consommateurs.
+
+Exigences :
+
+- transactionnalité des changements sensibles ;
+- événements idempotents ;
+- reprise sur erreur ;
+- journal de synchronisation ;
+- statut technique consultable sans polluer l’écran métier ;
+- invalidation des caches ;
+- recalcul ciblé des articles dépendants ;
+- aucune duplication d’article lors d’une nouvelle synchronisation ;
+- protection contre les mises à jour concurrentes ;
+- date et version de dernière synchronisation ;
+- alerte seulement lorsque l’utilisateur peut agir.
+
+Lorsqu’un prix matière change :
+
+1. Enregistrer la nouvelle valeur et sa date d’effet.
+2. Identifier les formules et articles dépendants.
+3. Recalculer en prévisualisation ou automatiquement selon la politique.
+4. Détecter les marges devenues insuffisantes.
+5. Signaler les articles touchés.
+6. Synchroniser les nouveaux tarifs actifs.
+7. Conserver l’ancien calcul pour les commandes historiques.
+
+======================================================================
+16. PERMISSIONS, SÉCURITÉ ET AUDIT
+======================================================================
+
+Respecter les rôles existants. Ne pas élargir les droits par défaut.
+
+Prévoir des permissions séparées pour :
+
+- consulter ;
+- créer/modifier une matière ;
+- modifier coûts et prix ;
+- corriger le stock ;
+- créer/modifier une formule ;
+- activer/archiver ;
+- importer ;
+- exporter ;
+- mettre à la corbeille ;
+- restaurer ;
+- supprimer définitivement ;
+- lancer une synchronisation globale ;
+- accéder à la maintenance technique.
+
+Tous les contrôles doivent être appliqués côté serveur, pas seulement masqués
+dans l’interface.
+
+Journaliser au minimum :
+
+- ancienne valeur ;
+- nouvelle valeur ;
+- objet ;
+- champ ;
+- utilisateur ;
+- date/heure ;
+- origine : UI, import, API, migration ;
+- motif si disponible ;
+- corrélation de l’opération.
+
+Masquer les informations sensibles selon le rôle. Protéger les imports contre
+les fichiers malveillants et les formules de tableur injectées.
+
+======================================================================
+17. PERFORMANCE ET FIABILITÉ
+======================================================================
+
+- pagination serveur ou virtualisation au-delà d’un volume raisonnable ;
+- requêtes sans N+1 ;
+- index sur références, familles, états, dates, soft-delete et clés de liaison ;
+- agrégats du tableau de bord calculés efficacement ;
+- cache seulement avec invalidation fiable ;
+- recherche insensible aux accents lorsque pertinent ;
+- opérations groupées limitées et traçables ;
+- timeouts et erreurs gérés ;
+- aucun blocage de toute la page pour une action de ligne ;
+- verrouillage optimiste ou versionnement des éditions concurrentes ;
+- sauvegarde et rollback avant migration de données.
+
+======================================================================
+18. PLAN D’EXÉCUTION PAR TRANCHES
+======================================================================
+
+TRANCHE 0 — AUDIT, CARTOGRAPHIE ET SAUVEGARDE
+
+Livrables :
+
+- inventaire routes/pages/composants ;
+- inventaire tables/API/services ;
+- carte des duplications ;
+- liste des statuts Brouillon/Publié et réglages POS ;
+- liste des tables de matières, prix contexte, stock, achats, options et
+  finitions ;
+- carte des dépendances avec commandes et POS ;
+- inventaire des formules et règles actives ;
+- état des corbeilles ;
+- risques de migration ;
+- sauvegarde vérifiée ;
+- plan de rollback.
+
+Ne modifier aucune donnée métier pendant l’audit.
+
+Critère de sortie : toute donnée à migrer possède une origine, une destination
+et une règle de résolution des conflits.
+
+TRANCHE 1 — CONTRAT DE DONNÉES ET MIGRATIONS PRÉPARATOIRES
+
+- définir les sources de vérité ;
+- créer les identifiants et relations manquants ;
+- ajouter les champs de prix explicites ;
+- unifier le soft-delete ;
+- préparer les vues/API de grille unifiée ;
+- préparer les migrations sans supprimer les anciennes structures ;
+- écrire les tests de migration et de rollback.
+
+Critère de sortie : exécution à blanc sans perte, rapport chiffré avant/après et
+réexécution idempotente.
+
+TRANCHE 2 — NAVIGATION ET TABLEAU DE BORD
+
+- réduire le menu aux cinq domaines cibles ;
+- intégrer Diagnostics dans le dashboard/maintenance ;
+- supprimer les cartes de navigation redondantes ;
+- créer KPI, priorités, santé des données et activité récente ;
+- relier chaque indicateur à une liste filtrée.
+
+Critère de sortie : aucune information du dashboard ne duplique simplement le
+menu et chaque alerte conduit à une action réelle.
+
+TRANCHE 3 — GRILLE MATIÈRES, FORMATS & STOCK
+
+- fusionner les vues Matières, Prix contexte et Stock & Achats dans une grille ;
+- ajouter coût, prix vierge, prix imprimé et colonnes de stock ;
+- ajouter panneau de détail achats/mouvements/utilisations ;
+- corriger le formulaire ;
+- supprimer Brouillon/Publié ;
+- corriger les actions pictogrammes ;
+- brancher la corbeille.
+
+Critère de sortie : une matière n’apparaît qu’une seule fois par variante et
+toutes ses informations sont accessibles sans changer de sous-module.
+
+TRANCHE 4 — PRIX & RÈGLES
+
+- simplifier les familles de calcul ;
+- nettoyer la grille articles ;
+- refondre la création/édition ;
+- séparer prix fixe et formule ;
+- supprimer toute copie de matière ;
+- référencer le référentiel unique ;
+- versionner les formules ;
+- ajouter simulateur et tests.
+
+Critère de sortie : chaque prix final peut être expliqué et chaque matière
+utilisée renvoie à son identifiant maître.
+
+TRANCHE 5 — INTÉGRATION OPTIONS & FINITIONS
+
+- retirer le domaine autonome ;
+- fusionner les sources options/finitions sans doublon ;
+- migrer prix, unités, contraintes et compatibilités ;
+- intégrer liste, fiche, historique et corbeille dans Prix & règles ;
+- retirer les champs POS et publication inutiles.
+
+Critère de sortie : une seule finition par référence métier et aucun lien de
+produit/formule cassé.
+
+TRANCHE 6 — SUPPRESSION DES REDONDANCES POS ET DU WORKFLOW DE PUBLICATION
+
+- migrer les informations indispensables ;
+- retirer Options POS, Apparence POS, ordre et toggles locaux ;
+- supprimer Brouillon/Publié sur UI, API et modèle ;
+- mettre en place validation + Actif/Archivé ;
+- centraliser et automatiser la synchronisation.
+
+Critère de sortie : le POS reçoit les bons articles actifs sans configuration
+répétée dans chaque écran.
+
+TRANCHE 7 — CORBEILLE ET HISTORIQUE UNIFIÉS
+
+- brancher toutes les entités sur le moteur soft-delete ;
+- réaliser restauration unitaire et multiple ;
+- gérer dépendances et conflits ;
+- sécuriser la purge ;
+- unifier journal et audit ;
+- tester les erreurs partielles.
+
+Critère de sortie : supprimer, restaurer et resupprimer un élément conserve la
+cohérence des références, formules, stocks et index.
+
+TRANCHE 8 — DESIGN SYSTEM ET RESPONSIVE
+
+- appliquer le système de tableau ;
+- supprimer traits rouges et capsules d’action ;
+- harmoniser barres d’outils, formulaires, filtres et états ;
+- corriger scrolls, hauteurs et zones vides ;
+- assurer clavier, contraste, focus et mobile ;
+- ajouter animations courtes et utiles.
+
+Critère de sortie : aucune action n’est dupliquée, aucun tableau n’utilise de
+séparateur rouge vertical et toutes les fonctions restent accessibles.
+
+TRANCHE 9 — IMPORT/EXPORT, SYNCHRONISATION ET PERFORMANCE
+
+- adapter modèles et contrôles aux nouvelles sources ;
+- créer analyse préalable et rapports d’erreur ;
+- fiabiliser recalcul, cache, index et POS ;
+- optimiser listes et dashboard ;
+- tester charge, reprise et concurrence.
+
+Critère de sortie : un import contrôlé se propage sans doublon et peut être
+audité ou annulé selon la stratégie définie.
+
+TRANCHE 10 — RECETTE, DÉPLOIEMENT ET NETTOYAGE
+
+- exécuter tous les tests ;
+- comparer prix avant/après sur un échantillon représentatif ;
+- comparer stocks et mouvements ;
+- vérifier commandes historiques ;
+- tester rôles ;
+- tester POS ;
+- tester restauration ;
+- déployer progressivement ;
+- surveiller erreurs et métriques ;
+- retirer ancien code seulement après validation ;
+- documenter administration et dépannage.
+
+Critère de sortie : zéro perte de données, zéro changement tarifaire inexpliqué,
+zéro lien cassé et rollback opérationnel.
+
+======================================================================
+19. PLAN DE TEST OBLIGATOIRE
+======================================================================
+
+19.1. Tests unitaires
+
+- génération et collision de références ;
+- calcul stock disponible ;
+- calcul coût/prix/marge ;
+- formules petit format ;
+- formules grand format/laize ;
+- règles grammage ;
+- contraintes finitions ;
+- paliers ;
+- arrondis ;
+- validation des articles ;
+- soft-delete et restauration ;
+- permissions.
+
+19.2. Tests d’intégration
+
+- création matière -> stock -> formule -> article -> POS ;
+- changement coût -> recalcul -> alerte marge -> synchronisation ;
+- import matière + prix + stock ;
+- archivage d’une matière utilisée ;
+- suppression/restauration d’une finition ;
+- conflit de référence à la restauration ;
+- suppression groupée partiellement invalide ;
+- formule versionnée utilisée par commande historique ;
+- échec de synchronisation puis reprise.
+
+19.3. Tests end-to-end
+
+- administrateur crée une matière vierge ;
+- renseigne coût, prix vierge, prix imprimé et stock ;
+- crée un article personnalisé ;
+- associe une formule, une matière et une finition ;
+- simule quantité et format ;
+- enregistre l’article actif ;
+- vérifie le bon prix dans le POS ;
+- modifie le coût matière ;
+- constate l’impact ;
+- supprime puis restaure l’élément ;
+- vérifie historique et absence de doublon.
+
+19.4. Tests visuels et accessibilité
+
+- desktop, tablette et mobile ;
+- zoom 200 % ;
+- navigation clavier ;
+- lecteur d’écran sur actions ;
+- contraste ;
+- longues références et libellés ;
+- tables vides, chargement, erreur et grand volume ;
+- aucun trait rouge vertical ;
+- pictogrammes sans capsules ;
+- focus visible malgré l’absence de contour permanent.
+
+19.5. Jeux de données de référence
+
+Créer des cas couvrant :
+
+- papier 80/90/130/135/170/180/300/400/>400 g ;
+- autocopiant ;
+- bâche 180/240/320 cm ;
+- vinyle/autocollant ;
+- T-shirt coton ;
+- stylo vierge ;
+- petit format A7 à A3+ ;
+- grand format personnalisé ;
+- livre avec feuilles, couverture et reliure ;
+- prix fixe ;
+- formule ;
+- option incompatible ;
+- stock nul, réservé, sous seuil et négatif interdit.
+
+======================================================================
+20. CRITÈRES D’ACCEPTATION GLOBAUX
+======================================================================
+
+La refonte n’est acceptée que si :
+
+1. Le menu interne contient au maximum les cinq domaines définis.
+2. Le tableau de bord ne répète aucun sous-menu sous forme de carte.
+3. Matières, prix contexte, stocks et achats sont accessibles depuis une grille
+   maître cohérente.
+4. Les colonnes Prix vierge et Prix avec impression sont présentes et définies.
+5. Les matières ne sont pas dupliquées dans Prix & règles.
+6. Prix & règles référence les matières au moyen d’identifiants stables.
+7. Options & finitions est intégré dans Prix & règles.
+8. Les statuts Brouillon/Publié ont disparu de ce domaine.
+9. Les réglages POS redondants ont disparu des fiches et tableaux.
+10. Une synchronisation centrale fiable alimente le POS.
+11. Les actions de ligne utilisent des pictogrammes uniques sans capsules.
+12. Aucun tableau n’a de séparateur vertical rouge.
+13. Toutes les suppressions passent par une corbeille fonctionnelle.
+14. Restauration unitaire et multiple fonctionnent avec contrôle des conflits.
+15. La suppression définitive est protégée et auditée.
+16. Chaque prix final peut être expliqué par le simulateur.
+17. Les anciennes commandes conservent leurs prix/formules historiques.
+18. Les imports sont validés avant écriture et produisent un rapport.
+19. Les calculs existants validés passent les tests de non-régression.
+20. Aucun droit utilisateur n’est élargi involontairement.
+21. Aucun bouton n’est décoratif ou sans effet.
+22. Aucun lien mort, doublon de route ou composant abandonné ne subsiste.
+23. La page reste rapide et exploitable avec un volume important.
+24. Le rendu est responsive et accessible.
+25. Une sauvegarde et un rollback ont été vérifiés avant mise en production.
+
+======================================================================
+21. INTERDICTIONS STRICTES
+======================================================================
+
+- Ne pas supprimer des tables ou colonnes avant migration et validation.
+- Ne pas écraser les prix existants sans comparaison et rapport.
+- Ne pas recalculer rétroactivement les anciennes commandes.
+- Ne pas créer une seconde source de vérité pour simplifier l’UI.
+- Ne pas fusionner physiquement des entités incompatibles sans analyse.
+- Ne pas conserver des copies locales de matières dans les formules.
+- Ne pas masquer un bug derrière un nouveau statut.
+- Ne pas remplacer Brouillon/Publié par un autre workflow aussi lourd.
+- Ne pas multiplier les onglets qui reproduisent les anciens sous-menus.
+- Ne pas ajouter des cartes de navigation dans le dashboard.
+- Ne pas conserver les micro-réglages POS dispersés.
+- Ne pas exécuter du code arbitraire dans le moteur de formule.
+- Ne pas utiliser de float pour les montants.
+- Ne pas afficher des actions dupliquées.
+- Ne pas encadrer les pictogrammes d’action par des capsules permanentes.
+- Ne pas utiliser de lignes rouges pour séparer les colonnes.
+- Ne pas réaliser de suppression physique depuis une grille métier.
+- Ne pas considérer un test de build comme une recette suffisante.
+- Ne pas annoncer « terminé » sans résultats de tests et bilan de migration.
+
+======================================================================
+22. FORMAT DU COMPTE RENDU À LA FIN DE CHAQUE TRANCHE
+======================================================================
+
+Fournir exactement :
+
+1. Résultat obtenu.
+2. Périmètre réellement modifié.
+3. Fichiers modifiés.
+4. Migrations ajoutées ou exécutées.
+5. Données avant/après.
+6. Tests exécutés et résultats.
+7. Captures des écrans concernés si l’environnement le permet.
+8. Problèmes restants.
+9. Risques et rollback.
+10. Proposition de tranche suivante, sans l’exécuter avant validation.
+
+Pour chaque écart par rapport à cette spécification, expliquer la contrainte
+technique, l’impact et l’alternative retenue. Ne jamais décider silencieusement
+de conserver une redondance ou de modifier une règle tarifaire.
+
+======================================================================
+23. INSTRUCTION FINALE À L’AGENT D’IMPLÉMENTATION
+======================================================================
+
+Commence maintenant uniquement par la TRANCHE 0 : audit, cartographie,
+sauvegarde et plan de migration. N’effectue aucune refonte destructive lors de
+cette première tranche.
+
+Inspecte le code et la base réellement présents. Utilise les conventions,
+composants, services, design tokens et mécanismes d’authentification existants
+lorsqu’ils sont sains. Signale les contradictions entre l’existant et cette
+spécification. Donne priorité à l’intégrité des données, à l’exactitude des prix,
+à la continuité des commandes et à la simplicité d’administration.
+
+Le résultat final doit donner l’impression d’un seul système cohérent :
+
+- Matières, formats & stock gère ce qui existe physiquement et ce que cela vaut.
+- Prix & règles gère comment les articles et prestations sont calculés et vendus.
+- Le tableau de bord pilote les anomalies et priorités.
+- Import / Export administre les mises à jour en masse avec contrôle.
+- Historique & corbeille protège, explique et restaure les changements.
+- Le POS reçoit automatiquement une donnée active, complète, vraie et à jour.
+
+FIN DU PROMPT

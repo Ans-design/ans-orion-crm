@@ -1,0 +1,352 @@
+﻿/* Plan matière · Déchets & pertes — densifié */
+
+.plan-matiere-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.plan-matiere-kpi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+@media (min-width: 900px) {
+  .plan-matiere-kpi {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.plan-matiere-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+}
+
+.plan-matiere-toolbar h2 {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.plan-matiere-toolbar .hint {
+  margin: 0.1rem 0 0;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.plan-matiere-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+}
+
+@media (min-width: 860px) {
+  .plan-matiere-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .plan-matiere-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.plan-matiere-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 88%, transparent);
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.plan-matiere-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--primary, #cc0033) 6%, var(--bg-card-soft, #f8fafc));
+}
+
+.plan-matiere-card[data-status='En prod.'] {
+  background: color-mix(in srgb, #f97316 9%, var(--bg-card-soft, #fff7ed));
+}
+
+.plan-matiere-card[data-status='Terminé'] {
+  background: color-mix(in srgb, #22c55e 9%, var(--bg-card-soft, #f0fdf4));
+}
+
+.plan-matiere-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.plan-matiere-cmd {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #0284c7;
+  text-decoration: none;
+}
+
+.plan-matiere-cmd:hover {
+  text-decoration: underline;
+}
+
+.plan-matiere-client {
+  margin-top: 0.1rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.plan-matiere-badge {
+  flex-shrink: 0;
+  padding: 0.18rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  background: color-mix(in srgb, var(--bg-app, #e2e8f0) 70%, transparent);
+  color: var(--text-muted);
+}
+
+.plan-matiere-badge[data-status='En prod.'] {
+  background: color-mix(in srgb, #f97316 18%, transparent);
+  color: #c2410c;
+}
+
+.plan-matiere-badge[data-status='Terminé'] {
+  background: color-mix(in srgb, #22c55e 18%, transparent);
+  color: #15803d;
+}
+
+.plan-matiere-art {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.25;
+}
+
+.plan-matiere-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.55rem;
+}
+
+.plan-matiere-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.plan-matiere-meta-item .lbl {
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.plan-matiere-meta-item .val {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plan-matiere-meta-item .val.empty {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.plan-matiere-stock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 55%, transparent);
+}
+
+.plan-matiere-stock .lbl {
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.plan-matiere-stock ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.plan-matiere-stock li {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.plan-matiere-stock-link {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--primary, #cc0033);
+  text-decoration: none;
+}
+
+.plan-matiere-stock-link:hover {
+  text-decoration: underline;
+}
+
+.plan-matiere-form {
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, #ef4444 8%, var(--bg-card-soft, #fef2f2));
+  border: none;
+}
+
+.plan-matiere-form h3 {
+  margin: 0 0 0.65rem;
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: #b91c1c;
+}
+
+.plan-matiere-waste-panel {
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 92%, transparent);
+  border: none;
+}
+
+.plan-matiere-waste-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.plan-matiere-waste-head h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.plan-matiere-waste-head .stats {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.plan-matiere-waste-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+}
+
+@media (min-width: 700px) {
+  .plan-matiere-waste-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .plan-matiere-waste-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.plan-matiere-waste-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--radius-card, 7px);
+  background: color-mix(in srgb, #ef4444 6%, var(--bg-app, #fff));
+  border: none;
+}
+
+.plan-matiere-waste-card .title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.plan-matiere-waste-card .meta {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+html.dark .plan-matiere-card,
+.dark .plan-matiere-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 90%, transparent);
+}
+
+html.dark .plan-matiere-card[data-status='En prod.'],
+.dark .plan-matiere-card[data-status='En prod.'] {
+  background: color-mix(in srgb, #f97316 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .plan-matiere-card[data-status='Terminé'],
+.dark .plan-matiere-card[data-status='Terminé'] {
+  background: color-mix(in srgb, #22c55e 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .plan-matiere-badge[data-status='En prod.'],
+.dark .plan-matiere-badge[data-status='En prod.'] {
+  color: #fdba74;
+}
+
+html.dark .plan-matiere-badge[data-status='Terminé'],
+.dark .plan-matiere-badge[data-status='Terminé'] {
+  color: #86efac;
+}
+
+html.dark .plan-matiere-cmd,
+.dark .plan-matiere-cmd {
+  color: #38bdf8;
+}
+
+html.dark .plan-matiere-stock,
+.dark .plan-matiere-stock {
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 70%, transparent);
+}
+
+html.dark .plan-matiere-form,
+.dark .plan-matiere-form {
+  background: color-mix(in srgb, #ef4444 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .plan-matiere-form h3,
+.dark .plan-matiere-form h3 {
+  color: #fca5a5;
+}
+
+html.dark .plan-matiere-waste-panel,
+.dark .plan-matiere-waste-panel {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .plan-matiere-waste-card,
+.dark .plan-matiere-waste-card {
+  background: color-mix(in srgb, #ef4444 12%, var(--bg-app, #0f172a));
+}

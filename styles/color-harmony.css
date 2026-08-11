@@ -1,0 +1,195 @@
+/**
+ * ANS ORION — Couche finale d’harmonie des couleurs
+ * ─────────────────────────────────────────────────
+ * Chargez ce fichier en DERNIER dans globals.css.
+ * Toujours la même hiérarchie :
+ *   Brand  = framboise  #FF174D  (--primary)
+ *   Hover  = framboise sombre #C91443
+ *   Or     = #FACC15 (accent secondaire, charts, KPI)
+ *   Success / Warning / Danger / Info = sémantiques DISTINCTS de la marque
+ * Alias legacy (orion-*, ans-*, brand-*, accent-*) → tokens canoniques.
+ */
+
+:root,
+:root:not(.dark),
+.dark {
+  /* ── Alias marque → primary (zéro palette parallèle) ── */
+  --brand-primary: var(--primary);
+  --brand-primary-hover: var(--primary-hover);
+  --brand-primary-soft: color-mix(in srgb, var(--primary) 10%, transparent);
+  --brand-primary-border: color-mix(in srgb, var(--primary) 28%, transparent);
+
+  --app-primary: var(--primary);
+  --app-primary-hover: var(--primary-hover);
+  --app-success: var(--success);
+  --app-warning: var(--warning);
+  --app-danger: var(--danger);
+
+  --accent-primary: var(--primary);
+  --accent-primary-hover: var(--primary-hover);
+  --accent-primary-active: var(--primary-hover);
+  --accent-brand: var(--ans-gold-500, #FACC15);
+  --accent-brand-alt: var(--primary);
+  --accent-success: var(--success);
+  --accent-warning: var(--warning);
+  --accent-danger: var(--danger);
+  --accent-info: var(--info);
+
+  --orion-red: var(--primary);
+  --orion-red-vivid: var(--primary);
+  --orion-rose: var(--primary);
+  --orion-red-dark: var(--primary-hover);
+  --orion-yellow: var(--ans-gold-500, #FACC15);
+  --orion-green: var(--success);
+  --orion-success: var(--success);
+  --orion-warning: var(--warning);
+  --orion-danger: var(--danger);
+  --orion-info: var(--info);
+
+  --ans-red: var(--primary);
+  --ans-red-vivid: var(--primary);
+  --ans-red-dark: var(--primary-hover);
+  --ans-yellow: var(--ans-gold-500, #FACC15);
+  --ans-green: var(--success);
+  --ans-orange: var(--ans-orange-500, #F59E0B);
+  /* cyan / blue historiques → info sémantique (plus de cyan-alias-rouge) */
+  --ans-cyan: var(--info);
+  --ans-blue: var(--info);
+
+  --ans-red-500: var(--primary);
+  --ans-red-600: var(--primary-hover);
+  --ans-pink-500: var(--primary);
+  --ans-pink-400: var(--primary-soft, #FF3366);
+  --ans-pink-600: var(--primary-hover);
+
+  /* Graphiques = même famille */
+  --chart-1: var(--primary);
+  --chart-2: var(--ans-gold-500, #FACC15);
+  --chart-3: var(--success);
+  --chart-4: var(--warning);
+  --chart-5: var(--text-muted, #64748B);
+
+  --status-success: var(--success);
+  --status-warning: var(--warning);
+  --status-error: var(--danger);
+  --status-info: var(--info);
+
+  --border-active: var(--primary);
+  --border-active-soft: color-mix(in srgb, var(--primary) 28%, transparent);
+  --ring: 345 100% 55%;
+  --ring-hsl: 345 100% 55%;
+}
+
+/**
+ * Sémantiques lock (clair) — ne pas confondre avec le rouge marque
+ * Info = bleu · Danger = rouge erreur · Warning = ambre
+ */
+:root:not(.dark) {
+  --primary: #FF174D;
+  --primary-hover: #C91443;
+  --primary-soft: #FF3366;
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground: #FFFFFF;
+
+  --success: #16A34A;
+  --warning: #F59E0B;
+  --danger: #DC2626;
+  --destructive: #DC2626;
+  --info: #2563EB;
+
+  --ans-primary: #FF174D;
+  --ans-primary-hover: #C91443;
+  --ans-primary-active: #B80030;
+  --ans-primary-soft: rgba(255, 23, 77, 0.12);
+  --ans-info: #2563EB;
+  --ans-success: #16A34A;
+  --ans-warning: #F59E0B;
+  --ans-danger: #DC2626;
+  --ans-gold: #FACC15;
+  --ans-gold-500: #FACC15;
+  --ans-amber: #F59E0B;
+  --ans-orange-500: #F59E0B;
+
+  --success-text: #087A55;
+  --warning-text: #92400E;
+  --danger-text: #B91C1C;
+  --info-text: #1D4ED8;
+  --info-bg: color-mix(in srgb, #2563EB 12%, transparent);
+  --info-border: color-mix(in srgb, #2563EB 28%, transparent);
+  --success-bg: color-mix(in srgb, #16A34A 10%, transparent);
+  --success-border: color-mix(in srgb, #16A34A 28%, transparent);
+  --warning-bg: color-mix(in srgb, #F59E0B 12%, transparent);
+  --warning-border: color-mix(in srgb, #F59E0B 32%, transparent);
+  --danger-bg: color-mix(in srgb, #DC2626 10%, transparent);
+  --danger-border: color-mix(in srgb, #DC2626 28%, transparent);
+
+  --ab2-info: #2563EB;
+  --orion-info: #2563EB;
+}
+
+.dark {
+  --primary: #FF174D;
+  --primary-hover: #FF3366;
+  --primary-soft: #FF3366;
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground: #FFFFFF;
+
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --destructive: #EF4444;
+  --info: #3B82F6;
+
+  --ans-primary: #FF174D;
+  --ans-primary-hover: #FF3366;
+  --ans-primary-active: #E0003B;
+  --ans-primary-soft: rgba(255, 23, 77, 0.16);
+  --ans-info: #3B82F6;
+  --ans-success: #22C55E;
+  --ans-warning: #F59E0B;
+  --ans-danger: #EF4444;
+  --ans-gold: #FACC15;
+  --ans-gold-500: #FACC15;
+  --ans-amber: #F59E0B;
+  --ans-orange-500: #F59E0B;
+
+  --success-text: #4ADE80;
+  --warning-text: #FACC15;
+  --danger-text: #FB7185;
+  --info-text: #93C5FD;
+  --info-bg: color-mix(in srgb, #3B82F6 14%, transparent);
+  --info-border: color-mix(in srgb, #3B82F6 30%, transparent);
+  --success-bg: color-mix(in srgb, #22C55E 10%, transparent);
+  --success-border: color-mix(in srgb, #22C55E 24%, transparent);
+  --warning-bg: color-mix(in srgb, #F59E0B 12%, transparent);
+  --warning-border: color-mix(in srgb, #F59E0B 28%, transparent);
+  --danger-bg: color-mix(in srgb, #EF4444 12%, transparent);
+  --danger-border: color-mix(in srgb, #EF4444 28%, transparent);
+
+  --ab2-info: #3B82F6;
+  --orion-info: #3B82F6;
+}
+
+/* Utilitaires d’accent : toujours le token, jamais un hex orphelin */
+.orion-text-brand {
+  color: var(--primary) !important;
+}
+.orion-bg-brand {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground, #fff) !important;
+}
+.orion-border-brand {
+  border-color: var(--primary) !important;
+}
+.orion-text-info {
+  color: var(--info) !important;
+}
+.orion-text-success {
+  color: var(--success) !important;
+}
+.orion-text-warning {
+  color: var(--warning) !important;
+}
+.orion-text-danger {
+  color: var(--danger) !important;
+}

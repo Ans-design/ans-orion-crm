@@ -1,0 +1,326 @@
+/**
+ * Phone / phablet — rails horizontaux (slide L→R) dans un même module.
+ * Inspiration SaaS compact (Dribbble / Behance) : peek card + scroll-snap, moins de hauteur page.
+ * Tablette+ : grilles classiques inchangées.
+ */
+
+/* ── Utilitaire rail (KPI / sections module) ── */
+.orion-h-rail {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-block: 2px 10px;
+  padding-inline: 2px max(0.5rem, env(safe-area-inset-right, 0px));
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* hint dégradé droit */
+  mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 28px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 28px), transparent 100%);
+}
+
+.orion-h-rail::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.orion-h-rail__slide {
+  flex: 0 0 auto;
+  width: min(78vw, 272px);
+  max-width: 86vw;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-width: 0;
+}
+
+.orion-h-rail__slide--wide {
+  width: min(88vw, 340px);
+}
+
+.orion-h-rail__slide > * {
+  height: 100%;
+  width: 100%;
+  min-height: 0;
+}
+
+/* Compact KPI dans le rail */
+@media (max-width: 767.98px) {
+  .orion-h-rail .orion-kpi-saas,
+  .orion-h-rail .orion-ds-metric,
+  .orion-h-rail .orion-card {
+    min-height: 96px !important;
+    padding: 0.875rem 1rem !important;
+  }
+
+  .orion-h-rail .orion-text-kpi-value,
+  .orion-h-rail .text-body-l {
+    font-size: 1.125rem !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Grilles KPI « brutes » (rapports, ops) → rail */
+  .orion-kpi-grid,
+  .dashboard-kpi-grid,
+  .kpi-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    grid-template-columns: none !important;
+    gap: 0.75rem !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.75rem;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 24px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 24px), transparent 100%);
+  }
+
+  .orion-kpi-grid::-webkit-scrollbar,
+  .dashboard-kpi-grid::-webkit-scrollbar,
+  .kpi-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .orion-kpi-grid > *,
+  .dashboard-kpi-grid > *,
+  .kpi-grid > * {
+    flex: 0 0 min(72vw, 240px) !important;
+    width: min(72vw, 240px) !important;
+    max-width: 80vw;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    min-height: 96px !important;
+  }
+
+  /* Analytics cockpit / charts : glisser plutôt qu’empiler */
+  .dashboard-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    grid-template-columns: none !important;
+    gap: 0.75rem !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.5rem;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+    align-items: stretch;
+    mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 28px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 28px), transparent 100%);
+  }
+
+  .dashboard-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dashboard-grid > * {
+    flex: 0 0 min(88vw, 320px) !important;
+    width: min(88vw, 320px) !important;
+    max-width: 92vw;
+    grid-column: auto !important;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    max-height: min(52vh, 380px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dashboard-grid .dashboard-chart-card,
+  .dashboard-grid .dashboard-chart-card-body {
+    min-height: 0;
+  }
+
+  .dashboard-grid .dashboard-chart-card-body {
+    min-height: 140px;
+  }
+
+  /* Modules board → carrousel */
+  .dashboard-module-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    gap: 0.75rem !important;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+  }
+
+  .dashboard-module-grid > * {
+    flex: 0 0 min(70vw, 220px) !important;
+    scroll-snap-align: start;
+  }
+
+  /* Moins d’air vertical inter-sections */
+  .orion-viewport .orion-page,
+  .orion-viewport .orion-module-page,
+  .orion-viewport .dashboard-full {
+    gap: 0.75rem;
+  }
+
+  .orion-viewport .orion-page.space-y-4,
+  .orion-viewport .orion-module-page.space-y-4,
+  .orion-viewport .dashboard-full.space-y-4 {
+    gap: 0.75rem;
+  }
+
+  .orion-viewport .orion-page.space-y-5,
+  .orion-viewport .dashboard-full.space-y-5,
+  .orion-viewport .space-y-5 {
+    --tw-space-y-reverse: 0;
+  }
+
+  .orion-viewport .space-y-4 > :not([hidden]) ~ :not([hidden]),
+  .orion-viewport .orion-page > :not([hidden]) ~ :not([hidden]),
+  .orion-viewport .orion-module-page.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.75rem !important;
+  }
+
+  .orion-viewport .space-y-5 > :not([hidden]) ~ :not([hidden]),
+  .orion-viewport .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.875rem !important;
+  }
+
+  /* Section filters chips — déjà x-scroll, renforce le snap */
+  .orion-viewport .orion-h-chips,
+  .orion-viewport [data-orion-h-scroll='1'] {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.5rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+  }
+
+  /* ── Headers : titre net, full width, zéro chasse monstrueuse ── */
+  .orion-viewport .orion-ds-page-header,
+  .orion-viewport .orion-page-header {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .orion-viewport .orion-ds-page-header__row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+
+  .orion-viewport .orion-ds-page-header__meta {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex: none !important;
+  }
+
+  /* Header module : plus compact, titres une ligne */
+  .orion-viewport .orion-page-header,
+  .orion-viewport .orion-ds-page-header {
+    margin-bottom: 0.5rem !important;
+    gap: 0.35rem !important;
+  }
+
+  .orion-viewport .orion-ds-page-title {
+    font-size: 0.9375rem !important; /* 15 — unifié avec density (pas 16 billboard) */
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: normal;
+    word-break: keep-all;
+    hyphens: none;
+  }
+
+  .orion-viewport .orion-ds-page-title__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  /* Pas de sous-textes longs (bandeau, KPI sous-titres module) */
+  .orion-viewport .orion-ds-page-desc,
+  .orion-viewport .orion-hide-on-phone,
+  .orion-viewport .orion-page-header p.text-sm,
+  .orion-viewport .orion-module-page > header p,
+  .orion-viewport .dashboard-full > header p.text-sm {
+    display: none !important;
+  }
+
+  /* Cartes KPI : labels sur une ligne (pas de chasse caractère par caractère) */
+  .orion-viewport .orion-kpi-saas .orion-text-meta,
+  .orion-viewport .orion-kpi-saas .text-meta,
+  .orion-viewport .orion-ds-metric .orion-text-meta,
+  .orion-viewport .orion-kpi-label,
+  .orion-viewport .dashboard-chart-card-title,
+  .orion-viewport .cockpit-quick-card h4,
+  .orion-viewport .cockpit-quick-card p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    word-break: normal;
+  }
+
+  .orion-viewport .cockpit-quick-card {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .orion-viewport .orion-ds-page-header__actions {
+    width: 100% !important;
+    max-width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  .orion-viewport .orion-ds-page-header__actions a,
+  .orion-viewport .orion-ds-page-header__actions button {
+    white-space: nowrap;
+    max-width: none;
+  }
+
+  /* Labels d’actions : version courte si data-short (sinon inchangé) */
+  .orion-viewport .orion-action-label {
+    font-size: 0.8125rem;
+  }
+
+  /* Shell content full bleed width */
+  .orion-viewport.orion-shell-pad {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: clip;
+  }
+
+  .orion-viewport .orion-page,
+  .orion-viewport .orion-module-page,
+  .orion-viewport .dashboard-full {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Tab bar bas : styles dans mobile-nav-launcher.css (prototypes ORION) */
+}
+
+/* ≥ tablet : rail explicitement masqué si variante uniquement phone (géré en JSX) */
+@media (min-width: 768px) {
+  .orion-h-rail--phone-only {
+    display: none !important;
+  }
+}

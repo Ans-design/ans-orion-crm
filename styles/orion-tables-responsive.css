@@ -1,0 +1,122 @@
+/**
+ * Tables ORION — densité + responsive anti-vide / anti-chevauchement
+ * Appliqué globalement aux wraps de tableaux métier.
+ */
+
+/* Conteneurs : scroll X propre, jamais de débordement layout */
+.orion-viewport :is(
+  .orion-table-wrap,
+  .orion-ds-table-wrap,
+  .table-responsive,
+  .ans-at__table-wrap,
+  .orion-master-data-scroll,
+  [data-orion-table-wrap],
+  .fm-refonte-param-scroll,
+  .cps-theme [class*='table-wrap']
+) {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+/* Cellules : pas d’étirement incontrôlé, ellipsis si besoin */
+.orion-viewport :is(
+  .orion-table,
+  .orion-table-enriched,
+  .ans-at__table,
+  [data-orion-table]
+) th,
+.orion-viewport :is(
+  .orion-table,
+  .orion-table-enriched,
+  .ans-at__table,
+  [data-orion-table]
+) td {
+  min-width: 0;
+  vertical-align: middle;
+}
+
+.orion-viewport :is(.orion-table, .orion-table-enriched, [data-orion-table]) th,
+.orion-viewport :is(.orion-table, .orion-table-enriched, [data-orion-table]) td {
+  padding-block: 0.45rem;
+  padding-inline: 0.55rem;
+}
+
+/* Actions : colonne compacte, icônes jamais empilées en hauteur inutile */
+.orion-viewport :is(.mp-row-actions, [data-row-actions]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.15rem;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.orion-viewport .mp-row-action-btn {
+  flex-shrink: 0;
+}
+
+/* Master data grid : lignes plus denses par défaut */
+.orion-viewport .orion-master-data-row.is-data {
+  min-height: 44px;
+}
+
+.orion-viewport .orion-master-data-cell {
+  overflow: hidden;
+}
+
+/* Empêcher les en-têtes flex qui cassent display:table-cell */
+.orion-viewport table thead th {
+  display: table-cell;
+}
+
+/* Formules / paramètres : scroll plutôt que forcer 1100px hors écran */
+.fm-refonte-param-table {
+  min-width: min(1100px, 100%);
+}
+
+@media (max-width: 1100px) {
+  .fm-refonte-param-table {
+    min-width: 720px;
+  }
+}
+
+@media (max-width: 900px) {
+  .orion-viewport :is(.orion-table, .orion-table-enriched, [data-orion-table]) {
+    min-width: 560px;
+  }
+
+  .orion-viewport :is(.orion-table, .orion-table-enriched, [data-orion-table]) th,
+  .orion-viewport :is(.orion-table, .orion-table-enriched, [data-orion-table]) td {
+    padding-block: 0.35rem;
+    padding-inline: 0.4rem;
+    font-size: 0.8125rem;
+  }
+
+  .orion-viewport th[data-priority='low'],
+  .orion-viewport td[data-priority='low'] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .orion-viewport :is(.orion-table, .orion-table-enriched, [data-orion-table]) {
+    min-width: 480px;
+  }
+
+  .orion-viewport .mp-row-action-btn {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+  }
+}
+
+/* Dark : surfaces de scroll cohérentes */
+html.dark .orion-viewport :is(.orion-table-wrap, .ans-at__table-wrap, .orion-master-data-scroll),
+.dark .orion-viewport :is(.orion-table-wrap, .ans-at__table-wrap, .orion-master-data-scroll) {
+  background: transparent;
+}

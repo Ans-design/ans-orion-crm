@@ -1,0 +1,847 @@
+/**
+ * ANS ORION — Refonte complète clair / sombre (ultra-prompts)
+ *
+ * CLAIR  : page #F4F7FB · surfaces/cartes #FFF · headers #F8FAFC · hover #F1F5F9
+ * SOMBRE : page #02030D · sidebar #030611 · cards #071021 · hover #0B1830
+ *
+ * ⚠️ Ne jamais cibler `:root` seul pour le clair : ça écrase aussi html.dark
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   MODE CLAIR — tokens ultra SaaS
+   ═══════════════════════════════════════════════════════════════ */
+:root:not(.dark),
+html:not(.dark) {
+  --blanc: #ffffff;
+  --blanc-casse: #f8fafc;
+  --page-soft: #f4f7fb;
+  --surface-soft: #f1f5f9;
+  --active-soft: #ffe8ef;
+
+  --ans-light-bg: #f4f7fb;
+  --ans-light-sidebar: #ffffff;
+  --ans-light-topbar: #ffffff;
+  --ans-light-panel: #ffffff;
+  --ans-light-card: #ffffff;
+  --ans-light-card-2: #f8fafc;
+  --ans-light-hover: #f1f5f9;
+  --ans-light-active: #ffe8ef;
+  --ans-light-border: #eef2f7;
+  --ans-light-border-strong: #e2e8f0;
+  --ans-light-text: #0f172a;
+  --ans-light-text-secondary: #334155;
+  --ans-light-text-muted: #64748b;
+  --ans-light-text-dim: #94a3b8;
+
+  --bg-app: #f4f7fb;
+  --bg-page: #f4f7fb;
+  --bg-sidebar: #ffffff;
+  --bg-header: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-2: #f8fafc;
+  --bg-card-soft: #f1f5f9;
+  --bg-card-elevated: #ffffff;
+  --bg-warm-subtle: #f4f7fb;
+  --bg-hover: #eef2f7;
+  --bg-active: #ffe8ef;
+  --bg-chip: #f8fafc;
+  --bg-context-soft: #f8fafc;
+  --bg-shell: #f4f7fb;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #f8fafc;
+  --bg-main: #f4f7fb;
+
+  --app-bg: #f4f7fb;
+  --app-surface: #ffffff;
+  --app-surface-soft: #f8fafc;
+  --app-disabled-bg: #f1f5f9;
+  --app-disabled-text: #64748b;
+  --app-text: #0f172a;
+  --app-muted: #64748b;
+  --app-border: #e2e8f0;
+  --primary: #ff174d;
+  --primary-foreground: #ffffff;
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground-hsl: 0 0% 100%;
+
+  --border-invisible: transparent;
+  --border-soft: #eef2f7;
+  --border-normal: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --border-focus: rgba(255, 23, 77, 0.45);
+
+  --text-main: #0f172a;
+  --text-soft: #334155;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+
+  --accent-primary: #ff174d;
+  --accent-primary-hover: #C91443;
+  --accent-primary-active: #C91443;
+  --accent-primary-dark: #9f1239;
+  --accent-primary-soft: rgba(255, 23, 77, 0.1);
+  --accent-gold: #facc15;
+
+  --radius-ui: 12px;
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+  --shadow-card-unified: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+
+  --oat-page: #f4f7fb;
+  --oat-card: #ffffff;
+  --oat-header: #f8fafc;
+  --oat-row: #ffffff;
+  --oat-row-hover: #f1f5f9;
+  --oat-border: #eef2f7;
+  --oat-border-row: #eef2f7;
+
+  --cps-bg: #f4f7fb;
+  --cps-bg-soft: #f8fafc;
+  --cps-surface: #ffffff;
+  --cps-surface-2: #f8fafc;
+
+  --ab2-bg: #f4f7fb;
+  --ab2-surface: #ffffff;
+  --ab2-surface-2: #f8fafc;
+  --ab2-surface-3: #f1f5f9;
+  --ab2-border: #e2e8f0;
+
+  --surface-lift: #ffffff;
+  --surface-sunken: #f4f7fb;
+  --surface-subtle: #f1f5f9;
+  --tetiere-bg: #f8fafc;
+  --cockpit-surface: #ffffff;
+  --cockpit-surface-muted: #f8fafc;
+
+  --dropdown-bg: #ffffff;
+  --dropdown-bg-elevated: #ffffff;
+  --dropdown-text: #0f172a;
+  --dropdown-text-muted: #64748b;
+  --dropdown-border: #e2e8f0;
+  --dropdown-hover: #f1f5f9;
+  --dropdown-selected: rgba(255, 23, 77, 0.1);
+  --dropdown-selected-border: rgba(255, 23, 77, 0.28);
+  --dropdown-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+/* Page / shell */
+html:not(.dark) body,
+html:not(.dark) .orion-viewport,
+html:not(.dark) .cps-theme,
+html:not(.dark) .ab2-shell,
+html:not(.dark) .orion-admin-table-root,
+html:not(.dark) .orion-master-data-root,
+html:not(.dark) .orion-catalogue-workspace,
+html:not(.dark) .ab2-options-workspace {
+  background: var(--bg-app) !important;
+  color: var(--text-main) !important;
+}
+
+html:not(.dark) .orion-sidebar:not(.orion-sidebar-desktop),
+html:not(.dark) .orion-sidebar-v2:not(.orion-sidebar-desktop),
+html:not(.dark) .orion-cockpit-header {
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Shell desktop transparent — fond blanc uniquement sur la carte */
+html:not(.dark) .orion-sidebar.orion-sidebar-desktop,
+html:not(.dark) .orion-sidebar-v2.orion-sidebar-desktop {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+html:not(.dark) .orion-sidebar-desktop .orion-sidebar-card {
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Cartes / panels — blanc, ombre, sans trait noir */
+html:not(.dark) .bg-card,
+html:not(.dark) .bg-background,
+html:not(.dark) .orion-card:not(.orion-kpi-saas),
+html:not(.dark) .orion-card-interactive,
+html:not(.dark) .ui-card,
+html:not(.dark) .orion-surface-card,
+html:not(.dark) .orion-surface-card-soft,
+html:not(.dark) .orion-surface-panel,
+html:not(.dark) .orion-catalogue-nav,
+html:not(.dark) .orion-catalogue-studio,
+html:not(.dark) .orion-catalogue-summary,
+html:not(.dark) .orion-material-kpi-card,
+html:not(.dark) .ab2-options-split {
+  background: #ffffff !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+  box-shadow: var(--shadow-card, var(--shadow-soft));
+  border-radius: var(--radius-ui, 12px);
+}
+
+/* Têtières tableaux */
+html:not(.dark) thead,
+html:not(.dark) thead th,
+html:not(.dark) .orion-admin-table thead,
+html:not(.dark) .orion-admin-table thead th,
+html:not(.dark) .ab2-chips-table th,
+html:not(.dark) .ab2-table th,
+html:not(.dark) .mp-table th,
+html:not(.dark) .ab2-dt-table thead,
+html:not(.dark) .ab2-dt-table th,
+html:not(.dark) .orion-master-data-header,
+html:not(.dark) .orion-master-data-header-cell,
+html:not(.dark) .orion-master-data-header-cell.is-sticky-right,
+html:not(.dark) .orion-master-data-header-cell.is-anom,
+html:not(.dark) .cps-theme table thead,
+html:not(.dark) .cps-theme table thead th {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #eef2f7 !important;
+  box-shadow: none !important;
+}
+
+/* Lignes tableaux */
+html:not(.dark) tbody tr,
+html:not(.dark) tbody td,
+html:not(.dark) .ab2-chips-table tbody td,
+html:not(.dark) .mp-table tbody td,
+html:not(.dark) .orion-master-data-row.is-data,
+html:not(.dark) .orion-master-data-row.is-data.is-zebra {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) tbody tr:hover td,
+html:not(.dark) .orion-master-data-row.is-data:hover {
+  background: #f1f5f9 !important;
+}
+
+html:not(.dark) .ab2-chips-table,
+html:not(.dark) .mp-table,
+html:not(.dark) .ab2-table,
+html:not(.dark) .orion-admin-table {
+  border-collapse: collapse !important;
+}
+
+html:not(.dark) .ab2-chips-table th,
+html:not(.dark) .ab2-chips-table td,
+html:not(.dark) .mp-table th,
+html:not(.dark) .mp-table td,
+html:not(.dark) .ab2-table th,
+html:not(.dark) .ab2-table td,
+html:not(.dark) .orion-admin-table th,
+html:not(.dark) .orion-admin-table td {
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  border-bottom: 1px solid #eef2f7 !important;
+}
+
+html:not(.dark) .orion-master-data-row.is-data::after,
+html:not(.dark) .orion-master-data-row.is-group::after {
+  background: #eef2f7 !important;
+}
+
+/* Inputs */
+html:not(.dark) input:not([type='checkbox']):not([type='radio']):not([type='range']),
+html:not(.dark) select,
+html:not(.dark) textarea,
+html:not(.dark) .ab2-input,
+html:not(.dark) .ab2-filter-select,
+html:not(.dark) .ab2-search-wrap,
+html:not(.dark) .ab2-search-input,
+html:not(.dark) .cps-input,
+html:not(.dark) .orion-catalogue-nav-search,
+html:not(.dark) .cockpit-search {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+  color-scheme: light;
+  border-radius: var(--radius-ui, 10px);
+}
+
+html:not(.dark) select option {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) select option:checked,
+html:not(.dark) select option:hover {
+  background: #ffe8ef !important;
+  color: #C91443 !important;
+}
+
+/* Boutons light — suit accent Apparence */
+html:not(.dark) button.bg-primary {
+  background: var(--primary, #ff174d) !important;
+  color: var(--on-primary, #ffffff) !important;
+  border-color: transparent !important;
+}
+
+html:not(.dark) button:disabled:not(.cmd-node-rail__node) {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
+  opacity: 0.85 !important;
+  cursor: not-allowed;
+}
+
+html:not(.dark) .orion-catalogue-chips-article-bar,
+html:not(.dark) .ab2-options-article-header {
+  background: #f8fafc !important;
+  border: 1px solid #eef2f7 !important;
+  color: #0f172a !important;
+  box-shadow: var(--shadow-soft);
+}
+
+html:not(.dark) .orion-catalogue-chips-article-bar strong,
+html:not(.dark) .orion-catalogue-chips-article-bar .text-foreground,
+html:not(.dark) .orion-catalogue-chips-kpis strong {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .orion-catalogue-chips-kpis,
+html:not(.dark) .orion-catalogue-chips-article-bar .text-muted-foreground {
+  color: #64748b !important;
+}
+
+html:not(.dark) .mp-row-action-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #475569 !important;
+  box-shadow: none !important;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+html:not(.dark) .mp-row-action-btn:hover {
+  background: color-mix(in srgb, #64748b 10%, transparent) !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .mp-row-action-btn.is-danger {
+  background: transparent !important;
+  color: #C91443 !important;
+  border: none !important;
+}
+
+html:not(.dark) .orion-master-data-row select,
+html:not(.dark) .orion-master-unit-select,
+html:not(.dark) .orion-master-char-type-select,
+html:not(.dark) .orion-master-char-input,
+html:not(.dark) .mp-cell-select,
+html:not(.dark) .ab2-cell-input,
+html:not(.dark) .orion-admin-table select {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: none;
+}
+
+html:not(.dark) .ab2-badge-muted,
+html:not(.dark) .ab2-filter-chip:not(.is-active),
+html:not(.dark) .ab2-search-clear:hover,
+html:not(.dark) .source-catalogue,
+html:not(.dark) .block-default {
+  background: #f8fafc !important;
+  color: #64748b !important;
+}
+
+html:not(.dark) .bg-muted,
+html:not(.dark) .bg-secondary,
+html:not(.dark) .bg-accent {
+  background-color: #f8fafc !important;
+}
+
+html:not(.dark) .bg-muted\/50,
+html:not(.dark) .hover\:bg-muted:hover,
+html:not(.dark) .hover\:bg-accent:hover {
+  background-color: #f1f5f9 !important;
+}
+
+html:not(.dark) .orion-catalogue-nav-item {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .orion-catalogue-nav-item-name {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .orion-catalogue-nav-item.is-active {
+  background: rgba(255, 23, 77, 0.1) !important;
+  color: #C91443 !important;
+}
+
+html:not(.dark) .ab2-block-accordion-head,
+html:not(.dark) .ab2-panel-head,
+html:not(.dark) .orion-master-data-row.is-group {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #eef2f7 !important;
+  box-shadow: none;
+}
+
+html:not(.dark) .orion-catalogue-studio-secondary-tabs button {
+  background: #ffffff !important;
+  color: #64748b !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: none;
+}
+
+html:not(.dark) .orion-catalogue-studio-secondary-tabs button:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .orion-catalogue-studio-secondary-tabs button.active {
+  background: #ffe8ef !important;
+  color: #ff174d !important;
+  border-color: rgba(255, 23, 77, 0.25) !important;
+}
+
+/* Dropdown light */
+html:not(.dark) [data-radix-select-content],
+html:not(.dark) [data-radix-dropdown-menu-content],
+html:not(.dark) [data-radix-popover-content],
+html:not(.dark) [role='listbox'],
+html:not(.dark) [role='menu'] {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12) !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+html:not(.dark) [role='option'][aria-selected='true'],
+html:not(.dark) [role='option'][data-highlighted],
+html:not(.dark) [role='menuitem'][data-highlighted],
+html:not(.dark) [cmdk-item][data-selected='true'] {
+  background: rgba(255, 23, 77, 0.1) !important;
+  color: #C91443 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODE SOMBRE — bleu nuit ultra sombre (hiérarchie réelle)
+   ═══════════════════════════════════════════════════════════════ */
+html.dark,
+html.dark:root {
+  --blanc: #050a18;
+  --blanc-casse: #071021;
+  --page-soft: #02030d;
+  --surface-soft: #0a1326;
+  --active-soft: #0e1d39;
+
+  --bg-app: #02030d;
+  --bg-page: #02030d;
+  --bg-sidebar: #030611;
+  --bg-header: #040814;
+  --bg-panel: #050a18;
+  --bg-card: #071021;
+  --bg-card-2: #091428;
+  --bg-card-soft: #0a1326;
+  --bg-card-elevated: #091428;
+  --bg-warm-subtle: #02030d;
+  --bg-hover: #0b1830;
+  --bg-active: #0e1d39;
+  --bg-chip: #091428;
+  --bg-context-soft: #050a18;
+  --bg-shell: #02030d;
+  --bg-surface: #050a18;
+  --bg-surface-2: #091428;
+  --bg-main: #02030d;
+
+  --app-bg: #02030d;
+  --app-surface: #071021;
+  --app-surface-soft: #091428;
+  --app-disabled-bg: #1e293b;
+  --app-disabled-text: #94a3b8;
+  --app-text: #f8fafc;
+  --app-muted: #94a3b8;
+  --app-border: rgba(255, 255, 255, 0.08);
+  --primary: #ff174d;
+  --primary-foreground: #ffffff;
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground-hsl: 0 0% 100%;
+
+  --border-invisible: transparent;
+  --border-soft: rgba(255, 255, 255, 0.04);
+  --border-normal: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --border-focus: rgba(255, 23, 77, 0.45);
+
+  --text-main: #f8fafc;
+  --text-soft: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --accent-primary: #ff174d;
+  --accent-primary-hover: #ff3366;
+  --accent-primary-active: #e0003b;
+  --accent-primary-dark: #a8002d;
+  --accent-primary-soft: rgba(255, 23, 77, 0.16);
+  --accent-gold: #facc15;
+
+  --radius-ui: 10px;
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.45);
+
+  --oat-page: #02030d;
+  --oat-card: #071021;
+  --oat-header: #091428;
+  --oat-row: #050a18;
+  --oat-row-hover: #0b1830;
+  --oat-border: rgba(255, 255, 255, 0.04);
+  --oat-border-row: rgba(255, 255, 255, 0.04);
+
+  --cps-bg: #02030d;
+  --cps-bg-soft: #050a18;
+  --cps-surface: #071021;
+  --cps-surface-2: #091428;
+
+  --ab2-bg: #02030d;
+  --ab2-surface: #071021;
+  --ab2-surface-2: #091428;
+  --ab2-surface-3: #0b1830;
+  --ab2-border: rgba(255, 255, 255, 0.08);
+
+  --surface-lift: #071021;
+  --surface-sunken: #02030d;
+  --surface-subtle: #050a18;
+  --tetiere-bg: #091428;
+  --cockpit-surface: #050a18;
+  --cockpit-surface-muted: #071021;
+
+  --dropdown-bg: #0a1022;
+  --dropdown-bg-elevated: #0c1328;
+  --dropdown-text: #e8eefc;
+  --dropdown-text-muted: #a9b4d0;
+  --dropdown-border: rgba(255, 255, 255, 0.08);
+  --dropdown-hover: rgba(255, 255, 255, 0.04);
+  --dropdown-selected: rgba(255, 23, 77, 0.22);
+  --dropdown-selected-border: rgba(255, 23, 77, 0.35);
+  --dropdown-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  --background: 230 60% 3%;
+  --card: 220 50% 8%;
+  --popover: 226 55% 8%;
+  --muted: 222 40% 10%;
+  --accent: 222 48% 12%;
+  --input: 222 40% 10%;
+}
+
+/* Page */
+html.dark body,
+html.dark .orion-viewport,
+html.dark .cps-theme,
+html.dark .ab2-shell,
+html.dark .orion-admin-table-root,
+html.dark .orion-master-data-root,
+html.dark .orion-catalogue-workspace,
+html.dark .ab2-options-workspace {
+  background: #02030d !important;
+  color: #f8fafc !important;
+}
+
+html.dark .orion-sidebar:not(.orion-sidebar-desktop),
+html.dark .orion-sidebar-v2:not(.orion-sidebar-desktop) {
+  background: #030611 !important;
+  background-image: none !important;
+}
+
+html.dark .orion-sidebar.orion-sidebar-desktop,
+html.dark .orion-sidebar-v2.orion-sidebar-desktop {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+html.dark .orion-cockpit-header {
+  background: #040814 !important;
+  background-image: none !important;
+  border-bottom-color: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Cartes / KPI */
+html.dark .orion-card,
+html.dark .ui-card,
+html.dark .orion-surface-card,
+html.dark .orion-surface-card-soft,
+html.dark .orion-surface-panel,
+html.dark .orion-catalogue-nav,
+html.dark .orion-catalogue-studio,
+html.dark .orion-catalogue-summary,
+html.dark .orion-material-kpi-card,
+html.dark .ab2-options-split,
+html.dark .ab2-options-left,
+html.dark .ab2-options-center,
+html.dark .orion-sb-brand:not(.orion-sb-brand-outside),
+html.dark .orion-sb-widget,
+html.dark .orion-master-data-card,
+html.dark .bg-card,
+html.dark .bg-background {
+  background: #071021 !important;
+  border-color: rgba(255, 255, 255, 0.04) !important;
+  color: #f8fafc !important;
+  box-shadow: none;
+  border-radius: var(--radius-ui, 10px);
+}
+
+html.dark .cps-theme button.group:not(.bg-primary),
+html.dark .cps-theme section button:not([class*='bg-primary']):not([class*='primary']) {
+  background: #071021 !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: none !important;
+}
+
+html.dark .cps-theme button.group:hover {
+  background: #0b1830 !important;
+}
+
+/* Headers tableaux */
+html.dark thead,
+html.dark thead th,
+html.dark .orion-admin-table thead,
+html.dark .orion-admin-table thead th,
+html.dark .ab2-chips-table th,
+html.dark .ab2-table th,
+html.dark .mp-table th,
+html.dark .ab2-dt-table thead,
+html.dark .ab2-dt-table th,
+html.dark .orion-master-data-header,
+html.dark .orion-master-data-header-cell,
+html.dark .orion-master-data-header-cell.is-sticky-right,
+html.dark .orion-catalogue-chips-article-bar,
+html.dark .ab2-options-article-header,
+html.dark .ab2-block-accordion-head,
+html.dark .ab2-panel-head,
+html.dark .orion-master-data-row.is-group {
+  background: #091428 !important;
+  color: #e2e8f0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Corps tableaux */
+html.dark tbody tr,
+html.dark tbody td,
+html.dark .ab2-chips-table tbody td,
+html.dark .mp-table tbody td,
+html.dark .ab2-dt-table tbody tr,
+html.dark .ab2-table tbody td,
+html.dark .orion-master-data-row.is-data,
+html.dark .orion-master-data-cell,
+html.dark .orion-master-data-root,
+html.dark .orion-master-data-scroll,
+html.dark .orion-admin-table-wrap {
+  background: #050a18 !important;
+  color: #f8fafc !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  box-shadow: none !important;
+}
+
+/* Alternance très légère en mode sombre */
+html.dark .ab2-chips-table tr:nth-child(even) td,
+html.dark .mp-table tbody tr:nth-child(even) td,
+html.dark .orion-master-data-row.is-data.is-zebra {
+  background: #071021 !important;
+}
+
+html.dark .orion-master-data-footer,
+html.dark .mt-workspace {
+  background: #050a18 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+}
+
+html.dark .mt-stat {
+  background: #071021 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #e2e8f0 !important;
+  box-shadow: none !important;
+}
+
+html.dark .orion-mat-swatch,
+html.dark .orion-mat-swatch.is-paper {
+  background: rgba(204, 0, 51, 0.18) !important;
+  color: #ff6b8a !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: none !important;
+}
+
+html.dark .orion-mat-swatch.is-ink {
+  background: rgba(22, 160, 113, 0.18) !important;
+  color: #34d399 !important;
+}
+
+html.dark .orion-mat-swatch.is-plate {
+  background: rgba(221, 139, 33, 0.18) !important;
+  color: #fbbf24 !important;
+}
+
+html.dark .orion-mat-swatch.is-finish {
+  background: rgba(155, 80, 189, 0.2) !important;
+  color: #d8b4fe !important;
+}
+
+html.dark tbody tr:hover td,
+html.dark .ab2-chips-table tr:hover td,
+html.dark .mp-table tbody tr:hover td,
+html.dark .orion-master-data-row.is-data:hover,
+html.dark .orion-master-data-row.is-data:hover .orion-master-data-cell,
+html.dark .orion-master-data-row.is-data:hover .orion-master-data-cell.is-sticky-right {
+  background: #0b1830 !important;
+}
+
+html.dark .ab2-chips-table,
+html.dark .mp-table,
+html.dark .ab2-table,
+html.dark .ab2-dt-table,
+html.dark .orion-admin-table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+}
+
+html.dark .ab2-chips-table th,
+html.dark .ab2-chips-table td,
+html.dark .mp-table th,
+html.dark .mp-table td,
+html.dark .ab2-table th,
+html.dark .ab2-table td,
+html.dark .orion-admin-table th,
+html.dark .orion-admin-table td {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+}
+
+html.dark .orion-master-data-row.is-data::after,
+html.dark .orion-master-data-row.is-group::after {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Inputs */
+html.dark input:not([type='checkbox']):not([type='radio']):not([type='range']),
+html.dark select,
+html.dark textarea,
+html.dark .ab2-input,
+html.dark .ab2-filter-select,
+html.dark .ab2-search-wrap,
+html.dark .ab2-search-input,
+html.dark .cps-input,
+html.dark .orion-catalogue-nav-search,
+html.dark .cockpit-search,
+html.dark .orion-sb-search,
+html.dark [class*='search'] input {
+  background: #0a1022 !important;
+  color: #e8eefc !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color-scheme: dark;
+  border-radius: var(--radius-ui, 10px);
+}
+
+html.dark select option {
+  background: #0a1022 !important;
+  color: #e8eefc !important;
+}
+
+/* Nav */
+html.dark .orion-catalogue-nav-item,
+html.dark .ab2-options-article-item {
+  background: #071021 !important;
+  color: #e2e8f0 !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+html.dark .orion-catalogue-nav-item-name,
+html.dark .ab2-options-article-name {
+  color: #f1f5f9 !important;
+}
+
+html.dark .orion-catalogue-nav-item.is-active,
+html.dark .ab2-options-article-item.is-active {
+  background: rgba(255, 23, 77, 0.16) !important;
+  color: #ffffff !important;
+}
+
+/* Boutons dark */
+html.dark button.bg-primary {
+  background: #ff174d !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+html.dark .orion-catalogue-studio-secondary-tabs button {
+  background: #071021 !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+
+html.dark .orion-catalogue-studio-secondary-tabs button:hover {
+  background: #0b1830 !important;
+  color: #f8fafc !important;
+}
+
+html.dark .orion-catalogue-studio-secondary-tabs button.active {
+  background: rgba(255, 23, 77, 0.16) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 23, 77, 0.35) !important;
+}
+
+html.dark button:disabled:not(.cmd-node-rail__node) {
+  background: #1e293b !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+  opacity: 0.85 !important;
+  cursor: not-allowed;
+}
+
+html.dark .mp-row-action-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+html.dark .mp-row-action-btn:hover {
+  background: color-mix(in srgb, var(--primary, #FF174D) 12%, transparent) !important;
+  color: #f8fafc !important;
+}
+
+html.dark .mp-row-action-btn.is-danger {
+  background: transparent !important;
+  color: #ff8fa8 !important;
+  border: none !important;
+}
+
+html.dark .orion-master-unit-select,
+html.dark .orion-master-char-type-select,
+html.dark .orion-master-char-input,
+html.dark .orion-master-data-row select,
+html.dark .ab2-cell-input {
+  background: #0a1022 !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+
+html.dark .ab2-badge-muted,
+html.dark .ab2-filter-chip:not(.is-active),
+html.dark .source-catalogue,
+html.dark .block-default {
+  background: #091428 !important;
+  color: #94a3b8 !important;
+}

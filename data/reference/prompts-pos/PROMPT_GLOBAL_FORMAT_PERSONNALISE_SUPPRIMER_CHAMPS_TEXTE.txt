@@ -1,0 +1,376 @@
+PROMPT GLOBAL — FORMAT PERSONNALISÉ : SUPPRIMER LES CHAMPS TEXTE ET GARDER UNIQUEMENT LES DIMENSIONS NUMÉRIQUES — ANS ORION
+
+Contexte :
+Dans plusieurs articles POS, lorsque l’utilisateur choisit “Format personnalisé”, l’interface affiche encore un bloc inutile :
+- “Dimensions personnalisées”
+- un champ texte “Format”
+- une zone texte “Autres précisions : forme, contraintes de production...”
+
+Ce bloc est inutile et doit être supprimé partout, car les dimensions doivent déjà être saisies avec les champs numériques en bas :
+- Longueur
+- Largeur
+- Hauteur si nécessaire
+- Soufflet si nécessaire
+- Profondeur si nécessaire
+- Diamètre si nécessaire
+- Épaisseur si nécessaire
+
+Objectif :
+Sur tous les articles POS qui utilisent un format personnalisé, supprimer tous les champs texte redondants et garder uniquement les champs numériques nécessaires au calcul automatique.
+
+IMPORTANT :
+Ne pas corriger seulement le frontend.
+Toutes les corrections doivent être synchronisées avec :
+- POS
+- Base de données
+- Admin / Back-office
+- ProductOptionGroup
+- ProductOptionValue
+- ProductVariant
+- PriceFormula
+- BusinessRule
+- StockRule
+- Panier
+- Devis
+- Commande
+- Facture
+- Fiche production
+- Cockpit
+- Seeds
+- Tests
+
+============================================================
+1. SUPPRESSION GLOBALE DU BLOC TEXTE “DIMENSIONS PERSONNALISÉES”
+============================================================
+
+Dans tous les articles POS avec “Format personnalisé”, supprimer le bloc qui contient :
+- Titre : “Dimensions personnalisées”
+- Champ texte : “Format”
+- Zone texte : “Autres précisions : forme, contraintes de production...”
+- Toute zone libre qui redemande les dimensions déjà présentes en champs numériques.
+
+Ce bloc ne doit plus apparaître dans :
+- Autocollant prédécoupé
+- Étiquette prédécoupée
+- Sticker
+- Vinyle
+- Doypack
+- Sac papier
+- Gobelet si impression partielle
+- Marque-page
+- Calendrier
+- Chevalet
+- Livres
+- Couvertures
+- Cartes
+- Flyers
+- PLV
+- Goodies avec zone personnalisée
+- Tout article POS qui utilise un format personnalisé
+
+Exception :
+Un champ “Détails spéciaux / Instructions production” peut exister uniquement si l’article en a réellement besoin, mais il ne doit pas être dans le bloc Dimensions personnalisées et ne doit pas remplacer les champs numériques.
+
+============================================================
+2. AFFICHAGE CORRECT DU FORMAT PERSONNALISÉ
+============================================================
+
+Quand l’utilisateur clique sur “Format personnalisé”, afficher uniquement les champs numériques utiles à l’article.
+
+Exemples selon article :
+
+A. Article simple à plat :
+- Longueur L
+- Largeur l
+
+B. Doypack :
+- Largeur finie
+- Hauteur finie
+- Soufflet fond
+
+C. Sac papier :
+- Largeur façade
+- Profondeur / soufflet
+- Hauteur
+
+D. Boîte / packaging :
+- Longueur
+- Largeur / profondeur
+- Hauteur
+- Champs spécifiques de structure si nécessaire
+
+E. Gobelet impression partielle :
+- Longueur zone impression
+- Largeur / hauteur zone impression
+
+F. Cylindre :
+- Diamètre
+- Hauteur
+
+G. Cube :
+- Côté
+
+H. Pyramide :
+- Côté base
+- Hauteur
+
+Règle :
+Les champs doivent être numériques, clairs, obligatoires si nécessaires au calcul et directement visibles dans la section Format / Dimensions.
+
+============================================================
+3. NE PLUS DEMANDER LE FORMAT EN TEXTE
+============================================================
+
+Interdiction d’utiliser un champ texte “Format” quand les dimensions numériques existent.
+
+Mauvais :
+- Format : [champ texte vide]
+- Autres précisions : [zone texte]
+
+Bon :
+- Longueur L : 100 mm
+- Largeur l : 50 mm
+- Hauteur : 120 mm si nécessaire
+- Soufflet : 30 mm si nécessaire
+
+Règle :
+Le système doit construire automatiquement le libellé du format à partir des champs numériques.
+
+Exemples :
+- 100 × 50 mm
+- 90 × 140 mm
+- 30 × 50 × 10 mm
+- 250 × 100 × 320 mm
+
+============================================================
+4. UNITÉS
+============================================================
+
+Respecter la règle globale du projet :
+- Petit format / format standard / articles hors grand format : mm
+- Grand format : cm
+
+Règles :
+- Ne pas mélanger mm et cm dans le même formulaire sans conversion claire.
+- Afficher l’unité à côté de chaque champ.
+- Les valeurs saisies doivent être utilisées directement dans les calculs de surface, matière brute, stock et prix.
+
+============================================================
+5. VALIDATION DES CHAMPS
+============================================================
+
+Chaque champ numérique doit avoir :
+- une valeur minimale ;
+- une valeur maximale si nécessaire ;
+- une validation numérique ;
+- une alerte si valeur incohérente ;
+- un comportement + / - propre ;
+- pas de valeur négative ;
+- pas de valeur vide si le champ est obligatoire.
+
+Exemples :
+- Longueur > 0
+- Largeur > 0
+- Hauteur > 0 si obligatoire
+- Soufflet ≥ 0 ou >0 selon article
+- Diamètre > 0
+- Quantité > 0
+
+============================================================
+6. CALCUL AUTOMATIQUE APRÈS SAISIE
+============================================================
+
+Dès que les champs numériques sont renseignés, calculer automatiquement :
+- dimensions client ;
+- surface réelle ;
+- surface brute ;
+- marge de chute ;
+- quantité ;
+- surface totale ;
+- prix automatique ;
+- stock consommé ;
+- récapitulatif matière brute.
+
+Pour article à plat en mm :
+surface_reelle_m2 = longueur_mm × largeur_mm / 1 000 000
+
+Marge de chute matière standard :
+- +50 mm sur les 4 côtés
+- donc +100 mm en longueur
+- +100 mm en largeur
+
+longueur_brute_mm = longueur_mm + 100
+largeur_brute_mm = largeur_mm + 100
+surface_brute_m2 = longueur_brute_mm × largeur_brute_mm / 1 000 000
+surface_brute_totale_m2 = surface_brute_m2 × quantité
+
+Pour les articles à volume ou matrice :
+- utiliser le développé à plat ;
+- puis ajouter la marge de chute ;
+- puis calculer la surface brute.
+
+============================================================
+7. SUPPRESSION DU “PRIX FORCÉ OBLIGATOIRE”
+============================================================
+
+Sur les formats personnalisés, supprimer l’alerte :
+“Prix forcé obligatoire pour cette option”
+
+Le prix ne doit pas être forcé manuellement.
+Le prix doit être calculé automatiquement à partir :
+- des dimensions numériques ;
+- de la surface réelle ;
+- de la surface brute ;
+- de la matière ;
+- du grammage ;
+- de la quantité ;
+- de l’impression ;
+- de la finition ;
+- du façonnage ;
+- des règles prix admin.
+
+Le prix forcé manuel doit rester seulement une exception admin, jamais une obligation normale.
+
+============================================================
+8. RÉCAPITULATIF MATIÈRE BRUTE
+============================================================
+
+Dans le POS, panier, devis, commande, facture et fiche production, afficher :
+
+- Article
+- Format : généré automatiquement depuis les dimensions
+- Dimensions client
+- Matière
+- Grammage / épaisseur si applicable
+- Quantité
+- Surface réelle unitaire
+- Marge de chute matière si applicable
+- Dimensions brutes finales
+- Surface brute unitaire
+- Surface brute totale
+- Impression
+- Finition
+- Stock consommé
+- Prix automatique
+- Total
+
+Exemple Doypack :
+- Dimensions client : largeur finie 30 mm × hauteur finie 50 mm × soufflet fond 10 mm
+- Surface développée calculée automatiquement selon la formule Doypack
+- Marge de chute : +50 mm sur les 4 côtés
+- Surface brute totale
+- Prix automatique
+
+============================================================
+9. BASE DE DONNÉES
+============================================================
+
+Mettre à jour les modèles pour ne plus dépendre d’un champ texte “format”.
+
+Champs recommandés :
+- custom_format_enabled
+- length_mm
+- width_mm
+- height_mm
+- depth_mm
+- gusset_mm
+- diameter_mm
+- thickness_mm
+- generated_format_label
+- real_surface_m2
+- gross_surface_m2
+- gross_total_surface_m2
+- waste_margin_mm
+- calculation_snapshot
+
+Supprimer ou désactiver :
+- custom_format_text
+- custom_dimension_note
+- format_free_text
+- dimensions_textarea
+- forced_price_required_for_custom_format
+
+Règle :
+Les anciennes commandes peuvent garder les anciens champs uniquement comme snapshot historique.
+Les nouvelles commandes doivent utiliser les champs numériques.
+
+============================================================
+10. ADMIN / BACK-OFFICE
+============================================================
+
+Dans l’admin, permettre de configurer par article :
+- quels champs dimensionnels sont nécessaires ;
+- unité utilisée ;
+- valeur minimale ;
+- valeur maximale ;
+- marge de chute activée ou non ;
+- formule de surface ;
+- formule de développé ;
+- formule de prix ;
+- prix au m² ;
+- règles stock ;
+- activation du prix forcé uniquement en exception admin.
+
+L’admin ne doit pas réactiver automatiquement le champ texte “Format”.
+
+============================================================
+11. STOCK
+============================================================
+
+Le stock doit être calculé avec les dimensions numériques et la surface brute.
+
+Avant ajout panier, afficher une alerte si :
+- surface impossible à calculer ;
+- dimension manquante ;
+- matière indisponible ;
+- stock insuffisant ;
+- prix admin manquant ;
+- formule absente.
+
+============================================================
+12. TESTS OBLIGATOIRES
+============================================================
+
+Créer ou corriger les tests :
+
+Interface :
+- Le bloc “Dimensions personnalisées” n’apparaît plus.
+- Le champ texte “Format” n’apparaît plus.
+- La zone “Autres précisions” n’apparaît plus dans la section dimensions.
+- Les champs numériques restent visibles.
+- Le libellé du format est généré automatiquement.
+
+Calcul :
+- Longueur × Largeur calcule la surface réelle.
+- Les champs spécifiques comme Hauteur, Soufflet, Profondeur, Diamètre sont utilisés selon article.
+- La surface brute est calculée.
+- La marge +50 mm est appliquée si nécessaire.
+- Le prix automatique fonctionne.
+- Le prix forcé n’est pas obligatoire.
+- Le stock est calculé.
+
+Flux :
+- Panier sauvegarde les dimensions.
+- Devis sauvegarde le snapshot.
+- Commande conserve les dimensions.
+- Facture affiche les dimensions propres.
+- Production reçoit les bonnes mesures.
+- Cockpit reçoit les vraies données.
+
+Commandes :
+- npm run lint
+- npm run build
+- tests disponibles
+
+============================================================
+13. RÉSULTAT ATTENDU
+============================================================
+
+Après correction :
+- Tous les formats personnalisés POS n’affichent plus de champ texte inutile.
+- Les dimensions personnalisées utilisent uniquement des champs numériques.
+- Le format affiché est généré automatiquement.
+- Les surfaces sont calculées automatiquement.
+- La matière brute est calculée automatiquement.
+- Le prix est automatique.
+- Le stock, devis, facture, production et cockpit sont synchronisés.

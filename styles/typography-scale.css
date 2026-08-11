@@ -1,0 +1,226 @@
+/**
+ * ANS ORION — Typographie
+ *
+ * 15px  Titres page / sections (pas de « billboard » 24px)
+ * 16px  Accent (montants, KPI)
+ * 11px  Texte courant
+ *  8px  Détails / explications
+ */
+
+:root {
+  --text-display: 0.9375rem; /* 15 — display / page */
+  --text-title: 0.9375rem;   /* 15 — titres module */
+  --text-page-title: 0.9375rem;
+  --text-accent: 1rem;       /* 16 — montants / KPI */
+  --text-body: 0.6875rem;    /* 11 — courant */
+  --text-detail: 0.5rem;     /* 8 — détails */
+
+  --text-xs: var(--text-detail);
+  --text-sm: var(--text-body);
+  --text-base: var(--text-body);
+  --text-md: var(--text-accent);
+  --text-lg: var(--text-title);
+  --text-xl: var(--text-title);
+  --text-2xl: var(--text-title);
+  --text-3xl: var(--text-title);
+
+  --font-size-xs: var(--text-detail);
+  --font-size-sm: var(--text-body);
+  --font-size-base: var(--text-body);
+  --font-size-md: var(--text-accent);
+  --font-size-lg: var(--text-title);
+  --font-size-xl: var(--text-title);
+  --font-size-2xl: var(--text-title);
+  --font-size-3xl: var(--text-title);
+
+  --align-label-size: var(--text-body);
+  --align-body-size: var(--text-body);
+  --align-meta-size: var(--text-detail);
+  --align-title-size: var(--text-title);
+  --align-page-title: var(--text-title);
+  --align-shell-title: var(--text-title);
+
+  --chip-font: var(--text-body);
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.35;
+  --line-height-normal: 1.45;
+  --line-height-relaxed: 1.55;
+}
+
+/* ── Courant 11px — hors Catalogue POS Soft UI (géré par pos-soft-ui.css) ── */
+.orion-viewport:not(:has(.pos-soft-shell)),
+main.orion-viewport:not(:has(.pos-soft-shell)),
+.cps-theme,
+.orion-cockpit-header {
+  font-size: var(--text-body);
+  line-height: var(--line-height-normal);
+}
+
+.orion-viewport:not(:has(.pos-soft-shell)) :is(
+  p, label, li, td, input, select, textarea, button, a,
+  .text-sm, .text-base, .text-\[11px\], .text-\[12px\],
+  .text-body, .orion-text-body, .orion-text-label,
+  .orion-admin-page-desc, .orion-field-label,
+  .cps-pill, .orion-surface-chip, .orion-select-field,
+  .badge, .orion-status-chip
+),
+.cps-theme :is(p, label, li, td, input, select, textarea, button, a),
+.cps-admin-header p {
+  font-size: var(--text-body) !important;
+  line-height: var(--line-height-normal);
+}
+
+.orion-viewport thead th,
+.cps-theme thead th,
+.orion-admin-table th,
+.ab2-table th,
+.mp-table th {
+  font-size: var(--text-body) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+}
+
+/* ── 8px — détails / explications ── */
+.orion-viewport :is(
+  .text-detail,
+  .orion-text-detail,
+  .text-meta,
+  .orion-text-meta,
+  .orion-help-text,
+  .orion-section-desc,
+  .field-hint,
+  .form-hint,
+  .form-description,
+  [data-slot='form-description'],
+  .ui-form-hint,
+  time,
+  small,
+  .text-xs,
+  .text-\[8px\],
+  .text-\[9px\],
+  .text-\[10px\],
+  .pos-category-tile__count
+),
+.cps-theme :is(.text-meta, .orion-text-meta, .orion-help-text, .field-hint, .form-hint, small, .text-xs) {
+  font-size: var(--text-detail) !important;
+  line-height: var(--line-height-snug) !important;
+}
+
+/* ── 15px — titres page / modules (plafond compact, hors Catalogue POS Soft UI) ── */
+.orion-viewport :is(
+  h1, h2, h3:not(.orion-text-kpi-value):not(.text-body-l):not(.orion-kpi-value):not(.pos-article-title):not(.pos-section-card__title),
+  .orion-page-title,
+  .orion-ds-page-title,
+  .orion-ds-section-title,
+  .orion-admin-page-title,
+  .orion-admin-section-title,
+  .ab2-page-title,
+  .orion-text-page-title,
+  .orion-text-section,
+  .orion-section-title,
+  .text-page-title,
+  .text-section,
+  .text-title,
+  .text-display,
+  .dashboard-chart-card-title,
+  .orion-card-title,
+  .orion-block-title,
+  .orion-shell-title
+):not(.pos-soft-shell h1):not(.pos-soft-shell h2):not(.pos-soft-shell h3),
+.orion-viewport:not(:has(.pos-soft-shell)) :is(
+  h1, h2, h3:not(.orion-text-kpi-value):not(.text-body-l):not(.orion-kpi-value):not(.pos-article-title)
+),
+.cps-theme :is(h1, h2, h3:not(.orion-text-kpi-value), .orion-admin-page-title, .orion-admin-section-title, .ab2-page-title),
+.cps-admin-header h1,
+.orion-cockpit-header :is(h1, h2, .orion-shell-title, .orion-text-page-title),
+h1.orion-text-page-title {
+  font-size: var(--text-page-title, var(--text-title)) !important;
+  font-weight: 700 !important;
+  line-height: var(--line-height-tight) !important;
+  letter-spacing: -0.02em !important;
+  margin: 0;
+}
+
+/* Neutralise les utilitaires Tailwind billboard sur les titres module */
+.orion-viewport :is(h1, h2).text-2xl,
+.orion-viewport :is(h1, h2).text-xl,
+.orion-viewport :is(h1, h2).text-3xl,
+.orion-viewport :is(h1, h2).text-4xl,
+.cps-theme :is(h1, h2).text-2xl,
+.cps-theme :is(h1, h2).text-xl {
+  font-size: var(--text-page-title, var(--text-title)) !important;
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* POS Soft UI — titres produit 28px (échelle Catalogue Commercial) */
+.orion-viewport .pos-soft-shell .pos-product-hero h1,
+.orion-viewport .pos-soft-shell .pos-catalog-hero h1 {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+}
+
+/* ── 16px — montants / KPI ── */
+.orion-viewport :is(
+  .orion-price,
+  .orion-amount,
+  [data-price],
+  .kpi-value,
+  .orion-kpi-value,
+  .orion-text-kpi-value,
+  .text-body-l,
+  .orion-text-body-l,
+  .text-accent,
+  textarea.min-h-\[80px\],
+  textarea.min-h-\[120px\],
+  .ProseMirror
+),
+.cps-theme :is(.orion-price, .orion-amount, [data-price], .kpi-value, .text-body-l),
+.orion-viewport :is(.cps-kpi-card, .orion-kpi-card, .orion-kpi-saas, .orion-ds-metric, .orion-material-kpi-card)
+  :is(strong, .tabular-nums, .text-body-l, h3.orion-text-kpi-value),
+.cps-theme .cps-kpi-card .tabular-nums,
+.cps-theme .orion-material-kpi-card strong {
+  font-size: var(--text-accent) !important; /* 16 */
+  font-weight: 700 !important;
+  line-height: var(--line-height-tight) !important;
+}
+
+.orion-viewport :is(.cps-kpi-card, .orion-kpi-card, .orion-material-kpi-card)
+  :is(.uppercase, .text-meta) {
+  font-size: var(--text-detail) !important; /* 8 */
+  font-weight: 600 !important;
+}
+
+/* Utilitaires */
+.text-detail, .orion-text-detail,
+.text-meta, .orion-text-meta { font-size: var(--text-detail) !important; }
+.text-body, .orion-text-body { font-size: var(--text-body) !important; }
+.text-body-l, .orion-text-body-l,
+.text-accent { font-size: var(--text-accent) !important; }
+.text-title, .text-section, .orion-text-section,
+.text-page-title, .orion-text-page-title, .text-display {
+  font-size: var(--text-page-title, var(--text-title)) !important;
+  font-weight: 700 !important;
+}
+
+/* POS Soft UI — titres article / catégories gérés par pos-soft-ui.css (échelle 8–32) */
+.orion-viewport:not(:has(.pos-soft-shell)) :is(
+  h3.pos-article-title,
+  .pos-article-title,
+  .pos-category-tile__label,
+  .pos-cat-chip
+) {
+  font-size: 0.8125rem !important; /* 13 */
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  margin: 0;
+}
+
+.orion-viewport:not(:has(.pos-soft-shell)) .pos-cat-chip {
+  background: color-mix(in srgb, var(--primary, #FF174D) 12%, transparent) !important;
+  color: var(--primary, #FF174D) !important;
+  border: none !important;
+}

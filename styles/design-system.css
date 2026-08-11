@@ -1,0 +1,449 @@
+/**
+ * ANS ORION — Design system global
+ * Classes orion-ds-* : même composant = même style partout.
+ * Radius : --orion-radius / --radius-ui = 10px
+ */
+
+/* ── Surfaces (ombres > contours) ── */
+.orion-ds-card {
+  background: var(--bg-card);
+  border: none;
+  border-radius: var(--orion-radius, 10px);
+  box-shadow: var(--shadow-soft, 0 8px 24px rgba(15, 23, 42, 0.06));
+  transition: background var(--duration-fast), border-color var(--duration-fast),
+    box-shadow var(--duration-normal);
+}
+
+.dark .orion-ds-card {
+  border: 1px solid var(--border-soft);
+  box-shadow: none;
+}
+
+.orion-ds-card--interactive:hover {
+  background: var(--bg-card-soft);
+  box-shadow: var(--shadow-hover, var(--orion-shadow-md));
+}
+
+.orion-ds-card--elevated {
+  background: var(--bg-card-elevated);
+  box-shadow: var(--shadow-card, var(--orion-shadow-sm));
+}
+
+.orion-ds-panel {
+  background: var(--bg-panel);
+  border: none;
+  border-radius: var(--orion-radius, 10px);
+}
+
+.dark .orion-ds-panel {
+  border: 1px solid var(--border-soft);
+}
+
+/* ── En-têtes module ── */
+.orion-ds-page-header {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 0.875rem;
+  box-sizing: border-box;
+}
+
+.orion-ds-page-header--compact {
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.orion-ds-page-header__row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.orion-ds-page-header__meta {
+  min-width: 0;
+  width: 100%;
+  flex: 1 1 auto;
+}
+
+.orion-ds-page-title {
+  font-family: var(--font-display, var(--font-sans));
+  font-size: 0.9375rem; /* 15 */
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  max-width: 100%;
+}
+
+.orion-ds-page-title--compact {
+  font-size: 0.875rem; /* 14 */
+}
+
+.orion-ds-page-title__text {
+  min-width: 0;
+}
+
+.orion-ds-page-desc {
+  margin-top: 0.1rem;
+  font-size: 0.6875rem; /* 11 — jamais corps billboard */
+  line-height: 1.3;
+  color: var(--text-muted);
+  max-width: 36rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.orion-ds-page-header__actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.orion-ds-page-header__actions::-webkit-scrollbar {
+  display: none;
+}
+
+.orion-ds-page-header__actions > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 640px) {
+  .orion-ds-page-header__row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .orion-ds-page-header__meta {
+    width: auto;
+    max-width: min(100%, 42rem);
+  }
+
+  .orion-ds-page-title {
+    font-size: 0.9375rem; /* 15 — modules densifiés */
+  }
+
+  .orion-ds-page-header__actions {
+    width: auto;
+    max-width: 50%;
+    flex-wrap: wrap;
+    overflow: visible;
+    justify-content: flex-end;
+  }
+}
+
+/* ── Module header unifié (kicker + titre + chip) ── */
+.orion-module-header {
+  padding: 0.25rem 0 0.4rem !important;
+  margin-bottom: 0.4rem !important;
+  border-bottom: 1px solid var(--border-soft);
+  position: relative;
+}
+
+.orion-module-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.15rem;
+  bottom: 0.4rem;
+  width: 2px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, var(--brand-primary, #FF174D), color-mix(in srgb, var(--brand-primary, #FF174D) 40%, transparent));
+  opacity: 0.85;
+}
+
+.orion-module-header .orion-module-header__meta,
+.orion-module-header .orion-ds-page-header__meta {
+  padding-left: 0.55rem;
+}
+
+.orion-module-header__kicker {
+  margin: 0 0 0.08rem;
+  font-size: 0.5625rem; /* 9 */
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted, #64748b);
+  line-height: 1.15;
+}
+
+.orion-module-header__title-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  min-width: 0;
+}
+
+.orion-module-header__title.orion-ds-page-title {
+  font-size: 0.9375rem !important; /* 15 */
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 !important;
+  color: var(--text-main) !important;
+}
+
+.orion-module-header--compact .orion-module-header__title.orion-ds-page-title {
+  font-size: 0.875rem !important; /* 14 */
+}
+
+.orion-module-header__chip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.35rem;
+  padding: 0 0.45rem;
+  border-radius: 7px;
+  font-size: 0.625rem; /* 10 */
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary, #475569);
+  background: color-mix(in srgb, var(--brand-primary, #FF174D) 8%, var(--bg-app, #f4f7fb));
+  border: 1px solid color-mix(in srgb, var(--brand-primary, #FF174D) 14%, var(--border-soft, #e2e8f0));
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.orion-module-header__chip b,
+.orion-module-header__chip strong {
+  color: var(--text-main, #0f172a);
+  font-weight: 800;
+  margin-right: 0.15em;
+}
+
+.orion-module-header__desc.orion-ds-page-desc {
+  margin-top: 0.2rem !important;
+  font-size: 0.6875rem !important; /* 11 */
+  line-height: 1.35 !important;
+  color: var(--text-muted) !important;
+  max-width: 36rem;
+}
+
+.orion-module-header__actions {
+  align-self: center;
+}
+
+@media (max-width: 767.98px) {
+  .orion-module-header {
+    padding: 0.2rem 0 0.4rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+
+  .orion-module-header::before {
+    top: 0.15rem;
+    bottom: 0.4rem;
+    width: 2px;
+  }
+
+  .orion-module-header__kicker {
+    font-size: 0.5rem; /* 8 floor */
+  }
+
+  .orion-module-header__title.orion-ds-page-title,
+  .orion-module-header--compact .orion-module-header__title.orion-ds-page-title {
+    font-size: 0.8125rem !important; /* 13 */
+  }
+
+  .orion-module-header__chip {
+    height: 1.2rem;
+    font-size: 0.5625rem; /* 9 */
+    padding: 0 0.35rem;
+  }
+}
+
+html.dark .orion-module-header__chip {
+  background: color-mix(in srgb, var(--brand-primary, #FF174D) 14%, #0a1424);
+  border-color: color-mix(in srgb, var(--brand-primary, #FF174D) 25%, transparent);
+  color: #cbd5e1;
+}
+
+html.dark .orion-module-header__chip b,
+html.dark .orion-module-header__chip strong {
+  color: #f8fafc;
+}
+
+/* Masquer textes long / aides sur phone */
+.orion-hide-on-phone {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .orion-hide-on-phone {
+    display: revert !important;
+  }
+}
+
+.orion-ds-section-title {
+  font-size: 1.5rem; /* 24 */
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-main);
+}
+
+/* ── KPI / métriques ── */
+.orion-ds-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-height: 6rem;
+  padding: 1rem;
+  background: var(--bg-card);
+  border: none;
+  border-radius: var(--orion-radius, 10px);
+  box-shadow: var(--shadow-soft, 0 8px 24px rgba(15, 23, 42, 0.06));
+  transition: background var(--duration-fast), box-shadow var(--duration-fast);
+}
+
+.dark .orion-ds-metric {
+  border: 1px solid var(--border-soft);
+  box-shadow: none;
+}
+
+.orion-ds-metric:hover {
+  background: var(--bg-hover);
+}
+
+.orion-ds-metric-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.orion-ds-metric-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+/* ── Toolbar / filtres ── */
+.orion-ds-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.orion-ds-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--orion-radius);
+}
+
+/* ── Table enrichie (alias) ── */
+.orion-ds-table-wrap {
+  border-radius: var(--orion-radius);
+  border: 1px solid var(--border-soft);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+/* ── États ── */
+.orion-ds-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 2.5rem 1.5rem;
+  border: 1px dashed var(--border-standard);
+  border-radius: var(--orion-radius);
+  background: var(--bg-card-soft);
+  color: var(--text-muted);
+}
+
+.orion-ds-skeleton {
+  border-radius: var(--orion-radius);
+  background: linear-gradient(
+    90deg,
+    var(--bg-card-soft) 0%,
+    var(--bg-hover) 50%,
+    var(--bg-card-soft) 100%
+  );
+  background-size: 200% 100%;
+  animation: orion-ds-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes orion-ds-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ── Motion standard ── */
+.orion-ds-hover {
+  transition: background var(--duration-fast), border-color var(--duration-fast),
+    color var(--duration-fast), box-shadow var(--duration-fast), transform var(--duration-fast);
+}
+
+.orion-ds-hover:hover {
+  background: var(--bg-hover);
+}
+
+.orion-ds-press:active {
+  transform: scale(0.985);
+}
+
+.orion-ds-fade-in {
+  animation: orionFadeUp 0.22s ease-out both;
+}
+
+/* ── Badges (alignés spacing-system) ── */
+.orion-ds-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 1.25rem;
+  padding: 0 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: var(--orion-radius);
+  letter-spacing: 0.02em;
+}
+
+.orion-ds-badge--md {
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* ── Pages module ── */
+.orion-module-page {
+  width: 100%;
+  max-width: none;
+}
+
+.orion-module-page > section + section {
+  margin-top: 1.5rem;
+}

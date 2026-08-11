@@ -1,0 +1,551 @@
+/**
+ * ANS ORION — Refonte UI/UX complète (couche structure globale)
+ * Spacing · typo · radius 10px · anti-cadres · tables · a11y · responsive
+ * Ne touche PAS au métier (prix, sync, Prisma, API).
+ * Importé juste avant light-white-only.css (couleurs ultra restent prioritaires).
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   1. TOKENS STRUCTURE (spacing, typo, focus)
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --space-1: 0.25rem; /* 4 */
+  --space-2: 0.5rem; /* 8 */
+  --space-3: 0.75rem; /* 12 */
+  --space-4: 1rem; /* 16 */
+  --space-5: 1.25rem; /* 20 */
+  --space-6: 1.5rem; /* 24 */
+  --space-8: 2rem; /* 32 */
+  --space-10: 2.5rem; /* 40 */
+  --space-12: 3rem; /* 48 */
+
+  /* Radius maître ANS = 7px partout (règle design system) */
+  --radius-ui: 7px;
+  --radius: 7px;
+  --radius-sm: 7px;
+  --radius-md: 7px;
+  --radius-lg: 7px;
+  --radius-xl: 7px;
+  --radius-2xl: 7px;
+  --orion-radius: 7px;
+  --orion-radius-sm: 7px;
+
+  --font-size-xs: 0.5rem;     /* 8 */
+  --font-size-sm: 0.6875rem;  /* 11 */
+  --font-size-base: 0.6875rem; /* 11 */
+  --font-size-md: 1rem;       /* 16 */
+  --font-size-lg: 1.5rem;     /* 24 — max */
+  --font-size-xl: 1.5rem;     /* 24 */
+  --font-size-2xl: 1.5rem;    /* 24 */
+  --font-size-3xl: 1.5rem;    /* 24 */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.35;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+
+  --focus-ring: 0 0 0 2px var(--bg-app, #fff), 0 0 0 4px rgba(255, 23, 77, 0.45);
+  --touch-min: 44px;
+
+  --page-pad-x: var(--shell-pad-x, clamp(1rem, 2vw, 1.75rem));
+  --page-pad-y: var(--shell-pad-y, clamp(0.75rem, 1.15vw, 1.25rem));
+  --content-max: none;
+  --section-gap: var(--stack-gap-xl, 1.5rem);
+  --toolbar-gap: var(--stack-gap-xs, 0.5rem);
+  --kpi-gap: var(--grid-gap, 0.75rem);
+}
+
+html.dark {
+  --radius-ui: 7px;
+  --radius: 7px;
+  --radius-sm: 7px;
+  --radius-md: 7px;
+  --radius-lg: 7px;
+  --radius-xl: 7px;
+  --radius-2xl: 7px;
+  --orion-radius: 7px;
+  --orion-radius-sm: 7px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2. LAYOUT SHELL — pleine largeur, grille stable
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport,
+main.orion-viewport {
+  width: 100%;
+  max-width: none;
+  /* Padding géré par le shell (Tailwind px-/py-) — éviter double marge */
+  overflow-x: clip;
+}
+
+.orion-viewport > * {
+  max-width: none;
+  width: 100%;
+}
+
+/* Macro grille page : header / KPI / toolbar / content */
+.orion-page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.orion-page-header,
+.orion-ds-page-header {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding-bottom: var(--space-4, 0.875rem);
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--border-soft);
+  box-sizing: border-box;
+}
+
+.orion-toolbar,
+.ui-toolbar,
+.ab2-toolbar,
+.cps-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--toolbar-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.orion-kpi-grid,
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--kpi-gap);
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3. RADIUS — tokens (éviter !important global qui casse pills/avatars)
+   ═══════════════════════════════════════════════════════════════ */
+.ui-card,
+.ui-panel,
+.ui-input,
+.ui-button,
+.ui-modal,
+.ui-drawer,
+.orion-ds-card,
+.orion-ds-metric,
+.orion-ds-panel,
+.dashboard-chart-card,
+.orion-master-data-card {
+  border-radius: var(--radius-ui, 10px);
+}
+
+.orion-viewport .rounded-lg,
+.orion-viewport .rounded-xl,
+.ab2-shell .rounded-lg,
+.cps-theme .rounded-lg {
+  border-radius: var(--radius-ui, 10px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   4. ANTI CADRES IMBRIQUÉS — une surface claire par section
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport .rounded-lg.border .rounded-lg.border,
+.orion-viewport .rounded-xl.border .rounded-xl.border,
+.orion-viewport [data-slot='card'] [data-slot='card'],
+.orion-viewport .orion-card:not(.orion-kpi-saas) .orion-card:not(.orion-kpi-saas),
+.orion-viewport .ui-card .ui-card,
+.cps-theme .rounded-lg.border .rounded-lg.border,
+.ab2-shell .rounded-lg.border .rounded-lg.border {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.orion-viewport .border.border-border,
+.orion-viewport .border-border {
+  border-color: var(--border-soft) !important;
+}
+
+.orion-ds-card,
+.orion-ds-metric,
+.orion-ds-panel,
+.dashboard-chart-card {
+  border: none;
+  box-shadow: var(--shadow-soft, 0 8px 24px rgba(15, 23, 42, 0.06));
+}
+
+.dark .orion-ds-card,
+.dark .orion-ds-metric,
+.dark .orion-ds-panel,
+.dark .dashboard-chart-card {
+  border: 1px solid var(--border-soft);
+  box-shadow: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   5. TYPOGRAPHIE
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+.orion-viewport h1,
+.orion-ds-page-title {
+  font-size: var(--text-page-title, 0.9375rem); /* 15 — modules compacts */
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.orion-viewport h2,
+.orion-ds-section-title {
+  font-size: var(--text-page-title, 0.9375rem);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--text-main);
+}
+
+.orion-viewport h3 {
+  font-size: 0.8125rem; /* 13 — sous-section, sous le titre page */
+  font-weight: 700;
+  line-height: var(--line-height-snug);
+  color: var(--text-main);
+}
+
+.orion-viewport p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-muted);
+  max-width: 48rem;
+}
+
+.orion-ds-page-desc {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+  max-width: 48rem;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.orion-viewport .truncate,
+.orion-viewport [data-ellipsis] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6. TABLEAUX — légers, lisibles, moins enfermés
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport table,
+.ab2-shell table,
+.cps-theme table,
+.orion-admin-table,
+.ab2-table,
+.mp-table,
+.ab2-chips-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.orion-viewport thead th,
+.ab2-shell thead th,
+.cps-theme thead th {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0.625rem 0.75rem;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.orion-viewport tbody td,
+.ab2-shell tbody td,
+.cps-theme tbody td {
+  padding: 0.625rem 0.75rem;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+  vertical-align: middle;
+  border-left: none;
+  border-right: none;
+}
+
+.orion-viewport .orion-table-wrap,
+.orion-viewport .ui-table-wrap,
+.ab2-shell .orion-admin-table-wrap,
+.orion-master-data-card {
+  border: none;
+  box-shadow: var(--shadow-soft, 0 8px 24px rgba(15, 23, 42, 0.06));
+  border-radius: var(--radius-ui, 10px);
+  overflow: hidden;
+}
+
+.dark .orion-viewport .orion-table-wrap,
+.dark .orion-viewport .ui-table-wrap,
+.dark .ab2-shell .orion-admin-table-wrap,
+.dark .orion-master-data-card {
+  border: 1px solid var(--border-soft);
+  box-shadow: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7. BOUTONS / INPUTS — ciblés (pas tous les button)
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport button.bg-primary,
+.orion-viewport a.btn {
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-weight: 550;
+  line-height: 1.2;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.orion-viewport input:not([type='checkbox']):not([type='radio']):not([type='range']),
+.orion-viewport select,
+.orion-viewport textarea,
+.ab2-shell .ab2-input,
+.cps-theme .cps-input {
+  min-height: 2.5rem;
+  padding-inline: 0.75rem;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.orion-viewport input[type='checkbox'],
+.orion-viewport input[type='radio'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: #ff174d;
+}
+
+.orion-viewport .mp-row-action-btn,
+.orion-viewport button.icon-btn,
+.orion-viewport [data-icon-button] {
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   8. ACCESSIBILITÉ — focus visible obligatoire
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport :focus {
+  outline: none;
+}
+
+.orion-viewport :focus-visible,
+.ab2-shell :focus-visible,
+.cps-theme :focus-visible,
+.orion-sidebar :focus-visible,
+.orion-cockpit-header :focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring) !important;
+}
+
+.orion-viewport a:focus-visible {
+  border-radius: var(--orion-radius, 7px);
+}
+
+button:disabled,
+[aria-disabled='true'],
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+  /* Couleurs gérées par light-white-only / light-saas — pas d’opacity trop basse */
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9. EMPTY / LOADING — états élégants
+   ═══════════════════════════════════════════════════════════════ */
+.orion-empty-state,
+.orion-viewport [data-empty-state] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-10) var(--space-6);
+  text-align: center;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  min-height: 12rem;
+}
+
+.orion-empty-state h3 {
+  margin: 0;
+  color: var(--text-main);
+  font-size: var(--font-size-lg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   10. RESPONSIVE — mobile-first
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 575.98px) {
+  .orion-kpi-grid,
+  .dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card-span-3,
+  .card-span-4,
+  .card-span-6,
+  .card-span-8,
+  .card-span-12 {
+    grid-column: span 2;
+  }
+
+  .orion-viewport table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .orion-kpi-grid .card-span-3,
+  .dashboard-grid .card-span-3 {
+    grid-column: span 6;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .orion-kpi-grid .card-span-3 {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .orion-ds-page-header {
+    width: 100%;
+  }
+}
+
+/* Empêche scroll horizontal parasite */
+html,
+body {
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11. ACCENTS — pas de violet UI parasite (Tailwind utilities)
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport .bg-violet-500\/10,
+.orion-viewport .bg-violet-500\/15,
+.orion-viewport .bg-violet-500\/20,
+.orion-viewport .bg-purple-500\/10,
+.orion-viewport .bg-purple-500\/15 {
+  background-color: rgba(255, 23, 77, 0.1) !important;
+}
+
+.orion-viewport .text-violet-500,
+.orion-viewport .text-violet-600,
+.orion-viewport .text-violet-400,
+.orion-viewport .text-purple-500,
+.orion-viewport .text-purple-600 {
+  color: #ff174d !important;
+}
+
+.orion-viewport .border-violet-500\/30,
+.orion-viewport .border-violet-500\/40,
+.orion-viewport .border-purple-500\/30 {
+  border-color: rgba(255, 23, 77, 0.28) !important;
+}
+
+.orion-viewport .bg-violet-50,
+.orion-viewport .bg-purple-50 {
+  background-color: rgba(255, 23, 77, 0.06) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   12. HEADER / SIDEBAR rythme
+   ═══════════════════════════════════════════════════════════════ */
+.orion-cockpit-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 3.5rem;
+  /* padding-inline géré par le shell Tailwind */
+}
+
+.orion-sidebar,
+.orion-sidebar-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 100%;
+}
+
+.orion-sidebar nav,
+.orion-sidebar-v2 nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  /* padding géré par .orion-sb-nav / sidebar-modern */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   13. MOBILE-FIRST — overflow, touch, safe-area
+   ═══════════════════════════════════════════════════════════════ */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.orion-viewport,
+main.orion-viewport {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.orion-touch-target {
+  min-width: var(--touch-min, 44px);
+  min-height: var(--touch-min, 44px);
+}
+
+.orion-safe-pad-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orion-viewport *,
+  .orion-viewport *::before,
+  .orion-viewport *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

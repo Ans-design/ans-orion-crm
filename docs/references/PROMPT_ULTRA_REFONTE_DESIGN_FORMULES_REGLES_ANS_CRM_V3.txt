@@ -1,0 +1,1190 @@
+PROMPT CURSOR — RECONSTRUCTION UX/UI EXPERTE DE « FORMULES & RÈGLES »
+STUDIO PRIX & CALCULS — ANS CRM V3 / ORION
+
+CONTEXTE
+
+L’écran Administration > Studio Prix & Calculs > Formules & règles a déjà été restructuré, mais son design reste insuffisant.
+
+L’interface actuelle montre :
+- une longue navigation horizontale en haut ;
+- une colonne gauche très étroite contenant plus de 150 profils ;
+- des noms tronqués et des métadonnées presque illisibles ;
+- des préfixes techniques ou d’archives affichés dans les noms métier ;
+- un très grand titre de profil qui prend trop de place ;
+- des états contradictoires comme « Brouillon », « Publiée », « aucune » dans la même zone ;
+- une explication de formule isolée dans un bloc peu structuré ;
+- une succession de lignes blanches plates avec cases à cocher ;
+- de minuscules flèches de réorganisation et icônes de suppression ;
+- des champs numériques éloignés de leur libellé ;
+- des actions « Enregistrer » et « Publier » trop éloignées l’une de l’autre ;
+- aucune vraie palette de blocs ;
+- aucun inspecteur clair pour configurer le bloc sélectionné ;
+- aucune simulation permanente ;
+- aucune visualisation claire de l’ordre du calcul ;
+- beaucoup d’espace horizontal mal utilisé ;
+- une typographie globalement trop petite ;
+- une hiérarchie visuelle faible ;
+- une impression de formulaire technique plutôt que de constructeur no-code professionnel.
+
+OBJECTIF
+
+Reconstruire complètement l’expérience de l’écran « Formules & règles » pour obtenir un véritable éditeur visuel de formules tarifaires, intuitif, premium, clair et administrable sans développeur.
+
+La refonte doit améliorer :
+- architecture de l’information ;
+- hiérarchie visuelle ;
+- lisibilité ;
+- densité ;
+- navigation ;
+- compréhension des formules ;
+- modification des blocs ;
+- simulation ;
+- validation ;
+- versionnage ;
+- publication ;
+- accessibilité ;
+- responsive ;
+- animations ;
+- gestion des erreurs et conflits.
+
+La refonte porte sur la présentation et les interactions, mais elle doit utiliser les vraies données, le vrai modèle FormulaVersion et le vrai pricingResolver.
+
+======================================================================
+1. RÈGLES ABSOLUES
+======================================================================
+
+1. Ne pas casser les formules existantes.
+2. Ne pas changer silencieusement les résultats tarifaires.
+3. Ne pas inventer de prix, variable ou résultat.
+4. Ne pas calculer une version différente uniquement dans React.
+5. Toute simulation doit appeler le vrai pricingResolver serveur.
+6. Toute modification d’une formule publiée crée un nouveau brouillon versionné.
+7. La version publiée continue d’alimenter le POS tant qu’un brouillon n’est pas explicitement validé et publié.
+8. Une publication échouée ne doit jamais remplacer la dernière version valide.
+9. Ne pas enregistrer les champs critiques à chaque frappe.
+10. Utiliser « modifications locales → validation → enregistrement du brouillon ».
+11. Afficher clairement les modifications non enregistrées.
+12. Ne pas supprimer un bloc sans confirmation si cela modifie le résultat ou casse une dépendance.
+13. Ne pas afficher les codes techniques dans le titre métier principal.
+14. Masquer les profils archivés par défaut.
+15. Ne pas conserver l’ancien design simplement en changeant les couleurs.
+16. Ne pas ajouter des ombres fortes, bordures rouges ou badges décoratifs inutiles.
+17. Respecter les composants et tokens du design system existant lorsqu’ils sont cohérents.
+18. Corriger le design system s’il provoque les incohérences visibles.
+19. Ajouter des tests de non-régression UX et fonctionnels.
+20. Ne pas considérer la mission terminée sans vérification réelle sur plusieurs familles de calcul.
+21. Ne pas recréer un module autonome « Options POS » : utiliser les options et finitions canoniques affectées au produit.
+22. Un bloc « Stock » peut contrôler la disponibilité ou lire un coût autorisé, mais ne doit jamais modifier directement le stock.
+23. « Minimum facturable » signifie un plancher de prix, jamais un plafond.
+24. Ne pas utiliser l’expression ambiguë « marge dépense » dans le calcul final : distinguer charges, pertes, bénéfice cible, taux de marge et taux de marque.
+25. Un « prix manuel » est un override exceptionnel, soumis à permission, motif, période de validité, audit et comparaison avec le prix calculé.
+26. Le bouton Publier génère la version et la projection commerciale ; ne pas maintenir une deuxième formule modifiable dans le POS.
+27. Ne pas afficher « Synchronisé » avant vérification de la version, du hash et d’un scénario de calcul.
+28. La sauvegarde automatique ne doit jamais publier ni remplacer silencieusement une valeur officielle.
+29. Une récupération locale automatique peut protéger la saisie, mais l’enregistrement serveur du brouillon doit être visible, versionné et contrôlé.
+30. Les articles, profils et formules archivés restent traçables, mais sont exclus de la liste principale et des nouvelles publications.
+
+======================================================================
+2. AUDIT CIBLÉ AVANT MODIFICATION
+======================================================================
+
+Identifier dans le projet :
+- page de l’onglet Formules & règles ;
+- composant de liste des profils ;
+- composant du constructeur ;
+- composants des blocs ;
+- formulaire ou drawer existant ;
+- modèle FormulaVersion ;
+- endpoints de lecture, sauvegarde, validation et publication ;
+- règles de réorganisation ;
+- logique d’activation ;
+- gestion des sources matière, options et finitions ;
+- calcul de minimum facturable ;
+- arrondi commercial ;
+- gestion de marge, perte, charges et supplément ;
+- permissions ;
+- audit logs ;
+- tests existants ;
+- comportement du POS pendant l’édition d’un brouillon.
+
+Vérifier l’écran aux largeurs :
+- 1920 px ;
+- 1600 px ;
+- 1440 px ;
+- 1280 px ;
+- 1024 px ;
+- tablette.
+
+Ne pas optimiser uniquement pour la très grande capture fournie.
+
+Produire une courte liste :
+Problème actuel | Impact utilisateur | Correction | Composant concerné | Test associé.
+
+======================================================================
+3. NOUVELLE ARCHITECTURE GÉNÉRALE DE L’ÉCRAN
+======================================================================
+
+Remplacer l’organisation actuelle par un véritable workspace en trois zones.
+
+ZONE A — Bibliothèque de profils à gauche
+Largeur recommandée : 300 à 340 px sur grand écran, repliable si l’espace devient insuffisant.
+
+ZONE B — Canvas du constructeur au centre
+Largeur flexible et prioritaire.
+
+ZONE C — Inspecteur et simulation à droite
+Largeur recommandée : 360 à 420 px sur grand écran, transformée en drawer sur laptop.
+
+Grille desktop indicative :
+320 px / minmax(600 px, 1fr) / 380 px.
+
+Espacement entre zones : 16 px.
+
+Sur écran inférieur à environ 1360 px :
+- conserver la bibliothèque ;
+- transformer l’inspecteur droit en drawer ;
+- garder le canvas prioritaire.
+
+Sur écran inférieur à environ 1024 px :
+- bibliothèque repliable ;
+- canvas en plein espace ;
+- inspecteur en drawer plein ou demi-écran ;
+- aucune colonne comprimée illisible.
+
+La hauteur du workspace doit utiliser l’espace disponible sous le header, sans créer un petit tableau dans une grande page vide.
+
+======================================================================
+4. HEADER DE PAGE ET NAVIGATION
+======================================================================
+
+Conserver « Studio Prix & Calculs » comme contexte global, mais rendre son header plus compact.
+
+Header global :
+- titre ;
+- courte description ;
+- état global des publications ;
+- accès aux domaines ;
+- aide contextuelle.
+
+Sous-navigation :
+- Vue d’ensemble ;
+- Moteurs ;
+- Formules & règles ;
+- Tarifs par article ;
+- Paliers & ajustements ;
+- Simulation ;
+- Versions ;
+- Anomalies.
+
+Améliorations :
+- augmenter légèrement la lisibilité des libellés ;
+- utiliser un état actif clair mais sobre ;
+- ne pas utiliser uniquement une fine ligne rose pour signaler l’onglet actif ;
+- permettre le défilement horizontal accessible si nécessaire ;
+- éviter que la navigation prenne deux lignes ;
+- ne pas dupliquer « Formules & règles » plusieurs fois sans hiérarchie.
+
+Dans l’écran, créer un toolbar contextuel sticky distinct de la navigation globale.
+
+Toolbar contextuel :
+- retour à la liste si nécessaire ;
+- nom court de la formule ;
+- badge de version ;
+- état Brouillon / Publié / À valider ;
+- indicateur « Modifications non enregistrées » ;
+- Annuler les modifications ;
+- Enregistrer le brouillon ;
+- Tester ;
+- Comparer ;
+- Publier.
+
+Règle d’importance :
+- action primaire en édition : « Enregistrer le brouillon » ;
+- action primaire après validation : « Publier » ;
+- ne pas afficher « Publier » comme action disponible si le brouillon contient des erreurs bloquantes ;
+- expliquer la raison dans un tooltip et dans le panneau de validation.
+
+======================================================================
+5. BIBLIOTHÈQUE DE PROFILS À GAUCHE
+======================================================================
+
+La colonne actuelle est trop petite, surchargée et illisible.
+
+Créer une bibliothèque structurée.
+
+En-tête :
+- titre « Profils tarifaires » ;
+- compteur ;
+- bouton « Nouveau » si autorisé ;
+- bouton de réduction de la colonne.
+
+Recherche :
+- nom ;
+- référence ;
+- SKU ;
+- famille ;
+- moteur ;
+- alias historique.
+
+Filtres compacts :
+- Tous ;
+- Actifs ;
+- Brouillons ;
+- Publiés ;
+- Sans formule ;
+- Prix manquant ;
+- À vérifier ;
+- Anomalies ;
+- Archivés.
+
+Ajouter un sélecteur de famille :
+- Carterie ;
+- Flyers ;
+- Grand format ;
+- Publications ;
+- Packaging ;
+- Vente directe ;
+- autres familles réellement présentes.
+
+Chaque entrée de liste doit afficher :
+- nom commercial lisible sur une ou deux lignes ;
+- référence courte ;
+- famille ;
+- méthode de calcul ;
+- version publiée ;
+- état principal ;
+- état commercial ou POS ;
+- point ou icône d’anomalie uniquement si nécessaire.
+
+Exemple lisible :
+Carte de visite recto-verso standard
+Carterie · Formule v1 · Publié
+
+Si aucun profil n’est attaché :
+Carte de fidélité standard
+Carterie · Sans formule · À compléter
+
+Ne pas afficher :
+- « published » en anglais ;
+- « v1 (published) » dans une ligne minuscule ;
+- préfixes tels que [archivé→cv-std] dans le nom principal ;
+- plusieurs statuts contradictoires ;
+- métadonnées techniques sans utilité immédiate.
+
+Pour les éléments archivés :
+- masquer par défaut ;
+- afficher un badge discret « Archivé » lorsqu’ils sont inclus ;
+- conserver le nom métier ;
+- déplacer les informations de fusion ou redirection dans le drawer avancé.
+
+État sélectionné :
+- fond accent très léger ;
+- bord gauche ou indicateur de 3 px ;
+- texte lisible ;
+- contraste AA ;
+- pas de gros bloc rose.
+
+Navigation :
+- clavier haut/bas ;
+- Enter pour ouvrir ;
+- focus visible ;
+- conservation du scroll ;
+- virtualisation ou pagination si plus de 100 profils ;
+- filtre et position conservés après retour.
+
+======================================================================
+6. EN-TÊTE DE LA FORMULE SÉLECTIONNÉE
+======================================================================
+
+Remplacer le grand bloc actuel par un résumé compact et utile.
+
+Ligne principale :
+- nom métier ;
+- référence en texte secondaire ;
+- famille ;
+- moteur ;
+- version du brouillon ;
+- version publiée ;
+- état de validation.
+
+Ligne secondaire :
+- dernière modification ;
+- auteur ;
+- produits consommateurs ;
+- statut POS ;
+- date d’effet de la version publiée.
+
+Actions :
+- Prévisualiser ;
+- Tester ;
+- Historique ;
+- menu secondaire.
+
+Ne jamais afficher un titre brut comme :
+[archivé→cv-std] Carte de visite recto-verso standard.
+
+Afficher :
+Carte de visite recto-verso standard
+Référence : CV-STD-RV
+
+Placer l’alias ou l’ancien identifiant dans « Informations avancées ».
+
+Ne pas afficher « Brouillon · aucune · Publiée ».
+
+Utiliser des libellés explicites :
+- Version publiée : v1 ;
+- Brouillon en cours : v2 ;
+- Validation : 1 avertissement ;
+- POS utilise : v1.
+
+======================================================================
+7. RÉSUMÉ HUMAIN DE LA FORMULE
+======================================================================
+
+La phrase actuelle est utile mais trop isolée.
+
+Créer un bloc « Résumé du calcul » directement sous l’en-tête.
+
+Afficher une formule métier lisible, par exemple :
+
+Prix final = paliers de quantité + options + finitions + supplément fixe, puis application du minimum facturable et arrondi au pas de 50 Ar.
+
+Le résumé doit se mettre à jour avec le brouillon.
+
+Ajouter :
+- bouton « Voir le détail » ;
+- bouton « Voir l’expression technique » réservé au mode avancé ;
+- statut de validité ;
+- nombre de variables ;
+- nombre de sources ;
+- nombre d’avertissements.
+
+Ne pas exposer l’expression technique par défaut aux utilisateurs métier.
+
+======================================================================
+8. CANVAS DU CONSTRUCTEUR VISUEL
+======================================================================
+
+La zone centrale doit ressembler à un constructeur de workflow tarifaire, pas à une liste de paramètres.
+
+Organisation des blocs par étapes :
+
+1. Entrées
+2. Prix de base / coûts sources
+3. Quantité et paliers
+4. Matières
+5. Options et finitions
+6. Suppléments et charges
+7. Perte / gâche
+8. Marge ou coefficient
+9. Minimum facturable
+10. Remises
+11. Arrondi commercial
+12. Sortie prix final
+
+Afficher une ligne verticale discrète ou des connecteurs légers entre les blocs pour rendre l’ordre du calcul compréhensible.
+
+Chaque bloc doit être une carte compacte mais informative.
+
+Anatomie d’un bloc :
+- poignée de déplacement accessible ;
+- numéro d’étape ;
+- icône de type ;
+- titre métier ;
+- résumé de la configuration ;
+- source ;
+- unité ;
+- état : valide / avertissement / erreur / désactivé ;
+- bouton développer ;
+- menu « … ».
+
+Exemples de résumé :
+- Paliers quantité — 6 paliers — source « Carterie standard » ;
+- Finitions — 12 finitions autorisées — prix par pièce ;
+- Supplément fixe — 0 Ar — appliqué une seule fois ;
+- Minimum facturable — 5 000 Ar — sur total avant arrondi ;
+- Arrondi commercial — supérieur — pas de 50 Ar.
+
+Ne pas utiliser une simple checkbox comme seul indicateur d’activation.
+
+Pour activer ou désactiver un bloc :
+- utiliser un switch avec libellé ;
+- afficher l’impact ;
+- conserver le bloc désactivé visuellement atténué ;
+- permettre sa réactivation ;
+- demander confirmation si le bloc est requis.
+
+Éviter les champs numériques flottant à l’extrémité droite d’une ligne très large.
+
+Un champ modifié doit être soit :
+- dans l’inspecteur droit ;
+- dans une zone compacte développée sous le bloc ;
+- avec label, unité et aide réunis.
+
+Réorganisation :
+- glisser-déposer ;
+- boutons Monter / Descendre dans le menu ;
+- raccourcis clavier accessibles ;
+- aperçu de la nouvelle position ;
+- validation des ordres interdits ;
+- animation de 160 à 200 ms ;
+- respecter prefers-reduced-motion.
+
+Suppression :
+- déplacer l’icône poubelle dans le menu « … » ;
+- afficher « Retirer du brouillon » ;
+- indiquer les dépendances ;
+- proposer Annuler via toast ;
+- confirmation renforcée si impact majeur.
+
+======================================================================
+9. PALETTE « AJOUTER UN BLOC »
+======================================================================
+
+Remplacer le petit select « Marge » + bouton « Ajouter un bloc » par une vraie palette.
+
+Au clic sur « Ajouter un bloc » :
+- ouvrir une popover large ou un drawer ;
+- recherche ;
+- catégories ;
+- description ;
+- unité attendue ;
+- disponibilité selon le moteur ;
+- blocs déjà présents ;
+- incompatibilités.
+
+Catégories :
+- Sources ;
+- Opérations ;
+- Conditions ;
+- Prix et coûts ;
+- Quantité ;
+- Matières ;
+- Impression ;
+- Options & finitions ;
+- Paliers ;
+- Packaging ;
+- Disponibilité stock ;
+- Ajustements ;
+- Contrôles ;
+- Sortie.
+
+Blocs possibles selon l’architecture réelle :
+- prix fixe ;
+- coût matière ;
+- prix matière brute ;
+- coût impression ;
+- prix matière avec impression ;
+- prix par A4 ;
+- prix par m² ;
+- prix par mètre linéaire ;
+- prix par pièce ;
+- quantité ;
+- surface ;
+- longueur ;
+- paliers ;
+- option ;
+- finition ;
+- découpe ;
+- pose ;
+- reliure ;
+- supplément fixe ;
+- supplément proportionnel ;
+- minimum ;
+- maximum ;
+- perte ;
+- charge ;
+- bénéfice cible ;
+- marge cible ;
+- coefficient ;
+- remise ;
+- condition ;
+- conversion ;
+- arrondi ;
+- contrôle de disponibilité stock ;
+- override manuel contrôlé ;
+- sortie.
+
+Règles sémantiques des blocs :
+- « Prix matière brute » lit la source canonique Matières, formats & coûts ;
+- « Prix matière avec impression » n’est utilisé que si cette source existe réellement et est applicable ;
+- « Disponibilité stock » produit un état ou un blocage métier, pas un prix inventé ;
+- « Bénéfice cible » précise sa base ;
+- « Marge cible » signifie taux sur coût complet ;
+- le taux de marque sur prix de vente doit être un choix distinct ;
+- « Minimum facturable » applique un plancher au total à l’étape configurée ;
+- « Override manuel » affiche la valeur calculée d’origine, la valeur forcée, le motif, l’auteur et l’expiration ;
+- un bloc incompatible avec le moteur reste visible dans la palette avec explication, mais ne peut pas être ajouté.
+
+Chaque carte de palette doit afficher :
+- icône ;
+- nom ;
+- description d’une ligne ;
+- exemple ;
+- type de sortie ;
+- état disponible / déjà utilisé / incompatible.
+
+Après ajout :
+- insérer à une position logique ;
+- ouvrir automatiquement l’inspecteur ;
+- placer le focus sur le premier champ ;
+- ne pas enregistrer avant confirmation du brouillon.
+
+======================================================================
+10. INSPECTEUR DU BLOC À DROITE
+======================================================================
+
+Quand un bloc est sélectionné, afficher un inspecteur contextuel.
+
+En-tête :
+- icône ;
+- nom du bloc ;
+- état ;
+- aide ;
+- fermer.
+
+Sections :
+
+1. Général
+- nom affiché ;
+- activation ;
+- description ;
+- ordre.
+
+2. Configuration
+- source ;
+- valeur ;
+- unité ;
+- base du pourcentage ;
+- ordre d’application ;
+- règles et conditions.
+
+3. Portée
+- par ligne ;
+- par pièce ;
+- par feuille ;
+- par m² ;
+- par commande ;
+- avant ou après un autre bloc.
+
+4. Contraintes
+- minimum ;
+- maximum ;
+- valeurs autorisées ;
+- comportement si donnée absente.
+
+5. Impact
+- produits concernés ;
+- variantes concernées ;
+- versions ;
+- estimation de l’effet sur le scénario courant.
+
+6. Avancé
+- identifiant ;
+- expression ;
+- type interne ;
+- métadonnées ;
+- dépendances techniques.
+
+Tous les champs doivent avoir :
+- label persistant ;
+- aide courte ;
+- exemple ;
+- unité ;
+- validation inline ;
+- message métier ;
+- nom accessible.
+
+Pour un pourcentage, demander explicitement :
+- valeur ;
+- base ;
+- étape d’application.
+
+Ne jamais laisser un champ « Marge 30 % » ambigu.
+
+======================================================================
+11. SIMULATION EN DIRECT
+======================================================================
+
+La colonne droite doit pouvoir basculer entre :
+- Inspecteur ;
+- Simulation ;
+- Validation.
+
+Simulation rapide :
+- produit ;
+- quantité ;
+- format ;
+- matière ;
+- dimensions ;
+- options ;
+- finitions.
+
+Résultat :
+- prix ou coût de base ;
+- matière brute ;
+- impression ;
+- paliers de quantité ;
+- options ;
+- finitions ;
+- découpe, pose ou reliure selon le moteur ;
+- perte et charges ;
+- bénéfice ou marge cible ;
+- minimum facturable ;
+- remise ;
+- arrondi ;
+- prix final ;
+- prix unitaire ;
+- version simulée ;
+- version POS ;
+- écart ;
+- détail du calcul ;
+- erreurs et avertissements.
+
+Utiliser le vrai pricingResolver serveur.
+
+Afficher deux modes :
+- Brouillon ;
+- Version publiée.
+
+Ajouter « Comparer » pour montrer :
+- total brouillon ;
+- total publié ;
+- différence en Ar ;
+- différence en pourcentage ;
+- blocs responsables de l’écart.
+
+La simulation ne doit pas se relancer à chaque frappe de manière coûteuse.
+
+Utiliser :
+- bouton « Recalculer » ;
+- ou debounce contrôlé après modification valide ;
+- annulation de la requête précédente ;
+- état de chargement non bloquant ;
+- indication de la date du dernier calcul.
+
+Ajouter une action explicite « Tester avec pricingResolver » lorsque le recalcul automatique est désactivé.
+
+Chaque ligne du détail doit afficher :
+- libellé métier ;
+- valeur d’entrée ;
+- unité ;
+- opération ;
+- montant ajouté ou déduit ;
+- source ;
+- bloc FormulaVersion correspondant.
+
+Si une source est absente :
+- afficher « Source manquante » ;
+- bloquer la publication si elle est obligatoire ;
+- ne jamais convertir l’absence en valeur zéro silencieuse.
+
+======================================================================
+12. VALIDATION AVANT ENREGISTREMENT ET PUBLICATION
+======================================================================
+
+Créer un panneau « Validation » structuré.
+
+Catégories :
+- Structure ;
+- Variables ;
+- Sources ;
+- Unités ;
+- Formule ;
+- Simulation ;
+- Publication ;
+- POS.
+
+Niveaux :
+- Bloquant ;
+- Avertissement ;
+- Information.
+
+Exemples :
+- source matière manquante ;
+- unité incompatible ;
+- bloc sans valeur ;
+- variable orpheline ;
+- division par zéro possible ;
+- minimum appliqué avant une étape incompatible ;
+- arrondi manquant ;
+- formule sans sortie ;
+- option à impact prix sans source ;
+- résultat inférieur au coût complet ;
+- profil archivé encore lié à un produit publié ;
+- scénario de référence en échec.
+
+Chaque problème doit proposer :
+- bloc concerné ;
+- explication ;
+- impact ;
+- action « Ouvrir et corriger ».
+
+Dans la toolbar, afficher :
+- « 3 erreurs bloquantes » ;
+- « 2 avertissements » ;
+- ou « Prêt à publier ».
+
+======================================================================
+13. ENREGISTREMENT, VERSIONNAGE ET PUBLICATION
+======================================================================
+
+Créer un flux explicite.
+
+État initial publié :
+- POS utilise v1 ;
+- aucune modification.
+
+À la première modification :
+- créer ou ouvrir un brouillon v2 ;
+- afficher « Modifications non enregistrées ».
+
+Protection de la saisie :
+- conserver un brouillon local de récupération après un délai d’inactivité ;
+- afficher « Sauvegarde locale » séparément de « Brouillon enregistré sur le serveur » ;
+- permettre de restaurer ou d’ignorer la récupération après un rechargement ou un crash ;
+- ne jamais interpréter cette récupération locale comme une publication.
+
+Enregistrement serveur assisté :
+- si une sauvegarde automatique serveur est retenue, attendre la fin de saisie et la validation des champs ;
+- ne jamais envoyer une mutation à chaque caractère ;
+- afficher Enregistrement…, Enregistré, Échec et Réessayer ;
+- conserver aussi un bouton « Enregistrer maintenant » ;
+- demander une action explicite pour les changements financiers sensibles ;
+- prévenir les conflits par version optimiste.
+
+Enregistrer :
+- valider les champs ;
+- écrire le brouillon ;
+- créer audit log ;
+- afficher « Brouillon v2 enregistré » ;
+- le POS continue d’utiliser v1.
+
+Publier :
+1. vérifier permissions ;
+2. enregistrer les changements ;
+3. exécuter validation complète ;
+4. exécuter scénarios de référence ;
+5. afficher comparaison v1 / v2 ;
+6. demander note de publication ;
+7. publier transactionnellement ;
+8. générer projection POS ;
+9. vérifier version et hash ;
+10. afficher succès réel.
+
+Après publication :
+- POS utilise v2 ;
+- version visible dans l’en-tête ;
+- historique mis à jour ;
+- bouton « Restaurer comme nouveau brouillon » disponible.
+
+Ne pas publier directement une version archivée ou invalide.
+
+Après publication, exécuter le flux technique réel :
+1. commit transactionnel de la FormulaVersion ;
+2. génération de la projection commerciale ;
+3. reconstruction ou invalidation ciblée de l’index tarifaire ;
+4. invalidation des caches concernés ;
+5. lecture de contrôle de la version et du hash ;
+6. scénario de parité Administration / POS ;
+7. contrôle panier et devis sur un cas de référence ;
+8. audit log ;
+9. statut final.
+
+États finaux possibles :
+- Publié et vérifié ;
+- Publié, contrôle POS en cours ;
+- Publication annulée avec rollback ;
+- Dernière version valide conservée ;
+- Projection POS obsolète ;
+- Erreur de parité.
+
+Ne pas ajouter une action « Synchroniser le POS » comme deuxième publication normale. Un bouton « Relancer le contrôle » ou « Régénérer la projection » n’apparaît qu’en cas d’erreur et selon permission.
+
+======================================================================
+14. MODE STANDARD ET MODE EXPERT
+======================================================================
+
+Créer deux niveaux d’information.
+
+Mode Standard :
+- libellés métier ;
+- ordre du calcul ;
+- valeurs ;
+- unités ;
+- sources ;
+- simulation ;
+- erreurs.
+
+Mode Expert :
+- identifiants ;
+- expression technique ;
+- graphe de dépendances ;
+- types ;
+- métadonnées ;
+- JSON sérialisé en lecture seule ou éditeur protégé selon permission ;
+- logs de validation.
+
+Le mode Standard doit suffire à la majorité des modifications.
+
+Mémoriser le mode préféré de l’utilisateur sans imposer le mode Expert.
+
+======================================================================
+15. STYLE VISUEL PRÉCIS
+======================================================================
+
+Direction : ERP SaaS premium, calme, net, professionnel.
+
+Fond de page :
+- gris très clair ou teinte froide discrète ;
+- cartes blanches ;
+- contraste suffisant.
+
+Accent :
+- utiliser la couleur de marque rouge/rose avec modération ;
+- réserver l’accent fort aux actions principales, focus et sélection ;
+- ne pas colorer chaque checkbox, ligne et icône en rouge.
+
+Typographie indicative :
+- titre page : 26–30 px ;
+- titre de formule : 20–24 px ;
+- titre de section : 16–18 px ;
+- corps : 14 px minimum ;
+- métadonnées : 12–13 px minimum ;
+- hauteur de ligne confortable.
+
+Espacements :
+- grille de 4 ou 8 px ;
+- 24 px entre sections principales ;
+- 16 px entre cartes ;
+- 12 à 16 px de padding dans les blocs ;
+- aucun texte collé aux bordures.
+
+Bordures :
+- 1 px neutre ;
+- rayon cohérent 8 à 12 px ;
+- ombre très légère uniquement pour élévation réelle ;
+- pas une ombre sur chaque ligne.
+
+États :
+- neutre : gris/bleu ;
+- succès : vert discret ;
+- avertissement : ambre ;
+- erreur : rouge ;
+- brouillon : violet ou bleu selon le design system ;
+- archivé : gris.
+
+Icônes :
+- une seule bibliothèque ;
+- taille cohérente ;
+- bouton 36 à 40 px ;
+- tooltip ;
+- nom accessible ;
+- éviter les icônes seules pour les actions essentielles.
+
+======================================================================
+16. MICRO-INTERACTIONS ET ANIMATIONS
+======================================================================
+
+Animations utiles :
+- ouverture drawer : 180–220 ms ;
+- développement bloc : 160–200 ms ;
+- réorganisation : 160–200 ms ;
+- apparition validation : fondu court ;
+- sauvegarde : transition d’état sans déplacement ;
+- toast avec action Annuler si possible.
+
+Interdictions :
+- animation lente ;
+- rebond excessif ;
+- déplacement du contenu lors de la sauvegarde ;
+- spinner plein écran pour une petite mutation ;
+- animation automatique permanente ;
+- disparition trop rapide des messages importants.
+
+Respecter prefers-reduced-motion.
+
+======================================================================
+17. ACCESSIBILITÉ
+======================================================================
+
+Respecter WCAG 2.2 AA lorsque applicable.
+
+Vérifier :
+- structure de titres ;
+- landmark main, nav, aside ;
+- nom accessible des actions ;
+- labels ;
+- focus visible ;
+- navigation clavier ;
+- réorganisation accessible sans souris ;
+- contraste ;
+- états non transmis uniquement par couleur ;
+- tooltips accessibles ;
+- messages d’erreur annoncés ;
+- retour du focus après drawer ou dialogue ;
+- zoom 200 % ;
+- réduction de mouvement ;
+- taille des cibles.
+
+Ne pas utiliser aria-* interdit.
+Ne pas laisser un en-tête de tableau vide.
+Ne pas désactiver axe-linter pour masquer un défaut.
+
+======================================================================
+18. ÉTATS À CONCEVOIR
+======================================================================
+
+Créer et tester :
+- chargement initial ;
+- liste vide ;
+- aucune recherche ;
+- profil sans formule ;
+- profil archivé ;
+- brouillon non enregistré ;
+- brouillon enregistré ;
+- erreur de validation ;
+- publication en cours ;
+- publication réussie ;
+- publication échouée ;
+- perte réseau ;
+- conflit de version ;
+- permission insuffisante ;
+- pricingResolver indisponible ;
+- formule publiée mais projection POS obsolète.
+
+Les messages doivent indiquer :
+- ce qui s’est passé ;
+- l’impact ;
+- ce que l’utilisateur peut faire.
+
+======================================================================
+19. PERFORMANCE
+======================================================================
+
+Avec plus de 150 profils :
+- ne pas charger toutes les relations détaillées ;
+- pagination ou virtualisation de la liste ;
+- recherche serveur débouncée ;
+- annulation des requêtes obsolètes ;
+- chargement du profil sélectionné à la demande ;
+- cache ciblé ;
+- invalidation après sauvegarde ;
+- mémorisation raisonnable des composants ;
+- pas de rerender de tous les blocs lors de la saisie d’un champ ;
+- pas de simulation complète à chaque caractère.
+
+Mesurer avant/après :
+- temps d’ouverture ;
+- temps de sélection d’un profil ;
+- temps de sauvegarde ;
+- temps de simulation ;
+- nombre de requêtes ;
+- taille du bundle de la page.
+
+======================================================================
+20. COMPOSANTS À CRÉER OU REFACTORER
+======================================================================
+
+Adapter les noms au projet réel.
+
+Composants suggérés :
+- FormulaWorkspace ;
+- FormulaToolbar ;
+- PricingProfileLibrary ;
+- PricingProfileListItem ;
+- FormulaSummary ;
+- FormulaCanvas ;
+- FormulaStepCard ;
+- FormulaBlockPalette ;
+- FormulaBlockInspector ;
+- FormulaSimulationPanel ;
+- FormulaValidationPanel ;
+- FormulaVersionCompare ;
+- PublishFormulaDialog ;
+- FormulaHistoryDrawer ;
+- UnsavedChangesGuard ;
+- AccessibleReorderControls.
+
+Éviter un composant monolithique contenant toute la page.
+
+Séparer :
+- lecture ;
+- état d’édition local ;
+- validation ;
+- mutations ;
+- simulation ;
+- publication ;
+- présentation.
+
+======================================================================
+21. TESTS OBLIGATOIRES
+======================================================================
+
+Tests unitaires :
+- rendu du résumé ;
+- statut de version ;
+- ajout de bloc ;
+- désactivation ;
+- réorganisation ;
+- suppression ;
+- validation des unités ;
+- modifications non enregistrées ;
+- comparaison brouillon/publié ;
+- permission de publication.
+
+Tests intégration :
+- charger un profil ;
+- modifier un bloc ;
+- enregistrer le brouillon ;
+- recharger ;
+- données conservées ;
+- version publiée inchangée ;
+- simulation via pricingResolver ;
+- publier ;
+- projection POS mise à jour ;
+- audit log présent.
+
+Tests E2E :
+1. ouvrir Formules & règles ;
+2. rechercher un profil ;
+3. filtrer ;
+4. ouvrir le profil ;
+5. ajouter un bloc ;
+6. configurer dans l’inspecteur ;
+7. réorganiser ;
+8. simuler ;
+9. comparer avec la version publiée ;
+10. enregistrer ;
+11. recharger ;
+12. publier ;
+13. vérifier le POS ;
+14. tester navigation clavier ;
+15. tester viewport 1440 et 1024 px.
+
+Tests visuels :
+- capture desktop large ;
+- desktop 1440 ;
+- laptop 1280 ;
+- tablette ;
+- liste longue ;
+- noms longs ;
+- erreurs ;
+- mode sombre uniquement si réellement pris en charge.
+
+Tester au minimum :
+- une formule simple ;
+- une formule avec matière ;
+- une formule avec paliers ;
+- une formule avec finitions ;
+- une formule grand format ;
+- une formule packaging ;
+- un profil archivé ;
+- un profil sans formule.
+
+======================================================================
+22. CRITÈRES D’ACCEPTATION VISUELS ET UX
+======================================================================
+
+La refonte est validée uniquement si :
+
+1. L’écran ressemble à un véritable constructeur de formule no-code.
+2. La bibliothèque de profils est lisible et filtrable.
+3. Les noms ne sont plus écrasés dans une colonne trop étroite.
+4. Les préfixes techniques sont masqués dans l’interface métier.
+5. Les états Brouillon, Publié et POS sont clairs et non contradictoires.
+6. La formule est compréhensible dans l’ordre réel de calcul.
+7. Chaque bloc affiche un résumé utile.
+8. La configuration détaillée se fait dans un inspecteur cohérent.
+9. L’ajout de bloc utilise une vraie palette.
+10. Les flèches et poubelles minuscules ont disparu de la vue principale.
+11. La simulation est accessible sans quitter l’éditeur.
+12. Le brouillon peut être comparé à la version publiée.
+13. Enregistrer et Publier suivent un flux clair.
+14. Les erreurs de validation sont actionnables.
+15. La typographie est lisible sans zoom navigateur.
+16. Les grands espaces sont utilisés intelligemment.
+17. Le design reste utilisable à 1440 et 1280 px.
+18. L’interface est navigable au clavier.
+19. Les animations sont fluides et discrètes.
+20. Aucun résultat tarifaire ne change sans modification métier volontaire.
+21. Le POS continue d’utiliser la dernière version publiée valide.
+22. Les tests, ESLint, TypeScript et le build passent.
+23. Les données enregistrées persistent après F5 et reconnexion.
+24. Une récupération automatique ne peut jamais publier une formule.
+25. La simulation utilise le vrai pricingResolver, sans calcul fictif dans React.
+26. La publication génère une projection commerciale vérifiée.
+27. Le POS, le panier et le devis utilisent la même FormulaVersion publiée.
+28. Aucun prix manquant n’est remplacé par une valeur fictive ou zéro silencieux.
+29. Les blocs matière brute, matière imprimée, paliers, options, finitions, minimum et arrondi utilisent des sources réelles et identifiables.
+30. Les concepts de charges, pertes, bénéfice, taux de marge et taux de marque sont distincts.
+31. Le minimum facturable est présenté comme un plancher.
+32. Les profils archivés sont absents de la liste principale mais restent consultables via filtre.
+33. L’interface empêche une publication invalide et explique chaque blocage.
+34. La comparaison Brouillon / Publié / POS identifie les blocs responsables de l’écart.
+
+======================================================================
+23. LIVRABLES
+======================================================================
+
+Fournir :
+- composants refactorés ;
+- styles et tokens ajustés ;
+- tests ;
+- captures avant/après ;
+- résultat des validations ;
+- liste des règles conservées ;
+- limites restantes ;
+- rapport : AUDIT_REFONTE_FORMULES_REGLES_STUDIO_PRIX.md.
+
+Dans le rapport, inclure :
+- problèmes observés sur l’ancien écran ;
+- architecture choisie ;
+- composants créés ;
+- comportement responsive ;
+- accessibilité ;
+- performance ;
+- scénarios testés ;
+- preuve que les résultats de calcul n’ont pas changé.
+
+======================================================================
+24. INSTRUCTION FINALE À CURSOR
+======================================================================
+
+Commence par inspecter les composants, les services et les données réelles de cet écran.
+
+Ensuite, reconstruis l’interface selon l’architecture en trois zones :
+- bibliothèque de profils ;
+- canvas du constructeur ;
+- inspecteur / simulation / validation.
+
+Ne te limite pas à :
+- changer les couleurs ;
+- agrandir les boutons ;
+- ajouter des ombres ;
+- renommer quelques libellés ;
+- déplacer légèrement les lignes existantes.
+
+La refonte doit être structurelle, visuelle et interactive.
+
+Préserve strictement :
+- données ;
+- formules ;
+- versions ;
+- pricingResolver ;
+- règles métier ;
+- publication ;
+- synchronisation POS ;
+- anciennes commandes.
+
+À la fin, exécute les validations et indique factuellement :
+- fichiers modifiés ;
+- composants créés ;
+- tests réussis / total ;
+- état ESLint ;
+- état TypeScript ;
+- état build ;
+- état accessibilité ;
+- état parité tarifaire ;
+- captures avant/après ;
+- limites restantes.

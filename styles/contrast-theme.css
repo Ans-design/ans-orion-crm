@@ -1,0 +1,90 @@
+/**
+ * ANS ORION — Renforcement contrastes (étape 5)
+ * WCAG AA visé pour texte courant, placeholders, ghost, sidebar, boutons disabled.
+ */
+
+:root:not(.dark) {
+  --muted-foreground: 220 12% 36%;
+  --text-placeholder: #6B7280;
+}
+
+:root:not(.dark) input::placeholder,
+:root:not(.dark) textarea::placeholder {
+  color: var(--text-placeholder);
+  opacity: 1;
+}
+
+:root:not(.dark) .text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Boutons ghost / outline plus visibles */
+:root:not(.dark) button[class*='ghost']:not(:disabled):hover,
+:root:not(.dark) [data-variant='ghost']:not(:disabled):hover {
+  color: var(--text-main);
+  background: var(--bg-hover);
+}
+
+/* Liens sidebar secondaires — leaf only (sous-modules = .orion-sb-sub-row) */
+:root:not(.dark) .orion-nav-strip-leaf-active {
+  color: var(--primary-hover) !important;
+  background: var(--bg-active-soft) !important;
+}
+
+/* Badges pastel — texte foncé garanti */
+:root:not(.dark) [class*='bg-emerald-'],
+:root:not(.dark) [class*='bg-amber-'] {
+  --tw-text-opacity: 1;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--text-placeholder);
+  opacity: 1;
+}
+
+/* ═══ Boutons / contrôles disabled — lisibles light & dark ═══ */
+button:disabled,
+button[disabled],
+[role='button'][aria-disabled='true'],
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed !important;
+}
+
+button:disabled:not(.cmd-node-rail__node),
+button[disabled]:not(.cmd-node-rail__node),
+[role='button'][aria-disabled='true']:not(.cmd-node-rail__node) {
+  background-color: var(--app-disabled-bg) !important;
+  color: var(--app-disabled-text) !important;
+  border-color: var(--app-border) !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+}
+
+/* Primary / brand actifs restent blancs sur rouge — sauf disabled (règle ci-dessus) */
+button:not(:disabled).bg-primary,
+button:not(:disabled)[class*='bg-primary'] {
+  color: #fff;
+}
+
+/* Éviter texte trop pâle sur fond clair */
+:root:not(.dark) .text-white\/50,
+:root:not(.dark) .text-white\/60,
+:root:not(.dark) .text-slate-100:not(.bg-primary):not([class*='bg-\[']),
+:root:not(.dark) .text-gray-300 {
+  color: var(--app-muted) !important;
+}
+
+/* Outline / secondary : texte toujours lisible */
+:root:not(.dark) button[class*='outline']:not(:disabled),
+:root:not(.dark) button[class*='secondary']:not(:disabled) {
+  color: var(--app-text);
+}
+
+.dark button[class*='outline']:not(:disabled),
+.dark button[class*='secondary']:not(:disabled) {
+  color: var(--app-text);
+  background-color: var(--app-surface);
+}

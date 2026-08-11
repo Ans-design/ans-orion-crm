@@ -1,0 +1,1 @@
+export { POST } from '@/app/api/admin-backoffice/sync-all/route';

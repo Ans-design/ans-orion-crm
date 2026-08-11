@@ -1,0 +1,6 @@
+event,recipient_resolver,channels,dedup,outbox,notes
+TalkMessageCreated,conversation members except sender,in-app+email_optin_member,clientMessageId+notif dedup,yes,P0-05 fix onlyUserIds
+NotificationCreated,explicit userIds required,in-app+email,dedupKey,yes,no global audience
+ClientNotifyRequested,client contact,WA/SMS/email,dedup per client+template,yes,NON_CONFIGURE until adapter
+DevisAccepted,commercial+ops policy,in-app,existing,V12,—
+PermissionPolicyChanged,affected users,in-app,policy version,V12,—

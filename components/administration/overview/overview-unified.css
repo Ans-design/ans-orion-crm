@@ -1,0 +1,236 @@
+.orion-overview-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+}
+
+.orion-overview-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.25rem;
+}
+
+.orion-overview-header h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.orion-overview-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.orion-overview-nav a {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ab2-muted);
+  text-decoration: none;
+  padding: 0.15rem 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.orion-overview-nav a:hover {
+  color: var(--ab2-accent, var(--primary, #cc0033));
+  border-bottom-color: color-mix(in srgb, var(--ab2-accent, #cc0033) 45%, transparent);
+}
+
+.orion-overview-meta {
+  margin: 0;
+  font-size: 0.68rem;
+  color: var(--ab2-muted);
+  line-height: 1.4;
+}
+
+.orion-overview-anomaly-peek {
+  margin-top: 0.35rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--ab2-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* Bloc CPS fusionné (ex-DOMAINES) — toujours visible sous le header Admin */
+.orion-overview-cps-fuse {
+  min-width: 0;
+}
+
+.orion-overview-cps-fuse .cps-theme {
+  margin: 0;
+}
+
+.orion-overview-health {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 7px;
+  border: 1px solid var(--ab2-border);
+  background: var(--ab2-surface);
+}
+
+.orion-overview-health-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ab2-muted);
+  margin-right: 0.35rem;
+}
+
+.orion-overview-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  gap: 0.5rem;
+}
+
+.orion-overview-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+@media (max-width: 1100px) {
+  .orion-overview-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.orion-overview-panel {
+  border: 1px solid var(--ab2-border);
+  border-radius: 7px;
+  background: var(--ab2-surface);
+  padding: 0.75rem;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.orion-overview-panel h2 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--ab2-fg);
+}
+
+.orion-overview-panel-desc {
+  font-size: 0.68rem;
+  color: var(--ab2-muted);
+  margin: -0.15rem 0 0;
+}
+
+.orion-overview-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.orion-overview-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 7px;
+  border: 1px solid var(--ab2-border);
+  background: var(--ab2-surface-2);
+  font-size: 0.72rem;
+}
+
+.orion-overview-alert.is-critical {
+  border-color: color-mix(in srgb, #ef4444 35%, var(--ab2-border));
+  background: color-mix(in srgb, #ef4444 8%, var(--ab2-surface-2));
+}
+
+.orion-overview-alert.is-warning {
+  border-color: color-mix(in srgb, #FACC15 35%, var(--ab2-border));
+  background: color-mix(in srgb, #FACC15 8%, var(--ab2-surface-2));
+}
+
+.orion-overview-alert.is-info {
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 30%, var(--ab2-border));
+}
+
+.orion-overview-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.orion-overview-table-wrap {
+  overflow: auto;
+  max-height: 280px;
+  border-radius: 7px;
+  border: 1px solid var(--ab2-border);
+}
+
+.orion-overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.7rem;
+}
+
+.orion-overview-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  background: var(--ab2-surface-2);
+  border-bottom: 1px solid var(--ab2-border);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ab2-muted);
+  white-space: nowrap;
+}
+
+.orion-overview-table td {
+  padding: 0.38rem 0.5rem;
+  border-bottom: 1px solid var(--ab2-border);
+  vertical-align: top;
+}
+
+.orion-overview-table tr:hover td {
+  background: color-mix(in srgb, var(--ab2-accent, #cc0033) 6%, var(--ab2-surface));
+}
+
+html.dark .orion-overview-table tr:hover td,
+.dark .orion-overview-table tr:hover td {
+  background: hsl(222 35% 13%);
+}
+
+.orion-overview-anomaly {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--ab2-border);
+  font-size: 0.72rem;
+}
+
+.orion-overview-anomaly:last-child {
+  border-bottom: none;
+}
+
+.orion-overview-footer-link {
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+a.orion-overview-link-btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}

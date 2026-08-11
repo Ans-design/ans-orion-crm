@@ -1,0 +1,16 @@
+/** Sources de données uniques — une base par domaine, vues filtrées par rôle */
+export const DATA_MASTER = {
+  CLIENTS: 'CLIENTS_MASTER',
+  DEVIS: 'DEVIS_MASTER',
+  COMMANDES: 'COMMANDES_MASTER',
+  PRODUCTION: 'PRODUCTION_MASTER',
+  BAT: 'BAT_MASTER',
+  STOCK: 'STOCK_MASTER',
+  MACHINES: 'MACHINES_MASTER',
+  LIVRAISONS: 'LIVRAISONS_MASTER',
+  FINANCE: 'FINANCE_MASTER',
+  EMPLOYES: 'EMPLOYES_MASTER',
+  NOTIFICATIONS: 'NOTIFICATIONS_MASTER',
+} as const;
+
+export type DataMasterId = (typeof DATA_MASTER)[keyof typeof DATA_MASTER];

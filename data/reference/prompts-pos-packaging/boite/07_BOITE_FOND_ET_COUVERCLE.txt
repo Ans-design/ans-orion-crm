@@ -1,0 +1,115 @@
+PROMPT ARTICLE — BOÎTE FOND + COUVERCLE — ANS ORION
+
+Travaille uniquement sur la structure “Boîte fond + couvercle” dans le module POS Boîte personnalisée.
+
+OBJECTIF :
+Créer une boîte en deux pièces :
+1. Base / fond
+2. Couvercle
+
+Le calcul doit être séparé pour la base et le couvercle.
+Le couvercle doit intégrer un jeu/tolérance pour pouvoir s’emboîter correctement sur la base.
+
+CHAMPS POS :
+- Longueur intérieure L en mm
+- Profondeur / largeur intérieure P en mm
+- Hauteur base H_base en mm
+- Hauteur couvercle H_couvercle en mm
+- Jeu couvercle en mm
+- Matière base
+- Grammage base
+- Matière couvercle
+- Grammage couvercle
+- Même matière pour les deux parties : oui/non
+- Épaisseur estimée
+- Quantité
+- Impression base
+- Impression couvercle
+- Finition base
+- Finition couvercle
+- Bleed
+- Marge de chute matière
+- Format compatible base
+- Format compatible couvercle
+- Poses par feuille
+- Surface facturée totale
+
+VARIABLES :
+- L = longueur intérieure base
+- P = profondeur intérieure base
+- H_base = hauteur base
+- H_couvercle = hauteur couvercle
+- jeu = tolérance entre base et couvercle, défaut 2 mm
+- bleed = fond perdu, valeur par défaut 3 mm
+- marge_chute = 50 mm sur chaque côté
+
+FORMULE BASE :
+base_developpe_largeur = L + 2H_base
+base_developpe_hauteur = P + 2H_base
+
+FORMULE COUVERCLE :
+couvercle_L = L + 2 × jeu
+couvercle_P = P + 2 × jeu
+
+couvercle_developpe_largeur = couvercle_L + 2H_couvercle
+couvercle_developpe_hauteur = couvercle_P + 2H_couvercle
+
+POUR CHAQUE PARTIE :
+largeur_imprimable = developpe_largeur + 2 × bleed
+hauteur_imprimable = developpe_hauteur + 2 × bleed
+
+largeur_brute_finale = largeur_imprimable + 100 mm
+hauteur_brute_finale = hauteur_imprimable + 100 mm
+
+surface_brute_m2 = largeur_brute_finale × hauteur_brute_finale / 1 000 000
+
+SURFACE TOTALE :
+surface_brute_totale = surface_brute_base + surface_brute_couvercle
+
+RÈGLES MÉTIER :
+- La boîte fond + couvercle est toujours composée de 2 éléments.
+- Le couvercle doit être légèrement plus grand que la base selon le jeu.
+- Permettre même matière ou matière différente pour base et couvercle.
+- Calculer stock et prix séparément pour chaque élément.
+- Ne pas proposer de grammage inférieur ou égal à 250g.
+- Utiliser uniquement PCB, PCM, Glossy, Papier spécial invitation, SBS, FBB ou Kraft épais en 300g, 350g, 400g.
+
+RÉCAPITULATIF À AFFICHER :
+- Structure : Boîte fond + couvercle
+- Dimensions base L × P × H_base
+- Hauteur couvercle
+- Jeu couvercle
+- Nombre de pièces : 2
+- Base : matière, grammage, développé, surface, format, poses
+- Couvercle : matière, grammage, développé, surface, format, poses
+- Bleed
+- Marge de chute matière +50 mm sur 4 côtés pour chaque pièce
+- Surface brute totale
+- Surface facturée totale
+- Taux de chute estimé
+- Prix base
+- Prix couvercle
+- Prix unitaire total
+- Total commande
+
+SYNCHRONISATION :
+Appliquer cette structure dans :
+- POS
+- Base de données
+- Admin
+- Prix
+- Stock
+- Devis
+- Commande
+- Facture
+- Production
+- Cockpit
+- Tests
+
+TESTS :
+- Vérifier calcul base.
+- Vérifier calcul couvercle avec jeu.
+- Vérifier que le couvercle est plus grand que la base.
+- Vérifier addition des surfaces.
+- Vérifier stock séparé.
+- Vérifier snapshot devis complet.

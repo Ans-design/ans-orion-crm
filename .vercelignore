@@ -1,0 +1,16 @@
+# Déploiement Vercel — exclure artefacts lourds (évite upload 350+ Mo)
+deploy/
+deploy/**
+prisma/dev.db
+prisma/prisma/
+.neon
+orion.env
+.api-token
+.chrome-cdp
+e2e/
+playwright-report/
+test-results/
+test-results/**
+*.trace.zip
+tsconfig.tsbuildinfo
+.git/

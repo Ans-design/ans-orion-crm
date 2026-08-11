@@ -1,0 +1,331 @@
+/**
+ * ANS ORION — Mode sombre : zéro filet blanc / contours clairs
+ * Surfaces séparées par fond, pas par traits blancs/gris clairs.
+ * Conservé : focus brand, barre d'état active, accents danger/warning.
+ */
+
+/* ── Tokens bordures quasi invisibles ── */
+html.dark,
+.dark {
+  --border-soft: rgba(255, 255, 255, 0.035) !important;
+  --border-subtle: transparent !important;
+  --border-medium: rgba(255, 255, 255, 0.05) !important;
+  --ans-border: transparent !important;
+  --contour-hairline: transparent !important;
+  --contour-soft: transparent !important;
+  --border: 220 18% 14% !important; /* hsl shadcn très bas */
+  --input: 214 40% 10% !important;
+  --shadow-card: none !important;
+  --shadow-card-unified: none !important;
+  --orion-shadow-sm: none !important;
+  --orion-shadow-soft: none !important;
+}
+
+/* ── Utilitaires Tailwind border-* trop clairs ── */
+html.dark :is(
+  .border,
+  .border-border,
+  .border-soft,
+  .border-soft-surface,
+  .border-muted,
+  .border-input,
+  .border-slate-200,
+  .border-slate-300,
+  .border-gray-200,
+  .border-gray-300,
+  .border-zinc-200,
+  .border-zinc-300,
+  .border-neutral-200,
+  .border-white,
+  .border-white\/10,
+  .border-white\/20,
+  .border-white\/5
+) {
+  border-color: transparent !important;
+}
+
+html.dark :is(
+  .border-t,
+  .border-b,
+  .border-l,
+  .border-r,
+  .border-x,
+  .border-y
+) {
+  border-color: transparent !important;
+}
+
+/* Filets Tailwind color-mix / opacity résiduels */
+html.dark [class*='border-[var(--border'],
+html.dark [class*='border-[var(--ans-border'],
+html.dark [class*='border-border'],
+html.dark [class*='border-soft'] {
+  border-color: transparent !important;
+}
+
+/* ── Cartes / panels / KPIs ── */
+html.dark :is(
+  .orion-card,
+  .orion-card-interactive,
+  .ans-card-premium,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .orion-ds-metric,
+  .orion-kpi-saas,
+  .orion-kpi-card,
+  .cps-kpi-card,
+  .orion-material-kpi-card,
+  [data-slot='card'],
+  .bg-card,
+  .bg-background
+).border,
+html.dark :is(
+  .orion-card,
+  .orion-card-interactive,
+  .ans-card-premium,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .orion-ds-metric,
+  .orion-kpi-saas,
+  .orion-kpi-card,
+  .cps-kpi-card,
+  .orion-material-kpi-card,
+  [data-slot='card']
+) {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ── Tableaux : plus de grilles blanches ── */
+html.dark table,
+html.dark thead,
+html.dark tbody,
+html.dark tr,
+html.dark th,
+html.dark td,
+html.dark .orion-table,
+html.dark .orion-ds-table-wrap,
+html.dark .orion-master-data-scroll,
+html.dark .orion-master-data-root,
+html.dark .orion-master-data-card,
+html.dark .orion-master-data-row,
+html.dark [data-orion-table] {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.dark table thead th,
+html.dark .orion-table thead th {
+  border-bottom: none !important;
+  border-right: none !important;
+  background: color-mix(in srgb, var(--bg-card-elevated, #121826) 92%, #000) !important;
+}
+
+html.dark table tbody td,
+html.dark table tbody th {
+  border-bottom: none !important;
+  border-right: none !important;
+}
+
+/* Alternance ligne = fond, pas de filet */
+html.dark table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+html.dark table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* ── Inputs / selects / toolbar ── */
+html.dark :is(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+  select,
+  textarea,
+  .app-btn,
+  button.app-button,
+  .orion-btn,
+  .ans-btn-outline,
+  [data-slot='input'],
+  [data-slot='select-trigger']
+) {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.dark :is(input, select, textarea, .app-btn, button):not(.talk-input):focus-visible {
+  border-color: color-mix(in srgb, var(--primary, #ff174d) 45%, transparent) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary, #ff174d) 22%, transparent) !important;
+  outline: none !important;
+}
+
+/* ── Admin CPS / matières ── */
+html.dark .cps-theme :is(
+  .cps-admin-header,
+  .orion-module-header,
+  .cps-content-flat,
+  .cps-panel,
+  .orion-master-data-root,
+  .orion-master-data-card,
+  .mt-workspace,
+  .cps-pill,
+  .orion-material-search
+) {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.dark .cps-theme table th,
+html.dark .cps-theme table td,
+html.dark .cps-theme .orion-master-data-row {
+  border-color: transparent !important;
+}
+
+/* Champs tarification dans cellules */
+html.dark .cps-theme :is(input, .orion-material-input, .cps-field) {
+  border-color: transparent !important;
+  background: color-mix(in srgb, #0a101c 90%, #fff 4%) !important;
+}
+
+/* ── Sidebar / shell ── */
+html.dark aside.orion-sidebar,
+html.dark .orion-sidebar-v2,
+html.dark .orion-sidebar-card,
+html.dark .orion-sb-widget,
+html.dark .orion-sb-div,
+html.dark .orion-sb-search-panel,
+html.dark .orion-phone-tabbar {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.dark .orion-sb-div {
+  height: 0 !important;
+  margin: 4px 0 !important;
+  background: transparent !important;
+}
+
+html.dark .orion-sidebar-desktop .orion-sidebar-card {
+  border: none !important;
+  box-shadow: 0 12px 40px -16px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* ── Header app / ticker / breadcrumb ── */
+html.dark .orion-app-header,
+html.dark .orion-cockpit-header,
+html.dark .orion-alert-ticker,
+html.dark .module-date-filter,
+html.dark nav[aria-label='breadcrumb'] {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.dark .orion-alert-ticker {
+  border: none !important;
+  box-shadow: 0 8px 28px -12px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* ── Dividers / separators génériques ── */
+html.dark :is(hr, .divider, .orion-divider, [role='separator'], .Separator) {
+  border-color: transparent !important;
+  background: transparent !important;
+  opacity: 0 !important;
+  height: 0 !important;
+}
+
+/* Outline résiduels blancs (ring) hors focus brand */
+html.dark :is(.ring-1, .ring-2, .ring, .outline, .outline-1) {
+  --tw-ring-color: transparent !important;
+  outline-color: transparent !important;
+}
+
+/* ── Dialogs / sheets : contour discret (pas blanc) ── */
+html.dark :is(
+  [data-radix-dialog-content],
+  [data-slot='dialog-content'],
+  [data-slot='sheet-content'],
+  .orion-slide-panel
+) {
+  border-color: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* ── Exception intentionnelle : état actif brand garde un trait brand ── */
+html.dark :is(
+  .is-active,
+  [aria-current='page'],
+  .orion-nav-item.is-active,
+  .orion-phone-tab.is-active
+) {
+  border-color: color-mix(in srgb, var(--primary, #ff174d) 35%, transparent) !important;
+}
+
+/* Badges / chips : fond seulement */
+html.dark :is(.badge, .orion-status-chip, .orion-surface-chip, .cps-pill, .orion-module-header__chip) {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Scrollbars: pas de ligne claire */
+html.dark * {
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+/* Fallback fort: tout élément border 1px clair → transparent dans le viewport métier */
+html.dark .orion-viewport *:not(img):not(svg):not(canvas):not(video) {
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
+
+/* Ré-activer bordure focus après le reset large */
+html.dark .orion-viewport :focus-visible {
+  border-color: color-mix(in srgb, var(--primary, #ff174d) 50%, transparent) !important;
+  outline: 2px solid color-mix(in srgb, var(--primary, #ff174d) 35%, transparent) !important;
+  outline-offset: 1px;
+}
+
+/* Inputs / champs en fond légèrement plus clair (structure sans filet) */
+html.dark .orion-viewport :is(
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea
+) {
+  background-color: color-mix(in srgb, var(--bg-card, #0a101c) 88%, #ffffff 5%) !important;
+}
+
+/* Exception : barres recherche / selects filtres — filet discret obligatoire */
+html.dark .orion-viewport :is(
+  .orion-search-field__input,
+  .orion-filter-select,
+  input.orion-admin-table-search,
+  input.orion-material-toolbar-search,
+  input.ab2-search-input,
+  select.orion-material-toolbar-select,
+  select.ab2-filter-select,
+  select.orion-filter-select
+) {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .orion-viewport :is(.bg-card, [data-slot='card'], .ans-card-premium, .dashboard-chart-card) {
+  background-color: var(--bg-card, #0c1220) !important;
+  background-image: none !important;
+}
+
+/* Garde-fou : utilitaires Tailwind clairs restés en dark */
+html.dark .orion-viewport :is(
+  .bg-white,
+  .bg-red-50,
+  .bg-rose-50,
+  .bg-orange-50,
+  .bg-amber-50,
+  .bg-yellow-50,
+  .bg-slate-50,
+  .bg-gray-50,
+  .bg-zinc-50,
+  .bg-neutral-50,
+  .bg-stone-50
+) {
+  background-color: color-mix(in srgb, var(--bg-card-soft, #0b1830) 92%, var(--primary, #ff174d) 8%) !important;
+}

@@ -1,0 +1,994 @@
+PROMPT MAÎTRE CURSOR — REMÉDIATION COMMERCIAL ANS ORION V6
+Audit source : AUDIT_COMMERCIAL_2026-07-31.md
+Date : 2026-07-31
+Objectif : corriger, tester et réauditer l’univers Commercial jusqu’à une validation réelle.
+
+================================================================================
+0. MISSION ET RÈGLE DE VÉRITÉ
+================================================================================
+
+Tu es l’agent principal chargé de corriger le dépôt ANS ORION ouvert dans Cursor.
+Tu dois travailler directement dans le dépôt réel, jamais à partir de suppositions.
+
+Résultat attendu :
+- univers Commercial cohérent, sécurisé, maintenable et accessible ;
+- parcours Client → POS → Panier → Devis → Commande → Réclamation fonctionnel ;
+- aucune régression des prix, permissions, commandes, stocks ou données existantes ;
+- build, types, lint et tests pertinents réussis ;
+- rapport de preuves vérifiables.
+
+IMPORTANT :
+- « 100 % OK » et « 10/10 » sont des résultats de validation, pas des slogans.
+- Ne déclare jamais un contrôle réussi s’il n’a pas été exécuté.
+- « Non testé », « commande indisponible » ou « environnement bloqué » ne vaut pas
+  « réussi ».
+- Si un contrôle est impossible, indique précisément le blocage et conserve la note
+  sous 10/10.
+- N’invente ni chemin, ni modèle Prisma, ni permission, ni résultat de test.
+- L’audit est une hypothèse à confirmer dans le dépôt actuel.
+
+================================================================================
+1. CONTRAINTES ABSOLUES
+================================================================================
+
+1. Zéro suppression métier :
+   - ne pas supprimer /panier ;
+   - ne pas supprimer /devis/[id] ;
+   - ne pas supprimer les clés panier legacy ;
+   - ne pas supprimer une route, permission, donnée ou fonctionnalité existante ;
+   - masquer, rediriger, migrer ou fusionner avec compatibilité.
+
+2. Préserver l’ordre canonique de l’univers Commercial :
+   1 Clients
+   2 POS
+   3 Panier
+   4 Devis
+   5 Commandes
+   6 Réclamations
+
+3. Ne pas confondre :
+   - le badge parent Commercial = compteur opérationnel dynamique ;
+   - les pastilles 1 à 6 = étapes structurelles du parcours.
+
+4. Ne jamais exposer :
+   - marge ;
+   - coût interne ;
+   - coût de revient ;
+   - détail fournisseur ;
+   - taux interne ;
+   - champ dérivé permettant de reconstituer la marge ;
+   sans permission explicite pos:view_margin.
+
+5. Ne pas modifier la formule de prix pendant le refactoring.
+   Avant/après, les mêmes entrées doivent produire les mêmes sorties, arrondis,
+   minimums, paliers, remises et erreurs.
+
+6. Ne pas contourner TypeScript avec :
+   - any ajouté ;
+   - @ts-ignore ;
+   - @ts-expect-error sans justification et test ;
+   - cast double « as unknown as » ;
+   - désactivation ESLint ;
+   - catch vide ;
+   - réponse de secours silencieuse.
+
+7. Ne pas lancer de migration destructive ou réinitialiser la base.
+   Interdits : reset, force-reset, drop, suppression globale, seed écrasant.
+
+8. Ne pas réécrire tout le projet. Appliquer des lots atomiques et réversibles.
+
+================================================================================
+2. MODE D’EXÉCUTION OBLIGATOIRE
+================================================================================
+
+Exécute les phases dans l’ordre :
+
+PHASE 1 — INVENTAIRE ET BASELINE
+PHASE 2 — SÉCURITÉ ET AUTORISATIONS
+PHASE 3 — SAV ET DEEP-LINKS
+PHASE 4 — PAGINATION ET ÉTATS RÉSEAU
+PHASE 5 — PANIER SERVER-FIRST
+PHASE 6 — REFACTORING POS ET PRICING
+PHASE 7 — DÉCOUPAGE CRM / DEVIS
+PHASE 8 — ACCESSIBILITÉ ET COHÉRENCE UI
+PHASE 9 — TESTS COMPLETS ET RÉAUDIT
+
+Après chaque phase :
+- exécuter les tests ciblés ;
+- corriger les régressions ;
+- produire un petit commit logique si Git est utilisé ;
+- mettre à jour la matrice de traçabilité ;
+- ne pas passer à la phase suivante si une erreur bloquante reste ouverte.
+
+================================================================================
+3. PHASE 1 — INVENTAIRE ET BASELINE
+================================================================================
+
+3.1 Identifier la stack réelle
+
+Avant toute modification :
+- lire package.json et les scripts disponibles ;
+- identifier le gestionnaire de paquets via le lockfile ;
+- lire le schéma Prisma et les migrations pertinentes ;
+- identifier le framework, le routeur, le système d’authentification ;
+- identifier le framework de tests ;
+- lire les instructions AGENTS.md / README / docs techniques applicables ;
+- relever l’état Git et préserver les modifications utilisateur existantes.
+
+3.2 Localiser les éléments sans supposer les chemins
+
+Utiliser rg/rg --files pour localiser :
+- SidebarUniverseNav ;
+- sidebar-universe-nav.tsx ;
+- UNIVERSE_MODULE_ORDER ;
+- COMMERCIAL_FLOW_ORDER ;
+- COMMERCIAL_FLOW_STEPS ;
+- MODULE_BADGE_KEYS ;
+- sumUniverseBadge ;
+- page-access ;
+- POS_PAGE_ROLES ;
+- sanitizePricingPayloadForRole ;
+- /api/pos/price-preview ;
+- /api/pricing/simulate ;
+- calculate.ts ;
+- validateAndMerge ;
+- cart-store et usages localStorage ;
+- ClientReclamation et commandeId ;
+- clients-page.tsx ;
+- pages/routes clients, pos, panier, devis, commandes, réclamations ;
+- AppListPagination ;
+- FlowBanner ;
+- CommandeDeepLinkBanner ;
+- ErrorState ;
+- permissions clients:*, pos:*, devis:*, commandes:* et pos:view_margin.
+
+Créer docs/remediation-commercial/inventory.md avec :
+- chemin réel ;
+- responsabilité ;
+- taille approximative ;
+- dépendances majeures ;
+- état confirmé : présent / absent / déjà corrigé / différent de l’audit.
+
+3.3 Établir la baseline
+
+Exécuter uniquement les scripts réellement disponibles :
+- installation déterministe si nécessaire ;
+- génération Prisma si le projet l’exige ;
+- validation Prisma ;
+- typecheck ;
+- lint ;
+- tests unitaires ;
+- tests d’intégration ;
+- build ;
+- tests E2E Commercial existants.
+
+Consigner dans docs/remediation-commercial/baseline.md :
+- commande exacte ;
+- code de sortie ;
+- durée ;
+- résumé ;
+- erreurs préexistantes ;
+- environnement et variables manquantes, sans afficher leurs valeurs.
+
+Ne pas corriger aveuglément une erreur non liée. La documenter et déterminer si elle
+bloque la remédiation Commercial.
+
+3.4 Tests de caractérisation obligatoires avant refactoring
+
+Ajouter des tests de non-régression sur :
+- prix par famille d’article représentative ;
+- arrondis et minimums ;
+- paliers de quantité ;
+- remise autorisée / refusée ;
+- payload avec marge pour rôle autorisé ;
+- payload sans marge pour rôle non autorisé ;
+- fusion et validation du panier ;
+- redirection /devis/[id] vers /devis?id=... ;
+- badge parent et étapes 1 à 6.
+
+Capturer des fixtures anonymisées et stables. Ne pas copier de données personnelles
+réelles dans le dépôt.
+
+================================================================================
+4. PHASE 2 — SÉCURITÉ ET AUTORISATIONS
+================================================================================
+
+4.1 Défense en profondeur
+
+Pour chaque module Commercial, vérifier quatre niveaux :
+
+A. Navigation
+- lien visible uniquement si l’utilisateur peut réellement accéder au module ;
+- absence de lien ne constitue jamais l’unique protection.
+
+B. Page
+- chargement interdit ou redirection sûre sans permission ;
+- pas de flash de contenu sensible avant contrôle ;
+- états 401 et 403 distincts si la convention du projet le permet.
+
+C. API
+- chaque GET exige la permission read/use correcte ;
+- chaque POST/PATCH/PUT/DELETE exige write/accept appropriée ;
+- ne jamais faire confiance au rôle ou au prix envoyé par le client.
+
+D. Payload
+- sérialisation minimale selon permission ;
+- suppression côté serveur des champs sensibles ;
+- aucun calcul dérivé exposé permettant de retrouver la marge.
+
+4.2 Matrice cible minimale
+
+Confirmer dans le registre réel, puis aligner :
+- clients* : clients:read / clients:write ;
+- pos*, pricing simulate, cart* : pos:use ;
+- marge POS : pos:view_margin ;
+- devis* : devis:read / devis:write / devis:accept selon action ;
+- commandes* : commandes:read / commandes:write ;
+- réclamations* : permissions actuelles clients:read / clients:write.
+
+Ne pas introduire immédiatement reclamations:* si cela casse les rôles existants.
+Si la séparation est pertinente :
+- ajouter les nouvelles permissions de façon additive ;
+- prévoir une compatibilité temporaire avec clients:* ;
+- documenter le plan de migration ;
+- tester tous les rôles ;
+- aucune perte d’accès légitime.
+
+4.3 POS-03 — assainissement de /api/pos/price-preview
+
+Corriger l’endpoint réel :
+- réutiliser le même mécanisme que /api/pricing/simulate ;
+- appliquer sanitizePricingPayloadForRole ou l’abstraction canonique équivalente ;
+- assainir objets imbriqués, tableaux, totaux et métadonnées ;
+- ne pas seulement masquer la colonne dans l’interface ;
+- vérifier les logs, exports, erreurs et réponses JSON.
+
+Tests obligatoires :
+- pos:view_margin reçoit uniquement les champs prévus ;
+- pos:use sans pos:view_margin ne reçoit aucune marge/coût ;
+- utilisateur sans pos:use reçoit 403 ;
+- utilisateur non authentifié reçoit 401 ;
+- snapshots ou assertions profondes empêchent la réapparition des champs.
+
+4.4 CRM-04 — données financières client
+
+Inventorier solde, CA, encours, plafond, marge et historique financier.
+Décider selon les permissions existantes, sans inventer une convention :
+- gate finance déjà existant, ou ;
+- permission dédiée additive.
+
+Appliquer le filtrage côté API et côté UI.
+Un utilisateur clients:read ne doit pas obtenir automatiquement des données
+financières sensibles si son rôle métier ne les nécessite pas.
+
+================================================================================
+5. PHASE 3 — SAV, RÉCLAMATIONS ET DEEP-LINKS
+================================================================================
+
+5.1 REC-01 — afficher et lier la commande
+
+Dans la liste des réclamations :
+- charger la relation commande de manière contrôlée ;
+- afficher commande.numero ou identifiant métier canonique ;
+- ajouter un lien vers /commandes/[id] ;
+- gérer une réclamation legacy sans commande sans crash ;
+- éviter N+1 ;
+- conserver filtres et pagination.
+
+5.2 REC-02 et CRM-03 — création de réclamation
+
+Ajouter un formulaire cohérent sur /reclamations et depuis la fiche client :
+- commandeId optionnel si le modèle le permet réellement ;
+- sélecteur limité aux commandes du client sélectionné ;
+- si commande choisie, déduire/valider le client côté serveur ;
+- empêcher l’association commande/client incohérente ;
+- afficher numéro, date, statut et montant utile dans les choix ;
+- recherche ou pagination si nombreuses commandes ;
+- validation partagée client/serveur ;
+- messages d’erreur explicites ;
+- protection contre doubles soumissions.
+
+Ne jamais accepter aveuglément clientId + commandeId du navigateur.
+L’API doit vérifier que la commande existe, est accessible et appartient au client.
+
+5.3 REC-03 — erreurs réseau
+
+Remplacer tout « catch → [] » ou faux état vide par :
+- état de chargement ;
+- état vide uniquement après succès avec zéro résultat ;
+- ErrorState sur échec ;
+- bouton Réessayer ;
+- message non technique ;
+- log structuré côté serveur sans donnée sensible.
+
+Tester :
+- 200 vide ;
+- 200 avec données ;
+- 401 ;
+- 403 ;
+- 500 ;
+- timeout / réseau indisponible ;
+- retry réussi.
+
+5.4 CMD-01 / CMD-02 — CTA SAV et retour POS
+
+Dans le hub /commandes/[id] :
+- CTA « Créer une réclamation » vers /reclamations?commande=<id> ;
+- lien vers les réclamations filtrées pour cette commande ;
+- CTA de reconfiguration POS uniquement si techniquement valide ;
+- conserver l’identifiant nécessaire au préremplissage ;
+- contrôler les permissions avant affichage ;
+- fournir un retour vers la commande depuis la réclamation.
+
+5.5 Deep-links bidirectionnels
+
+Vérifier la navigation :
+- Client → POS prérempli ;
+- POS → Panier ;
+- Panier → Devis ;
+- Devis → Commande ;
+- Commande → Réclamation ;
+- Réclamation → Commande ;
+- Commande → Client ;
+- Commande → reconfiguration POS si supportée.
+
+Tous les paramètres URL doivent être :
+- validés ;
+- encodés ;
+- ignorés proprement s’ils sont invalides ;
+- compatibles avec refresh et ouverture dans un nouvel onglet.
+
+5.6 REC-04 — E2E SAV
+
+Créer un scénario E2E déterministe :
+1. authentification avec rôle autorisé ;
+2. ouverture d’une commande ;
+3. clic Créer une réclamation ;
+4. commande préremplie ;
+5. saisie et validation ;
+6. création réussie ;
+7. affichage dans la liste ;
+8. lien retour vers hub commande ;
+9. réclamation visible dans hub 360.
+
+Ajouter scénarios 403 et association client/commande invalide.
+
+================================================================================
+6. PHASE 4 — PAGINATION ET ÉTATS DES LISTES
+================================================================================
+
+6.1 CRM-02 — clients
+
+L’API retourne 25 éléments : l’UI ne doit jamais tronquer silencieusement.
+Implémenter selon le contrat réel :
+- page ;
+- pageSize borné côté serveur ;
+- total ou pagination par curseur ;
+- AppListPagination si composant canonique ;
+- conservation recherche/filtres/tri dans l’URL ;
+- retour arrière cohérent ;
+- page invalide ramenée à une page valide ;
+- reset page=1 lors d’un changement de filtre ;
+- skeleton, empty et ErrorState distincts.
+
+6.2 Toutes les listes Commercial
+
+Auditer clients, catalogue POS, devis, commandes et réclamations.
+Pour chacune, vérifier :
+- pagination visible ;
+- taille de page raisonnable et bornée ;
+- total exact ou indication hasNext ;
+- recherche côté serveur si dataset important ;
+- tri allowlisté côté serveur ;
+- aucune requête full non justifiée ;
+- pas de N+1 ;
+- état d’URL partageable ;
+- accessibilité des contrôles.
+
+Ne pas ajouter une seconde abstraction si AppListPagination répond déjà au besoin.
+
+6.3 POS-04 — catalogue count-first
+
+Remplacer le chargement full par un flux paginé :
+- métadonnées/compte séparés seulement si cela réduit réellement la charge ;
+- recherche et filtres côté serveur ;
+- champs sélectionnés minimaux ;
+- annulation des requêtes obsolètes ;
+- debounce raisonnable ;
+- cache selon conventions du projet ;
+- pas de changement de prix ou de disponibilité.
+
+Mesurer avant/après :
+- taille du payload ;
+- nombre de lignes ;
+- durée requête sur jeu de données représentatif ;
+- nombre de requêtes.
+
+================================================================================
+7. PHASE 5 — PANIER SERVER-FIRST
+================================================================================
+
+7.1 PAN-01 — source de vérité
+
+La source de vérité doit être /api/cart :
+- le serveur possède articles, variantes, quantités, prix validés et totaux ;
+- localStorage devient cache/offline seulement ;
+- le client ne décide jamais du prix final ;
+- après login, refresh, changement d’onglet ou reconnexion, réconciliation serveur ;
+- les erreurs de synchronisation sont visibles et récupérables.
+
+7.2 Migration douce de la clé legacy
+
+Ne pas supprimer la clé immédiatement.
+Mettre en place une migration versionnée et idempotente :
+1. détecter cache legacy ;
+2. parser en sécurité ;
+3. envoyer les lignes au serveur pour validation ;
+4. recevoir le panier canonique ;
+5. marquer la migration réussie ;
+6. conserver une compatibilité de lecture limitée si nécessaire ;
+7. ne jamais boucler ni dupliquer les lignes.
+
+Ne stocker aucun secret ou champ sensible en localStorage.
+
+7.3 PAN-02 — validateAndMerge obligatoire
+
+Avant checkout et lors de toute réconciliation :
+- appeler validateAndMerge côté serveur ;
+- recharger prix, disponibilité, variantes et règles courantes ;
+- signaler les articles modifiés ou indisponibles ;
+- demander confirmation si le total change ;
+- bloquer checkout tant que la validation échoue ;
+- rendre l’opération idempotente.
+
+7.4 Concurrence et fiabilité
+
+Tester :
+- deux onglets ;
+- refresh ;
+- session expirée ;
+- réseau hors ligne puis retour ;
+- article supprimé ;
+- prix modifié ;
+- quantité hors limite ;
+- double clic checkout ;
+- reprise d’un panier legacy ;
+- deux mises à jour concurrentes.
+
+Utiliser version/revision/updatedAt ou mécanisme existant pour prévenir les
+écrasements silencieux.
+
+================================================================================
+8. PHASE 6 — REFACTORING POS ET MOTEUR DE PRIX
+================================================================================
+
+8.1 Principe de refactoring
+
+Le but n’est pas de déplacer 2600 lignes dans un seul autre fichier.
+Créer des frontières métier testables, avec API stable.
+
+Avant extraction :
+- cartographier états, effets, callbacks et appels réseau ;
+- identifier les dépendances circulaires ;
+- figer les contrats avec tests ;
+- mesurer taille et complexité ;
+- ne modifier aucun résultat métier.
+
+8.2 POS-01 — découpage du configurateur
+
+Adapter les noms à l’architecture réelle, mais viser des responsabilités séparées :
+- shell/orchestrateur de page ;
+- chargement article et permission gates ;
+- configuration options/variantes ;
+- grand format / dimensions ;
+- aperçu et résumé prix ;
+- intégration panier ;
+- erreurs et états réseau ;
+- hooks de calcul/simulation ;
+- types et schémas partagés.
+
+Critères :
+- aucun module logique cible au-delà d’environ 400 lignes sans justification ;
+- le fichier route/page reste un orchestrateur ;
+- logique métier hors JSX ;
+- effets réseau isolés ;
+- pas de prop drilling excessif : préférer composition/context local ciblé ;
+- pas de store global pour un état strictement local ;
+- composants accessibles et testables ;
+- aucune nouvelle dépendance lourde sans justification.
+
+8.3 POS-02 — router calculate.ts par famille
+
+Figer d’abord le contrat public actuel.
+Introduire progressivement :
+- types d’entrée/sortie canoniques ;
+- validation des unités ;
+- registre/routeur de famille ;
+- stratégie par famille ;
+- primitives communes : quantité, surface, minimum, palier, arrondi, remise ;
+- erreurs métier typées ;
+- fallback explicite seulement pour familles reconnues legacy.
+
+Exemple conceptuel, à adapter sans imposer ces noms :
+- pricing/index ou public facade ;
+- pricing/router ;
+- pricing/common ;
+- pricing/families/<family> ;
+- pricing/schemas ;
+- pricing/errors.
+
+Interdictions :
+- switch géant déplacé tel quel ;
+- duplication de formules ;
+- imports du moteur vers l’UI ;
+- accès direct base depuis fonctions pures ;
+- prix codés en dur ;
+- fallback numérique silencieux ;
+- changement d’arrondi implicite.
+
+8.4 Tests de parité prix
+
+Créer une matrice couvrant les familles réelles :
+- valeurs normales ;
+- quantité minimale ;
+- juste avant/après un palier ;
+- dimensions décimales ;
+- unités différentes ;
+- options et finitions ;
+- remise autorisée ;
+- remise interdite ;
+- minimum commercial ;
+- arrondi ;
+- entrée invalide ;
+- famille inconnue ;
+- valeurs extrêmes bornées.
+
+Comparer ancien moteur et nouveau moteur pendant la transition.
+Toute différence doit être :
+- expliquée ;
+- validée métier ;
+- documentée ;
+- testée.
+Sinon, c’est une régression à corriger.
+
+8.5 Observabilité
+
+Ajouter sans donnée sensible :
+- erreur structurée par code ;
+- famille et version de formule ;
+- durée de calcul agrégée si infrastructure existante ;
+- compteur de fallback legacy ;
+- aucun détail de marge dans les logs non autorisés.
+
+================================================================================
+9. PHASE 7 — DÉCOUPAGE CRM ET DEVIS
+================================================================================
+
+9.1 CRM-01 — clients-page
+
+Extraire progressivement :
+- liste/filtres/pagination ;
+- panneau détail ;
+- formulaire création/édition ;
+- commandes du client ;
+- réclamations/SAV ;
+- hooks API ;
+- schémas de validation.
+
+Garder une seule source d’état pour le client sélectionné.
+Ne pas dupliquer les appels ou changer les permissions.
+
+9.2 DEV-01 — devis
+
+Extraire le panneau détail et les actions :
+- lecture ;
+- acceptation ;
+- PDF ;
+- email ;
+- conversion commande ;
+- erreurs et permissions.
+
+Conserver :
+- /devis/[id] → /devis?id=... ;
+- FlowBanner ;
+- next-action ;
+- deep-link commande ;
+- pagination existante.
+
+9.3 DEV-02 — smoke PDF et email
+
+Tester sans envoyer de message externe non autorisé :
+- génération PDF valide ;
+- type MIME et nom de fichier ;
+- caractères accentués ;
+- montant et lignes corrects ;
+- permission ;
+- gestion erreur ;
+- email via mock/stub en test ;
+- aucun secret dans logs ou UI.
+
+================================================================================
+10. PHASE 8 — SIDEBAR, UX ET ACCESSIBILITÉ
+================================================================================
+
+10.1 Badge parent vs étapes
+
+Dans SidebarUniverseNav :
+- conserver le compteur dynamique du parent ;
+- conserver les étapes 1 à 6 au déploiement ;
+- aria-label explicite, par exemple sens équivalent à
+  « Commercial, 6 éléments en attente » pour le badge ;
+- aria-current sur le sous-module actif ;
+- aria-expanded correct ;
+- ne pas annoncer le badge comme « étape 6 » ;
+- ne pas annoncer l’étape comme compteur.
+
+10.2 Navigation clavier
+
+Vérifier :
+- Tab et Shift+Tab ;
+- Enter/Espace pour ouvrir ;
+- focus visible ;
+- ordre logique ;
+- fermeture/retour sans perte de focus ;
+- aucun élément cliquable uniquement via div ;
+- boutons avec nom accessible.
+
+10.3 États cohérents
+
+Pour les six modules :
+- skeleton lors du chargement ;
+- empty uniquement après succès ;
+- ErrorState + retry lors d’échec ;
+- toast non utilisé comme seul retour d’erreur critique ;
+- actions désactivées pendant soumission ;
+- confirmation sur action irréversible ;
+- responsive sans masquer une action essentielle.
+
+10.4 Design
+
+Réutiliser le design system du projet :
+- mêmes composants boutons, inputs, tableaux, pagination et erreurs ;
+- pas de nouvelle palette isolée ;
+- contraste WCAG AA ;
+- tailles tactiles suffisantes ;
+- labels visibles ;
+- contenu financier masqué selon permission, pas flouté.
+
+================================================================================
+11. TESTS OBLIGATOIRES
+================================================================================
+
+11.1 Tests unitaires
+
+Au minimum :
+- sanitize price-preview ;
+- routeur pricing et chaque stratégie famille ;
+- primitives paliers/minimum/arrondi/remise ;
+- validateAndMerge ;
+- migration panier legacy ;
+- validation commande/client d’une réclamation ;
+- génération des deep-links ;
+- calcul badge parent ;
+- mapping étapes 1 à 6.
+
+11.2 Tests d’intégration API
+
+Pour les endpoints réels :
+- auth absente → 401 ;
+- permission absente → 403 ;
+- lecture autorisée → 200 ;
+- payload sensible sanitizé ;
+- validation 400/422 selon convention ;
+- ressource inexistante → 404 ;
+- pagination bornée ;
+- tri/recherche allowlistés ;
+- réclamation commande/client cohérente ;
+- panier recalculé serveur ;
+- concurrence/idempotence.
+
+11.3 Tests E2E
+
+Scénarios :
+A. chaîne heureuse complète ;
+B. rôle commercial sans marge ;
+C. rôle avec pos:view_margin ;
+D. refus d’accès module/API ;
+E. pagination Clients ;
+F. catalogue POS paginé ;
+G. panier legacy migré ;
+H. panier modifié serveur avant checkout ;
+I. devis PDF ;
+J. devis email mocké ;
+K. commande vers SAV puis retour ;
+L. fetch Réclamations en erreur puis retry ;
+M. navigation clavier sidebar ;
+N. deep-link invalide sans crash.
+
+11.4 Non-régression
+
+Exécuter :
+- validate/generate Prisma selon scripts ;
+- typecheck ;
+- lint ;
+- tests unitaires ;
+- tests intégration ;
+- tests E2E Commercial ;
+- build production ;
+- analyse des imports/cycles si outil disponible.
+
+Ne pas modifier les seuils de couverture pour obtenir artificiellement un succès.
+
+================================================================================
+12. PERFORMANCE ET MESURES
+================================================================================
+
+Mesurer avant/après sur environnement comparable :
+- taille du JS de /pos et /clients ;
+- temps de rendu ou métrique disponible ;
+- taille payload catalogue ;
+- nombre de requêtes ;
+- temps API p50/p95 si mesurable ;
+- nombre de requêtes base ;
+- absence de N+1 ;
+- taille des composants principaux.
+
+Objectifs :
+- aucun chargement full non justifié ;
+- pas de requête répétée en boucle ;
+- annulation des recherches obsolètes ;
+- import dynamique seulement s’il améliore réellement le bundle ;
+- pas de mémoïsation aveugle ;
+- pas de dégradation mesurable du parcours.
+
+Consigner dans docs/remediation-commercial/performance.md.
+
+================================================================================
+13. CRITÈRES D’ACCEPTATION PAR FINDING
+================================================================================
+
+CRM-01 :
+[ ] clients-page découpé par responsabilité.
+[ ] route/page orchestratrice.
+[ ] comportement et permissions inchangés.
+
+CRM-02 :
+[ ] pagination visible et contrôlable.
+[ ] aucune troncature silencieuse.
+[ ] filtres/recherche/tri conservés dans URL.
+
+CRM-03 :
+[ ] commande sélectionnable à la création SAV.
+[ ] seules les commandes du client sont acceptées.
+[ ] incohérence refusée côté serveur.
+
+CRM-04 :
+[ ] données financières gated côté API et UI.
+[ ] tests rôle autorisé/non autorisé.
+
+POS-01 :
+[ ] configurateur découpé en modules logiques.
+[ ] modules proches de 400 lignes maximum ou justification écrite.
+[ ] aucune régression fonctionnelle.
+
+POS-02 :
+[ ] façade publique stable.
+[ ] moteur routé par famille.
+[ ] tests de parité réussis.
+[ ] calculate.ts ne grossit plus.
+
+POS-03 :
+[ ] price-preview sanitizé côté serveur.
+[ ] aucun champ de marge reconstructible sans permission.
+
+POS-04 :
+[ ] catalogue paginé/recherché côté serveur.
+[ ] payload et requêtes mesurés avant/après.
+
+PAN-01 :
+[ ] /api/cart est la source canonique.
+[ ] localStorage est cache seulement.
+[ ] migration legacy idempotente.
+
+PAN-02 :
+[ ] validateAndMerge avant checkout.
+[ ] changement de prix/stock signalé.
+[ ] double soumission empêchée.
+
+DEV-01 :
+[ ] panneau détail extrait.
+[ ] redirection legacy conservée.
+
+DEV-02 :
+[ ] smoke PDF réussi.
+[ ] email testé sans envoi réel non autorisé.
+
+CMD-01 :
+[ ] CTA SAV contextualisé.
+[ ] CTA POS seulement si valide et autorisé.
+
+CMD-02 :
+[ ] lien SAV contient commande.
+[ ] filtre et préremplissage fonctionnent après refresh.
+
+REC-01 :
+[ ] numéro commande visible et cliquable.
+[ ] legacy sans commande géré.
+
+REC-02 :
+[ ] création disponible sur /reclamations.
+[ ] commandeId optionnel selon contrat réel.
+[ ] validation serveur complète.
+
+REC-03 :
+[ ] échec fetch ne produit jamais un faux empty.
+[ ] ErrorState et retry testés.
+
+REC-04 :
+[ ] E2E création → hub réussi.
+[ ] refus permission et incohérence testés.
+
+REC-05 :
+[ ] décision permission documentée.
+[ ] migration additive si reclamations:* introduit.
+[ ] aucun rôle légitime cassé.
+
+================================================================================
+14. 45 CONDITIONS BLOQUANTES AVANT « 10/10 »
+================================================================================
+
+La note 10/10 est interdite si une seule condition échoue ou n’est pas testée :
+
+01. Baseline documentée.
+02. Inventaire fichiers réel documenté.
+03. Modifications utilisateur préservées.
+04. Zéro migration destructive.
+05. Typecheck réussi.
+06. Lint réussi.
+07. Build production réussi.
+08. Tests unitaires Commercial réussis.
+09. Tests intégration Commercial réussis.
+10. E2E chaîne commerciale réussi.
+11. E2E permissions réussi.
+12. Prisma validé si utilisé.
+13. Aucun secret exposé.
+14. Aucun any/ignore de contournement ajouté.
+15. Aucun catch vide.
+16. Aucun faux empty sur erreur.
+17. price-preview sanitizé.
+18. simulate pricing toujours sanitizé.
+19. marge absente sans pos:view_margin.
+20. marge visible seulement avec pos:view_margin.
+21. données financières client protégées.
+22. pages protégées.
+23. APIs protégées.
+24. navigation filtrée.
+25. pagination Clients visible.
+26. catalogue POS non chargé intégralement sans justification.
+27. listes Commercial paginées.
+28. panier server-first.
+29. migration panier legacy réussie et idempotente.
+30. validateAndMerge avant checkout.
+31. prix recalculé côté serveur.
+32. double checkout empêché.
+33. commande liée correctement à la réclamation.
+34. création SAV disponible.
+35. erreur SAV avec retry.
+36. CTA commande → SAV contextualisé.
+37. retour SAV → commande fonctionnel.
+38. redirection /devis/[id] conservée.
+39. PDF devis vérifié.
+40. email devis testé via mock.
+41. POS découpé sans régression.
+42. pricing routé par famille avec parité.
+43. badge parent distinct des étapes en accessibilité.
+44. rapport de preuves complet.
+45. zéro finding P0/P1/P2 ouvert ; P3 documenté et accepté explicitement.
+
+Si 44/45 passent, le résultat n’est pas 10/10.
+Si un test est flaky, le stabiliser et le rejouer ; ne pas l’ignorer.
+
+================================================================================
+15. LIVRABLES OBLIGATOIRES DANS LE DÉPÔT
+================================================================================
+
+Créer ou mettre à jour :
+
+1. docs/remediation-commercial/inventory.md
+   - éléments localisés et écarts avec l’audit.
+
+2. docs/remediation-commercial/baseline.md
+   - état initial et commandes.
+
+3. docs/remediation-commercial/traceability.md
+   Tableau :
+   ID | constat confirmé | fichiers modifiés | correction | tests | statut | preuve
+
+4. docs/remediation-commercial/security-matrix.md
+   Tableau :
+   module/API | permission | navigation | page | API | payload | tests
+
+5. docs/remediation-commercial/performance.md
+   - mesures avant/après.
+
+6. docs/remediation-commercial/final-report.md
+   - résumé ;
+   - fichiers modifiés ;
+   - migrations ;
+   - résultats de commandes ;
+   - tests ;
+   - limites ;
+   - anomalies restantes ;
+   - rollback ;
+   - note calculée.
+
+7. Tests et fixtures nécessaires dans les emplacements conventionnels du dépôt.
+
+Ne pas créer de document affirmant un succès sans résultat de commande correspondant.
+
+================================================================================
+16. FORMAT DU RAPPORT FINAL CURSOR
+================================================================================
+
+À la fin, répondre exactement avec ces sections :
+
+1. VERDICT
+- note réelle /10 ;
+- « 100 % OK » uniquement si les 45 conditions passent.
+
+2. CORRECTIONS APPLIQUÉES
+- regroupées par CRM, POS, Panier, Devis, Commandes, Réclamations.
+
+3. FICHIERS MODIFIÉS
+- chemin réel + rôle de la modification.
+
+4. MIGRATIONS
+- base, données, panier legacy, permissions ;
+- réversibilité.
+
+5. PREUVES
+- commande ;
+- code de sortie ;
+- nombre de tests ;
+- résultat.
+
+6. PERFORMANCE
+- mesures avant/après.
+
+7. SÉCURITÉ
+- rôles testés ;
+- champs sensibles vérifiés.
+
+8. RESTE À FAIRE
+- tout échec, non testé, blocage ou dette restante.
+
+9. MATRICE DES 45 CONDITIONS
+- PASS / FAIL / BLOCKED, jamais de case vide.
+
+================================================================================
+17. DÉMARRAGE IMMÉDIAT
+================================================================================
+
+Commence maintenant par :
+
+1. afficher l’état Git sans modifier ;
+2. lire les instructions du dépôt ;
+3. identifier scripts et stack ;
+4. localiser tous les symboles de la section 3.2 ;
+5. créer l’inventaire ;
+6. exécuter la baseline ;
+7. présenter le plan précis basé sur les fichiers réellement trouvés ;
+8. appliquer les corrections phase par phase ;
+9. tester après chaque lot ;
+10. produire le réaudit final.
+
+Ne demande confirmation que si :
+- une décision métier absente change le résultat ;
+- une migration risquée est nécessaire ;
+- des modifications utilisateur entrent en conflit ;
+- un secret ou service externe manque pour un test ;
+- une action irréversible serait requise.
+
+Sinon, avance de façon autonome jusqu’au résultat vérifié.
+
+FIN DU PROMPT MAÎTRE V6

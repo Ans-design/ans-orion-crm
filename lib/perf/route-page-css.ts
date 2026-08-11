@@ -1,0 +1,38 @@
+/**
+ * CSS métier par route — chargé à la demande (plus dans globals.css).
+ * Évite ~240 Ko de CSS pages sur login / dashboard / POS.
+ */
+export const ROUTE_PAGE_CSS: { match: (pathname: string) => boolean; load: () => Promise<unknown> }[] = [
+  { match: (p) => p.startsWith('/devis'), load: () => import('@/styles/devis-page.css') },
+  { match: (p) => p.startsWith('/commandes'), load: () => import('@/styles/commandes-page.css') },
+  { match: (p) => p.startsWith('/achats'), load: () => import('@/styles/achats-modal.css') },
+  { match: (p) => p.startsWith('/fournisseurs'), load: () => import('@/styles/fournisseurs-page.css') },
+  { match: (p) => p.startsWith('/materiels') || p.startsWith('/machines'), load: () => import('@/styles/materiels-page.css') },
+  { match: (p) => p.startsWith('/maintenance'), load: () => import('@/styles/maintenance-tickets.css') },
+  { match: (p) => p.startsWith('/mes-equipements') || p.startsWith('/equipements'), load: () => import('@/styles/mes-equipements.css') },
+  { match: (p) => p.startsWith('/stock'), load: () => import('@/styles/stock-inventaire.css') },
+  { match: (p) => p.startsWith('/studio'), load: () => import('@/styles/studio-briefs.css') },
+  { match: (p) => p.startsWith('/studio'), load: () => import('@/styles/studio-fichiers.css') },
+  { match: (p) => p.startsWith('/production') || p.startsWith('/gpao'), load: () => import('@/styles/gpao-dossiers.css') },
+  { match: (p) => p.startsWith('/equipe/taches') || p.startsWith('/taches'), load: () => import('@/styles/metier-taches.css') },
+  { match: (p) => p.startsWith('/qualite'), load: () => import('@/styles/qualite-checklist.css') },
+  { match: (p) => p.startsWith('/plan-matiere') || p.includes('plan-matiere'), load: () => import('@/styles/plan-matiere.css') },
+  { match: (p) => p.startsWith('/suggestions'), load: () => import('@/styles/suggestions-page.css') },
+  { match: (p) => p.startsWith('/communication/campagnes') || p.startsWith('/cm/campagnes'), load: () => import('@/styles/cm-campagnes.css') },
+  { match: (p) => p.startsWith('/communication/relances') || p.includes('relance'), load: () => import('@/styles/cm-relances.css') },
+  { match: (p) => p.startsWith('/communication/notifications') || p.startsWith('/notifications'), load: () => import('@/styles/cm-notifications.css') },
+  { match: (p) => p.startsWith('/livraisons'), load: () => import('@/styles/livraisons-page.css') },
+  { match: (p) => p.startsWith('/factures'), load: () => import('@/styles/factures-page.css') },
+  { match: (p) => p.startsWith('/paiements'), load: () => import('@/styles/paiements-page.css') },
+  { match: (p) => p.startsWith('/caisse'), load: () => import('@/styles/caisse-page.css') },
+  { match: (p) => p.startsWith('/rh/employes'), load: () => import('@/styles/rh-employes.css') },
+  { match: (p) => p.startsWith('/rh/absences'), load: () => import('@/styles/rh-absences.css') },
+  { match: (p) => p.startsWith('/rh/performance'), load: () => import('@/styles/rh-performance.css') },
+  { match: (p) => p.startsWith('/rh/paie'), load: () => import('@/styles/rh-paie.css') },
+  { match: (p) => p.startsWith('/rh/annonces'), load: () => import('@/styles/rh-annonces.css') },
+  { match: (p) => p.startsWith('/finance/charges') || p.startsWith('/charges'), load: () => import('@/styles/charges-page.css') },
+  { match: (p) => p.startsWith('/finance/fiscalite') || p.startsWith('/fiscalite'), load: () => import('@/styles/fiscalite-page.css') },
+  { match: (p) => p.startsWith('/finance/couts') || p.includes('couts-revient'), load: () => import('@/styles/couts-revient.css') },
+  { match: (p) => p.startsWith('/machines'), load: () => import('@/styles/machines-v29.css') },
+  { match: (p) => p.startsWith('/rh/recrutement') || p.includes('recruit'), load: () => import('@/styles/rh-recruitment-v29.css') },
+];

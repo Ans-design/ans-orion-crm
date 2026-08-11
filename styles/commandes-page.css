@@ -1,0 +1,220 @@
+/**
+ * Liste Commandes — cartes soft, zéro filet, hiérarchie claire
+ */
+
+.cmd-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cmd-list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cmd-page .orion-data-row,
+.cmd-order-row.orion-data-row {
+  align-items: stretch;
+  gap: 1rem;
+  min-height: 5.25rem;
+  padding: 1rem 1.1rem;
+  border: none !important;
+  border-radius: var(--radius-card, 12px);
+  background: var(--bg-card, #fff);
+  box-shadow: none;
+}
+
+html:not(.dark) .cmd-page .orion-data-row,
+html:not(.dark) .cmd-order-row.orion-data-row {
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.035);
+}
+
+html.dark .cmd-page .orion-data-row,
+html.dark .cmd-order-row.orion-data-row {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 94%, #fff 2.5%);
+}
+
+.cmd-page .orion-data-row:hover,
+.cmd-order-row.orion-data-row:hover {
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 4%, var(--bg-card, #fff));
+  transform: none;
+}
+
+.cmd-page .orion-data-row-icon {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: var(--radius-card, 7px);
+  align-self: center;
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 10%, transparent);
+}
+
+.cmd-page .orion-data-row-title {
+  gap: 0.4rem 0.55rem;
+}
+
+.cmd-page .orion-ref-muted {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-muted, #64748b);
+  text-transform: uppercase;
+}
+
+.cmd-page .orion-data-row-subtitle {
+  margin-top: 0.2rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text-main, #0f172a);
+  line-height: 1.25;
+}
+
+html.dark .cmd-page .orion-data-row-subtitle {
+  color: #f1f5f9;
+}
+
+.cmd-page .orion-data-row-meta {
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-muted, #64748b);
+}
+
+.cmd-order-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  border: none;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 10%, transparent);
+  color: var(--brand-primary, #cc0033);
+  max-width: 100%;
+}
+
+.cmd-order-next svg {
+  flex-shrink: 0;
+}
+
+.cmd-client-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.35rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 9999px;
+  border: none;
+  font-size: 0.625rem;
+  font-weight: 650;
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 8%, transparent);
+  color: var(--brand-primary, #cc0033);
+  cursor: pointer;
+}
+
+.cmd-client-chip:hover {
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 14%, transparent);
+}
+
+.cmd-order-trailing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.2rem;
+  min-width: 7.5rem;
+}
+
+.cmd-page .orion-amount {
+  font-size: 1rem;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .cmd-page .orion-amount {
+  color: #f8fafc;
+}
+
+.cmd-pay-ok {
+  font-size: 0.65rem;
+  font-weight: 650;
+  color: #059669;
+}
+
+.cmd-pay-due {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #d97706;
+}
+
+html.dark .cmd-pay-ok {
+  color: #34d399;
+}
+
+html.dark .cmd-pay-due {
+  color: #fbbf24;
+}
+
+.cmd-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.cmd-progress__track {
+  width: 4.25rem;
+  height: 0.35rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--text-muted, #64748b) 14%, transparent);
+  overflow: hidden;
+}
+
+.cmd-progress__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brand-primary, #cc0033) 75%, #ff6b8a),
+    var(--brand-primary, #cc0033)
+  );
+  transition: width 0.25s ease;
+}
+
+.cmd-progress__pct {
+  font-size: 0.625rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted, #64748b);
+  min-width: 1.75rem;
+  text-align: right;
+}
+
+.cmd-list-kpis .orion-kpi-tile,
+.cmd-list-kpis .cockpit-quick-card {
+  border: none !important;
+}
+
+@media (max-width: 639.98px) {
+  .cmd-page .orion-data-row {
+    flex-wrap: wrap;
+    padding: 0.85rem 0.9rem;
+  }
+
+  .cmd-order-trailing {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+  }
+}

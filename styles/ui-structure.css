@@ -1,0 +1,247 @@
+/**
+ * ANS ORION — Structure UI unifiée
+ * Arrondi 10px · contours minimisés · anti carte-dans-carte
+ */
+
+:root {
+  --radius-ui: 10px;
+  --radius: 7px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 10px;
+  --radius-xl: 10px;
+  --radius-2xl: 10px;
+  --orion-radius: 7px;
+  --orion-radius-sm: 8px;
+
+  /* Contours — usage minimal */
+  --border-invisible: transparent;
+  --border-soft: rgba(255, 255, 255, 0.04);
+  --border-normal: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(255, 23, 77, 0.45);
+
+  --panel-border: var(--border-soft);
+  --panel-border-strong: var(--border-normal);
+  --panel-bg: var(--bg-card, var(--app-surface));
+  --panel-bg-soft: var(--bg-panel, var(--app-surface-soft));
+}
+
+:root:not(.dark) {
+  --border-soft: rgba(15, 23, 42, 0.06);
+  --border-normal: rgba(15, 23, 42, 0.1);
+  --border-focus: rgba(255, 23, 77, 0.4);
+  --panel-border: var(--border-soft);
+  --panel-border-strong: var(--border-normal);
+}
+
+.ui-card,
+.ui-panel,
+.ui-button,
+.ui-input,
+.ui-table,
+.ui-toolbar,
+.ui-select,
+.ui-modal,
+.ui-drawer {
+  border-radius: var(--radius-ui) !important;
+}
+
+/* Card premium : fond + ombre unifiée (clair), sans contour fort */
+.ui-card {
+  background: var(--panel-bg);
+  border: none;
+  box-shadow: var(--shadow-card, 0 2px 10px rgba(15, 23, 42, 0.10));
+}
+
+.dark .ui-card {
+  box-shadow: none;
+  border: 1px solid var(--border-soft);
+}
+
+.ui-card-flat {
+  background: var(--panel-bg);
+  border: none;
+  box-shadow: var(--shadow-card, 0 2px 10px rgba(15, 23, 42, 0.10));
+  border-radius: var(--radius-ui);
+}
+
+.dark .ui-card-flat {
+  box-shadow: none;
+}
+
+.ui-panel {
+  background: var(--panel-bg-soft);
+  border: none;
+}
+
+.ui-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+}
+
+/* Table : un seul cadre soft max */
+.ui-table-wrap {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-ui);
+  overflow: hidden;
+  background: var(--panel-bg);
+}
+
+.ui-table-wrap table {
+  border-radius: 0;
+}
+
+/* Split : séparation interne seulement */
+.ui-split {
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+  min-height: 480px;
+  border: none;
+  border-radius: var(--radius-ui);
+  overflow: hidden;
+  background: var(--panel-bg);
+}
+
+.ui-split-left {
+  border-right: 1px solid var(--border-soft);
+  min-height: 0;
+  overflow: auto;
+  background: transparent;
+}
+
+.ui-split-right {
+  min-height: 0;
+  overflow: auto;
+  background: transparent;
+}
+
+@media (max-width: 900px) {
+  .ui-split {
+    grid-template-columns: 1fr;
+  }
+  .ui-split-left {
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+    max-height: 280px;
+  }
+}
+
+.ui-flat,
+.ui-nested-flat {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+.cps-theme .cps-content-flat {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  min-height: 480px;
+  width: 100%;
+}
+
+/* Catalogue embed : surface unique, séparation soft */
+.cps-theme .orion-catalogue-workspace.is-embedded {
+  gap: 0.75rem;
+}
+
+.cps-theme .orion-catalogue-workspace.is-embedded .orion-catalogue-layout,
+.cps-theme .orion-catalogue-workspace.is-embedded .orion-catalogue-layout--two-col {
+  gap: 0;
+  border: none;
+  border-radius: var(--radius-ui);
+  overflow: hidden;
+  background: var(--cps-surface, var(--panel-bg));
+  min-height: calc(100vh - 14rem);
+}
+
+.cps-theme .orion-catalogue-workspace.is-embedded .orion-catalogue-nav,
+.cps-theme .orion-catalogue-workspace.is-embedded .orion-catalogue-studio,
+.cps-theme .orion-catalogue-workspace.is-embedded .orion-catalogue-summary {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.cps-theme .orion-catalogue-workspace.is-embedded .orion-catalogue-nav {
+  border-right: 1px solid var(--border-soft) !important;
+}
+
+/* Force 10px sur utilitaires fréquents */
+.cps-theme .rounded-sm,
+.cps-theme .rounded-md,
+.cps-theme .rounded-lg,
+.cps-theme .rounded-xl,
+.cps-theme .rounded-2xl,
+.cps-theme .rounded-3xl,
+.cps-theme .rounded-\[7px\],
+.ab2-shell .rounded-sm,
+.ab2-shell .rounded-md,
+.ab2-shell .rounded-lg,
+.ab2-shell .rounded-xl,
+.ab2-shell .rounded-2xl,
+.orion-viewport .rounded-lg,
+.orion-viewport .rounded-xl,
+.orion-viewport .rounded-2xl {
+  border-radius: var(--radius-ui) !important;
+}
+
+/* CPS — minimiser contours globaux */
+.cps-theme .cps-card,
+.cps-theme .cps-panel-surface {
+  border-color: var(--border-soft) !important;
+  box-shadow: none !important;
+}
+
+.cps-theme table {
+  border-collapse: collapse;
+}
+
+.cps-theme table thead th {
+  border-bottom: 1px solid var(--border-soft) !important;
+  border-left: none !important;
+  border-right: none !important;
+  box-shadow: none !important;
+}
+
+.cps-theme table tbody td {
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid var(--border-soft) !important;
+}
+
+.cps-theme table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Options split : pas de cadre externe lourd */
+.cps-theme .ab2-options-split,
+.ab2-options-workspace .ab2-options-split {
+  border: none !important;
+  background: var(--cps-surface, var(--ab2-surface)) !important;
+}
+
+.cps-theme .ab2-options-left,
+.ab2-options-workspace .ab2-options-left {
+  border-right: 1px solid var(--border-soft) !important;
+}
+
+.cps-theme .ab2-chips-table-wrap {
+  border-color: var(--border-soft) !important;
+  box-shadow: none !important;
+}
+
+.cps-theme .ab2-block-accordion,
+.cps-theme .ab2-panel-head {
+  border-color: var(--border-soft) !important;
+}

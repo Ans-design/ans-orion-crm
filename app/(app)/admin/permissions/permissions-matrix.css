@@ -1,0 +1,445 @@
+/**
+ * Matrice permissions — UI simple et soignée (ANS ORION).
+ */
+
+.perm-page {
+  --perm-radius: 7px;
+  --perm-line: #e5eaf0;
+  --perm-ink: #0f172a;
+  --perm-muted: #64748b;
+  --perm-red: var(--primary, #FF174D);
+  --perm-bg: #ffffff;
+  --perm-soft: #f7f9fc;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: none;
+}
+
+.perm-page__intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.perm-page__stats {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.perm-page__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--perm-line);
+  border-radius: 999px;
+  background: var(--perm-bg);
+  font-size: 11.5px;
+  color: var(--perm-muted);
+  font-weight: 600;
+}
+
+.perm-page__stat b {
+  color: var(--perm-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.perm-page__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--perm-line);
+  border-radius: var(--perm-radius);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.perm-page__modes {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: var(--perm-radius);
+  background: #eef2f7;
+  gap: 2px;
+}
+
+.perm-page__mode {
+  border: 0;
+  background: transparent;
+  color: var(--perm-muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 650;
+  padding: 7px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.perm-page__mode:hover {
+  color: var(--perm-ink);
+}
+
+.perm-page__mode.is-active {
+  background: #fff;
+  color: var(--perm-ink);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1);
+}
+
+.perm-page__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--perm-muted);
+  font-weight: 650;
+}
+
+.perm-page__field select {
+  height: 34px;
+  min-width: 180px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--perm-line);
+  border-radius: var(--perm-radius);
+  background: #fff;
+  color: var(--perm-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.perm-page__field select:focus,
+.perm-page__search input:focus,
+.perm-page__btn:focus-visible,
+.perm-page__mode:focus-visible,
+.perm-table__save:focus-visible {
+  outline: 2px solid rgba(204, 0, 51, 0.28);
+  outline-offset: 1px;
+}
+
+.perm-page__search {
+  position: relative;
+  flex: 1 1 200px;
+  min-width: 180px;
+  max-width: 300px;
+}
+
+.perm-page__search svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.perm-page__search input {
+  width: 100%;
+  height: 34px;
+  padding: 0 10px 0 32px;
+  border: 1px solid var(--perm-line);
+  border-radius: var(--perm-radius);
+  background: #fff;
+  color: var(--perm-ink);
+  font-size: 13px;
+}
+
+.perm-page__search input::placeholder {
+  color: #94a3b8;
+}
+
+.perm-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.perm-page__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--perm-line);
+  border-radius: var(--perm-radius);
+  background: #fff;
+  color: var(--perm-ink);
+  font-size: 12.5px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.perm-page__btn:hover:not(:disabled) {
+  background: var(--perm-soft);
+  border-color: #d5dbe3;
+}
+
+.perm-page__btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.perm-page__btn--primary {
+  border-color: var(--perm-red);
+  background: var(--perm-red);
+  color: #fff;
+}
+
+.perm-page__btn--primary:hover:not(:disabled) {
+  background: #b0002c;
+  border-color: #b0002c;
+}
+
+.perm-page__hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--perm-muted);
+  line-height: 1.45;
+}
+
+.perm-page__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+.perm-page__meta {
+  font-size: 12px;
+  color: var(--perm-muted);
+}
+
+.perm-page__meta strong {
+  color: var(--perm-ink);
+}
+
+.perm-table-wrap {
+  border: 1px solid var(--perm-line);
+  border-radius: var(--perm-radius);
+  background: var(--perm-bg);
+  overflow: auto;
+  max-height: min(72vh, 920px);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.perm-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.perm-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 11px 6px;
+  background: #f4f7fb;
+  border-bottom: 1px solid var(--perm-line);
+  color: #475569;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.perm-table thead th:first-child {
+  left: 0;
+  z-index: 3;
+  text-align: left;
+  min-width: 220px;
+  padding-left: 16px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+}
+
+.perm-table thead th:last-child {
+  min-width: 44px;
+}
+
+.perm-table tbody td {
+  padding: 9px 6px;
+  border-bottom: 1px solid #eef2f6;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.perm-table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  padding-left: 16px;
+  background: #fff;
+  min-width: 220px;
+}
+
+.perm-table__group td {
+  padding: 9px 16px;
+  background: #eef2f7;
+  border-bottom: 1px solid var(--perm-line);
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #334155;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.perm-table__group-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  margin-left: 8px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #fff;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.perm-table__row:nth-child(even) td {
+  background: #fcfdff;
+}
+
+.perm-table__row:nth-child(even) td:first-child {
+  background: #fcfdff;
+}
+
+.perm-table__row:hover td,
+.perm-table__row:hover td:first-child {
+  background: #f5f8fc;
+}
+
+.perm-table__row.is-dirty td,
+.perm-table__row.is-dirty td:first-child {
+  background: #fff7f9;
+}
+
+.perm-table__row.is-dirty td:first-child {
+  box-shadow: inset 3px 0 0 var(--perm-red);
+}
+
+.perm-table__mod-label {
+  font-weight: 650;
+  color: var(--perm-ink);
+  line-height: 1.3;
+}
+
+.perm-table__mod-id {
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.perm-table input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--perm-red);
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.perm-table input[type='checkbox']:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.perm-table__save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: var(--perm-radius);
+  background: transparent;
+  color: var(--perm-red);
+  cursor: pointer;
+}
+
+.perm-table__save:hover:not(:disabled) {
+  background: #ffe4ec;
+}
+
+.perm-table__save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.perm-page__empty {
+  padding: 48px 16px;
+  text-align: center;
+  color: var(--perm-muted);
+  font-size: 13px;
+}
+
+.perm-page__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 180px;
+  color: var(--perm-muted);
+  font-size: 14px;
+}
+
+/* Excel actions dans la barre — alignement compact */
+.perm-page__actions .excel-table-actions,
+.perm-page__actions > div {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .perm-page__actions {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .perm-page__search {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .perm-page__field select {
+    min-width: 140px;
+  }
+
+  .perm-table thead th:first-child,
+  .perm-table tbody td:first-child {
+    min-width: 160px;
+  }
+}

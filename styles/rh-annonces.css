@@ -1,0 +1,287 @@
+/* Annonces RH — densifié unifié */
+
+.rh-ann-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+}
+
+.rh-ann-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rh-ann-links a {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.28rem 0.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+}
+
+.rh-ann-links a:hover {
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+}
+
+.rh-ann-kpi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+@media (min-width: 720px) {
+  .rh-ann-kpi {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.rh-ann-composer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.85rem 0.9rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 92%, transparent);
+  border: none;
+}
+
+.rh-ann-composer__head {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.rh-ann-composer input,
+.rh-ann-composer textarea,
+.rh-ann-composer select {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 70%, transparent);
+  padding: 0.55rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  outline: none;
+  resize: none;
+}
+
+.rh-ann-composer input:focus,
+.rh-ann-composer textarea:focus,
+.rh-ann-composer select:focus {
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 28%, transparent));
+}
+
+.rh-ann-composer__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.rh-ann-composer__row select {
+  width: auto;
+  min-width: 120px;
+}
+
+.rh-ann-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.rh-ann-composer__submit {
+  margin-left: auto;
+}
+
+.rh-ann-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.rh-ann-chip {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--bg-app, #e2e8f0) 55%, transparent);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.rh-ann-chip:hover {
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+}
+
+.rh-ann-chip.is-active {
+  background: var(--primary, #cc0033);
+  color: #fff;
+}
+
+.rh-ann-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+@media (min-width: 700px) {
+  .rh-ann-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.rh-ann-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  min-width: 0;
+}
+
+.rh-ann-card[data-prio='important'] {
+  background: color-mix(in srgb, #eab308 10%, var(--bg-card-soft, #fffbeb));
+}
+
+.rh-ann-card[data-prio='urgent'] {
+  background: color-mix(in srgb, #ef4444 9%, var(--bg-card-soft, #fef2f2));
+}
+
+.rh-ann-card[data-pinned='1'] {
+  box-shadow: inset 3px 0 0 var(--primary, #cc0033);
+}
+
+.rh-ann-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.25rem;
+}
+
+.rh-ann-pin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.12rem 0.4rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, #eab308 18%, transparent);
+  color: #a16207;
+}
+
+.rh-ann-prio {
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.12rem 0.4rem;
+  border-radius: 9999px;
+}
+
+.rh-ann-prio--normal {
+  background: color-mix(in srgb, #2563eb 14%, transparent);
+  color: #1d4ed8;
+}
+
+.rh-ann-prio--important {
+  background: color-mix(in srgb, #eab308 18%, transparent);
+  color: #a16207;
+}
+
+.rh-ann-prio--urgent {
+  background: color-mix(in srgb, #ef4444 16%, transparent);
+  color: #b91c1c;
+}
+
+.rh-ann-card__title {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text-main);
+}
+
+.rh-ann-card__body {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rh-ann-card__meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Dark */
+html.dark .rh-ann-composer,
+.dark .rh-ann-composer,
+html.dark .rh-ann-links a,
+.dark .rh-ann-links a,
+html.dark .rh-ann-card,
+.dark .rh-ann-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .rh-ann-composer input,
+.dark .rh-ann-composer input,
+html.dark .rh-ann-composer textarea,
+.dark .rh-ann-composer textarea,
+html.dark .rh-ann-composer select,
+.dark .rh-ann-composer select {
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 70%, transparent);
+}
+
+html.dark .rh-ann-card[data-prio='important'],
+.dark .rh-ann-card[data-prio='important'] {
+  background: color-mix(in srgb, #eab308 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .rh-ann-card[data-prio='urgent'],
+.dark .rh-ann-card[data-prio='urgent'] {
+  background: color-mix(in srgb, #ef4444 12%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .rh-ann-prio--normal,
+.dark .rh-ann-prio--normal {
+  color: #93c5fd;
+}
+
+html.dark .rh-ann-prio--important,
+.dark .rh-ann-prio--important,
+html.dark .rh-ann-pin-badge,
+.dark .rh-ann-pin-badge {
+  color: #fde68a;
+}
+
+html.dark .rh-ann-prio--urgent,
+.dark .rh-ann-prio--urgent {
+  color: #fca5a5;
+}

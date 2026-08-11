@@ -1,0 +1,374 @@
+/**
+ * Alert ticker bas — toujours fixed, au-dessus du contenu (z élevé).
+ * Phone : au-dessus de la tab bar · Desktop : aligné bas carte sidebar.
+ */
+
+:root {
+  --orion-ticker-h: 44px;
+  --orion-ticker-radius: var(--sb-shell-radius, 7px);
+  /* Au-dessus header/sidebar (50) · sous modales (~80+) */
+  --orion-ticker-z: 70;
+  /* Filet contenu → ticker (~5 mm) */
+  --orion-content-ticker-gap: 5mm;
+  /* Réserve droite pour FAB ANS Talk (à côté du ticker) */
+  --orion-talk-fab-size: 44px;
+  --orion-talk-fab-gap: 8px;
+  --orion-talk-fab-reserve: calc(
+    var(--orion-talk-fab-size) + var(--orion-talk-fab-gap) + 36px
+  );
+  --orion-ticker-scrim-h: calc(
+    var(--orion-ticker-h, 44px) + var(--orion-sidebar-inset-y, 14px) + 16px
+  );
+}
+
+/* Dock = simple hôte (pas de place en flux) — le ticker est fixed */
+.orion-alert-ticker-dock {
+  display: contents;
+}
+
+.orion-alert-ticker-spacer {
+  /* legacy — clearance désormais dans main (.orion-shell-bottom-clearance) */
+  display: none !important;
+  height: 0 !important;
+}
+
+/* Clearance contenu — pad réel = padding-bottom main (--orion-inset-bottom) */
+.orion-shell-bottom-clearance {
+  width: 100%;
+  flex-shrink: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+html[data-orion-ticker='1'] .orion-shell-bottom-clearance {
+  height: 0 !important;
+}
+
+/**
+ * Scrim bas — désactivé (bande grise inutile sous le ticker Live).
+ * La clearance contenu reste gérée par --orion-inset-bottom / padding main.
+ */
+.orion-alert-ticker-scrim {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .orion-alert-ticker-scrim {
+    left: calc(var(--orion-tablet-rail-width, 72px) + 12px);
+    right: 12px;
+    --orion-ticker-scrim-h: calc(var(--orion-ticker-h, 44px) + 12px + 20px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .orion-alert-ticker-scrim {
+    left: var(--orion-sidebar-offset, 280px);
+    right: var(--orion-sidebar-inset-x, 14px);
+    --orion-ticker-scrim-h: calc(
+      var(--orion-ticker-h, 44px) + var(--orion-sidebar-inset-y, 14px) + 20px
+    );
+  }
+}
+
+html.dark .orion-alert-ticker-scrim {
+  background: var(--bg-app, #050a14);
+}
+
+/* Carte flottante bas — fixed + au-dessus de tout le chrome app */
+.orion-alert-ticker {
+  position: fixed !important;
+  z-index: var(--orion-ticker-z, 90) !important;
+  box-sizing: border-box;
+  height: var(--orion-ticker-h);
+  left: max(10px, env(safe-area-inset-left, 0px));
+  right: max(10px, env(safe-area-inset-right, 0px));
+  /* défaut phone — stack mobile nav */
+  bottom: calc(
+    var(--orion-ticker-stack, 0px) + max(6px, env(safe-area-inset-bottom, 0px))
+  );
+  border-radius: var(--orion-ticker-radius);
+  border: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 100%, transparent);
+  background: #ffffff;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 32px -12px rgba(15, 23, 42, 0.14);
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+html.dark .orion-alert-ticker {
+  background: #050a14;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 16px 40px -12px rgba(0, 0, 0, 0.55);
+}
+
+/* Tablette : rail + réserve FAB */
+@media (min-width: 768px) {
+  .orion-alert-ticker {
+    left: calc(var(--orion-tablet-rail-width, 72px) + 12px);
+    right: calc(12px + var(--orion-talk-fab-reserve, 88px));
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* Desktop : aligné carte sidebar */
+@media (min-width: 1280px) {
+  .orion-alert-ticker {
+    left: calc(var(--orion-sidebar-offset, 280px) + var(--orion-sidebar-inset-x, 14px));
+    right: calc(var(--orion-sidebar-inset-x, 14px) + var(--orion-talk-fab-reserve, 88px));
+    bottom: var(--orion-sidebar-inset-y, 14px);
+  }
+}
+
+.orion-alert-ticker__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+html.dark .orion-alert-ticker__inner {
+  background: #050a14;
+}
+
+.orion-alert-ticker__track {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  /* Opaque — jamais de mask-image (ça perçait le fond vers le contenu page) */
+  background: #ffffff;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* Fade latéral opaque (dégradé blanc → transparent), pas un trou dans le fond */
+.orion-alert-ticker__track::before,
+.orion-alert-ticker__track::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.orion-alert-ticker__track::before {
+  left: 0;
+  background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.orion-alert-ticker__track::after {
+  right: 0;
+  background: linear-gradient(270deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+html.dark .orion-alert-ticker__track {
+  background: #050a14;
+}
+
+html.dark .orion-alert-ticker__track::before {
+  background: linear-gradient(90deg, #050a14 0%, rgba(5, 10, 20, 0) 100%);
+}
+
+html.dark .orion-alert-ticker__track::after {
+  background: linear-gradient(270deg, #050a14 0%, rgba(5, 10, 20, 0) 100%);
+}
+
+.orion-alert-ticker__brand {
+  display: none;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  background: var(--primary, #ff174d);
+  color: #fff;
+  border-right: 1px solid color-mix(in srgb, #fff 18%, transparent);
+}
+
+@media (min-width: 480px) {
+  .orion-alert-ticker__brand {
+    display: inline-flex;
+  }
+}
+
+.orion-alert-ticker__brand-icon {
+  flex-shrink: 0;
+  animation: orion-ticker-pulse 1.8s ease-in-out infinite;
+}
+
+.orion-alert-ticker__brand-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.orion-alert-ticker__count {
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.2);
+  font-size: 9px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.orion-alert-ticker__rail {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  width: max-content;
+  will-change: transform;
+}
+
+.orion-alert-ticker__item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.orion-alert-ticker__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  border-radius: 7px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.orion-alert-ticker__link:hover {
+  text-decoration: none;
+  background: color-mix(in srgb, var(--primary, #ff174d) 8%, transparent);
+}
+
+.orion-alert-ticker__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.orion-alert-ticker__link--info {
+  color: var(--text-secondary, #475569);
+}
+.orion-alert-ticker__link--info .orion-alert-ticker__dot {
+  background: #64748b;
+}
+
+.orion-alert-ticker__link--warn {
+  color: #b45309;
+}
+.orion-alert-ticker__link--warn .orion-alert-ticker__dot {
+  background: #f59e0b;
+}
+
+.orion-alert-ticker__link--critical {
+  color: #be123c;
+}
+.orion-alert-ticker__link--critical .orion-alert-ticker__dot {
+  background: #ff174d;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #ff174d 22%, transparent);
+}
+
+html.dark .orion-alert-ticker__link--info {
+  color: #cbd5e1;
+}
+html.dark .orion-alert-ticker__link--warn {
+  color: #fbbf24;
+}
+html.dark .orion-alert-ticker__link--critical {
+  color: #fb7185;
+}
+
+.orion-alert-ticker__text {
+  max-width: 42rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.orion-alert-ticker__sep {
+  color: color-mix(in srgb, var(--border-medium, #cbd5e1) 90%, transparent);
+  font-weight: 700;
+  padding: 0 2px;
+  user-select: none;
+}
+
+@keyframes orion-ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes orion-ticker-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orion-alert-ticker__rail {
+    animation: none !important;
+  }
+  .orion-alert-ticker__brand-icon {
+    animation: none !important;
+  }
+}
+
+/* Phone + bottom nav : juste au-dessus de la tab bar */
+@media (max-width: 767.98px) {
+  .orion-alert-ticker-scrim {
+    left: 8px;
+    right: 8px;
+    --orion-ticker-scrim-h: calc(
+      40px + var(--orion-ticker-stack, 0px) + 24px + env(safe-area-inset-bottom, 0px)
+    );
+  }
+
+  .orion-alert-ticker {
+    height: 40px;
+    --orion-ticker-h: 40px;
+    border-radius: 7px;
+    left: 8px;
+    right: 8px;
+    bottom: calc(var(--orion-ticker-stack, 0px) + 6px);
+  }
+
+  .orion-alert-ticker-spacer {
+    height: calc(40px + 8px);
+  }
+
+  .orion-alert-ticker__link {
+    font-size: 10px;
+    padding: 0 10px;
+  }
+}

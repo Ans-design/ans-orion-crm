@@ -1,0 +1,171 @@
+/**
+ * Filtre période modules — embarqué dans orion-cockpit-header__left
+ * Flux gauche → droite, wrap si débordement.
+ */
+
+.module-date-filter--header {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+  border: none;
+  background: transparent;
+}
+
+.module-date-filter__inner {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+}
+
+.module-date-filter__presets-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.45rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.module-date-filter__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.module-date-filter__presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.module-date-filter__chip {
+  flex: 0 0 auto;
+  padding: 0.28rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  white-space: nowrap;
+  line-height: 1.15;
+  border-radius: 7px;
+}
+
+.module-date-filter__chip:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-primary, #FF174D) 45%, transparent);
+}
+
+/* Desktop : libellé long ; phone : short (CSS) */
+.module-date-filter__chip-short {
+  display: none;
+}
+
+.module-date-filter__dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.45rem;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.module-date-filter__date-field {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  flex: 0 1 auto;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.module-date-filter__date-field > span {
+  font-weight: 600;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.module-date-filter__input {
+  min-width: 0;
+  width: auto;
+  max-width: 9.5rem;
+  padding: 0.22rem 0.4rem;
+  font-size: 0.72rem;
+  border-radius: 7px;
+  min-height: 1.85rem;
+}
+
+/* Alignement header quand le filtre wrap */
+.orion-cockpit-header:has(.module-date-filter--header) {
+  align-items: flex-start !important;
+}
+
+.orion-cockpit-header:has(.module-date-filter--header) .orion-cockpit-header__tools {
+  padding-top: 0.1rem;
+}
+
+/* ── Smartphone ── */
+@media (max-width: 767.98px) {
+  .module-date-filter__kicker {
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    gap: 0.2rem;
+  }
+
+  .module-date-filter__kicker svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .module-date-filter__chip {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.625rem;
+  }
+
+  .module-date-filter__chip-full {
+    display: none;
+  }
+
+  .module-date-filter__chip-short {
+    display: inline;
+  }
+
+  .module-date-filter__date-field {
+    font-size: 0.6875rem;
+  }
+
+  .module-date-filter__input {
+    max-width: 8.25rem;
+    padding: 0.3rem 0.35rem;
+    font-size: 16px; /* iOS — évite zoom focus */
+    min-height: 2rem;
+  }
+
+  .module-date-filter__input::-webkit-date-and-time-value {
+    text-align: left;
+  }
+}
+
+/* Tablette étroite : short labels */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .module-date-filter__chip-full {
+    display: none;
+  }
+  .module-date-filter__chip-short {
+    display: inline;
+  }
+}

@@ -1,0 +1,99 @@
+PROMPT ARTICLE — BOÎTE RABATS DROITS / STRAIGHT TUCK END — ANS ORION
+
+Travaille uniquement sur la structure “Boîte rabats droits / Straight Tuck End” dans le module POS Boîte personnalisée.
+
+OBJECTIF :
+Créer une structure de boîte classique avec rabats haut et bas dans le même sens.
+Le calcul doit être basé sur le développé à plat, pas sur la surface visible de la boîte montée.
+
+CHAMPS POS :
+- Longueur intérieure L en mm
+- Profondeur / largeur intérieure P en mm
+- Hauteur H en mm
+- Matière
+- Grammage
+- Épaisseur estimée
+- Quantité
+- Impression
+- Finition
+- Collage
+- Bleed
+- Marge de chute matière
+- Format compatible
+- Poses par feuille
+- Surface facturée
+
+VARIABLES :
+- L = longueur intérieure
+- P = profondeur / largeur intérieure
+- H = hauteur
+- G = patte de colle, valeur par défaut 15 mm
+- T = rabat principal
+- D = rabat poussière
+- bleed = fond perdu, valeur par défaut 3 mm
+- marge_chute = 50 mm sur chaque côté
+
+FORMULE :
+T = max(15, P / 2 - 5)
+D = max(10, P / 2 - 2)
+
+développé_net_largeur = 2L + 2P + G
+développé_net_hauteur = H + 2 × max(T, D)
+
+largeur_imprimable = développé_net_largeur + 2 × bleed
+hauteur_imprimable = développé_net_hauteur + 2 × bleed
+
+largeur_brute_finale = largeur_imprimable + 100 mm
+hauteur_brute_finale = hauteur_imprimable + 100 mm
+
+surface_brute_m2 = largeur_brute_finale × hauteur_brute_finale / 1 000 000
+poids_matiere_g = surface_brute_m2 × grammage
+
+RÈGLES MÉTIER :
+- Structure adaptée aux boîtes légères et moyennes.
+- Nécessite une patte de collage latérale.
+- Les rabats haut et bas ont la même orientation.
+- Ne pas proposer de grammage inférieur ou égal à 250g.
+- Utiliser uniquement PCB, PCM, Glossy, Papier spécial invitation, SBS, FBB ou Kraft épais en 300g, 350g, 400g.
+
+RÉCAPITULATIF À AFFICHER :
+- Structure : Boîte rabats droits
+- Dimensions intérieures L × P × H
+- Matière
+- Grammage
+- Épaisseur estimée
+- Patte de colle
+- Rabat principal
+- Rabat poussière
+- Développé net
+- Bleed
+- Marge de chute matière +50 mm sur 4 côtés
+- Dimension brute finale
+- Surface brute
+- Format compatible
+- Poses par feuille
+- Taux de chute
+- Prix unitaire
+- Total
+
+SYNCHRONISATION :
+Appliquer cette structure dans :
+- POS
+- Base de données
+- Admin
+- Prix
+- Stock
+- Devis
+- Commande
+- Facture
+- Production
+- Cockpit
+- Tests
+
+TESTS :
+- Vérifier le calcul développé_net_largeur.
+- Vérifier le calcul développé_net_hauteur.
+- Vérifier la marge +50 mm sur les 4 côtés.
+- Vérifier la conversion A4/A3/A2/A1/A0.
+- Vérifier poses par feuille.
+- Vérifier que les anciens devis gardent leur snapshot.

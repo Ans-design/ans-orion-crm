@@ -1,0 +1,1782 @@
+PROMPT ULTRA COMPLET POUR CURSOR
+PROJET : ANS ORION ERP / CRM / GPAO / POS / VENTE / IMPRIMERIE
+OBJECTIF : AMELIORATION SANS SUPPRESSION
+VERSION : PROMPT STRUCTURE ETAPE PAR ETAPE
+
+
+============================================================
+0. ROLE DE CURSOR
+============================================================
+
+Tu es un expert senior en :
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- UI/UX premium
+- architecture ERP
+- CRM
+- GPAO
+- POS pour imprimerie
+- sécurité applicative
+- gestion de fichiers professionnels
+- gestion de production
+- gestion commerciale
+- gestion RH / paie / finance / fiscalité
+- optimisation de performance
+- refactorisation sans casse
+
+Tu travailles sur le projet ANS ORION existant.
+
+Ton objectif n’est PAS de refaire le projet à zéro.
+Ton objectif n’est PAS de supprimer.
+Ton objectif est d’améliorer, ajouter, compléter, organiser, corriger, connecter les modules, uniformiser le design et rendre le système réellement opérationnel pour une société d’imprimerie.
+
+
+============================================================
+1. REGLE ABSOLUE : ZERO SUPPRESSION
+============================================================
+
+REGLE PRINCIPALE :
+Ne jamais supprimer une fonctionnalité existante, un module, une route, un composant, une donnée, un menu, un sous-menu, une logique, une page, une carte, un tableau ou une option déjà présente.
+
+Le but est :
+- améliorer ce qui existe,
+- corriger ce qui est cassé,
+- compléter ce qui est incomplet,
+- rendre fonctionnel ce qui est décoratif,
+- réorganiser ce qui est mal placé,
+- uniformiser ce qui est incohérent,
+- ajouter ce qui manque,
+- connecter les modules entre eux.
+
+Si un élément semble parasite :
+1. ne pas le supprimer directement ;
+2. analyser son rôle ;
+3. le corriger si possible ;
+4. le déplacer si nécessaire ;
+5. le renommer si nécessaire ;
+6. le rendre fonctionnel ;
+7. si vraiment inutilisable, le masquer avec commentaire clair dans le code ;
+8. conserver une trace de la raison.
+
+Interdictions :
+- ne pas supprimer de route ;
+- ne pas supprimer de composant ;
+- ne pas supprimer de module ;
+- ne pas supprimer de page ;
+- ne pas supprimer de logique métier ;
+- ne pas supprimer de donnée de test utile ;
+- ne pas refaire l’application à zéro ;
+- ne pas casser l’existant ;
+- ne pas remplacer un module fonctionnel par une maquette moins complète ;
+- ne pas changer les noms de routes sans nécessité forte ;
+- ne pas supprimer un bouton : lui donner une action réelle ;
+- ne pas supprimer une option POS : la corriger, la classer, la renommer ou l’améliorer.
+
+
+============================================================
+2. VISION FINALE DU PROJET
+============================================================
+
+ANS ORION doit devenir la forteresse digitale complète d’une société d’imprimerie.
+
+Le système doit gérer tout le cycle :
+
+Client
+→ CRM
+→ devis
+→ POS
+→ panier
+→ commande
+→ validation BAT
+→ dossier de production
+→ fichiers
+→ graphiste
+→ impression
+→ façonnage
+→ contrôle qualité
+→ livraison
+→ facture
+→ paiement
+→ stock
+→ achats
+→ fournisseurs
+→ machines
+→ maintenance
+→ employés
+→ RH
+→ paie
+→ fiscalité
+→ cockpit direction
+→ rapport mensuel
+→ évaluation annuelle de la société.
+
+Tous les modules doivent être connectés autour d’un élément central :
+DOSSIER COMMANDE UNIQUE.
+
+
+============================================================
+3. METHODE DE TRAVAIL OBLIGATOIRE
+============================================================
+
+Travaille étape par étape.
+
+Avant de modifier :
+- analyser le projet ;
+- comprendre la structure ;
+- repérer les modules existants ;
+- repérer les routes ;
+- repérer les composants communs ;
+- repérer les données mockées ;
+- repérer les permissions ;
+- repérer les formulaires ;
+- repérer les dashboards ;
+- repérer les incohérences.
+
+Pendant les modifications :
+- faire des changements progressifs ;
+- ne pas casser l’existant ;
+- garder la compatibilité ;
+- ajouter des types TypeScript propres ;
+- ajouter des commentaires utiles uniquement ;
+- éviter le code dupliqué ;
+- réutiliser les composants existants si possible ;
+- créer des composants partagés si nécessaire.
+
+Après chaque grande étape :
+- vérifier le build ;
+- vérifier les routes ;
+- vérifier la console ;
+- vérifier le responsive ;
+- vérifier les actions ;
+- vérifier les formulaires ;
+- vérifier les permissions.
+
+
+============================================================
+4. ETAPE 1 — AUDIT COMPLET DU PROJET
+============================================================
+
+Analyser tout le projet :
+- structure des dossiers ;
+- routes ;
+- pages ;
+- layouts ;
+- composants ;
+- hooks ;
+- stores ;
+- services ;
+- types ;
+- données mockées ;
+- navigation ;
+- menus ;
+- sous-menus ;
+- formulaires ;
+- tableaux ;
+- modales ;
+- drawers ;
+- dashboards ;
+- graphiques ;
+- modules métier ;
+- permissions ;
+- gestion utilisateur ;
+- logique POS ;
+- logique production ;
+- logique CRM ;
+- logique finance ;
+- logique stock ;
+- logique admin ;
+- design system ;
+- responsive ;
+- performances ;
+- sécurité.
+
+Produire une liste interne claire :
+1. bugs critiques ;
+2. bugs moyens ;
+3. bugs mineurs ;
+4. boutons sans action ;
+5. formulaires incomplets ;
+6. routes cassées ;
+7. pages incomplètes ;
+8. composants à uniformiser ;
+9. incohérences design ;
+10. incohérences métier ;
+11. modules existants à renforcer ;
+12. modules manquants à ajouter ;
+13. risques de sécurité ;
+14. risques de performance.
+
+Ne rien supprimer durant l’audit.
+
+
+============================================================
+5. ETAPE 2 — STABILISATION TECHNIQUE
+============================================================
+
+Corriger :
+- erreurs TypeScript ;
+- imports cassés ;
+- props manquantes ;
+- erreurs de build ;
+- erreurs de console ;
+- erreurs hydration ;
+- routes cassées ;
+- liens morts ;
+- pages qui crashent ;
+- boutons sans handler ;
+- modales qui ne s’ouvrent pas ;
+- drawers qui ne se ferment pas ;
+- formulaires qui ne sauvegardent rien ;
+- tableaux qui ne filtrent pas ;
+- problèmes évidents responsive.
+
+Objectif :
+L’application doit s’ouvrir proprement, sans erreur critique, sans page cassée, sans action morte.
+
+
+============================================================
+6. ETAPE 3 — DESIGN SYSTEM ANS ORION
+============================================================
+
+Créer ou renforcer un design system global sans supprimer l’identité existante.
+
+Style attendu :
+- moderne ;
+- professionnel ;
+- premium ;
+- clair ;
+- cohérent ;
+- rapide ;
+- élégant ;
+- adapté à une imprimerie ;
+- utilisable par un débutant.
+
+Couleurs principales :
+- Rouge ANS : #cc0033
+- Rouge vif : #ff1e56
+- Jaune accent : #eab308
+- Dark obsidian pour mode sombre
+- Fond clair doux pour mode clair
+- Vert discret pour succès
+- Rouge strict pour danger
+- Bleu/gris pour information
+
+Uniformiser :
+- boutons ;
+- cartes ;
+- KPI cards ;
+- tableaux ;
+- badges ;
+- statuts ;
+- menus ;
+- sous-menus ;
+- modales ;
+- drawers ;
+- formulaires ;
+- inputs ;
+- selects ;
+- checkboxes ;
+- chips ;
+- alertes ;
+- toasts ;
+- loaders ;
+- skeletons ;
+- graphiques ;
+- icônes ;
+- espacements ;
+- arrondis ;
+- ombres ;
+- transitions ;
+- états vides ;
+- messages d’erreur.
+
+Règles UI :
+- aucun texte trop petit ;
+- contraste lisible ;
+- labels clairs ;
+- actions principales visibles ;
+- actions dangereuses confirmées ;
+- hiérarchie visuelle claire ;
+- interface mobile/tablette/desktop propre ;
+- aucune décoration inutile sans fonction.
+
+
+============================================================
+7. ETAPE 4 — LOGIN ET SECURITE D’ACCES
+============================================================
+
+Améliorer la page login existante sans suppression.
+
+Améliorations :
+- champ intelligent : matricule ou email ;
+- mot de passe ;
+- affichage/masquage mot de passe ;
+- mot de passe oublié ;
+- demande d’accès ;
+- message d’erreur clair ;
+- état loading ;
+- redirection après connexion selon rôle ;
+- sécurité visuelle ;
+- design plus premium ;
+- ne pas exposer inutilement les emails internes ;
+- afficher la version seulement si utile ou en mode admin ;
+- éviter les caractères parasites.
+
+Demande d’accès :
+- formulaire propre ;
+- nom ;
+- email ;
+- matricule si disponible ;
+- service ;
+- message ;
+- statut : envoyé, en attente, accepté, refusé ;
+- notification admin.
+
+Sécurité :
+- session sécurisée ;
+- expiration session ;
+- protection routes ;
+- rôle obligatoire ;
+- redirection si non autorisé.
+
+
+============================================================
+8. ETAPE 5 — NAVIGATION GLOBALE
+============================================================
+
+Améliorer la navigation sans supprimer les menus existants.
+
+Ajouter ou renforcer :
+- menu principal clair ;
+- sous-menus logiques ;
+- recherche globale ;
+- raccourcis rapides ;
+- fil d’Ariane ;
+- retour facile ;
+- favoris ;
+- accès rapide aux commandes ;
+- accès rapide au POS ;
+- accès rapide au chat ;
+- accès rapide aux tâches ;
+- accès rapide aux notifications.
+
+Organisation recommandée :
+1. Cockpit global
+2. POS / Vente
+3. CRM Clients
+4. Devis
+5. Commandes
+6. BAT
+7. Production / GPAO
+8. Fichiers
+9. ANS Talk
+10. Stock
+11. Achats / Fournisseurs
+12. Machines / Maintenance
+13. Livraison
+14. Facturation / Paiements
+15. Finance
+16. RH / Employés
+17. Paie
+18. Fiscalité
+19. Rapports
+20. Admin
+
+
+============================================================
+9. ETAPE 6 — ROLES ET PERMISSIONS
+============================================================
+
+Créer ou renforcer les rôles suivants :
+- Super Admin
+- Admin
+- Directeur
+- Commercial
+- Agent d’accueil
+- Graphiste
+- Conducteur machine
+- Opérateur impression
+- Opérateur façonnage
+- Responsable stock
+- Livreur
+- Finance
+- RH
+- Vérificateur / Contrôle qualité
+- Community manager
+- Assistant administratif
+- Technicien réparateur
+- Stagiaire
+- Ventes
+
+Règles :
+- Super Admin configure tout.
+- Admin voit tout.
+- Directeur voit cockpit, finance, RH, rapports, production.
+- Commercial voit clients, devis, commandes, paiements liés.
+- Graphiste voit BAT, fichiers, tâches graphisme, chat commande.
+- Conducteur machine voit commandes prêtes impression, machines, fichiers validés.
+- Façonnage voit commandes à façonner.
+- Stock voit matières, sorties, entrées, réservations.
+- Livreur voit livraisons, clients, preuves livraison.
+- Finance voit factures, paiements, caisse, banque, dépenses.
+- RH voit employés, présence, paie.
+- Stagiaire voit uniquement ce qui est autorisé.
+
+Chaque menu, action et donnée sensible doit dépendre du rôle.
+
+Données sensibles à protéger :
+- marges ;
+- salaires ;
+- paie ;
+- finance ;
+- prix d’achat ;
+- fichiers clients ;
+- informations RH ;
+- rapports direction.
+
+
+============================================================
+10. ETAPE 7 — POS / VENTE / DEVIS
+============================================================
+
+Améliorer le POS sans supprimer aucun article.
+
+Objectif :
+Créer un assistant de vente simple, rapide, fiable et complet.
+
+Workflow idéal :
+1. choisir ou créer un client ;
+2. choisir une catégorie ;
+3. choisir un article ;
+4. configurer les dimensions ;
+5. configurer la matière ;
+6. configurer le grammage ;
+7. configurer les finitions ;
+8. vérifier le stock ;
+9. calculer le prix ;
+10. ajouter au panier ;
+11. appliquer une remise si le rôle est autorisé ;
+12. générer un devis ;
+13. convertir le devis en commande ;
+14. créer automatiquement le dossier de production.
+
+Règles POS :
+- tous les articles existants restent ;
+- toutes les options existantes restent ;
+- corriger les options incohérentes ;
+- réorganiser les options par groupe ;
+- chips neutres au départ ;
+- aucune présélection sauf règle métier obligatoire ;
+- deuxième clic sur une option = désélection ;
+- choix unique et choix multiple clairement gérés ;
+- progression affichée : 0/n, 1/n, etc. ;
+- alerte stock faible avant ajout panier ;
+- alerte rupture avant validation ;
+- panier clair ;
+- prix recalculé automatiquement ;
+- résumé technique complet ;
+- devis exportable PDF ;
+- facture exportable PDF ;
+- bon de production généré.
+
+Groupes d’options recommandés :
+- format ;
+- dimensions ;
+- matière ;
+- grammage ;
+- impression ;
+- couleurs ;
+- finition ;
+- façonnage ;
+- quantité ;
+- délai ;
+- livraison ;
+- remise ;
+- commentaire technique.
+
+
+============================================================
+11. ETAPE 8 — REGLES UNITES IMPRIMERIE
+============================================================
+
+Règle globale impérative :
+- Tous les articles Grand Format utilisent le centimètre : cm.
+- Tous les petits formats, formats standards et articles hors Grand Format utilisent le millimètre : mm.
+- Les surfaces sont calculées en m².
+- Les laizes sont affichées en cm.
+
+Interdictions :
+- ne pas mélanger cm et mm sans conversion claire ;
+- ne jamais afficher une dimension sans unité ;
+- ne jamais calculer une surface si longueur ou largeur manque ;
+- ne jamais laisser un champ ambigu.
+
+Afficher les unités dans :
+- POS ;
+- panier ;
+- devis ;
+- facture ;
+- bon de production ;
+- fiche commande ;
+- stock ;
+- cockpit ;
+- rapports ;
+- historique ;
+- export PDF.
+
+
+============================================================
+12. ETAPE 9 — GRAND FORMAT ET LAIZE
+============================================================
+
+Améliorer tous les articles Grand Format existants.
+
+Champs nécessaires :
+- longueur en cm ;
+- largeur en cm ;
+- quantité ;
+- matière ;
+- finition ;
+- laize ;
+- surface réelle ;
+- surface facturée ;
+- prix m² ;
+- total.
+
+Règle de laize :
+- calculer automatiquement la meilleure laize ;
+- appliquer la marge de sécurité si nécessaire ;
+- si un côté dépasse la laize moins la marge, basculer sur la laize supérieure ;
+- si un côté correspond exactement à la laize disponible, ne pas appliquer inutilement la marge ;
+- afficher la surface réelle et la surface facturée ;
+- expliquer visuellement le calcul.
+
+Exemple attendu :
+- Dimension réelle : 115 x 300 cm
+- Surface réelle : 3,45 m²
+- Laize utilisée : 120 cm
+- Surface facturée : selon règle de laize
+- Prix total : calculé automatiquement.
+
+
+============================================================
+13. ETAPE 10 — BACHES
+============================================================
+
+Améliorer les modules bâches sans supprimer les options existantes.
+
+Règles :
+- garder les bâches existantes ;
+- regrouper proprement si nécessaire ;
+- ne pas supprimer les anciennes options ;
+- corriger les libellés incohérents ;
+- séparer matière et grammage ;
+- ajouter laize 240 cm si absente ;
+- dos blanc/noir/gris si disponible ;
+- finition mat/brillant ;
+- recto ou recto-verso si applicable ;
+- dos blanc seul pour recto-verso si règle métier ;
+- supprimer uniquement les ambiguïtés par renommage ou rangement, pas par suppression brutale.
+
+Dimensions :
+- ne pas utiliser un champ texte “dimension personnalisée” ;
+- utiliser longueur + largeur ;
+- unité cm ;
+- calcul surface réelle ;
+- calcul surface facturée ;
+- calcul prix.
+
+Œillets :
+- représentation visuelle du rectangle ;
+- placement manuel ;
+- au moins 20 points possibles par côté ;
+- sélection/désélection par clic ;
+- calcul nombre total ;
+- calcul prix ;
+- résumé dans devis et bon production.
+
+Résumé technique bâche :
+- matière ;
+- grammage ;
+- dos ;
+- finition ;
+- longueur ;
+- largeur ;
+- surface réelle ;
+- surface facturée ;
+- laize ;
+- œillets ;
+- quantité ;
+- prix.
+
+
+============================================================
+14. ETAPE 11 — PETIT FORMAT / STANDARD
+============================================================
+
+Améliorer les articles petit format sans suppression.
+
+Règles :
+- dimensions en mm ;
+- formats A6, A5, A4, A3, A3+, SRA3 si existants ;
+- matière séparée du grammage ;
+- finition claire ;
+- quantité claire ;
+- recto / recto-verso clair ;
+- options cohérentes ;
+- prix visible ;
+- résumé technique complet.
+
+Corrections métier à intégrer si déjà présentes :
+- matière et grammage séparés ;
+- pelliculage organisé ;
+- vernis organisé ;
+- dorure organisée ;
+- plastification organisée ;
+- rainage simplifié ;
+- reliure avec règles techniques ;
+- calendrier, chevalet, marque-pages, bloc-notes, agenda, acrylique avec options propres.
+
+
+============================================================
+15. ETAPE 12 — REGLES RELIURE ET FINITIONS
+============================================================
+
+Améliorer les modules finition sans suppression.
+
+Reliure :
+- remplacer “pages” par “feuilles” si nécessaire selon contexte ;
+- recto : 40 pages = 40 feuilles ;
+- recto-verso : 40 pages = 20 feuilles ;
+- dos carré collé non autorisé si moins de 40 pages sur 80g ;
+- afficher épaisseur du dos calculée ;
+- spirale : références automatiques 6 mm, 8 mm, etc. ;
+- agrafes : références 23/8, 23/10, etc. ;
+- piqûre à cheval : pages multiples de 4 ;
+- afficher alerte si règle non respectée.
+
+Dorure :
+- garder les options existantes ;
+- organiser formats ;
+- éviter les choix incohérents ;
+- résumé clair.
+
+Pelliculage :
+- organiser mat / brillant ;
+- clarifier à chaud / à froid si applicable ;
+- éviter les libellés impossibles.
+
+Vernis :
+- libellé clair ;
+- zone claire si nécessaire ;
+- formats cohérents.
+
+Plastification :
+- recto-verso automatique si règle métier ;
+- formats cohérents.
+
+
+============================================================
+16. ETAPE 13 — DOSSIER COMMANDE UNIQUE
+============================================================
+
+Créer ou renforcer un dossier commande unique.
+
+Chaque commande validée doit générer automatiquement un dossier contenant :
+- numéro commande ;
+- client ;
+- contact client ;
+- commercial ;
+- date création ;
+- date livraison prévue ;
+- priorité ;
+- statut global ;
+- produits ;
+- quantités ;
+- dimensions ;
+- unités ;
+- options techniques ;
+- prix ;
+- remise ;
+- total ;
+- acompte ;
+- reste à payer ;
+- fichiers ;
+- BAT ;
+- matières nécessaires ;
+- stock réservé ;
+- machine prévue ;
+- opérateur affecté ;
+- étapes production ;
+- contrôle qualité ;
+- livraison ;
+- facture ;
+- paiement ;
+- marge estimée ;
+- marge réelle si disponible ;
+- historique ;
+- commentaires ;
+- conversation ANS Talk liée.
+
+Le dossier commande devient la source unique de vérité.
+
+
+============================================================
+17. ETAPE 14 — STATUTS DE COMMANDE ET PRODUCTION
+============================================================
+
+Ajouter ou renforcer les statuts suivants :
+
+Statuts commande :
+1. Brouillon
+2. Devis envoyé
+3. Devis accepté
+4. Commande créée
+5. En attente acompte
+6. En attente BAT
+7. En production
+8. En contrôle qualité
+9. Prêt livraison
+10. Livré
+11. Facturé
+12. Payé
+13. Archivé
+14. Annulé
+
+Statuts production :
+1. Nouveau
+2. En attente BAT
+3. BAT validé
+4. Préparation fichier
+5. En attente matière
+6. Prêt impression
+7. Impression en cours
+8. Impression terminée
+9. Façonnage
+10. Contrôle qualité
+11. Prêt livraison
+12. Livré
+13. Facturé
+14. Payé
+15. Archivé
+
+Chaque changement doit être historisé :
+- utilisateur ;
+- date ;
+- ancien statut ;
+- nouveau statut ;
+- commentaire ;
+- pièce jointe éventuelle.
+
+
+============================================================
+18. ETAPE 15 — MODULE BAT
+============================================================
+
+Ajouter ou améliorer le module BAT.
+
+Fonctions :
+- upload fichier BAT ;
+- aperçu fichier ;
+- version v1, v2, v3, final ;
+- commentaire client ;
+- commentaire interne ;
+- validation client ;
+- refus client ;
+- correction demandée ;
+- notification graphiste ;
+- notification commercial ;
+- notification production ;
+- verrouillage après validation ;
+- historique complet.
+
+Statuts BAT :
+- En attente fichier
+- En attente validation client
+- Correction demandée
+- Validé
+- Refusé
+- Verrouillé
+
+Règle :
+Si BAT obligatoire, la commande ne doit pas passer en impression sans BAT validé.
+
+
+============================================================
+19. ETAPE 16 — FICHIERS PROFESSIONNELS SANS PERTE
+============================================================
+
+Améliorer la gestion des fichiers.
+
+Formats autorisés :
+- PDF
+- AI
+- PSD
+- CDR
+- EPS
+- SVG
+- PNG
+- JPG
+- JPEG
+- TIFF
+- TIF
+- ZIP
+- RAR
+- DOC
+- DOCX
+- XLS
+- XLSX
+
+Règles :
+- conserver le fichier original sans compression destructive ;
+- ne jamais écraser un fichier sans versioning ;
+- générer seulement un aperçu léger séparé ;
+- afficher extension ;
+- afficher taille ;
+- afficher date upload ;
+- afficher auteur ;
+- afficher statut ;
+- afficher version ;
+- associer à commande, BAT, production ou chat ;
+- journaliser téléchargement ;
+- journaliser validation ;
+- protéger selon rôle.
+
+Versioning :
+- v1
+- v2
+- v3
+- final
+- final_corrige
+- print_ready
+
+Statuts fichier :
+- Reçu
+- En vérification
+- À corriger
+- Validé BAT
+- Prêt impression
+- Archivé
+
+
+============================================================
+20. ETAPE 17 — ANS TALK / CHAT INTERNE
+============================================================
+
+Créer ou améliorer le module ANS Talk.
+
+Objectif :
+Transformer le CRM/GPAO en réseau professionnel interne type Telegram/Messenger pour les employés d’imprimerie.
+
+Fonctions :
+- chat privé 1 à 1 ;
+- chat de groupe ;
+- groupe par service ;
+- groupe automatique par commande ;
+- groupe automatique par dossier production ;
+- bulle flottante en bas à droite ;
+- compteur messages non lus ;
+- notifications ;
+- mentions @utilisateur ;
+- pièces jointes ;
+- fichiers sans perte ;
+- messages vus/non vus ;
+- accusé réception ;
+- messages épinglés ;
+- recherche conversation ;
+- filtres ;
+- réponse à un message ;
+- citation ;
+- transfert vers une tâche ;
+- transformation d’un message en tâche ;
+- lien direct vers commande ;
+- lien direct vers BAT ;
+- lien direct vers fichier ;
+- lien direct vers facture ;
+- lien direct vers livraison.
+
+Groupes recommandés :
+- Direction
+- Commercial
+- Graphistes
+- Impression
+- Façonnage
+- Livraison
+- Stock
+- Finance
+- RH
+- Maintenance
+- Support
+- Groupe commande
+
+Règle :
+Chaque commande doit pouvoir créer automatiquement une conversation dédiée.
+
+Exemple workflow :
+Graphiste envoie fichier final dans le groupe commande.
+Conducteur machine reçoit notification.
+Conducteur répond “bien reçu”.
+Chef production valide.
+Façonnage reçoit notification après impression.
+Livreur reçoit notification après contrôle qualité.
+
+
+============================================================
+21. ETAPE 18 — TACHES INTERNES
+============================================================
+
+Ajouter ou renforcer un module tâches.
+
+Fonctions :
+- créer tâche ;
+- assigner utilisateur ;
+- assigner service ;
+- lier à commande ;
+- lier à fichier ;
+- lier à conversation ;
+- priorité ;
+- échéance ;
+- checklist ;
+- commentaire ;
+- pièce jointe ;
+- statut ;
+- notification ;
+- historique.
+
+Statuts tâche :
+- À faire
+- En cours
+- En attente
+- Bloquée
+- Terminée
+- Annulée
+
+Priorités :
+- Basse
+- Normale
+- Haute
+- Urgente
+
+
+============================================================
+22. ETAPE 19 — PRODUCTION / GPAO
+============================================================
+
+Améliorer le module production.
+
+Fonctions :
+- Kanban production ;
+- liste production ;
+- planning production ;
+- affectation opérateur ;
+- affectation machine ;
+- suivi statut ;
+- temps estimé ;
+- temps réel ;
+- priorité ;
+- commentaires ;
+- fichiers liés ;
+- BAT visible ;
+- matières nécessaires ;
+- alertes blocage ;
+- historique.
+
+Vues :
+- par statut ;
+- par machine ;
+- par opérateur ;
+- par date limite ;
+- par priorité ;
+- par client ;
+- par commercial.
+
+Actions :
+- démarrer impression ;
+- terminer impression ;
+- envoyer façonnage ;
+- envoyer contrôle qualité ;
+- signaler problème ;
+- demander fichier corrigé ;
+- demander matière ;
+- mettre en pause ;
+- clôturer étape.
+
+
+============================================================
+23. ETAPE 20 — STOCK
+============================================================
+
+Améliorer le module stock.
+
+Fonctions :
+- entrée stock ;
+- sortie stock ;
+- réservation par commande ;
+- stock disponible ;
+- stock réservé ;
+- stock minimum ;
+- alerte stock faible ;
+- alerte rupture ;
+- fournisseur ;
+- prix achat ;
+- historique mouvement ;
+- inventaire ;
+- perte ;
+- gâche ;
+- valorisation stock ;
+- export.
+
+Types de mouvements :
+- Entrée achat
+- Sortie production
+- Réservation commande
+- Annulation réservation
+- Perte
+- Gâche
+- Correction inventaire
+- Retour fournisseur
+
+Règle :
+Le POS doit vérifier le stock avant validation.
+La commande validée doit réserver la matière.
+La production terminée doit sortir la matière réellement consommée.
+
+
+============================================================
+24. ETAPE 21 — ACHATS ET FOURNISSEURS
+============================================================
+
+Ajouter ou renforcer :
+- fournisseurs ;
+- contacts fournisseurs ;
+- articles achetés ;
+- prix achat ;
+- commande fournisseur ;
+- réception stock ;
+- facture fournisseur ;
+- paiement fournisseur ;
+- historique ;
+- performance fournisseur.
+
+Statuts achat :
+- Brouillon
+- Commandé
+- Reçu partiellement
+- Reçu totalement
+- Facturé
+- Payé
+- Annulé
+
+
+============================================================
+25. ETAPE 22 — MACHINES ET MAINTENANCE
+============================================================
+
+Ajouter ou améliorer :
+- liste machines ;
+- type machine ;
+- capacité ;
+- statut ;
+- planning ;
+- conducteur ;
+- coût horaire ;
+- rendement ;
+- maintenance préventive ;
+- panne ;
+- historique panne ;
+- temps d’arrêt ;
+- pièces remplacées ;
+- coût maintenance.
+
+Statuts machine :
+- Disponible
+- Occupée
+- En maintenance
+- En panne
+- Hors service
+
+Règle :
+Une commande en production doit pouvoir être affectée à une machine disponible.
+
+
+============================================================
+26. ETAPE 23 — CONTROLE QUALITE
+============================================================
+
+Ajouter ou améliorer un module contrôle qualité.
+
+Checklist :
+- fichier conforme ;
+- BAT respecté ;
+- dimensions correctes ;
+- unité correcte ;
+- quantité correcte ;
+- couleur correcte ;
+- finition correcte ;
+- coupe correcte ;
+- reliure correcte ;
+- œillets corrects ;
+- emballage correct ;
+- étiquette correcte ;
+- livraison prête.
+
+Statuts contrôle :
+- En attente contrôle
+- Conforme
+- Non conforme
+- À refaire
+- Accepté avec réserve
+
+Non-conformité :
+- commentaire ;
+- responsable ;
+- cause ;
+- action corrective ;
+- coût ;
+- photo preuve ;
+- historique.
+
+
+============================================================
+27. ETAPE 24 — LIVRAISON
+============================================================
+
+Améliorer le module livraison.
+
+Fonctions :
+- bon de livraison ;
+- client ;
+- adresse ;
+- téléphone ;
+- livreur ;
+- frais livraison ;
+- statut ;
+- signature client ;
+- photo preuve ;
+- commentaire ;
+- historique ;
+- retour.
+
+Statuts livraison :
+- À préparer
+- Prêt
+- En cours livraison
+- Livré
+- Échec livraison
+- Reporté
+- Retourné
+
+Règle :
+Une commande ne passe en “Livré” qu’après preuve ou validation.
+
+
+============================================================
+28. ETAPE 25 — FACTURATION ET PAIEMENT
+============================================================
+
+Améliorer :
+- devis ;
+- factures ;
+- avoirs si nécessaire ;
+- acompte ;
+- paiement partiel ;
+- paiement total ;
+- reste à payer ;
+- échéance ;
+- retard ;
+- relance ;
+- caisse ;
+- banque ;
+- modes de paiement ;
+- reçu ;
+- export PDF.
+
+Statuts paiement :
+- Non payé
+- Acompte reçu
+- Partiellement payé
+- Payé
+- En retard
+- Annulé
+
+Modes de paiement :
+- Espèces
+- Mobile Money
+- Virement
+- Chèque
+- Carte
+- Autre
+
+Chaque paiement doit être lié à :
+- client ;
+- commande ;
+- facture ;
+- utilisateur ;
+- date ;
+- montant ;
+- mode ;
+- reçu.
+
+
+============================================================
+29. ETAPE 26 — FINANCE
+============================================================
+
+Ajouter ou renforcer :
+- caisse ;
+- banque ;
+- recettes ;
+- dépenses ;
+- dettes ;
+- créances ;
+- impayés ;
+- dépenses par catégorie ;
+- bénéfice brut ;
+- marge estimée ;
+- marge réelle ;
+- rapport journalier ;
+- rapport mensuel ;
+- rapport annuel.
+
+Catégories dépenses :
+- matières premières ;
+- salaires ;
+- loyers ;
+- électricité ;
+- maintenance ;
+- transport ;
+- fiscalité ;
+- communication ;
+- autres.
+
+KPI finance :
+- chiffre d’affaires ;
+- encaissements ;
+- impayés ;
+- dépenses ;
+- bénéfice ;
+- marge ;
+- panier moyen ;
+- clients débiteurs ;
+- produits rentables.
+
+
+============================================================
+30. ETAPE 27 — CRM CLIENTS
+============================================================
+
+Améliorer le CRM.
+
+Fiche client :
+- nom ;
+- type : particulier / société ;
+- téléphone ;
+- email ;
+- adresse ;
+- NIF / STAT si applicable ;
+- historique devis ;
+- historique commandes ;
+- historique factures ;
+- historique paiements ;
+- fichiers ;
+- conversations ;
+- réclamations ;
+- fidélité ;
+- note interne ;
+- commercial responsable.
+
+Statuts client :
+- Prospect
+- Actif
+- Fidèle
+- À relancer
+- Inactif
+- Débiteur
+- Bloqué
+
+Actions :
+- créer devis ;
+- créer commande ;
+- appeler ;
+- envoyer message ;
+- relancer ;
+- voir solde ;
+- voir historique.
+
+
+============================================================
+31. ETAPE 28 — RH / EMPLOYES
+============================================================
+
+Ajouter ou renforcer :
+- fiche employé ;
+- matricule ;
+- nom ;
+- contact ;
+- service ;
+- rôle ;
+- date embauche ;
+- contrat ;
+- salaire ;
+- présence ;
+- absence ;
+- retard ;
+- congé ;
+- avance ;
+- prime ;
+- sanction ;
+- documents ;
+- historique.
+
+Services :
+- Direction
+- Commercial
+- Graphisme
+- Impression
+- Façonnage
+- Livraison
+- Stock
+- Finance
+- RH
+- Maintenance
+- Administration
+
+Statuts employé :
+- Actif
+- En congé
+- Suspendu
+- Sorti
+- Stagiaire
+
+
+============================================================
+32. ETAPE 29 — PAIE
+============================================================
+
+Créer ou améliorer la paie.
+
+Calcul :
+salaire de base
++ primes
++ heures supplémentaires
+- avances
+- retenues
+= net à payer
+
+Fonctions :
+- bulletin de paie ;
+- période ;
+- employé ;
+- salaire de base ;
+- primes ;
+- avances ;
+- retenues ;
+- net à payer ;
+- statut paiement ;
+- export PDF ;
+- historique.
+
+Statuts paie :
+- Brouillon
+- Validé
+- Payé
+- Annulé
+
+Règle :
+Les salaires sont visibles uniquement par Admin, Directeur, RH ou rôle autorisé.
+
+
+============================================================
+33. ETAPE 30 — FISCALITE ET ADMINISTRATION
+============================================================
+
+Ajouter ou renforcer :
+- taxes paramétrables ;
+- TVA si applicable ;
+- échéances fiscales ;
+- documents fiscaux ;
+- déclarations ;
+- export comptable ;
+- rappels ;
+- archivage annuel ;
+- configuration admin.
+
+Important :
+Ne pas coder de taux fiscal fixe.
+Tous les taux doivent être configurables dans l’admin.
+
+Fonctions :
+- type taxe ;
+- taux ;
+- période ;
+- montant ;
+- statut ;
+- document ;
+- échéance ;
+- rappel ;
+- historique.
+
+Statuts :
+- À préparer
+- Préparé
+- Déclaré
+- Payé
+- En retard
+- Archivé
+
+
+============================================================
+34. ETAPE 31 — COCKPIT GLOBAL DIRECTION
+============================================================
+
+Améliorer le cockpit global.
+
+KPI essentiels :
+- chiffre d’affaires jour ;
+- chiffre d’affaires mois ;
+- chiffre d’affaires année ;
+- commandes en cours ;
+- commandes en retard ;
+- devis en attente ;
+- taux conversion devis ;
+- paiements reçus ;
+- impayés ;
+- dépenses ;
+- bénéfice ;
+- marge estimée ;
+- marge réelle ;
+- stock critique ;
+- machines occupées ;
+- employés actifs ;
+- tâches urgentes ;
+- livraisons du jour ;
+- BAT en attente ;
+- production bloquée.
+
+Graphiques :
+- ventes par mois ;
+- marge par mois ;
+- commandes par statut ;
+- CA par commercial ;
+- CA par produit ;
+- charge production ;
+- stock critique ;
+- dépenses mensuelles ;
+- impayés ;
+- performance employés ;
+- performance machines.
+
+Règle :
+Aucun graphique fictif sans mention “démo”.
+Si les données sont mockées, l’indiquer clairement.
+Préparer l’architecture pour données réelles.
+
+
+============================================================
+35. ETAPE 32 — RAPPORTS MENSUELS ET ANNUELS
+============================================================
+
+Ajouter ou améliorer les rapports.
+
+Rapport mensuel :
+- ventes ;
+- commandes ;
+- devis ;
+- production ;
+- retards ;
+- stock ;
+- dépenses ;
+- bénéfices ;
+- impayés ;
+- performance commerciale ;
+- performance production.
+
+Rapport annuel :
+- chiffre d’affaires annuel ;
+- évolution mensuelle ;
+- produits les plus vendus ;
+- produits les plus rentables ;
+- clients les plus importants ;
+- commerciaux performants ;
+- machines les plus utilisées ;
+- dépenses annuelles ;
+- bénéfice annuel ;
+- stock annuel ;
+- RH ;
+- paie ;
+- fiscalité ;
+- recommandations.
+
+Exports :
+- PDF ;
+- Excel si possible ;
+- impression.
+
+
+============================================================
+36. ETAPE 33 — ADMIN CONFIGURATION SANS CODE
+============================================================
+
+Renforcer l’admin.
+
+L’admin doit pouvoir configurer :
+- utilisateurs ;
+- rôles ;
+- permissions ;
+- menus visibles ;
+- modules visibles ;
+- produits ;
+- catégories ;
+- options ;
+- prix ;
+- remises ;
+- stocks ;
+- fournisseurs ;
+- machines ;
+- statuts ;
+- taxes ;
+- modèles devis ;
+- modèles facture ;
+- paramètres société ;
+- logo ;
+- couleurs ;
+- informations légales.
+
+Chaque modification admin doit être historisée :
+- utilisateur ;
+- date ;
+- ancienne valeur ;
+- nouvelle valeur ;
+- module concerné.
+
+
+============================================================
+37. ETAPE 34 — NOTIFICATIONS
+============================================================
+
+Ajouter ou renforcer les notifications.
+
+Types :
+- nouvelle commande ;
+- nouveau BAT ;
+- BAT validé ;
+- correction demandée ;
+- fichier reçu ;
+- message reçu ;
+- tâche assignée ;
+- stock faible ;
+- rupture stock ;
+- commande en retard ;
+- paiement reçu ;
+- facture impayée ;
+- livraison prête ;
+- maintenance machine ;
+- demande d’accès.
+
+Canaux :
+- notification interne ;
+- badge ;
+- toast ;
+- email si disponible ;
+- chat ANS Talk.
+
+Chaque notification :
+- titre ;
+- description ;
+- priorité ;
+- lien direct ;
+- lu/non lu ;
+- date.
+
+
+============================================================
+38. ETAPE 35 — JOURNAL D’ACTIVITE
+============================================================
+
+Créer ou renforcer un journal d’activité global.
+
+Tracer :
+- connexion ;
+- déconnexion ;
+- création ;
+- modification ;
+- changement statut ;
+- suppression douce ;
+- validation ;
+- téléchargement fichier ;
+- upload fichier ;
+- paiement ;
+- modification prix ;
+- modification rôle ;
+- export ;
+- action sensible.
+
+Chaque log :
+- utilisateur ;
+- action ;
+- module ;
+- cible ;
+- date ;
+- ancienne valeur ;
+- nouvelle valeur ;
+- IP si disponible ;
+- commentaire.
+
+
+============================================================
+39. ETAPE 36 — SOFT DELETE ET ARCHIVAGE
+============================================================
+
+Ne jamais supprimer définitivement par défaut.
+
+Mettre en place :
+- soft delete ;
+- archive ;
+- restauration ;
+- confirmation ;
+- raison de suppression ;
+- historique.
+
+Boutons :
+- “Archiver”
+- “Restaurer”
+- “Supprimer définitivement” uniquement Super Admin si nécessaire.
+
+Ne pas supprimer les anciens éléments du projet.
+Les améliorer ou les archiver logiquement.
+
+
+============================================================
+40. ETAPE 37 — RESPONSIVE ET MOBILE
+============================================================
+
+Optimiser :
+- desktop ;
+- tablette ;
+- mobile.
+
+Règles :
+- menus utilisables sur mobile ;
+- tableaux adaptés ;
+- cartes empilées ;
+- boutons accessibles ;
+- textes lisibles ;
+- chat flottant responsive ;
+- POS utilisable sur tablette ;
+- production Kanban utilisable sur grand écran ;
+- formulaires simples sur mobile.
+
+
+============================================================
+41. ETAPE 38 — PERFORMANCE
+============================================================
+
+Optimiser :
+- chargement initial ;
+- lazy loading ;
+- pagination ;
+- virtualisation si gros tableaux ;
+- images ;
+- fichiers ;
+- composants lourds ;
+- dashboards ;
+- filtres ;
+- recherches ;
+- recalculs POS.
+
+Ajouter :
+- skeleton loading ;
+- empty states ;
+- error states ;
+- retry states ;
+- debounce recherche ;
+- mémoïsation si utile.
+
+Objectif :
+Application fluide, professionnelle et stable.
+
+
+============================================================
+42. ETAPE 39 — TESTS PAR PARCOURS
+============================================================
+
+Tester les parcours suivants :
+
+PARCOURS 1 — Vente complète :
+Client → Devis → Commande → BAT → Production → Livraison → Facture → Paiement.
+
+PARCOURS 2 — Production :
+Commande → Fichier → Graphiste → BAT → Impression → Façonnage → Contrôle qualité.
+
+PARCOURS 3 — Chat :
+Commande → groupe ANS Talk → fichier envoyé → accusé réception → tâche créée.
+
+PARCOURS 4 — Stock :
+POS → alerte stock → commande validée → réservation matière → sortie production.
+
+PARCOURS 5 — Finance :
+Facture → acompte → paiement partiel → reste à payer → impayé → rapport.
+
+PARCOURS 6 — RH :
+Employé → présence → avance → paie → bulletin.
+
+PARCOURS 7 — Direction :
+Données ventes → production → finance → RH → rapport mensuel → rapport annuel.
+
+Vérifier :
+- aucune route cassée ;
+- aucun bouton mort ;
+- aucun module supprimé ;
+- aucune erreur console ;
+- aucune incohérence d’unité ;
+- aucune donnée sensible visible au mauvais rôle ;
+- responsive correct ;
+- design uniforme.
+
+
+============================================================
+43. ETAPE 40 — LIVRABLE FINAL ATTENDU DE CURSOR
+============================================================
+
+À la fin, fournir :
+1. résumé clair des améliorations ;
+2. bugs corrigés ;
+3. modules renforcés ;
+4. nouveaux modules ajoutés ;
+5. composants créés ;
+6. composants modifiés ;
+7. routes touchées ;
+8. règles métier intégrées ;
+9. points restant à vérifier ;
+10. recommandations futures.
+
+Le livrable doit respecter :
+- zéro suppression non justifiée ;
+- amélioration de l’existant ;
+- code propre ;
+- TypeScript propre ;
+- design uniforme ;
+- UX simple ;
+- application plus professionnelle ;
+- logique métier imprimerie renforcée ;
+- modules connectés autour du dossier commande unique.
+
+
+============================================================
+44. RAPPEL FINAL POUR CURSOR
+============================================================
+
+Tu dois agir comme un architecte logiciel senior.
+Tu dois protéger l’existant.
+Tu dois améliorer sans supprimer.
+Tu dois ajouter les modules manquants.
+Tu dois rendre fonctionnel ce qui est décoratif.
+Tu dois connecter les modules entre eux.
+Tu dois respecter les règles métier imprimerie.
+Tu dois rendre l’interface simple, moderne et professionnelle.
+Tu dois transformer ANS ORION en vraie forteresse digitale pour une société d’imprimerie.
+
+Phrase clé :
+AMELIORER, AJOUTER, COMPLETER, CONNECTER, UNIFORMISER, SECURISER — SANS SUPPRESSION.

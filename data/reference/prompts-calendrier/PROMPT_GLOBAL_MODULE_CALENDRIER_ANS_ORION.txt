@@ -1,0 +1,798 @@
+PROMPT GLOBAL — MODULE “CALENDRIER” — TOUS LES ARTICLES CALENDRIER — ANS ORION
+
+Contexte :
+On travaille sur le POS ANS ORION, dans le module / catégorie “Calendrier”.
+Ce prompt reformule et regroupe toutes les consignes déjà données sur les calendriers, afin de corriger tous les articles calendrier de manière cohérente, propre et synchronisée.
+
+Articles concernés dans le module Calendrier :
+- Calendrier mural
+- Calendrier plateau (mural/bureau)
+- Calendrier marque-page
+- Calendrier chevalet / chevalet de bureau si présent dans Calendrier
+- Calendrier de bureau avec feuillets
+- Calendrier sous-main si présent
+- Tout autre article classé dans la catégorie Calendrier
+
+OBJECTIF GLOBAL :
+Nettoyer la configuration des calendriers, supprimer les options incohérentes, corriger les inversions entre articles, uniformiser les formats, imposer les bonnes matières/grammages, afficher partout le récapitulatif matière brute, calculer automatiquement le prix, synchroniser la base, l’admin, le stock, les devis, les commandes, les factures, la production et le cockpit.
+
+IMPORTANT :
+Ne pas corriger seulement le frontend.
+Toute correction doit être appliquée dans :
+- POS
+- Base de données
+- Admin / Back-office
+- ProductOptionGroup
+- ProductOptionValue
+- PriceFormula
+- BusinessRule
+- StockRule
+- Panier
+- Devis
+- Commande
+- Facture
+- Fiche production
+- Cockpit
+- Seeds
+- Tests
+
+============================================================
+1. AUDIT GLOBAL DU MODULE CALENDRIER
+============================================================
+
+Auditer tous les articles de la catégorie Calendrier.
+
+Vérifier :
+- les noms d’articles ;
+- les types affichés ;
+- les formats ;
+- les matières ;
+- les grammages ;
+- les options de feuillets ;
+- les options de reliure / spirale ;
+- les options d’accroche ;
+- les options de finition ;
+- les règles de prix ;
+- les règles de stock ;
+- les récapitulatifs matière brute ;
+- les snapshots devis/commande/facture ;
+- les seeds ;
+- les données cockpit.
+
+Objectif :
+Chaque article calendrier doit avoir une configuration cohérente avec son usage réel.
+
+============================================================
+2. CORRIGER LES CONFUSIONS ENTRE ARTICLES
+============================================================
+
+Il y a une confusion possible entre :
+- Calendrier plateau (mural/bureau)
+- Calendrier mural
+- Sous-main
+- Chevalet de bureau / calendrier bureau à feuillets
+
+Action obligatoire :
+Auditer et corriger les configurations mal placées.
+
+Règle :
+- Un article “Calendrier mural” doit contenir les options adaptées à un calendrier mural.
+- Un article “Calendrier plateau (mural/bureau)” doit contenir uniquement les options adaptées au plateau/calendrier rigide.
+- Un article “Sous-main” doit contenir uniquement les options sous-main.
+- Un article “Chevalet de bureau” doit gérer les feuillets, pas les formes 3D.
+- Les formes 3D comme cube, pyramide, cylindre, prisme ne doivent pas être dans Calendrier ; elles appartiennent à “Chevalet de table simple” si cet article existe ailleurs dans la POS.
+
+Ne pas dupliquer les options.
+Ne pas laisser les anciennes options dans le mauvais article.
+
+============================================================
+3. CALENDRIER PLATEAU (MURAL/BUREAU)
+============================================================
+
+Dans “Calendrier plateau (mural/bureau)” :
+
+Supprimer le bloc “Type de calendriers sous-main” si présent.
+Supprimer les options :
+- Sous-main bureau 52 feuillets
+- Sous-main bureau 12 feuillets
+- Sous-main publicitaire
+- Sous-main personnalisé
+
+Ces options ne doivent pas être dans Calendrier plateau.
+
+Formats autorisés :
+- A4
+- A4+
+- A3
+- A3+
+- A2
+- Format personnalisé uniquement si activé par admin
+
+Règle :
+- A4 minimum.
+- A2 maximum standard.
+- A3+ doit remplacer SRA3 partout.
+- Ne pas proposer A5, A6, A7 pour Calendrier plateau.
+- Ne pas proposer des petits formats inutiles.
+
+Matières :
+Les matières doivent être épaisses.
+Supprimer tous les grammages inférieurs ou égaux à 250g.
+
+Supprimer :
+- 90g
+- 115g
+- 130g
+- 135g
+- 150g
+- 170g
+- 200g
+- 250g
+
+Garder / ajouter :
+- 300g
+- 350g
+- 400g si disponible
+- 600g si réellement utilisé comme carton support
+- 700g si réellement utilisé comme carton support
+
+Matières recommandées :
+- PCM 300g, 350g
+- PCB 300g, 350g
+- Glossy 300g, 350g
+- Bristol 300g, 350g
+- Papier recyclé épais 300g, 350g
+- Carte ivoire / SBS 300g, 350g
+- Matière personnalisée uniquement si activée par admin
+
+Récapitulatif matière brute obligatoire :
+- format ;
+- dimensions ;
+- matière ;
+- grammage ;
+- quantité ;
+- surface réelle ;
+- surface brute ;
+- marge de chute si format personnalisé ;
+- prix matière ;
+- prix impression ;
+- prix finition ;
+- prix total.
+
+============================================================
+4. CALENDRIER MURAL
+============================================================
+
+Dans “Calendrier mural” :
+
+Corriger la configuration si elle a été inversée avec Calendrier plateau ou Sous-main.
+
+Options recommandées :
+- Format
+- Nombre de feuillets
+- Matière couverture/support si applicable
+- Matière des feuillets
+- Grammage des feuillets
+- Impression recto / recto-verso
+- Spirale / reliure / perforation / trou d’accroche si applicable
+- Finition
+- Quantité
+- Récapitulatif matière brute
+- Prix automatique
+
+Formats standards :
+- A4
+- A4+
+- A3
+- A3+
+- A2
+- Format personnalisé si activé par admin
+
+Règle :
+- A3+ remplace SRA3 partout.
+- Trier les formats du plus petit au plus grand.
+- Si format personnalisé : utiliser Longueur × Largeur en mm, pas de champ texte “format”.
+
+Matières :
+Selon le type de calendrier mural :
+- Pour couverture/support rigide : matière >250g recommandée.
+- Pour feuillets intérieurs : permettre grammages adaptés si l’article utilise réellement plusieurs feuilles.
+- Si l’article est un calendrier mural rigide/plateau : appliquer la règle >250g.
+- Si l’article est un calendrier mural à feuillets : séparer support/couverture et feuillets.
+
+Calcul :
+- Calculer séparément la matière du support/couverture.
+- Calculer séparément la matière des feuillets.
+- Nombre de feuillets doit impacter le prix, le stock, la production et le devis.
+- Le prix doit être automatique.
+
+============================================================
+5. CALENDRIER MARQUE-PAGE
+============================================================
+
+Dans “Calendrier Marque-page” :
+
+Supprimer complètement la matière :
+- Offset
+
+Offset ne doit plus apparaître :
+- POS ;
+- admin ;
+- base ;
+- seeds ;
+- formules prix ;
+- devis/factures nouvelles commandes ;
+- production ;
+- cockpit.
+
+Règle historique :
+Les anciens devis peuvent conserver Offset uniquement comme snapshot historique.
+Offset ne doit plus être sélectionnable dans les nouvelles ventes.
+
+Grammages :
+Supprimer tous les grammages inférieurs à 230g.
+
+Supprimer :
+- 90g
+- 115g
+- 130g
+- 135g
+- 150g
+- 170g
+- 200g
+- 220g
+- tout grammage inférieur à 230g
+
+Autoriser :
+- 230g
+- 250g
+- 300g
+- 350g
+- 400g si disponible
+
+Matières recommandées :
+- PCM 230g, 250g, 300g, 350g
+- PCB 230g, 250g, 300g, 350g
+- Bristol 230g, 250g, 300g, 350g
+- Glossy 230g, 250g, 300g, 350g
+- Carte ivoire / SBS 250g, 300g, 350g
+- Papier recyclé épais 250g, 300g, 350g
+- Papier spécial invitation 250g, 300g, 350g
+- Matière personnalisée uniquement si admin activé
+
+Formats possibles :
+- 50 × 150 mm
+- 55 × 170 mm
+- 60 × 180 mm
+- 70 × 200 mm
+- A7 si utilisé
+- DL si utilisé
+- Format personnalisé
+
+Règle :
+- Trier par surface croissante.
+- Format personnalisé doit être en dernier.
+- Pas de champ texte inutile “format” si Longueur × Largeur existent.
+
+Récapitulatif matière brute obligatoire :
+- format ;
+- dimensions ;
+- matière ;
+- grammage ;
+- impression recto/recto-verso ;
+- quantité ;
+- surface réelle ;
+- marge de chute si format personnalisé ;
+- surface brute ;
+- surface brute totale ;
+- prix matière ;
+- prix impression ;
+- prix finition ;
+- prix total.
+
+============================================================
+6. CHEVALET DE BUREAU / CALENDRIER BUREAU À FEUILLETS
+============================================================
+
+Dans “Chevalet de bureau” ou “Calendrier bureau à feuillets” :
+
+Ne pas ajouter les formes 3D.
+Ne pas afficher :
+- cube
+- pyramide
+- cylindre
+- prisme
+- toblerone
+
+Ces formes appartiennent à Chevalet de table simple, pas au calendrier de bureau.
+
+Ajouter uniquement :
+- Nombre de feuillets
+
+Champs recommandés :
+- Format
+- Matière support
+- Grammage support
+- Nombre de feuillets
+- Matière feuillets
+- Grammage feuillets
+- Impression
+- Reliure / spirale si applicable
+- Finition
+- Quantité
+- Prix automatique
+- Récapitulatif matière brute
+
+Règles :
+- Nombre de feuillets impacte matière, prix, stock et production.
+- Si recto-verso, calculer correctement feuilles/pages.
+- Calculer séparément support et feuillets.
+- Le prix doit être automatique.
+
+Calcul matière :
+- surface support = format support × quantité
+- surface feuillets = format feuillet × nombre_feuillets × quantité
+- surface brute avec marge si format personnalisé
+- stock consommé = support + feuillets
+- prix automatique = support + feuillets + impression + reliure/spirale + finition
+
+Récapitulatif :
+- Article : Chevalet de bureau / Calendrier bureau
+- Format
+- Nombre de feuillets
+- Matière support
+- Matière feuillets
+- Surface support
+- Surface feuillets
+- Surface brute totale
+- Reliure / spirale
+- Prix automatique
+- Total
+
+============================================================
+7. SOUS-MAIN / CALENDRIER SOUS-MAIN SI PRÉSENT
+============================================================
+
+Si un article “Sous-main” ou “Calendrier sous-main” existe, il doit être séparé de Calendrier plateau.
+
+Options possibles :
+- Sous-main bureau 52 feuillets
+- Sous-main bureau 12 feuillets
+- Sous-main publicitaire
+- Sous-main personnalisé
+
+Ces options doivent être uniquement dans l’article Sous-main, pas dans Calendrier plateau.
+
+Règles :
+- Format adapté au sous-main.
+- Nombre de feuillets si applicable.
+- Matière support et matière feuillets séparées.
+- Prix automatique.
+- Récapitulatif matière brute complet.
+- Stock support + feuillets.
+
+============================================================
+8. RÈGLE GLOBALE FORMATS — TOUS LES ARTICLES CALENDRIER
+============================================================
+
+Tous les formats doivent être affichés du plus petit au plus grand.
+
+Ordre recommandé :
+- A7 = 74 × 105 mm
+- A6 = 105 × 148 mm
+- A5 = 148 × 210 mm
+- A4 = 210 × 297 mm
+- A4+ = format admin configurable
+- A3 = 297 × 420 mm
+- A3+ = format admin configurable
+- A2 = 420 × 594 mm
+- A1 = 594 × 841 mm si concerné
+- A0 = 841 × 1189 mm si concerné
+- Format personnalisé / Autres
+
+Règles :
+- Trier automatiquement par surface croissante.
+- Format personnalisé toujours à la fin.
+- SRA3 ne doit jamais être affiché côté utilisateur.
+- SRA3 doit être remplacé par A3+ dans toute la POS.
+- Si la base garde une valeur technique SRA3, display_label doit être A3+.
+- Si DL ou 20×15 cm sont utilisés, les trier selon leur surface réelle.
+
+============================================================
+9. FORMAT PERSONNALISÉ — TOUS LES CALENDRIERS
+============================================================
+
+Si un calendrier utilise un format personnalisé :
+
+Supprimer le bloc inutile :
+- “Dimensions personnalisées”
+- champ texte “Format”
+- zone texte “Autres précisions : forme, contraintes de production...”
+
+Garder uniquement :
+- Longueur L en mm
+- Largeur l en mm
+
+Calcul :
+surface_reelle_m2 = L × l / 1 000 000
+
+Marge de chute matière :
+- +50 mm à gauche
+- +50 mm à droite
+- +50 mm en haut
+- +50 mm en bas
+
+Donc :
+largeur_brute_finale = l + 100 mm
+longueur_brute_finale = L + 100 mm
+
+surface_brute_m2 = longueur_brute_finale × largeur_brute_finale / 1 000 000
+surface_brute_totale_m2 = surface_brute_m2 × quantité
+
+Important :
+Cette marge +50 mm est une marge matière/chute/calage/déchet.
+Elle ne remplace pas :
+- le fond perdu ;
+- la marge de sécurité design ;
+- la tolérance machine ;
+- la marge de coupe.
+
+============================================================
+10. RÉCAPITULATIF MATIÈRE BRUTE — OBLIGATOIRE PARTOUT
+============================================================
+
+Tous les articles du module Calendrier doivent afficher un récapitulatif matière brute complet dans :
+- POS
+- Panier
+- Devis
+- Commande
+- Facture
+- Fiche production
+
+Récapitulatif minimum :
+- Article
+- Format
+- Dimensions en mm
+- Matière
+- Grammage
+- Nombre de feuillets si applicable
+- Impression recto / recto-verso
+- Quantité
+- Surface réelle unitaire
+- Marge de chute si applicable
+- Dimensions brutes si format personnalisé
+- Surface brute unitaire
+- Surface brute totale
+- Surface support si applicable
+- Surface feuillets si applicable
+- Finition
+- Prix matière
+- Prix impression
+- Prix finition/façonnage
+- Prix unitaire
+- Total
+
+Si plusieurs composants :
+Exemple calendrier bureau :
+- Support : surface, matière, grammage, prix
+- Feuillets : surface, matière, grammage, nombre, prix
+- Reliure/spirale : prix
+- Total
+
+============================================================
+11. CALCUL DE PRIX AUTOMATIQUE — TOUS LES CALENDRIERS
+============================================================
+
+Le prix doit être automatique.
+Ne pas afficher “prix à définir” comme comportement normal.
+
+Formule générale :
+prix_total =
+prix_matiere
++ prix_impression
++ prix_finition
++ prix_decoupe
++ prix_perforation
++ prix_reliure_spirale
++ prix_support
++ prix_accessoire
++ prix_calage
++ minimum_production
++ marge_commerciale
+
+Prix matière :
+prix_matiere = surface_brute_totale_m2 × prix_m2_matiere
+
+Prix impression :
+- recto : surface_reelle_totale × prix_m2_impression_recto
+- recto-verso : surface_reelle_totale × prix_m2_impression_recto_verso
+
+Pour calendriers à feuillets :
+prix_feuillets =
+surface_feuillet × nombre_feuillets × quantité × prix_m2_matiere_feuillet
++ impression_feuillets
++ façonnage_feuillets
+
+Le prix forcé manuel doit rester uniquement une option admin exceptionnelle, non obligatoire.
+
+============================================================
+12. ADMIN / BACK-OFFICE
+============================================================
+
+Créer ou corriger les configurations admin :
+
+Admin > Calendrier > Articles :
+- Calendrier mural
+- Calendrier plateau
+- Calendrier marque-page
+- Chevalet de bureau / calendrier bureau
+- Sous-main si présent
+- Activation/désactivation des options
+
+Admin > Formats :
+- formats standards
+- dimensions exactes en mm
+- ordre par surface
+- A3+ à la place de SRA3
+- format personnalisé
+- activation/désactivation par article
+
+Admin > Matières :
+- matière
+- grammage
+- prix au m²
+- stock disponible
+- seuil d’alerte
+- actif/inactif
+- article autorisé ou interdit
+
+Admin > Règles matière :
+- Calendrier plateau : >250g uniquement
+- Calendrier mural rigide : >250g recommandé
+- Calendrier marque-page : minimum 230g
+- Calendrier marque-page : Offset interdit
+- Feuillets calendrier bureau : grammage selon configuration admin
+- Support calendrier bureau : grammage épais selon configuration admin
+
+Admin > Prix :
+- prix matière
+- prix impression recto
+- prix impression recto-verso
+- prix finition
+- prix découpe
+- prix perforation
+- prix reliure / spirale
+- prix support
+- prix accessoire
+- minimum production
+- marge commerciale
+- prix forcé seulement admin
+
+============================================================
+13. BASE DE DONNÉES
+============================================================
+
+Mettre à jour ou créer les modèles/champs :
+
+CalendarProduct :
+- product_type
+- format_label
+- width_mm
+- height_mm
+- material
+- grammage
+- print_mode
+- quantity
+- number_of_sheets
+- finishing
+- is_active
+
+CalendarFormat :
+- label
+- display_label
+- technical_label
+- width_mm
+- height_mm
+- surface_m2
+- sort_order
+- is_standard
+- is_active
+
+Règle :
+- display_label = A3+
+- SRA3 ne doit pas être affiché côté utilisateur.
+
+CalendarMaterial :
+- material_name
+- grammage
+- price_m2
+- stock_m2
+- min_grammage_allowed
+- allowed_product_types
+- forbidden_product_types
+- is_active
+
+CalendarCalculationSnapshot :
+- product_type
+- format_label
+- width_mm
+- height_mm
+- material
+- grammage
+- print_mode
+- quantity
+- number_of_sheets
+- real_surface_m2
+- waste_margin_mm
+- gross_width_mm
+- gross_height_mm
+- gross_surface_m2
+- total_real_surface_m2
+- total_gross_surface_m2
+- support_surface_m2
+- sheets_surface_m2
+- material_price
+- print_price
+- finishing_price
+- binding_price
+- unit_price
+- total_price
+- formula_version
+- created_at
+
+Synchroniser avec :
+- ProductOptionGroup
+- ProductOptionValue
+- PriceFormula
+- BusinessRule
+- StockRule
+- QuoteLine
+- OrderLine
+- InvoiceLine
+- ProductionTask
+- StockMovement
+- CockpitKPI
+
+Chaque devis doit sauvegarder un snapshot complet.
+Un changement futur de prix ou de formule ne doit jamais modifier les anciens devis.
+
+============================================================
+14. STOCK
+============================================================
+
+Le stock doit être calculé avec la surface brute.
+
+Pour format standard :
+stock_consomme = surface_format × quantité
+
+Pour format personnalisé :
+stock_consomme = surface_brute × quantité
+
+Pour calendrier à feuillets :
+stock_support = surface_support × quantité
+stock_feuillets = surface_feuillet × nombre_feuillets × quantité
+stock_total = stock_support + stock_feuillets
+
+Alertes avant ajout panier :
+- matière indisponible
+- grammage interdit
+- Offset sélectionné dans Calendrier marque-page
+- stock insuffisant
+- prix matière manquant
+- prix impression manquant
+- format incompatible
+- nombre de feuillets manquant si article à feuillets
+
+============================================================
+15. PRODUCTION
+============================================================
+
+La fiche production doit afficher :
+- Article calendrier exact
+- Format
+- Dimensions en mm
+- Matière
+- Grammage
+- Nombre de feuillets si applicable
+- Quantité
+- Impression recto / recto-verso
+- Finition
+- Surface réelle
+- Surface brute
+- Stock matière consommé
+- Reliure / spirale si applicable
+- Perforation / trou d’accroche si applicable
+- Instructions production
+
+Créer les tâches selon besoin :
+- impression
+- découpe
+- pelliculage/vernis
+- perforation
+- reliure / spirale
+- assemblage feuillets
+- contrôle qualité
+- emballage / livraison
+
+============================================================
+16. COCKPIT
+============================================================
+
+Mettre à jour les KPI du module Calendrier :
+
+- ventes par article calendrier
+- CA par article calendrier
+- marge par article calendrier
+- top formats
+- top matières
+- consommation matière réelle
+- consommation matière brute
+- taux de chute
+- stock consommé support
+- stock consommé feuillets
+- alertes stock matière
+- commandes avec prix forcé exceptionnel
+- commandes sans prix automatique
+- commandes avec ancien libellé SRA3 à migrer
+- commandes avec matière interdite détectée
+- nombre moyen de feuillets pour calendriers bureau
+
+Le cockpit doit utiliser les vraies données, pas des données mockées.
+
+============================================================
+17. TESTS OBLIGATOIRES
+============================================================
+
+Créer ou mettre à jour les tests :
+
+Audit / configuration :
+- Les articles Calendrier sont bien séparés.
+- Calendrier plateau ne contient plus les types sous-main.
+- Calendrier marque-page ne contient plus Offset.
+- Chevalet de bureau contient Nombre de feuillets.
+- Chevalet de bureau n’affiche pas cube/pyramide/cylindre.
+
+Formats :
+- Les formats sont triés par surface croissante.
+- A3+ remplace SRA3 partout côté UI.
+- Format personnalisé est toujours en dernier.
+- Les champs Longueur × Largeur remplacent le champ texte inutile “format”.
+
+Matières :
+- Calendrier plateau ne propose pas de grammage ≤250g.
+- Calendrier marque-page ne propose pas de grammage <230g.
+- Offset est interdit pour Calendrier marque-page.
+- Les règles matière sont appliquées dans POS, admin et seeds.
+
+Calculs :
+- Surface réelle calculée.
+- Surface brute calculée.
+- Marge +50 mm appliquée pour format personnalisé.
+- Nombre de feuillets impacte stock et prix.
+- Prix automatique calculé.
+- Prix forcé non obligatoire.
+- Devis sauvegarde snapshot.
+- Facture reprend le calcul.
+- Production reçoit les données.
+- Cockpit mis à jour.
+
+Commandes :
+- npm run lint
+- npm run build
+- tests disponibles
+
+============================================================
+18. RÉSULTAT ATTENDU
+============================================================
+
+Après correction :
+- Tous les articles du module Calendrier sont propres et non confondus.
+- Les options sous-main ne sont plus dans Calendrier plateau.
+- Calendrier marque-page n’utilise plus Offset ni papier <230g.
+- Calendrier plateau utilise des matières épaisses >250g.
+- Chevalet de bureau possède Nombre de feuillets.
+- Les formats sont triés du plus petit au plus grand.
+- SRA3 est remplacé par A3+ partout.
+- Le récapitulatif matière brute est présent dans tous les calendriers.
+- La surface réelle, la surface brute, le stock et le prix sont calculés automatiquement.
+- Les devis, commandes, factures, production, admin, stock et cockpit sont synchronisés.

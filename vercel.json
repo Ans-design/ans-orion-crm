@@ -1,0 +1,37 @@
+{
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "node scripts/vercel-build.mjs",
+  "framework": "nextjs",
+  "regions": ["cdg1"],
+  "crons": [
+    { "path": "/api/cron/orion-daily", "schedule": "0 6 * * *" },
+    { "path": "/api/cron/devis-expiration", "schedule": "0 7 * * *" }
+  ],
+  "functions": {
+    "app/api/dashboard/stats/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/cockpit/stats/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/cockpit/material-stats/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/factures/[id]/pdf/route.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "app/api/devis/[id]/pdf/route.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "app/api/factures/[id]/send-email/route.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "app/api/devis/[id]/send-email/route.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  }
+}

@@ -1,0 +1,366 @@
+/**
+ * ANS ORION — Recherche & filtres unifiés
+ * Classes canoniques : .orion-search-field · .orion-filter-select · .orion-filter-toolbar
+ * Alias legacy : .orion-admin-table-search · .orion-material-toolbar-* · .ab2-search-input · .ab2-filter-select
+ */
+
+:root {
+  --orion-control-h: 2.5rem; /* 40px */
+  --orion-control-radius: var(--radius-control, 8px);
+  --orion-control-bg: var(--bg-card, #fff);
+  --orion-control-border: color-mix(in srgb, var(--border-soft, #e2e8f0) 92%, transparent);
+  --orion-control-border-hover: color-mix(in srgb, #64748b 35%, var(--border-soft, #e2e8f0));
+  --orion-control-focus: color-mix(in srgb, #64748b 18%, transparent);
+  --orion-control-text: var(--text-main, #0f172a);
+  --orion-control-muted: var(--text-muted, #64748b);
+  --orion-control-placeholder: color-mix(in srgb, var(--text-muted, #64748b) 78%, transparent);
+  --orion-control-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+html.dark {
+  --orion-control-bg: var(--bg-card, #0b1220);
+  --orion-control-border: rgba(255, 255, 255, 0.08);
+  --orion-control-border-hover: color-mix(in srgb, #94a3b8 40%, rgba(255, 255, 255, 0.12));
+  --orion-control-focus: color-mix(in srgb, #94a3b8 22%, transparent);
+  --orion-control-text: var(--text-main, #f1f5f9);
+  --orion-control-muted: #94a3b8;
+  --orion-control-placeholder: #64748b;
+  --orion-control-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Toolbar ligne recherche + selects ── */
+.orion-filter-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.orion-filter-toolbar > .orion-search-field,
+.orion-filter-toolbar > .orion-module-toolbar-search {
+  flex: 1 1 14rem;
+  min-width: min(100%, 12rem);
+}
+
+.orion-filter-toolbar > .orion-filter-select,
+.orion-filter-toolbar > select.orion-filter-select {
+  flex: 0 1 auto;
+}
+
+/* ── Champ recherche ── */
+.orion-search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+}
+
+.orion-search-field__icon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.95rem;
+  height: 0.95rem;
+  color: var(--orion-control-muted);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+.orion-search-field__input,
+input.orion-search-field__input {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--orion-control-h);
+  margin: 0;
+  padding: 0 2.35rem 0 2.45rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--orion-control-text);
+  background: var(--orion-control-bg);
+  border: 1px solid var(--orion-control-border);
+  border-radius: var(--orion-control-radius);
+  box-shadow: var(--orion-control-shadow);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.orion-search-field__input::placeholder {
+  color: var(--orion-control-placeholder);
+  font-weight: 450;
+}
+
+.orion-search-field__input::-webkit-search-cancel-button,
+.orion-search-field__input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.orion-search-field__input:hover {
+  border-color: var(--orion-control-border-hover);
+}
+
+.orion-search-field__input:focus,
+.orion-search-field__input:focus-visible {
+  border-color: var(--border-focus-field, color-mix(in srgb, #64748b 45%, var(--orion-control-border)));
+  box-shadow:
+    var(--orion-control-shadow),
+    var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 18%, transparent));
+}
+
+.orion-search-field__clear {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--orion-control-muted);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.orion-search-field__clear:hover {
+  background: color-mix(in srgb, var(--orion-control-muted) 14%, transparent);
+  color: var(--orion-control-text);
+}
+
+html.dark .orion-search-field__clear:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Select filtre ── */
+.orion-filter-select,
+select.orion-filter-select {
+  box-sizing: border-box;
+  height: var(--orion-control-h);
+  min-width: 9.5rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 2rem 0 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 550;
+  line-height: 1.25;
+  color: var(--orion-control-text);
+  background-color: var(--orion-control-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 0.7rem;
+  border: 1px solid var(--orion-control-border);
+  border-radius: var(--orion-control-radius);
+  box-shadow: var(--orion-control-shadow);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+html.dark .orion-filter-select,
+html.dark select.orion-filter-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+.orion-filter-select:hover {
+  border-color: var(--orion-control-border-hover);
+}
+
+.orion-filter-select:focus,
+.orion-filter-select:focus-visible {
+  border-color: var(--border-focus-field, color-mix(in srgb, #64748b 45%, var(--orion-control-border)));
+  box-shadow:
+    var(--orion-control-shadow),
+    var(--focus-ring-field, 0 0 0 2px var(--orion-control-focus));
+}
+
+.orion-filter-select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.orion-filter-select option {
+  background: var(--orion-control-bg);
+  color: var(--orion-control-text);
+}
+
+/* ── Alias legacy → même look ── */
+input.orion-admin-table-search,
+input.orion-material-toolbar-search,
+input.ab2-search-input,
+.ab2-input.ab2-search-input {
+  box-sizing: border-box !important;
+  height: var(--orion-control-h) !important;
+  min-height: var(--orion-control-h) !important;
+  padding: 0 0.85rem 0 2.45rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  color: var(--orion-control-text) !important;
+  background-color: var(--orion-control-bg) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: 0.8rem center !important;
+  background-size: 0.9rem !important;
+  border: 1px solid var(--orion-control-border) !important;
+  border-radius: var(--orion-control-radius) !important;
+  box-shadow: var(--orion-control-shadow) !important;
+  outline: none !important;
+}
+
+html.dark input.orion-admin-table-search,
+html.dark input.orion-material-toolbar-search,
+html.dark input.ab2-search-input,
+html.dark .ab2-input.ab2-search-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") !important;
+}
+
+/* Si déjà dans un wrap avec icône Lucide → pas de double icône */
+.orion-material-toolbar-search-wrap input.orion-material-toolbar-search,
+.orion-material-toolbar-search-wrap input.orion-admin-table-search {
+  background-image: none !important;
+  padding-left: 2.45rem !important;
+  padding-right: 2.2rem !important;
+}
+
+input.orion-admin-table-search:hover,
+input.orion-material-toolbar-search:hover,
+input.ab2-search-input:hover {
+  border-color: var(--orion-control-border-hover) !important;
+}
+
+input.orion-admin-table-search:focus,
+input.orion-material-toolbar-search:focus,
+input.ab2-search-input:focus {
+  border-color: var(--border-focus-field, color-mix(in srgb, #64748b 45%, var(--orion-control-border))) !important;
+  box-shadow:
+    var(--orion-control-shadow),
+    var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 18%, transparent)) !important;
+}
+
+select.orion-material-toolbar-select,
+select.ab2-filter-select,
+.ab2-input.ab2-filter-select,
+.orion-viewport select.bg-card.border.border-border,
+.orion-viewport select.rounded-lg.px-3.py-2.text-sm {
+  box-sizing: border-box !important;
+  height: var(--orion-control-h) !important;
+  min-height: var(--orion-control-h) !important;
+  min-width: 9.5rem;
+  padding: 0 2rem 0 0.85rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 550 !important;
+  color: var(--orion-control-text) !important;
+  background-color: var(--orion-control-bg) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.7rem center !important;
+  background-size: 0.7rem !important;
+  border: 1px solid var(--orion-control-border) !important;
+  border-radius: var(--orion-control-radius) !important;
+  box-shadow: var(--orion-control-shadow) !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: pointer;
+}
+
+html.dark select.orion-material-toolbar-select,
+html.dark select.ab2-filter-select,
+html.dark .ab2-input.ab2-filter-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+}
+
+select.orion-material-toolbar-select:focus,
+select.ab2-filter-select:focus {
+  border-color: var(--border-focus-field, color-mix(in srgb, #64748b 45%, var(--orion-control-border))) !important;
+  box-shadow:
+    var(--orion-control-shadow),
+    var(--focus-ring-field, 0 0 0 2px var(--orion-control-focus)) !important;
+}
+
+/* Alignement icône wrap matières */
+.orion-material-toolbar-search-icon {
+  left: 0.8rem !important;
+  width: 0.95rem !important;
+  height: 0.95rem !important;
+  color: var(--orion-control-muted) !important;
+  opacity: 0.85;
+}
+
+/* Sidebar search panel */
+.orion-sb-search-panel input[type='search'],
+.orion-sb-search-panel input[type='text'] {
+  height: var(--orion-control-h) !important;
+  border: 1px solid var(--orion-control-border) !important;
+  border-radius: var(--orion-control-radius) !important;
+  background: var(--orion-control-bg) !important;
+  box-shadow: var(--orion-control-shadow) !important;
+  font-size: 0.8125rem !important;
+}
+
+select.orion-select-field,
+.orion-select-field {
+  box-sizing: border-box !important;
+  height: var(--orion-control-h) !important;
+  min-height: var(--orion-control-h) !important;
+  min-width: 9.5rem;
+  padding: 0 2rem 0 0.85rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 550 !important;
+  color: var(--orion-control-text) !important;
+  background-color: var(--orion-control-bg) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.7rem center !important;
+  background-size: 0.7rem !important;
+  border: 1px solid var(--orion-control-border) !important;
+  border-radius: var(--orion-control-radius) !important;
+  box-shadow: var(--orion-control-shadow) !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: pointer;
+}
+
+@media (max-width: 639.98px) {
+  .orion-filter-toolbar {
+    flex-direction: column;
+  }
+
+  .orion-filter-toolbar > .orion-filter-select,
+  .orion-filter-toolbar > select.orion-filter-select,
+  .orion-filter-toolbar > select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Dark : filet visible sur contrôles (override dark-mode-no-white-borders) */
+html.dark .orion-search-field__input,
+html.dark input.orion-search-field__input,
+html.dark .orion-filter-select,
+html.dark select.orion-filter-select,
+html.dark input.orion-admin-table-search,
+html.dark input.orion-material-toolbar-search,
+html.dark input.ab2-search-input,
+html.dark select.orion-material-toolbar-select,
+html.dark select.ab2-filter-select,
+html.dark select.orion-select-field {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}

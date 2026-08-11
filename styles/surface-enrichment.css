@@ -1,0 +1,189 @@
+/**
+ * ANS ORION — Enrichissement surfaces (trames, chips, rows, groupes)
+ * Tokens source : design-tokens.css
+ */
+
+/* ── Chips / pills / filtres — 32px · pad X 12px · radius 12px ── */
+.orion-surface-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  height: 32px;
+  min-height: 32px;
+  max-height: 32px;
+  padding: 0 16px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: var(--orion-radius, 7px);
+  border: 1px solid var(--border-soft);
+  background: var(--bg-chip);
+  color: var(--text-muted);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.orion-surface-chip:hover {
+  background: var(--bg-row-hover);
+  color: var(--text-main);
+  border-color: var(--border-standard);
+}
+
+.orion-surface-chip--active {
+  background: var(--primary, #FF174D);
+  color: #fff;
+  border-color: transparent;
+}
+
+.orion-surface-chip--pill {
+  border-radius: var(--orion-radius, 7px);
+  padding: 0 16px;
+  font-size: 11px;
+  height: 32px;
+}
+
+/* ── Badges statut premium ── */
+.orion-badge-chip {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 32px;
+  min-height: 32px;
+  max-height: 32px;
+  padding: 0 16px;
+  border-radius: var(--orion-radius, 7px);
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+/* ── Lignes liste / tableau ── */
+.orion-surface-row {
+  border-radius: var(--radius-sm, 7px);
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.orion-surface-row:hover {
+  background: var(--bg-row-hover);
+}
+
+.orion-surface-row--alt {
+  background: var(--bg-row-alt);
+}
+
+.orion-surface-row--selected {
+  background: var(--bg-selected-soft);
+  border-color: color-mix(in srgb, var(--primary) 22%, transparent);
+  box-shadow: inset 2px 0 0 var(--primary);
+}
+
+/* ── Groupes / sections enveloppantes ── */
+.orion-surface-group {
+  padding: 0.75rem;
+  border-radius: var(--radius-ui, 10px);
+  border: 1px solid var(--border-soft);
+  background: var(--bg-card-soft);
+}
+
+.orion-surface-group--flush {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+/* ── Cartes douces ── */
+.orion-surface-card-soft {
+  background: var(--bg-card);
+  border: none;
+  border-radius: var(--radius-ui, 10px);
+  box-shadow: var(--shadow-card, var(--orion-shadow-sm));
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.orion-surface-card-soft:hover {
+  background: var(--bg-card);
+  box-shadow: var(--shadow-hover, var(--orion-shadow-md));
+}
+
+.dark .orion-surface-card-soft,
+.dark .orion-surface-card-soft:hover {
+  box-shadow: none;
+  background: var(--bg-card-soft);
+}
+
+.orion-surface-card-elevated {
+  background: var(--bg-card);
+  border: none;
+  border-radius: var(--radius-ui, 10px);
+  box-shadow: var(--shadow-card, var(--orion-shadow-sm));
+}
+
+.dark .orion-surface-card-elevated {
+  box-shadow: none;
+}
+
+/* ── Contexte / aside ── */
+.orion-surface-context {
+  background: var(--bg-context-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-ui, 10px);
+}
+
+/* ── Toolbar group ── */
+.orion-surface-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-ui, 10px);
+  border: 1px solid var(--border-soft);
+  background: var(--bg-card-soft);
+}
+
+/* ── Table wrapper enrichi ── */
+.orion-table-enriched {
+  overflow: hidden;
+  border-radius: var(--radius-ui, 10px);
+  border: 1px solid var(--border-soft);
+  background: var(--bg-card);
+}
+
+.orion-table-enriched thead {
+  background: var(--bg-chip);
+}
+
+.orion-table-enriched tbody tr:nth-child(even) {
+  background: var(--bg-row-alt);
+}
+
+.orion-table-enriched tbody tr:hover {
+  background: var(--bg-row-hover);
+}
+
+.orion-table-enriched tbody tr[data-state="selected"] {
+  background: var(--bg-selected-soft);
+  box-shadow: inset 2px 0 0 var(--primary);
+}
+
+/* ── États interactifs doux ── */
+.orion-hover-soft {
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.orion-hover-soft:hover {
+  background: var(--bg-row-hover);
+}
+
+.orion-active-soft {
+  background: var(--bg-active-soft);
+}
+
+.orion-selected-soft {
+  background: var(--bg-selected-soft);
+}

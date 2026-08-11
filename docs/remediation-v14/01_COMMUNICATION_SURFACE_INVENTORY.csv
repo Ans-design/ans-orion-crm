@@ -1,0 +1,9 @@
+surface_id,route,composant,source,permission,canal,p0,statut
+talk-fullscreen,/messagerie,ans-talk/*,Talk*,talk:read,in-app,—,PASS layout
+talk-fab,FAB,floating-messenger-bubble,/messagerie only,—,nav,—,PASS
+talk-api,/api/messaging/*,messaging-service,Talk*,membership,in-app,P0-12..16,FAIL
+notif-bell,/api/notifications,Notification,Notification,session,in-app,P0-01..05,FAIL
+notif-drawer,drawer,notification-drawer-service,synthétique,mixed,in-app,P0-08/35,FAIL
+ticker,/api/alerts/ticker,alert-ticker,ops,clients:read,in-app,P0-30,FAIL
+cm-client,/api/cm/notifications,ClientNotificationLog,CM,cm,external,P0-10,FAIL
+email-alerts,email-service,Resend,prefs,email,P0-05,FAIL

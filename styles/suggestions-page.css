@@ -1,0 +1,362 @@
+/* Suggestions & idées — layout 2 colonnes densifié */
+
+.suggestions-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+}
+
+.suggestions-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .suggestions-layout {
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
+
+.suggestions-composer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 92%, transparent);
+  border: none;
+  box-shadow: none;
+}
+
+@media (min-width: 900px) {
+  .suggestions-composer {
+    position: sticky;
+    top: 0.75rem;
+  }
+}
+
+.suggestions-composer__label {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.suggestions-composer input,
+.suggestions-composer textarea {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 70%, transparent);
+  padding: 0.55rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  resize: none;
+  outline: none;
+}
+
+.suggestions-composer input:focus,
+.suggestions-composer textarea:focus {
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 28%, transparent));
+}
+
+.suggestions-composer__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.suggestions-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.suggestions-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.suggestions-filter {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.28rem 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--bg-card-soft, #f1f5f9) 88%, transparent);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.suggestions-filter:hover {
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+  color: var(--text-main);
+}
+
+.suggestions-filter.is-active {
+  background: var(--primary, #cc0033);
+  color: #fff;
+}
+
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+@media (min-width: 640px) {
+  .suggestions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  /* Dans la colonne droite : 2 cartes côte à côte */
+  .suggestions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.suggestions-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  box-shadow: none;
+  min-width: 0;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.suggestions-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--primary, #cc0033) 5%, var(--bg-card-soft, #f8fafc));
+}
+
+.suggestions-card[data-status='Prioritaire'] {
+  background: color-mix(in srgb, #eab308 10%, var(--bg-card-soft, #fffbeb));
+}
+
+.suggestions-card[data-status='En étude'] {
+  background: color-mix(in srgb, #0ea5e9 9%, var(--bg-card-soft, #f0f9ff));
+}
+
+.suggestions-card[data-status='Validé'] {
+  background: color-mix(in srgb, #22c55e 9%, var(--bg-card-soft, #f0fdf4));
+}
+
+.suggestions-card[data-status='Refusé'] {
+  background: color-mix(in srgb, #ef4444 8%, var(--bg-card-soft, #fef2f2));
+}
+
+.suggestions-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.45rem;
+}
+
+.suggestions-card__icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  color: #fff;
+  background: linear-gradient(135deg, #64748b, #475569);
+}
+
+.suggestions-card__icon[data-dept='commercial'] {
+  background: linear-gradient(135deg, #cc0033, #be123c);
+}
+
+.suggestions-card__icon[data-dept='production'] {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.suggestions-card__icon[data-dept='studio'] {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.suggestions-card__icon[data-dept='equipe'] {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+.suggestions-card__title-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.suggestions-card__title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text-main);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.suggestions-pill {
+  flex-shrink: 0;
+  padding: 0.15rem 0.45rem;
+  border-radius: 9999px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--bg-app, #e2e8f0) 70%, transparent);
+  color: var(--text-muted);
+}
+
+.suggestions-pill[data-status='Prioritaire'] {
+  background: color-mix(in srgb, #eab308 22%, transparent);
+  color: #a16207;
+}
+
+.suggestions-pill[data-status='En étude'] {
+  background: color-mix(in srgb, #0ea5e9 18%, transparent);
+  color: #0369a1;
+}
+
+.suggestions-pill[data-status='Validé'] {
+  background: color-mix(in srgb, #22c55e 18%, transparent);
+  color: #15803d;
+}
+
+.suggestions-pill[data-status='Refusé'] {
+  background: color-mix(in srgb, #ef4444 16%, transparent);
+  color: #b91c1c;
+}
+
+.suggestions-card__body {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.suggestions-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.suggestions-card__meta {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.suggestions-vote {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: color-mix(in srgb, #eab308 14%, transparent);
+  color: #a16207;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.suggestions-vote:hover {
+  background: color-mix(in srgb, #eab308 24%, transparent);
+}
+
+html.dark .suggestions-composer,
+.dark .suggestions-composer,
+html.dark .suggestions-card,
+.dark .suggestions-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .suggestions-composer input,
+.dark .suggestions-composer input,
+html.dark .suggestions-composer textarea,
+.dark .suggestions-composer textarea {
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 75%, transparent);
+  color: var(--text-main);
+}
+
+html.dark .suggestions-filter,
+.dark .suggestions-filter {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 88%, transparent);
+}
+
+html.dark .suggestions-card[data-status='Prioritaire'],
+.dark .suggestions-card[data-status='Prioritaire'] {
+  background: color-mix(in srgb, #eab308 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .suggestions-card[data-status='En étude'],
+.dark .suggestions-card[data-status='En étude'] {
+  background: color-mix(in srgb, #0ea5e9 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .suggestions-card[data-status='Validé'],
+.dark .suggestions-card[data-status='Validé'] {
+  background: color-mix(in srgb, #22c55e 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .suggestions-card[data-status='Refusé'],
+.dark .suggestions-card[data-status='Refusé'] {
+  background: color-mix(in srgb, #ef4444 12%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .suggestions-pill[data-status='Prioritaire'],
+.dark .suggestions-pill[data-status='Prioritaire'] {
+  color: #fde68a;
+}
+
+html.dark .suggestions-pill[data-status='En étude'],
+.dark .suggestions-pill[data-status='En étude'] {
+  color: #7dd3fc;
+}
+
+html.dark .suggestions-pill[data-status='Validé'],
+.dark .suggestions-pill[data-status='Validé'] {
+  color: #86efac;
+}
+
+html.dark .suggestions-pill[data-status='Refusé'],
+.dark .suggestions-pill[data-status='Refusé'] {
+  color: #fca5a5;
+}
+
+html.dark .suggestions-vote,
+.dark .suggestions-vote {
+  background: color-mix(in srgb, #eab308 18%, transparent);
+  color: #fde68a;
+}

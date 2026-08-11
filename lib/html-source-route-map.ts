@@ -1,0 +1,75 @@
+/**
+ * Correspondance IDs pages HTML v29 → routes Next.js ANS ORION.
+ * Source : crm complet ans design sauf devis deja fini par les developpeur ok.html
+ */
+export const HTML_PAGE_ROUTE_MAP: Record<string, string> = {
+  cockpit: '/dashboard',
+  adm_vue: '/admin/vue',
+  devis: '/devis',
+  commandes: '/commandes',
+  clients: '/clients',
+  ventes: '/finance/ventes-directes',
+  ops: '/operations',
+  achats: '/achats',
+  charges: '/finance/charges',
+  couts_revient: '/finance/couts-revient',
+  plan_matiere: '/production/dechets',
+  machines: '/machines',
+  adm_stocks: '/stock',
+  finances: '/finance/charges',
+  autres: '/rh/absences',
+  adm_pay: '/rh/paie',
+  adm_rh: '/rh/recrutement',
+  adm_perf: '/rh/performance',
+  adm_tasks: '/planning',
+  rapports: '/rapports',
+  adm_messages: '/equipe/messages',
+  adm_suggest: '/equipe/suggestions',
+  dir_ticker: '/admin/ticker',
+  dir_annexes: '/admin/annexes',
+  ws_graphiste: '/workspace/studio',
+  ws_commercial: '/workspace/commercial',
+  ws_operateur: '/workspace/production',
+  ws_logistique: '/workspace/logistique',
+  ws_faconnage: '/workspace/faconnage',
+  ws_cm: '/workspace/cm',
+  ws_tech: '/workspace/maintenance',
+  ws_taches: '/equipe/taches',
+  ws_matos: '/rh/equipements',
+  ws_bl: '/livraisons',
+  emp_profil: '/rh/mon-profil',
+  emp_plan: '/planning',
+  emp_prod: '/planning',
+  emp_dash: '/workspace/accueil',
+  emp_messages: '/equipe/messages',
+  emp_suggest: '/equipe/suggestions',
+  pos: '/pos',
+  panier: '/panier',
+  historique: '/historique',
+  bat: '/bat',
+  production: '/production',
+  factures: '/factures',
+  paiements: '/paiements',
+  livraisons: '/livraisons',
+  reclamations: '/reclamations',
+  parametres: '/parametres',
+  admin_control: '/administration/vue-ensemble',
+};
+
+/** Rôles HTML v29 → rôles auth Next.js */
+export const HTML_ROLE_MAP: Record<string, string> = {
+  director: 'admin',
+  admin: 'admin',
+  graphiste: 'designer',
+  commercial: 'commercial',
+  operateur: 'production',
+  logistique: 'livreur',
+  faconnage: 'faconnage',
+  cm_social: 'cm',
+  technicien: 'maintenance',
+  employee: 'user',
+};
+
+export function resolveHtmlPageRoute(htmlId: string): string | null {
+  return HTML_PAGE_ROUTE_MAP[htmlId] ?? null;
+}

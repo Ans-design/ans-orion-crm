@@ -1,0 +1,801 @@
+/* Modales Matières — premium dark ANS ORION */
+
+.orion-mat-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(7, 11, 20, 0.72);
+  backdrop-filter: blur(6px);
+  animation: orion-mat-modal-fade 0.2s ease;
+}
+
+@keyframes orion-mat-modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.orion-mat-modal {
+  width: min(100%, 780px);
+  max-height: min(92vh, 880px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: #0b1220;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+  animation: orion-mat-modal-slide 0.22s ease;
+  overflow: hidden;
+}
+
+@keyframes orion-mat-modal-slide {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.orion-mat-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.orion-mat-modal-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
+}
+
+.orion-mat-modal-subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.orion-mat-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.orion-mat-modal-close:hover {
+  background: rgba(148, 163, 184, 0.1);
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+.orion-mat-modal-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.orion-mat-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(15, 23, 42, 0.65));
+}
+
+.orion-mat-summary-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.orion-mat-summary-char {
+  font-size: 0.8125rem;
+  color: #cbd5e1;
+}
+
+.orion-mat-summary-ref {
+  font-size: 0.75rem;
+  font-family: ui-monospace, monospace;
+  color: #94a3b8;
+}
+
+.orion-mat-summary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.orion-mat-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.orion-mat-chip.is-family {
+  background: rgba(148, 163, 184, 0.12);
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.orion-mat-chip.is-draft {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fcd34d;
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.orion-mat-chip.is-published {
+  background: rgba(34, 197, 94, 0.12);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.orion-mat-chip.is-unlinked {
+  background: color-mix(in srgb, var(--primary, #FF174D) 10%, transparent);
+  color: var(--primary, #FF174D);
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 22%, transparent);
+}
+
+.orion-mat-chip.is-pos-on {
+  background: rgba(34, 197, 94, 0.12);
+  color: #86efac;
+}
+
+.orion-mat-chip.is-pos-off {
+  background: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+}
+
+.orion-mat-section {
+  margin-bottom: 1.25rem;
+}
+
+.orion-mat-section-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+}
+
+.orion-mat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem 1rem;
+}
+
+@media (max-width: 640px) {
+  .orion-mat-grid { grid-template-columns: 1fr; }
+}
+
+.orion-mat-grid .span-2 { grid-column: 1 / -1; }
+
+.orion-mat-field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.orion-mat-field input,
+.orion-mat-field select,
+.orion-mat-field textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.875rem;
+  color: #f8fafc;
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 7px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.orion-mat-field input:focus,
+.orion-mat-field select:focus,
+.orion-mat-field textarea:focus {
+  outline: none;
+  border-color: rgba(225, 29, 72, 0.55);
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15);
+}
+
+.orion-mat-field input:disabled,
+.orion-mat-field select:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.orion-mat-field-hint {
+  margin-top: 0.3rem;
+  font-size: 0.6875rem;
+  color: #64748b;
+}
+
+.orion-mat-advanced-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.5rem 0;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.orion-mat-advanced-toggle:hover { color: #e2e8f0; }
+
+.orion-mat-state-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(17, 24, 39, 0.45);
+}
+
+.orion-mat-state-item label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.orion-mat-pos-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  margin-top: 0.75rem;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(17, 24, 39, 0.35);
+}
+
+.orion-mat-pos-row span {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.orion-mat-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.orion-mat-footer-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.orion-mat-btn-ghost {
+  padding: 0.55rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.orion-mat-btn-ghost:hover:not(:disabled) {
+  background: rgba(148, 163, 184, 0.08);
+  color: #f8fafc;
+}
+
+.orion-mat-btn-primary {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--cps-brand, #FF174D), #C91443);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.orion-mat-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.orion-mat-btn-primary:disabled,
+.orion-mat-btn-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.orion-mat-btn-secondary {
+  padding: 0.55rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #f8fafc;
+  background: color-mix(in srgb, var(--primary, #FF174D) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary, #FF174D) 30%, transparent);
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.orion-mat-alert {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 7px;
+  font-size: 0.75rem;
+  color: #fcd34d;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.orion-material-actions-sep {
+  height: 1px;
+  margin: 0.25rem 0.35rem;
+  background: rgba(148, 163, 184, 0.15);
+}
+
+.orion-material-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .orion-material-kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.orion-material-kpi-card {
+  border-radius: var(--radius-ui, 7px);
+  border: 1px solid transparent;
+  background: var(--bg-card, #ffffff);
+  box-shadow: var(--shadow-card-unified, var(--shadow-card));
+  padding: 0.65rem 0.85rem;
+  color: var(--text-main, #0f172a);
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.orion-material-kpi-card:hover {
+  border-color: color-mix(in srgb, var(--accent-primary, #FF174D) 35%, transparent);
+}
+
+.orion-material-kpi-card.is-warn {
+  border-color: color-mix(in srgb, #FACC15 45%, transparent);
+  background: color-mix(in srgb, #FACC15 8%, var(--bg-card, #ffffff));
+}
+
+.orion-material-kpi-card.is-active {
+  border-color: color-mix(in srgb, var(--accent-primary, #FF174D) 55%, transparent);
+  background: color-mix(in srgb, var(--accent-primary, #FF174D) 8%, var(--bg-card, #ffffff));
+}
+
+.orion-material-kpi-card strong {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-main, #0f172a);
+  font-variant-numeric: tabular-nums;
+}
+
+.orion-material-kpi-card span {
+  font-size: 0.6875rem;
+  color: var(--text-muted, #475569);
+  font-weight: 500;
+}
+
+.dark .orion-material-kpi-card {
+  background: var(--bg-card, #071021);
+  box-shadow: none;
+  border: none;
+}
+
+.dark .orion-material-kpi-card strong {
+  color: #f8fafc;
+}
+
+.dark .orion-material-kpi-card span {
+  color: #94a3b8;
+}
+
+.orion-material-nav-tabs {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border-radius: var(--radius-ui, 7px);
+  border: none;
+  background: var(--bg-card-soft, #ffffff);
+  box-shadow: var(--shadow-card-unified, var(--shadow-card));
+}
+
+.dark .orion-material-nav-tabs {
+  background: rgba(12, 16, 24, 0.45);
+  box-shadow: none;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.orion-material-nav-tabs button {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.orion-material-nav-tabs button.active,
+.orion-material-nav-tabs button:hover {
+  color: #f8fafc;
+  background: rgba(225, 29, 72, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Modale « Nouvelle matière » — SaaS clair (cobalt)
+   ═══════════════════════════════════════════════════════════ */
+
+.orion-mat-modal-overlay--saas {
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 16px;
+  animation: orion-mat-modal-fade 0.18s ease;
+}
+
+.orion-mat-modal--saas {
+  --mat-cobalt: #1d4ed8;
+  --mat-cobalt-hover: #1e40af;
+  --mat-ink: #0f172a;
+  --mat-muted: #64748b;
+  --mat-line: #e2e8f0;
+  --mat-soft: #f8fafc;
+  --mat-radius: 16px;
+  width: min(100%, 860px);
+  max-height: min(92vh, 900px);
+  border-radius: var(--mat-radius);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: #ffffff;
+  box-shadow:
+    0 4px 6px -1px rgba(15, 23, 42, 0.06),
+    0 24px 48px -12px rgba(15, 23, 42, 0.22);
+  color: var(--mat-ink);
+  animation: orion-mat-modal-slide 0.22s ease;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-header {
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--mat-line);
+  background: #ffffff;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 7px;
+  background: #eff6ff;
+  color: var(--mat-cobalt);
+  flex: none;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--mat-ink);
+  letter-spacing: -0.02em;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-subtitle {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  color: var(--mat-muted);
+  line-height: 1.45;
+  max-width: 36rem;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  border: 1px solid var(--mat-line);
+  background: #ffffff;
+  color: #475569;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-close:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: var(--mat-ink);
+  border-color: #cbd5e1;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-close:focus-visible {
+  outline: 2px solid var(--mat-cobalt);
+  outline-offset: 2px;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-body {
+  padding: 20px 24px;
+  background: #fafbfc;
+}
+
+.orion-mat-modal--saas .orion-mat-section {
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid var(--mat-line);
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.orion-mat-modal--saas .orion-mat-section:last-child {
+  margin-bottom: 0;
+}
+
+.orion-mat-modal--saas .orion-mat-section-title {
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #1e293b;
+}
+
+.orion-mat-modal--saas .orion-mat-grid {
+  gap: 16px;
+}
+
+.orion-mat-modal--saas .orion-mat-field label {
+  margin-bottom: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.orion-mat-modal--saas .orion-mat-field input,
+.orion-mat-modal--saas .orion-mat-field select,
+.orion-mat-modal--saas .orion-mat-field textarea {
+  height: 44px;
+  padding: 0 14px;
+  font-size: 0.875rem;
+  color: var(--mat-ink);
+  background: #ffffff;
+  border: 1px solid #d0d7e2;
+  border-radius: 7px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.orion-mat-modal--saas .orion-mat-field select {
+  cursor: pointer;
+}
+
+.orion-mat-modal--saas .orion-mat-field input:focus,
+.orion-mat-modal--saas .orion-mat-field select:focus,
+.orion-mat-modal--saas .orion-mat-field textarea:focus {
+  border-color: var(--mat-cobalt);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);
+}
+
+.orion-mat-modal--saas .orion-mat-field.has-error input,
+.orion-mat-modal--saas .orion-mat-field.has-error select {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.orion-mat-modal--saas .orion-mat-field-hint {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.orion-mat-modal--saas .orion-mat-field-error {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #dc2626;
+  line-height: 1.4;
+}
+
+.orion-mat-modal--saas .orion-mat-price-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.orion-mat-modal--saas .orion-mat-price-wrap input {
+  padding-right: 48px;
+}
+
+.orion-mat-modal--saas .orion-mat-price-suffix {
+  position: absolute;
+  right: 12px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.orion-mat-modal--saas .orion-mat-pos-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 7px;
+  border: 1px solid #dbeafe;
+  background: #f8fbff;
+}
+
+.orion-mat-modal--saas .orion-mat-pos-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.orion-mat-modal--saas .orion-mat-pos-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mat-ink);
+}
+
+.orion-mat-modal--saas .orion-mat-pos-help {
+  font-size: 0.75rem;
+  color: var(--mat-muted);
+  line-height: 1.4;
+}
+
+.orion-mat-modal--saas .orion-mat-modal-footer {
+  flex-shrink: 0;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--mat-line);
+  background: #ffffff;
+}
+
+.orion-mat-modal--saas .orion-mat-btn-ghost,
+.orion-mat-modal--saas .orion-mat-btn-secondary,
+.orion-mat-modal--saas .orion-mat-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 7px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.orion-mat-modal--saas .orion-mat-btn-ghost {
+  color: #334155;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
+.orion-mat-modal--saas .orion-mat-btn-ghost:hover:not(:disabled) {
+  background: #f8fafc;
+  color: var(--mat-ink);
+}
+
+.orion-mat-modal--saas .orion-mat-btn-secondary {
+  color: var(--mat-cobalt);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.orion-mat-modal--saas .orion-mat-btn-secondary:hover:not(:disabled) {
+  background: #dbeafe;
+}
+
+.orion-mat-modal--saas .orion-mat-btn-primary {
+  color: #ffffff;
+  background: var(--mat-cobalt);
+  border: 1px solid transparent;
+  box-shadow: 0 8px 18px rgba(29, 78, 216, 0.22);
+}
+
+.orion-mat-modal--saas .orion-mat-btn-primary:hover:not(:disabled) {
+  background: var(--mat-cobalt-hover);
+  filter: none;
+}
+
+.orion-mat-modal--saas .orion-mat-btn-primary:focus-visible,
+.orion-mat-modal--saas .orion-mat-btn-secondary:focus-visible,
+.orion-mat-modal--saas .orion-mat-btn-ghost:focus-visible {
+  outline: 2px solid var(--mat-cobalt);
+  outline-offset: 2px;
+}
+
+.orion-mat-modal--saas .orion-mat-btn-primary:disabled,
+.orion-mat-modal--saas .orion-mat-btn-secondary:disabled,
+.orion-mat-modal--saas .orion-mat-btn-ghost:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (max-width: 720px) {
+  .orion-mat-modal-overlay--saas {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .orion-mat-modal--saas {
+    width: 100%;
+    max-height: 100vh;
+    height: 100%;
+    border-radius: 0;
+    border: none;
+  }
+
+  .orion-mat-modal--saas .orion-mat-modal-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .orion-mat-modal--saas .orion-mat-footer-right {
+    margin-left: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .orion-mat-modal--saas .orion-mat-btn-ghost {
+    width: 100%;
+  }
+
+  .orion-mat-modal--saas .orion-mat-pos-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

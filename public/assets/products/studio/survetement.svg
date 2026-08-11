@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+<defs>
+  <linearGradient id="fab" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="55%" stop-color="#f4f4f0"/>
+    <stop offset="100%" stop-color="#e4e4de"/>
+  </linearGradient>
+  <linearGradient id="fabD" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#d8d8d2"/>
+    <stop offset="100%" stop-color="#f8f8f6"/>
+  </linearGradient>
+  <linearGradient id="brim" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#f0f0ec"/>
+    <stop offset="100%" stop-color="#d0d0c8"/>
+  </linearGradient>
+  <linearGradient id="cer" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="100%" stop-color="#e8ecf0"/>
+  </linearGradient>
+  <linearGradient id="paper" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="100%" stop-color="#f0f2f5"/>
+  </linearGradient>
+  <linearGradient id="kraft" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#dcc9a8"/>
+    <stop offset="100%" stop-color="#a08050"/>
+  </linearGradient>
+  <linearGradient id="metal" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#e8ecf0"/>
+    <stop offset="100%" stop-color="#8898a8"/>
+  </linearGradient>
+  <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/>
+  </filter>
+</defs>
+<rect width="400" height="400" fill="none"/>
+<ellipse cx="200" cy="360" rx="120" ry="14" fill="#000" opacity="0.12"/>
+<g filter="url(#sh)">
+    <!-- Survêtement veste + pantalon -->
+    <path d="M95 95 Q95 68 165 62 Q200 58 235 62 Q305 68 305 95 L328 118 L342 162 L305 175 L288 128 L288 195 L112 195 L112 128 L95 175 L58 162 L72 118 Z" fill="url(#fab)" stroke="#bbb" stroke-width="0.8"/>
+    <path d="M200 62 L200 195" fill="none" stroke="#ccc" stroke-width="0.8"/>
+    <rect x="128" y="118" width="55" height="45" rx="3" fill="#000" opacity="0.04" stroke="#ccc" stroke-dasharray="4 3"/>
+    <path d="M128 195 L128 305 L178 305 L178 195 M222 195 L222 305 L272 305 L272 195" fill="url(#fabD)" stroke="#bbb" stroke-width="0.7"/>
+    <line x1="128" y1="240" x2="272" y2="240" stroke="#ccc" stroke-width="0.6"/>
+    <rect x="215" y="128" width="48" height="38" rx="3" fill="#000" opacity="0.04" stroke="#ccc" stroke-dasharray="4 3"/>
+  </g>
+</svg>

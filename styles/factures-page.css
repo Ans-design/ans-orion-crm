@@ -1,0 +1,290 @@
+/* Facturation — grille 2 colonnes densifiée, sans filets */
+
+.factures-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+}
+
+.factures-page .orion-filter-toolbar {
+  gap: 0.45rem;
+  padding: 0.55rem 0.65rem;
+  border: none;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  box-shadow: none;
+}
+
+.factures-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.factures-filter {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--bg-app, #e2e8f0) 55%, transparent);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.factures-filter:hover {
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+  color: var(--text-main);
+}
+
+.factures-filter.is-active {
+  background: var(--primary, #cc0033);
+  color: #fff;
+}
+
+.factures-filter.is-danger.is-active {
+  background: #dc2626;
+}
+
+.factures-filter.is-warn.is-active {
+  background: #d97706;
+}
+
+.factures-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+@media (min-width: 700px) {
+  .factures-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .factures-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.facture-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  min-width: 0;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.facture-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--primary, #cc0033) 5%, var(--bg-card-soft, #f8fafc));
+}
+
+.facture-card[data-statut='Payée'] {
+  background: color-mix(in srgb, #22c55e 9%, var(--bg-card-soft, #f0fdf4));
+}
+
+.facture-card[data-statut='Partiellement payée'] {
+  background: color-mix(in srgb, #f97316 9%, var(--bg-card-soft, #fff7ed));
+}
+
+.facture-card[data-statut='Émise'] {
+  background: color-mix(in srgb, #0ea5e9 8%, var(--bg-card-soft, #f0f9ff));
+}
+
+.facture-card[data-statut='Brouillon'] {
+  background: color-mix(in srgb, #64748b 8%, var(--bg-card-soft, #f8fafc));
+}
+
+.facture-card[data-statut='Annulée'] {
+  background: color-mix(in srgb, #ef4444 7%, var(--bg-card-soft, #fef2f2));
+  opacity: 0.92;
+}
+
+.facture-card__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.facture-card__icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  color: #fff;
+  background: linear-gradient(135deg, #cc0033, #ff1e56);
+}
+
+.facture-card__icon[data-statut='Payée'] {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.facture-card__icon[data-statut='Partiellement payée'] {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.facture-card__icon[data-statut='Émise'] {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+.facture-card__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.facture-card__num-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.facture-card__num {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.facture-card__client {
+  margin-top: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.facture-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.3rem;
+}
+
+.facture-card__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--primary, #cc0033) 10%, transparent);
+  color: var(--primary, #cc0033);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.facture-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+  padding-top: 0.35rem;
+}
+
+.facture-card__amounts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.facture-card__ttc {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.facture-card__reste {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.facture-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.facture-card__date {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.facture-card__pay {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: color-mix(in srgb, #22c55e 16%, transparent);
+  color: #15803d;
+  cursor: pointer;
+}
+
+.facture-card__pay:hover {
+  background: color-mix(in srgb, #22c55e 26%, transparent);
+}
+
+html.dark .factures-page .orion-filter-toolbar,
+.dark .factures-page .orion-filter-toolbar,
+html.dark .facture-card,
+.dark .facture-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .facture-card[data-statut='Payée'],
+.dark .facture-card[data-statut='Payée'] {
+  background: color-mix(in srgb, #22c55e 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .facture-card[data-statut='Partiellement payée'],
+.dark .facture-card[data-statut='Partiellement payée'] {
+  background: color-mix(in srgb, #f97316 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .facture-card[data-statut='Émise'],
+.dark .facture-card[data-statut='Émise'] {
+  background: color-mix(in srgb, #0ea5e9 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .facture-card__reste,
+.dark .facture-card__reste {
+  color: #fca5a5;
+}
+
+html.dark .facture-card__pay,
+.dark .facture-card__pay {
+  background: color-mix(in srgb, #22c55e 18%, transparent);
+  color: #86efac;
+}
+
+html.dark .factures-filter,
+.dark .factures-filter {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 88%, transparent);
+}

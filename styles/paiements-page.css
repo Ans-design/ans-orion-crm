@@ -1,0 +1,297 @@
+/* Paiements & Acomptes — grille 2 colonnes densifiée */
+
+.paiements-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+}
+
+.paiements-page .orion-filter-toolbar {
+  gap: 0.45rem;
+  padding: 0.55rem 0.65rem;
+  border: none;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  box-shadow: none;
+}
+
+.paiements-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.paiements-filter {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--bg-app, #e2e8f0) 55%, transparent);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.paiements-filter:hover {
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+  color: var(--text-main);
+}
+
+.paiements-filter.is-active {
+  background: var(--primary, #cc0033);
+  color: #fff;
+}
+
+.paiements-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+@media (min-width: 700px) {
+  .paiements-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.paiement-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  box-shadow: none;
+  min-width: 0;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.paiement-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--primary, #cc0033) 5%, var(--bg-card-soft, #f8fafc));
+}
+
+.paiement-card[data-type='Remboursement'] {
+  background: color-mix(in srgb, #ef4444 8%, var(--bg-card-soft, #fef2f2));
+}
+
+.paiement-card[data-type='Acompte'] {
+  background: color-mix(in srgb, #0ea5e9 8%, var(--bg-card-soft, #f0f9ff));
+}
+
+.paiement-card[data-type='Solde'] {
+  background: color-mix(in srgb, #22c55e 8%, var(--bg-card-soft, #f0fdf4));
+}
+
+.paiement-card__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.paiement-card__icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  color: #fff;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.paiement-card__icon[data-mode='Espèces'] {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.paiement-card__icon[data-mode='Virement'] {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+.paiement-card__icon[data-mode='Mobile Money'] {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+}
+
+.paiement-card__icon[data-mode='Chèque'] {
+  background: linear-gradient(135deg, #eab308, #ca8a04);
+}
+
+.paiement-card__icon[data-mode='Carte'] {
+  background: linear-gradient(135deg, #cc0033, #ff1e56);
+}
+
+.paiement-card__icon[data-type='Remboursement'] {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.paiement-card__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.paiement-card__num-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.paiement-card__num {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.paiement-pill {
+  padding: 0.1rem 0.4rem;
+  border-radius: 9999px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  background: color-mix(in srgb, var(--bg-app, #e2e8f0) 70%, transparent);
+  color: var(--text-muted);
+}
+
+.paiement-pill--mode-especes {
+  background: color-mix(in srgb, #22c55e 18%, transparent);
+  color: #15803d;
+}
+
+.paiement-pill--mode-virement {
+  background: color-mix(in srgb, #0ea5e9 18%, transparent);
+  color: #0369a1;
+}
+
+.paiement-pill--mode-mobile {
+  background: color-mix(in srgb, #a855f7 16%, transparent);
+  color: #7c3aed;
+}
+
+.paiement-pill--mode-cheque {
+  background: color-mix(in srgb, #eab308 20%, transparent);
+  color: #a16207;
+}
+
+.paiement-pill--mode-carte {
+  background: color-mix(in srgb, var(--primary, #cc0033) 12%, transparent);
+  color: var(--primary, #cc0033);
+}
+
+.paiement-pill--type-acompte {
+  background: color-mix(in srgb, #0ea5e9 16%, transparent);
+  color: #0369a1;
+}
+
+.paiement-pill--type-solde {
+  background: color-mix(in srgb, #22c55e 16%, transparent);
+  color: #15803d;
+}
+
+.paiement-pill--type-remb {
+  background: color-mix(in srgb, #ef4444 16%, transparent);
+  color: #b91c1c;
+}
+
+.paiement-card__meta {
+  margin-top: 0.2rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.paiement-card__meta a {
+  color: var(--primary, #cc0033);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.paiement-card__meta a:hover {
+  text-decoration: underline;
+}
+
+.paiement-card__foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.paiement-card__amount {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.paiement-card__amount.is-in {
+  color: #15803d;
+}
+
+.paiement-card__amount.is-out {
+  color: #dc2626;
+}
+
+.paiement-card__date {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+html.dark .paiements-page .orion-filter-toolbar,
+.dark .paiements-page .orion-filter-toolbar,
+html.dark .paiement-card,
+.dark .paiement-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .paiement-card[data-type='Remboursement'],
+.dark .paiement-card[data-type='Remboursement'] {
+  background: color-mix(in srgb, #ef4444 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .paiement-card[data-type='Acompte'],
+.dark .paiement-card[data-type='Acompte'] {
+  background: color-mix(in srgb, #0ea5e9 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .paiement-card[data-type='Solde'],
+.dark .paiement-card[data-type='Solde'] {
+  background: color-mix(in srgb, #22c55e 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .paiement-card__amount.is-in,
+.dark .paiement-card__amount.is-in {
+  color: #86efac;
+}
+
+html.dark .paiement-card__amount.is-out,
+.dark .paiement-card__amount.is-out {
+  color: #fca5a5;
+}
+
+html.dark .paiements-filter,
+.dark .paiements-filter {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 88%, transparent);
+}
+
+html.dark .paiement-pill--mode-especes,
+.dark .paiement-pill--mode-especes,
+html.dark .paiement-pill--type-solde,
+.dark .paiement-pill--type-solde {
+  color: #86efac;
+}
+
+html.dark .paiement-pill--mode-virement,
+.dark .paiement-pill--mode-virement,
+html.dark .paiement-pill--type-acompte,
+.dark .paiement-pill--type-acompte {
+  color: #7dd3fc;
+}

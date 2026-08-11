@@ -1,0 +1,154 @@
+{
+  "generatedAt": "2026-06-28T06:45:36.242Z",
+  "summary": {
+    "totalTsFiles": 943,
+    "apiRoutes": 184,
+    "appPages": 82,
+    "uiComponents": 61,
+    "largeFilesOver400": 26,
+    "apisGuarded": 183,
+    "apisWithTryCatch": 138,
+    "apisWithAuth": 141,
+    "apisWithTimeout": 9,
+    "htmlRoutesMapped": 0
+  },
+  "largeFiles": [
+    {
+      "file": "lib/data/config-types.ts",
+      "lines": 4292
+    },
+    {
+      "file": "app/(app)/pos/[id]/page.tsx",
+      "lines": 1764
+    },
+    {
+      "file": "app/(app)/clients/page.tsx",
+      "lines": 1585
+    },
+    {
+      "file": "components/article-mockups.tsx",
+      "lines": 1072
+    },
+    {
+      "file": "lib/messaging/messaging-service.ts",
+      "lines": 901
+    },
+    {
+      "file": "components/ans-talk/ans-talk-app.tsx",
+      "lines": 830
+    },
+    {
+      "file": "app/login/page.tsx",
+      "lines": 692
+    },
+    {
+      "file": "app/(app)/devis/page.tsx",
+      "lines": 670
+    },
+    {
+      "file": "app/(app)/dashboard/page.tsx",
+      "lines": 644
+    },
+    {
+      "file": "components/admin/fusion-admin-panels.tsx",
+      "lines": 632
+    },
+    {
+      "file": "components/pos/pos-summary-content.tsx",
+      "lines": 609
+    },
+    {
+      "file": "lib/grand-format/bache-rules.ts",
+      "lines": 567
+    },
+    {
+      "file": "lib/services/dashboard-stats.ts",
+      "lines": 564
+    },
+    {
+      "file": "lib/production/work-order-lines.ts",
+      "lines": 539
+    },
+    {
+      "file": "lib/services/cart-service.ts",
+      "lines": 480
+    },
+    {
+      "file": "lib/grand-format/pricing.ts",
+      "lines": 477
+    },
+    {
+      "file": "app/(app)/stock/page.tsx",
+      "lines": 469
+    },
+    {
+      "file": "app/(app)/admin-control/page.tsx",
+      "lines": 464
+    },
+    {
+      "file": "app/(app)/pos/conception/page.tsx",
+      "lines": 462
+    },
+    {
+      "file": "lib/data/binding-catalog.ts",
+      "lines": 457
+    },
+    {
+      "file": "components/commandes/commande-360-view.tsx",
+      "lines": 453
+    },
+    {
+      "file": "app/(app)/commandes/page.tsx",
+      "lines": 447
+    },
+    {
+      "file": "app/(app)/rh/paie/page.tsx",
+      "lines": 434
+    },
+    {
+      "file": "app/(app)/parametres/regles/page.tsx",
+      "lines": 415
+    },
+    {
+      "file": "lib/modules/role-registry.ts",
+      "lines": 406
+    }
+  ],
+  "apisMissingGuard": [
+    "app/api/auth/[...nextauth]/route.ts"
+  ],
+  "pagesToEnhanceEmptyStates": [
+    "app/(app)/aide/page.tsx",
+    "app/(app)/clients/[id]/page.tsx",
+    "app/(app)/commandes/[id]/page.tsx",
+    "app/(app)/equipe/messages/page.tsx",
+    "app/(app)/messagerie/page.tsx",
+    "app/(app)/parametres/apparence/page.tsx",
+    "app/(app)/parametres/configuration/page.tsx",
+    "app/(app)/parametres/donnees/page.tsx",
+    "app/(app)/parametres/notifications/page.tsx",
+    "app/(app)/parametres/page.tsx",
+    "app/(app)/pos/conception/page.tsx",
+    "app/(app)/pos/[id]/page.tsx",
+    "app/(app)/studio/briefs/page.tsx",
+    "app/(app)/studio/fichiers/page.tsx",
+    "app/(app)/studio/page.tsx",
+    "app/(app)/studio/prepresse/page.tsx",
+    "app/(app)/workspace/accueil/page.tsx",
+    "app/(app)/workspace/cm/page.tsx",
+    "app/(app)/workspace/commercial/page.tsx",
+    "app/(app)/workspace/conducteur/page.tsx"
+  ],
+  "designSystem": {
+    "tokensCss": true,
+    "tokensTs": true,
+    "appUiBarrel": true,
+    "formatters": true
+  },
+  "recommendations": [
+    "Découper 26 fichier(s) > 400 lignes",
+    "Protéger 1 route(s) API (try/catch ou runApiHandler)",
+    "POS : ne pas refactoriser — sync prix via Excel",
+    "Design : utiliser AppPageHeader + orion-card sur toutes les pages"
+  ]
+}

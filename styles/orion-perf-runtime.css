@@ -1,0 +1,51 @@
+/* Perf runtime — peindre hors-écran seulement à l’approche */
+
+.dashboard-chart-card,
+.orion-kpi-saas,
+.orion-mnav-tile,
+.orion-mnav-module,
+.metier-task-card,
+.cm-campagne-card,
+.pos-section-card,
+.orion-sb-universe,
+.ans-card-premium,
+.orion-card,
+.clients-card,
+.commande-card,
+.devis-card,
+.facture-card,
+.stock-inv-card,
+.livraison-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 180px;
+}
+
+/* Conteneurs listes — isolation layout pour scroll fluide */
+.orion-viewport .orion-virtual-list,
+.orion-viewport [data-orion-virtual],
+.pos-config-scroll,
+.orion-sidebar-card,
+.orion-sb-nav-scroll {
+  contain: layout style;
+}
+
+/* Blur sticky allégé — moins de coût GPU au scroll */
+html .orion-cockpit-header {
+  backdrop-filter: saturate(1.02) blur(4px) !important;
+  -webkit-backdrop-filter: saturate(1.02) blur(4px) !important;
+}
+
+/* KPI reveal plus court = sensation plus réactive */
+.dashboard-kpi-grid > *,
+.orion-kpi-grid > *,
+.orion-kpi-strip > * {
+  animation-duration: 0.16s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-chart-card,
+  .orion-kpi-saas,
+  .pos-section-card {
+    content-visibility: visible;
+  }
+}

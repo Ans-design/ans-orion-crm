@@ -1,0 +1,499 @@
+PROMPT — GOBELET PERSONNALISÉ + RÉCAPITULATIF MATIÈRE BRUTE GLOBAL POS — ANS ORION
+
+Contexte :
+On travaille sur le POS ANS ORION, notamment l’article “Gobelet personnalisé”.
+La correction doit aussi améliorer le fonctionnement global du “récapitulatif matière brute” sur tous les articles POS, car ce récapitulatif définit la surface réelle de matière d’impression, la surface brute, les marges, les chutes, le stock, le prix et la production.
+
+Objectif :
+Le module “Gobelet personnalisé” doit calculer automatiquement la surface d’impression, le prix, les marges, le stock et le récapitulatif matière brute.
+Il ne faut pas se limiter à un simple “prix à définir”.
+Les calculs doivent être pilotés par des règles métier, des formules, des prix admin/back-office et des snapshots dans les devis/commandes/factures.
+
+IMPORTANT :
+Ne pas corriger seulement le frontend.
+Toute correction doit être synchronisée avec :
+- POS
+- Base de données
+- Admin / Back-office
+- Prix
+- Formules
+- Règles métier
+- Stock
+- Panier
+- Devis
+- Commande
+- Facture
+- Fiche production
+- Cockpit
+- Seeds
+- Tests
+
+============================================================
+1. RÈGLE GLOBALE — RÉCAPITULATIF MATIÈRE BRUTE POS
+============================================================
+
+Sur tous les articles POS, le récapitulatif matière brute doit fonctionner correctement.
+
+Le récapitulatif matière brute doit afficher les données qui définissent la surface de matière utilisée pour l’impression, le façonnage, le stock et le prix.
+
+Il doit afficher automatiquement selon l’article :
+- Dimensions client
+- Surface réelle
+- Surface d’impression
+- Surface brute
+- Marges de chute
+- Fond perdu / bleed si applicable
+- Matière
+- Quantité
+- Surface totale
+- Stock consommé
+- Base de calcul prix
+- Prix automatique
+- Finition
+- Total
+
+Le récapitulatif matière brute ne doit jamais être vide ou incohérent si un article utilise :
+- dimensions personnalisées
+- surface d’impression
+- format personnalisé
+- impression partielle
+- impression totale
+- matière imprimable
+- support avec prix au m²
+- support avec prix par format/feuille
+
+============================================================
+2. ARTICLE : GOBELET PERSONNALISÉ
+============================================================
+
+Créer ou corriger l’article POS “Gobelet personnalisé”.
+
+Champs POS obligatoires :
+- Type de gobelet
+- Contenance
+- Matière du gobelet
+- Couleur du gobelet
+- Quantité
+- Type d’impression
+- Impression totale ou impression partielle
+- Longueur de zone d’impression si impression partielle
+- Largeur / hauteur de zone d’impression si impression partielle
+- Surface d’impression calculée automatiquement
+- Finition si applicable
+- Prix automatique
+- Récapitulatif matière brute
+
+Types de gobelet possibles :
+- Gobelet carton
+- Gobelet plastique
+- Gobelet réutilisable
+- Gobelet kraft
+- Autres, avec champ détail uniquement si “Autres” est sélectionné
+
+Contenances possibles :
+- 120 ml
+- 180 ml
+- 250 ml
+- 330 ml
+- 500 ml
+- Autres, avec champ détail uniquement si “Autres” est sélectionné
+
+Types d’impression :
+- Impression partielle
+- Impression totale / full wrap
+- Impression 1 couleur
+- Impression quadri
+- Sérigraphie
+- UV
+- DTF / transfert si applicable
+- Autres, avec champ détail uniquement si “Autres” est sélectionné
+
+============================================================
+3. IMPRESSION PARTIELLE — LONGUEUR × LARGEUR OBLIGATOIRE
+============================================================
+
+Si l’utilisateur choisit “Impression partielle”, afficher obligatoirement :
+- Longueur zone impression en mm
+- Largeur / hauteur zone impression en mm
+
+Formule :
+surface_impression_partielle_m2 = longueur_zone_mm × largeur_zone_mm / 1 000 000
+
+Si quantité > 1 :
+surface_impression_partielle_totale_m2 = surface_impression_partielle_m2 × quantité
+
+Cette surface doit être calculée automatiquement et affichée dans le récapitulatif matière brute.
+
+Règle :
+Si “Impression partielle” est sélectionnée, le prix ne doit pas être manuel.
+Il doit être calculé automatiquement selon :
+- surface d’impression
+- quantité
+- type de gobelet
+- type d’impression
+- couleur d’impression
+- finition
+- minimum de production
+- prix admin/back-office
+
+============================================================
+4. IMPRESSION TOTALE / FULL WRAP
+============================================================
+
+Si l’utilisateur choisit “Impression totale / full wrap”, le système doit calculer la surface d’impression à partir du gabarit du gobelet.
+
+Deux possibilités :
+
+A. Si le gabarit du gobelet existe dans la base :
+Utiliser :
+- surface_gabarit_impression_m2
+- largeur_gabarit_mm
+- hauteur_gabarit_mm
+- coefficient_courbure si nécessaire
+
+B. Si le gabarit n’existe pas :
+Afficher une alerte :
+“Gabarit d’impression totale non défini pour cette contenance. Veuillez configurer le gabarit dans l’admin.”
+
+Ne pas laisser le prix vide.
+Si le gabarit est absent :
+- empêcher la validation automatique
+OU
+- basculer en statut “prix à valider par admin”
+Mais ne pas afficher “prix à définir” comme comportement normal.
+
+Formule possible si gabarit disponible :
+surface_impression_totale_m2 = surface_gabarit_impression_m2
+surface_impression_totale_commande_m2 = surface_gabarit_impression_m2 × quantité
+
+============================================================
+5. MARGE DE CHUTE MATIÈRE / IMPRESSION
+============================================================
+
+Pour les zones d’impression personnalisées, appliquer la marge de chute matière si l’impression utilise un film, adhésif, transfert, DTF, support imprimé ou matière consommable.
+
+Règle standard :
+- +50 mm à gauche
+- +50 mm à droite
+- +50 mm en haut
+- +50 mm en bas
+
+Donc :
+longueur_brute_zone_mm = longueur_zone_mm + 100
+largeur_brute_zone_mm = largeur_zone_mm + 100
+
+surface_brute_impression_m2 = longueur_brute_zone_mm × largeur_brute_zone_mm / 1 000 000
+surface_brute_totale_m2 = surface_brute_impression_m2 × quantité
+
+Important :
+La marge +50 mm est une marge matière / chute / calage / déchet.
+Elle ne remplace pas :
+- marge de sécurité design
+- fond perdu
+- tolérance de pose
+- marge machine
+
+Si certaines techniques de gobelet ne consomment pas une matière à plat, l’admin doit pouvoir désactiver ou adapter cette marge par technique d’impression.
+
+============================================================
+6. RÉCAPITULATIF MATIÈRE BRUTE — GOBELET
+============================================================
+
+Dans le POS, panier, devis, commande, facture et fiche production, afficher :
+
+Si impression partielle :
+- Article : Gobelet personnalisé
+- Type de gobelet
+- Contenance
+- Matière gobelet
+- Quantité
+- Type d’impression : partielle
+- Dimensions zone impression : longueur × largeur mm
+- Surface impression réelle unitaire
+- Marge de chute : +50 mm sur chaque côté si applicable
+- Dimensions brutes impression
+- Surface brute impression unitaire
+- Surface brute impression totale
+- Technique d’impression
+- Prix matière / impression
+- Prix façonnage
+- Prix unitaire
+- Total
+
+Si impression totale :
+- Article : Gobelet personnalisé
+- Type de gobelet
+- Contenance
+- Matière gobelet
+- Quantité
+- Type d’impression : totale / full wrap
+- Gabarit utilisé
+- Surface gabarit impression unitaire
+- Surface impression totale commande
+- Marge technique si applicable
+- Technique d’impression
+- Prix matière / impression
+- Prix façonnage
+- Prix unitaire
+- Total
+
+============================================================
+7. PRIX AUTOMATIQUE — PAS JUSTE “PRIX À DÉFINIR”
+============================================================
+
+Le prix du Gobelet personnalisé doit être calculé automatiquement.
+
+Créer ou corriger les formules dans l’admin/back-office.
+
+Base de prix possible :
+prix_total =
+prix_gobelet_base × quantité
++ prix_impression
++ prix_finition
++ prix_calage
++ prix_façonnage
++ prix_minimum_production
++ marge_commerciale
+
+Pour impression partielle :
+prix_impression =
+surface_brute_totale_m2 × prix_m2_technique_impression
+
+Pour impression totale :
+prix_impression =
+surface_gabarit_impression_m2 × quantité × prix_m2_technique_impression
+
+Ajouter les coefficients :
+- coefficient selon type de gobelet
+- coefficient selon contenance
+- coefficient selon technique d’impression
+- coefficient selon quantité
+- minimum de production
+- supplément urgence si applicable
+- supplément finition si applicable
+
+Le prix forcé manuel doit rester uniquement une option admin exceptionnelle, non obligatoire.
+
+============================================================
+8. ADMIN / BACK-OFFICE
+============================================================
+
+Créer ou corriger les écrans admin pour Gobelet personnalisé :
+
+Admin > Gobelets :
+- types de gobelets
+- contenances
+- matières
+- couleurs
+- stock par type / contenance / matière
+- activation / désactivation des variantes
+
+Admin > Gabarits impression gobelet :
+- type de gobelet
+- contenance
+- largeur gabarit mm
+- hauteur gabarit mm
+- surface gabarit m²
+- coefficient courbure
+- zone imprimable max
+- image ou fichier gabarit si disponible
+- statut actif/inactif
+
+Admin > Prix gobelet :
+- prix gobelet vierge par type/contenance
+- prix impression par technique
+- prix au m² impression partielle
+- prix au m² impression totale
+- minimum de production
+- prix calage
+- prix finition
+- coefficient quantité
+- marge commerciale
+- prix forcé autorisé seulement pour admin
+
+Admin > Règles métier :
+- impression partielle nécessite longueur × largeur
+- impression totale nécessite gabarit actif
+- alerte si zone partielle dépasse zone imprimable max
+- marge +50 mm activable selon technique
+- quantité minimale
+- stock insuffisant
+- prix admin manquant
+
+============================================================
+9. BASE DE DONNÉES
+============================================================
+
+Créer ou corriger les modèles ou champs :
+
+CupProduct :
+- cup_type
+- capacity_ml
+- cup_material
+- cup_color
+- is_active
+
+CupPrintTemplate :
+- cup_type
+- capacity_ml
+- template_width_mm
+- template_height_mm
+- template_surface_m2
+- curvature_coefficient
+- max_print_width_mm
+- max_print_height_mm
+- is_active
+
+CupPrintOption :
+- print_type
+- technique
+- partial_print_enabled
+- full_wrap_enabled
+- waste_margin_enabled
+- waste_margin_mm
+- price_m2
+- setup_fee
+- minimum_price
+- is_active
+
+CupCalculationSnapshot :
+- cup_type
+- capacity_ml
+- quantity
+- print_mode
+- print_zone_length_mm
+- print_zone_width_mm
+- real_print_surface_m2
+- gross_print_length_mm
+- gross_print_width_mm
+- gross_print_surface_m2
+- total_gross_print_surface_m2
+- template_id
+- template_surface_m2
+- unit_price
+- total_price
+- formula_version
+- created_at
+
+Lignes commerciales :
+- QuoteLine
+- OrderLine
+- InvoiceLine
+- ProductionTask
+
+Chaque devis doit enregistrer un snapshot complet du calcul.
+Un changement futur de formule ne doit jamais modifier les anciens devis.
+
+============================================================
+10. STOCK
+============================================================
+
+Le stock doit gérer :
+- stock gobelet vierge
+- stock matière d’impression si applicable
+- stock film / transfert / consommable si applicable
+- quantité commandée
+- surface brute consommée
+- pertes / chute
+
+Avant ajout panier, afficher une alerte si :
+- gobelet indisponible
+- contenance indisponible
+- matière indisponible
+- technique d’impression indisponible
+- gabarit absent pour impression totale
+- surface d’impression partielle dépasse la zone max
+- stock insuffisant
+- prix admin manquant
+
+============================================================
+11. PRODUCTION
+============================================================
+
+La fiche production doit afficher :
+- type de gobelet
+- contenance
+- matière/couleur
+- quantité
+- type d’impression
+- technique d’impression
+- dimensions zone impression si partielle
+- gabarit si impression totale
+- surface impression
+- surface brute
+- consommables nécessaires
+- finition
+- instructions de production
+- statut validation gabarit
+
+Pour impression totale sans gabarit :
+- créer une tâche “Validation gabarit requise”
+- ne pas envoyer directement en production automatique
+
+============================================================
+12. COCKPIT
+============================================================
+
+Mettre à jour les KPI :
+- nombre de gobelets personnalisés vendus
+- CA gobelets
+- marge gobelets
+- consommation gobelets vierges
+- consommation surface impression
+- top contenances
+- top techniques d’impression
+- commandes sans gabarit
+- commandes avec prix forcé exceptionnel
+- alertes stock gobelets
+- alertes prix admin manquant
+
+Le cockpit doit utiliser les données réelles issues des commandes, pas des données mockées.
+
+============================================================
+13. TESTS OBLIGATOIRES
+============================================================
+
+Créer ou mettre à jour les tests :
+
+Gobelet personnalisé :
+- Impression partielle affiche longueur × largeur.
+- Surface partielle est calculée automatiquement.
+- Marge +50 mm est appliquée si technique concernée.
+- Surface brute apparaît dans le récapitulatif matière.
+- Prix automatique est calculé.
+- Prix forcé n’est pas obligatoire.
+- Impression totale utilise le gabarit.
+- Impression totale sans gabarit affiche une alerte.
+- Zone partielle dépassant le maximum affiche une alerte.
+- Devis sauvegarde le snapshot complet.
+- Facture reprend les calculs.
+- Production affiche les données.
+- Stock est vérifié.
+- Cockpit est mis à jour.
+
+Récapitulatif matière brute global POS :
+- Aucun article à dimension personnalisée ne doit avoir un récapitulatif vide.
+- Surface réelle calculée.
+- Surface brute calculée.
+- Marge affichée.
+- Quantité appliquée.
+- Prix automatique cohérent.
+- Stock consommé cohérent.
+
+Commandes :
+- npm run lint
+- npm run build
+- tests disponibles
+
+============================================================
+14. RÉSULTAT ATTENDU
+============================================================
+
+Après correction :
+- Le Gobelet personnalisé calcule automatiquement la surface d’impression.
+- En impression partielle, longueur × largeur sont obligatoires et calculés dans le récapitulatif.
+- En impression totale, le système utilise un gabarit admin.
+- Le prix est automatique, basé sur les formules et le back-office.
+- Le prix forcé n’est plus une obligation normale.
+- Le récapitulatif matière brute fonctionne sur tous les articles POS.
+- Le stock, les devis, les factures, la production, l’admin et le cockpit sont synchronisés.

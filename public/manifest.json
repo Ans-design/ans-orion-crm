@@ -1,0 +1,15 @@
+{
+  "name": "ANS ORION — Print Studio ERP",
+  "short_name": "ORION",
+  "description": "ERP/CRM imprimerie grand format — ANS Design Madagascar",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#E11D48",
+  "lang": "fr",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "any", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/branding/ans-logo-mark-rounded.png", "sizes": "any", "type": "image/png", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,151 @@
+/**
+ * Polish chrome / KPI inspirÃ© HTML v29 â€” sans changer le flow mÃ©tier.
+ * Radius ORION 7px. Blur sticky soft (pas opaque plat).
+ */
+
+/* â”€â”€ Header sticky : verre lÃ©ger (clair) â”€â”€ */
+html:not(.dark) .orion-cockpit-header {
+  background: rgba(255, 255, 255, 0.86) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85) !important;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.03) !important;
+  backdrop-filter: saturate(1.15) blur(14px) !important;
+  -webkit-backdrop-filter: saturate(1.15) blur(14px) !important;
+  border-bottom-left-radius: 7px !important;
+  border-bottom-right-radius: 7px !important;
+}
+
+html.dark .orion-cockpit-header {
+  background: rgba(5, 12, 24, 0.82) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: saturate(1.1) blur(14px) !important;
+  -webkit-backdrop-filter: saturate(1.1) blur(14px) !important;
+  border-bottom-left-radius: 7px !important;
+  border-bottom-right-radius: 7px !important;
+}
+
+/* Recherche header â€” focus brand */
+html:not(.dark) .cockpit-search {
+  border-radius: 7px !important;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+html:not(.dark) .cockpit-search:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+html:not(.dark) .cockpit-search:focus-within {
+  border-color: color-mix(in srgb, var(--brand-primary, #FF174D) 55%, #e2e8f0);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary, #FF174D) 12%, transparent);
+}
+
+/* Boutons icÃ´nes header â€” 7px + hover scale doux */
+html:not(.dark) .orion-cockpit-header > div button.p-2,
+html:not(.dark) .orion-header-icon-btn,
+html.dark .orion-cockpit-header > div button.p-2,
+html.dark .orion-header-icon-btn {
+  border-radius: 7px !important;
+  transition: transform 0.14s ease, background 0.14s ease, color 0.14s ease;
+}
+
+html:not(.dark) .orion-header-icon-btn:hover,
+html.dark .orion-header-icon-btn:hover {
+  transform: scale(1.04);
+}
+
+/* Badge notif â€” contraste v29 */
+.orion-notif-pulse {
+  box-shadow: 0 0 0 2px #fff;
+}
+
+html.dark .orion-notif-pulse {
+  box-shadow: 0 0 0 2px #050c18;
+}
+
+/* â”€â”€ KPI cards â€” lift + stagger (v29 .sc) â”€â”€ */
+@keyframes orionKpiReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dashboard-kpi-grid > *,
+.orion-kpi-grid > *,
+.orion-kpi-strip > * {
+  animation: orionKpiReveal 0.38s ease both;
+}
+
+.dashboard-kpi-grid > *:nth-child(1),
+.orion-kpi-grid > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+.dashboard-kpi-grid > *:nth-child(2),
+.orion-kpi-grid > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.dashboard-kpi-grid > *:nth-child(3),
+.orion-kpi-grid > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.dashboard-kpi-grid > *:nth-child(4),
+.orion-kpi-grid > *:nth-child(4) {
+  animation-delay: 0.16s;
+}
+.dashboard-kpi-grid > *:nth-child(5),
+.orion-kpi-grid > *:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.dashboard-kpi-grid > *:nth-child(6),
+.orion-kpi-grid > *:nth-child(6) {
+  animation-delay: 0.24s;
+}
+
+html:not(.dark) .orion-kpi-saas {
+  border-radius: 7px !important;
+  transition:
+    transform 0.18s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.18s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+html:not(.dark) .orion-kpi-saas:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.1), 0 2px 4px rgba(15, 23, 42, 0.04) !important;
+}
+
+html.dark .orion-kpi-saas {
+  border-radius: 7px !important;
+  transition:
+    transform 0.18s cubic-bezier(0.25, 0.8, 0.25, 1),
+    background 0.18s ease !important;
+}
+
+html.dark .orion-kpi-saas:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* Ticker bas — styles complets dans styles/alert-ticker.css (carte flottante = sidebar-card) */
+/* legacy hook conservé */
+[data-alert-ticker].orion-alert-ticker {
+  /* neutralise ancien full-bleed v29 si encore référencé */
+  border-top: none;
+}
+
+.alert-ticker-brand {
+  /* deprecated — remplacé par .orion-alert-ticker__brand */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-kpi-grid > *,
+  .orion-kpi-grid > *,
+  .orion-kpi-strip > *,
+  .orion-kpi-saas,
+  .orion-header-icon-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}

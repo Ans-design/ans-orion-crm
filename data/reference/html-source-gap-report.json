@@ -1,0 +1,392 @@
+{
+  "source": "e:\\C\\Telegram Desktop\\1\\crm complet ans design sauf devis deja fini par les developpeur ok.html",
+  "analyzedAt": "2026-06-27T19:46:49.213Z",
+  "stats": {
+    "htmlPages": 20,
+    "navRoles": 10,
+    "navIds": 40,
+    "matricules": 18,
+    "mappedRoutes": 39,
+    "unmappedNavIds": 1,
+    "brokenMappings": 0
+  },
+  "navsByRole": {
+    "director": [
+      "cockpit",
+      "adm_vue",
+      "devis",
+      "commandes",
+      "clients",
+      "ventes",
+      "ops",
+      "achats",
+      "charges",
+      "couts_revient",
+      "plan_matiere",
+      "machines",
+      "adm_stocks",
+      "finances",
+      "autres",
+      "adm_pay",
+      "adm_rh",
+      "adm_perf",
+      "adm_tasks",
+      "rapports",
+      "adm_messages",
+      "adm_suggest",
+      "dir_ticker",
+      "dir_annexes"
+    ],
+    "admin": [
+      "adm_vue",
+      "adm_tasks",
+      "commandes",
+      "ops",
+      "machines",
+      "plan_matiere",
+      "adm_stocks",
+      "achats",
+      "adm_rh",
+      "adm_pay",
+      "adm_perf",
+      "autres",
+      "adm_messages",
+      "adm_suggest"
+    ],
+    "graphiste": [
+      "ws_graphiste",
+      "emp_profil",
+      "ws_taches",
+      "clients",
+      "ws_matos",
+      "emp_plan",
+      "emp_messages",
+      "emp_suggest"
+    ],
+    "commercial": [
+      "ws_commercial",
+      "emp_profil",
+      "devis",
+      "commandes",
+      "clients",
+      "ventes",
+      "emp_messages",
+      "emp_suggest"
+    ],
+    "operateur": [
+      "ws_operateur",
+      "ws_taches",
+      "emp_plan",
+      "emp_profil",
+      "machines",
+      "adm_stocks",
+      "adm_tasks",
+      "emp_messages",
+      "emp_suggest"
+    ],
+    "logistique": [
+      "ws_logistique",
+      "ws_taches",
+      "emp_profil",
+      "commandes",
+      "ws_bl",
+      "emp_messages",
+      "emp_suggest"
+    ],
+    "faconnage": [
+      "ws_faconnage",
+      "ws_taches",
+      "emp_plan",
+      "emp_profil",
+      "machines",
+      "adm_stocks",
+      "emp_messages",
+      "emp_suggest"
+    ],
+    "cm_social": [
+      "ws_cm",
+      "emp_profil",
+      "commandes",
+      "clients",
+      "emp_messages",
+      "emp_suggest"
+    ],
+    "technicien": [
+      "ws_tech",
+      "emp_profil",
+      "machines",
+      "adm_stocks",
+      "emp_messages",
+      "emp_suggest"
+    ],
+    "employee": [
+      "emp_dash",
+      "emp_prod",
+      "emp_plan",
+      "emp_profil",
+      "emp_messages",
+      "emp_suggest"
+    ]
+  },
+  "htmlPages": [
+    "COCKPIT DIRECTEUR",
+    "OPS",
+    "VENTES",
+    "FINANCES & TRÉSORERIE",
+    "PRÉSENCES & CONGÉS",
+    "MACHINES",
+    "EMP SUGGESTIONS",
+    "EMP MESSAGES",
+    "ADMIN SUGGESTIONS",
+    "ADMIN MESSAGES",
+    "EMP DASHBOARD",
+    "EMP PROD",
+    "EMP PLANNING",
+    "EMP PROFIL",
+    "ADM VUE",
+    "ADM TASKS (GANTT AMÉLIORÉ)",
+    "ADM STOCKS",
+    "ADM PERF",
+    "GESTION ALERTES / TICKER",
+    "SITE INSTITUTIONNEL ANS"
+  ],
+  "matricules": [
+    "ADM01",
+    "ADM02",
+    "ADMIN",
+    "CM01",
+    "DIR01",
+    "DIR02",
+    "DIRECTEUR",
+    "EMP01",
+    "EMP02",
+    "EMP03",
+    "EMP04",
+    "EMP05",
+    "EMP06",
+    "EMP07",
+    "EMP08",
+    "EMP09",
+    "FAC01",
+    "TECH01"
+  ],
+  "roleMapping": {
+    "director": "admin",
+    "admin": "admin",
+    "graphiste": "designer",
+    "commercial": "commercial",
+    "operateur": "production",
+    "logistique": "livreur",
+    "faconnage": "faconnage",
+    "cm_social": "cm",
+    "technicien": "maintenance",
+    "employee": "user"
+  },
+  "routeMapping": [
+    {
+      "htmlId": "cockpit",
+      "route": "/dashboard",
+      "exists": true
+    },
+    {
+      "htmlId": "adm_vue",
+      "route": "/admin/vue",
+      "exists": true
+    },
+    {
+      "htmlId": "devis",
+      "route": "/devis",
+      "exists": true
+    },
+    {
+      "htmlId": "commandes",
+      "route": "/commandes",
+      "exists": true
+    },
+    {
+      "htmlId": "clients",
+      "route": "/clients",
+      "exists": true
+    },
+    {
+      "htmlId": "ventes",
+      "route": "/finance/ventes-directes",
+      "exists": true
+    },
+    {
+      "htmlId": "ops",
+      "route": "/operations",
+      "exists": true
+    },
+    {
+      "htmlId": "achats",
+      "route": "/achats",
+      "exists": true
+    },
+    {
+      "htmlId": "charges",
+      "route": "/finance/charges",
+      "exists": true
+    },
+    {
+      "htmlId": "couts_revient",
+      "route": "/finance/couts-revient",
+      "exists": true
+    },
+    {
+      "htmlId": "plan_matiere",
+      "route": "/production/dechets",
+      "exists": true
+    },
+    {
+      "htmlId": "machines",
+      "route": "/machines",
+      "exists": true
+    },
+    {
+      "htmlId": "adm_stocks",
+      "route": "/stock",
+      "exists": true
+    },
+    {
+      "htmlId": "finances",
+      "route": "/finance/charges",
+      "exists": true
+    },
+    {
+      "htmlId": "autres",
+      "route": "/rh/absences",
+      "exists": true
+    },
+    {
+      "htmlId": "adm_pay",
+      "route": "/rh/paie",
+      "exists": true
+    },
+    {
+      "htmlId": "adm_rh",
+      "route": "/rh/recrutement",
+      "exists": true
+    },
+    {
+      "htmlId": "adm_perf",
+      "route": "/rh/performance",
+      "exists": true
+    },
+    {
+      "htmlId": "adm_tasks",
+      "route": "/planning",
+      "exists": true
+    },
+    {
+      "htmlId": "rapports",
+      "route": "/rapports",
+      "exists": true
+    },
+    {
+      "htmlId": "adm_messages",
+      "route": "/equipe/messages",
+      "exists": true
+    },
+    {
+      "htmlId": "adm_suggest",
+      "route": "/equipe/suggestions",
+      "exists": true
+    },
+    {
+      "htmlId": "dir_ticker",
+      "route": "/admin/ticker",
+      "exists": true
+    },
+    {
+      "htmlId": "dir_annexes",
+      "route": "/admin/annexes",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_graphiste",
+      "route": "/workspace/studio",
+      "exists": true
+    },
+    {
+      "htmlId": "emp_profil",
+      "route": "/rh/mon-profil",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_taches",
+      "route": "/equipe/taches",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_matos",
+      "route": "/rh/equipements",
+      "exists": true
+    },
+    {
+      "htmlId": "emp_plan",
+      "route": "/planning",
+      "exists": true
+    },
+    {
+      "htmlId": "emp_messages",
+      "route": "/equipe/messages",
+      "exists": true
+    },
+    {
+      "htmlId": "emp_suggest",
+      "route": "/equipe/suggestions",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_commercial",
+      "route": "/workspace/commercial",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_operateur",
+      "route": "/workspace/production",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_logistique",
+      "route": "/workspace/logistique",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_bl",
+      "route": "/livraisons",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_faconnage",
+      "route": "/workspace/faconnage",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_cm",
+      "route": "/workspace/cm",
+      "exists": true
+    },
+    {
+      "htmlId": "ws_tech",
+      "route": "/workspace/maintenance",
+      "exists": true
+    },
+    {
+      "htmlId": "emp_dash",
+      "route": "/workspace/accueil",
+      "exists": true
+    }
+  ],
+  "unmappedNavIds": [
+    "emp_prod"
+  ],
+  "missingNextRoutes": [],
+  "recommendations": [
+    "Créer ou mapper 1 IDs NAV non reliés à Next.js",
+    "Routes mappées présentes dans app/",
+    "POS et devis : préserver l'existant, corriger prix/articles via sync:pos-prices",
+    "Seed équipe v29 : npm run seed:production (ORION_V29_ACCOUNTS déjà intégrés)"
+  ]
+}

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ANS ORION — Audit &amp; analyse complète — 30 juil. 2026</title>
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --card: #fff;
+    --text: #18243e;
+    --muted: #5c6578;
+    --border: #dde1ea;
+    --crit: #b91c1c;
+    --crit-bg: #fef2f2;
+    --maj: #c2410c;
+    --maj-bg: #fff7ed;
+    --min: #a16207;
+    --min-bg: #fefce8;
+    --ok: #15803d;
+    --ok-bg: #f0fdf4;
+    --info: #1d4ed8;
+    --info-bg: #eff6ff;
+    --brand: #cc0033;
+    --radius: 7px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 14px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 64px; }
+  header.hero {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 22px;
+    margin-bottom: 20px;
+  }
+  header.hero h1 { margin: 0 0 8px; font-size: 26px; letter-spacing: -0.02em; }
+  header.hero .meta { color: var(--muted); font-size: 13px; }
+  header.hero .brand { color: var(--brand); font-weight: 800; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin: 18px 0 0;
+  }
+  .stat {
+    background: var(--bg);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+  .stat b { display: block; font-size: 20px; }
+  .stat span { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  nav.toc h2 { margin: 0 0 10px; font-size: 14px; }
+  nav.toc ol { margin: 0; padding-left: 20px; }
+  nav.toc a { color: var(--info); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+  section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  section h2 { margin: 0 0 12px; font-size: 18px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  section h3 { margin: 18px 0 8px; font-size: 15px; }
+  p, li { color: var(--text); }
+  .muted { color: var(--muted); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--bg); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  .sev {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .sev-c { background: var(--crit-bg); color: var(--crit); }
+  .sev-m { background: var(--maj-bg); color: var(--maj); }
+  .sev-n { background: var(--min-bg); color: var(--min); }
+  .sev-o { background: var(--ok-bg); color: var(--ok); }
+  .sev-i { background: var(--info-bg); color: var(--info); }
+  code, .path {
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 12px;
+    background: var(--bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .callout {
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin: 12px 0;
+    border: 1px solid var(--border);
+  }
+  .callout.crit { background: var(--crit-bg); border-color: #fecaca; }
+  .callout.maj { background: var(--maj-bg); border-color: #fed7aa; }
+  .callout.ok { background: var(--ok-bg); border-color: #bbf7d0; }
+  .callout.info { background: var(--info-bg); border-color: #bfdbfe; }
+  ul.compact li { margin-bottom: 4px; }
+  footer {
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+  }
+  @media print {
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    section, header.hero, nav.toc { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="brand">ANS DESIGN PRINT · ORION</div>
+  <h1>Audit &amp; analyse complète du projet</h1>
+  <p class="meta">
+    Date : <strong>30 juillet 2026</strong> · Workspace :
+    <span class="path">2em-export-complet-UNIQUE</span> · Stack : Next.js 14.2.28 · Prisma 6.19 · TypeScript<br />
+    Périmètre : structure, architecture, sécurité, bugs, perf, design, sync, navigation, dette technique.<br />
+    Méthode : analyse statique du code, registries, docs, APIs, schéma Prisma, patterns UI (lecture seule).
+  </p>
+  <div class="stats">
+    <div class="stat"><b>~84</b><span>Modules registry</span></div>
+    <div class="stat"><b>136</b><span>Pages app</span></div>
+    <div class="stat"><b>394</b><span>Routes API</span></div>
+    <div class="stat"><b>155</b><span>Modèles Prisma</span></div>
+    <div class="stat"><b>~308</b><span>Tests unitaires</span></div>
+    <div class="stat"><b>~2 500</b><span>Fichiers source*</span></div>
+  </div>
+  <p class="muted" style="margin:10px 0 0;font-size:12px">* app + components + lib + docs + tests (hors node_modules)</p>
+</header>
+
+<nav class="toc">
+  <h2>Sommaire</h2>
+  <ol>
+    <li><a href="#exec">Synthèse exécutive</a></li>
+    <li><a href="#forces">Points forts</a></li>
+    <li><a href="#critique">Anomalies critiques &amp; majeures</a></li>
+    <li><a href="#structure">Structure &amp; architecture</a></li>
+    <li><a href="#securite">Sécurité &amp; accès</a></li>
+    <li><a href="#bugs">Bugs &amp; dysfonctionnements</a></li>
+    <li><a href="#sync">Données, sync &amp; source de vérité</a></li>
+    <li><a href="#perf">Performance &amp; optimisation</a></li>
+    <li><a href="#design">Design system &amp; UX</a></li>
+    <li><a href="#nav">Navigation &amp; redondances</a></li>
+    <li><a href="#deps">Dépendances &amp; outillage</a></li>
+    <li><a href="#plan">Plan d’action priorisé</a></li>
+  </ol>
+</nav>
+
+<section id="exec">
+  <h2>1. Synthèse exécutive</h2>
+  <div class="callout maj">
+    <strong>Verdict :</strong> plateforme métier mature et large (CRM → devis → BAT → commande → GPAO → stock → facture),
+    avec hub commande et Centre sync en place, mais <strong>dette structurelle concentrée</strong> sur :
+    (1) secrets / comptes démo en clair, (2) double vérité catalogue/prix (TS vs DB),
+    (3) permissions API inégales, (4) triple pile UI Administration, (5) dépendances lourdes inutilisées.
+  </div>
+  <table>
+    <thead><tr><th>Indicateur</th><th>État</th><th>Commentaire</th></tr></thead>
+    <tbody>
+      <tr><td>Prêt démo locale</td><td><span class="sev sev-o">Bon</span></td><td>Shell, macros Admin, POS, planning, estimation-temps opérationnels</td></tr>
+      <tr><td>Prêt production sécurisée</td><td><span class="sev sev-m">Attention</span></td><td>Secrets locaux, setup-db, page-access RH incomplet</td></tr>
+      <tr><td>Source de vérité prix</td><td><span class="sev sev-m">Partiel</span></td><td>Gate PRIX 2026 OK ; grilles TS encore présentes</td></tr>
+      <tr><td>Qualité tests</td><td><span class="sev sev-o">Solide</span></td><td>~308 tests ; focus pricing / auth / stock</td></tr>
+      <tr><td>Maintenabilité Admin</td><td><span class="sev sev-m">Fragile</span></td><td>admin / administration / backoffice-v2 en parallèle</td></tr>
+      <tr><td>Design Soft UI 7px</td><td><span class="sev sev-n">Inégal</span></td><td>Tokens présents ; écarts rounded-full / piles CSS</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="forces">
+  <h2>2. Points forts (à conserver)</h2>
+  <ul class="compact">
+    <li><strong>Règle zéro suppression</strong> respectée via redirects / alias (<span class="path">middleware.ts</span>, <span class="path">next.config.js</span>, pages legacy).</li>
+    <li><strong>Hub commande 360</strong> : <span class="path">commande-360-service.ts</span>, <span class="path">CommandeIntegrationHub</span>, deep-links <code>?commande=</code>.</li>
+    <li><strong>Registries centralisés</strong> : <span class="path">module-registry.ts</span>, <span class="path">role-registry.ts</span>, <span class="path">admin-macro-modules.ts</span> + <span class="path">data/admin-nav-config.json</span>.</li>
+    <li><strong>Centre sync / drift</strong> : <span class="path">sync-drift-service.ts</span> (catalogue, pricing, paiements, formules).</li>
+    <li><strong>Lazy-load</strong> shell : CommandPalette / messagerie dynamic, panels backoffice lazy.</li>
+    <li><strong>Estimation temps</strong> : templates par famille article + UI pleine largeur (<span class="path">/administration/estimation-temps</span>).</li>
+    <li><strong>Docs canoniques</strong> : ARCHITECTURE, FLOW_GLOBAL, MODULES_MAP, SYNC_MATRIX, USER_JOURNEYS.</li>
+  </ul>
+</section>
+
+<section id="critique">
+  <h2>3. Anomalies critiques &amp; majeures</h2>
+
+  <h3>Critiques</h3>
+  <table>
+    <thead><tr><th>ID</th><th>Problème</th><th>Preuve</th><th>Impact</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="sev sev-c">C1</span></td>
+        <td>Fichiers <code>.env*</code> et backups secrets sur disque</td>
+        <td><span class="path">.env.local</span>, <span class="path">.env.integrations</span>, <span class="path">.env.backup-*</span> (×6)</td>
+        <td>Fuite si ZIP / cloud / copie machine</td>
+        <td>Ne jamais exporter ; rotation secrets ; purger backups</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-c">C2</span></td>
+        <td>Mots de passe démo en clair dans le code</td>
+        <td><span class="path">lib/dev-accounts.ts</span> (<code>johndoe123</code>, <code>Demo2026!</code>) ; fallback <code>ADM01</code> dans <span class="path">lib/local-auth.ts</span></td>
+        <td>Compte admin si DEMO_MODE / local mal isolé</td>
+        <td>Env-only ; retirer literals ; forcer secrets forts en prod</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-c">C3</span></td>
+        <td><code>/api/setup-db</code> public (préfixe exact)</td>
+        <td><span class="path">middleware.ts</span> PUBLIC_API_EXACT</td>
+        <td>Init DB si secret faible / flag ouvert</td>
+        <td>Désactiver en prod ; secret fort ; IP allowlist si besoin</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Majeures</h3>
+  <table>
+    <thead><tr><th>ID</th><th>Problème</th><th>Preuve</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="sev sev-m">M1</span></td>
+        <td>Double vérité catalogue / prix</td>
+        <td><span class="path">lib/data/catalogue.ts</span> (~114 articles) + <code>ArticlePricingProfile</code> ; grilles <span class="path">lib/data/prix-2026-grids/*</span>, <span class="path">conception.ts</span> (prix en dur)</td>
+        <td>Runtime = DB publiée uniquement ; TS = seed/archive ; suivre drift</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-m">M2</span></td>
+        <td>~168 APIs sans <code>requirePermission</code> local</td>
+        <td>Scan routes vs 226 protégées explicitement</td>
+        <td>Audit mutations <code>/api/admin*</code> ; fail-closed rôle</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-m">M3</span></td>
+        <td><span class="path">page-access.ts</span> incomplet</td>
+        <td>RH absences / performance / annonces / équipements non listés ; stock / caisse / messagerie à clarifier</td>
+        <td>Aligner sur role-registry + permissions</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-m">M4</span></td>
+        <td>Triple pile UI Admin</td>
+        <td><span class="path">components/admin</span> (~96) · <span class="path">administration</span> (~49) · <span class="path">backoffice-v2</span> (~84)</td>
+        <td>Fusion progressive ; 1 workspace canonique par domaine</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-m">M5</span></td>
+        <td>Prisma 155 modèles / multi-prix</td>
+        <td>Schéma ~3500 L ; <code>SalePrice2026</code> legacy + profils + SystemConfig JSON</td>
+        <td>Cartographie « canon vs legacy » ; plan migration</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-m">M6</span></td>
+        <td>Catch vides masquant erreurs UI</td>
+        <td><span class="path">paiements/page.tsx</span>, <span class="path">production/page.tsx</span>, <span class="path">TarifsLegacyGrid.tsx</span></td>
+        <td>uxToast / ErrorState ; ne jamais avaler le réseau</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-m">M7</span></td>
+        <td>Densité <code>any</code> (~93) finance / POS / sync</td>
+        <td><span class="path">event-pricing-sync.service.ts</span>, <span class="path">pos/[id]/page.tsx</span>, <span class="path">factures</span>, <span class="path">paiements</span></td>
+        <td>Typer DTOs API ; supprimer <code>as any</code></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="structure">
+  <h2>4. Structure &amp; architecture</h2>
+  <h3>Organisation</h3>
+  <table>
+    <thead><tr><th>Zone</th><th>Volume</th><th>Rôle</th></tr></thead>
+    <tbody>
+      <tr><td><span class="path">app/</span></td><td>~549 fichiers</td><td>App Router : pages + 394 APIs</td></tr>
+      <tr><td><span class="path">components/</span></td><td>~551</td><td>UI métier (POS, Admin, layout, commandes…)</td></tr>
+      <tr><td><span class="path">lib/</span></td><td>~911</td><td>Services, pricing, flow, auth, registries</td></tr>
+      <tr><td><span class="path">prisma/</span></td><td>schéma 155 models</td><td>Source de vérité données</td></tr>
+      <tr><td><span class="path">docs/</span></td><td>~242 fichiers</td><td>Canoniques + audits historiques (bruit)</td></tr>
+      <tr><td><span class="path">tests/</span></td><td>~309</td><td>Vitest — pricing, auth, stock, sync</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Chaîne métier (conforme FLOW_GLOBAL)</h3>
+  <p class="muted">Client → Devis → BAT → Commande → GPAO → Stock → Production → CQ → Livraison → Facture → Paiement</p>
+  <div class="callout info">
+    Deux couches « next action » existent : <span class="path">lib/flow/next-action.ts</span> (générique) et
+    <span class="path">lib/commande/order-next-action.ts</span> (hub). Risque mineur de messages divergents si fallback générique.
+    <strong>Recommandation :</strong> hub commande = seule source pour <code>entity: 'commande'</code>.
+  </div>
+
+  <h3>Pollution racine</h3>
+  <ul class="compact">
+    <li>~47 fichiers <code>AUDIT_*.md</code> à la racine + nombreux scripts / logs → signal/bruit.</li>
+    <li><span class="path">docs/SECURITY.md</span> trop court (~25 L) face à la surface réelle.</li>
+    <li><strong>Action :</strong> index <span class="path">docs/README.md</span> ; archiver audits hors chemin opérationnel.</li>
+  </ul>
+</section>
+
+<section id="securite">
+  <h2>5. Sécurité &amp; accès</h2>
+  <div class="callout ok">
+    <strong>Positif :</strong> middleware JWT large, rate-limit auth, headers sécurité, CSP Report-Only,
+    redirects non-autorisés, BAT client tokenisé, cron derrière <code>CRON_SECRET</code>.
+  </div>
+  <ul class="compact">
+    <li><strong>Public API</strong> : <code>/api/auth</code>, <code>/api/bat/client</code>, <code>/api/setup-db</code>, <code>/api/auth/setup-status</code>.</li>
+    <li><strong>Pages sensibles</strong> protégées partiellement : <code>/administration</code>, <code>/rh/paie</code>, finance…</li>
+    <li><strong>Gaps page-access</strong> : plusieurs écrans RH et ops accessibles à tout utilisateur connecté si la page existe.</li>
+    <li><strong>Signup / demo</strong> : vérifier <code>DEMO_MODE</code>, <code>ALLOW_PUBLIC_SIGNUP</code>, <code>ALLOW_SETUP_DB</code> en prod Hostinger.</li>
+    <li><strong>ZIP précédent</strong> : l’archive « ANS PROJET PRES FINAL TEST 50 » peut contenir des <code>.env*</code> — traiter comme compromis potentiel et rotator.</li>
+  </ul>
+</section>
+
+<section id="bugs">
+  <h2>6. Bugs &amp; dysfonctionnements (observés / risques)</h2>
+  <table>
+    <thead><tr><th>Sévérité</th><th>Symptôme</th><th>Cause probable</th><th>Où</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="sev sev-m">Majeur</span></td>
+        <td>Listes vides sans message d’erreur</td>
+        <td><code>catch {}</code> silencieux</td>
+        <td>Paiements, Production, TarifsLegacyGrid</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-m">Majeur</span></td>
+        <td>Prix / articles incohérents entre POS et Admin</td>
+        <td>Catalogue TS + profils DB + grilles 2026</td>
+        <td>sync-drift, catalogue.ts, prix-2026-grids</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-n">Mineur</span></td>
+        <td>Écrans Admin « introuvables » dans la sidebar</td>
+        <td>~29 pages hors micro-items macros (via CPS / redirects)</td>
+        <td>administration/*</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-n">Mineur</span></td>
+        <td>Menu profil header doublonné (corrigé récem.)</td>
+        <td>LateArrivalGate / app-shell vs sidebar</td>
+        <td>Corrigé : compte dans sidebar uniquement</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-n">Mineur</span></td>
+        <td>Articles Temps &amp; capacités à 0 op. (corrigé)</td>
+        <td>Seed partiel vs catalogue DB</td>
+        <td>Templates famille + ensureRatesForArticles</td>
+      </tr>
+      <tr>
+        <td><span class="sev sev-i">Info</span></td>
+        <td>Peu de TODO/FIXME dans le code</td>
+        <td>~0 marqueurs métier ; dette non taguée</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="sync">
+  <h2>7. Données, sync &amp; source de vérité</h2>
+  <p>Règle projet : <strong>Backoffice configure → DB stocke → Modules consomment</strong>.</p>
+  <table>
+    <thead><tr><th>Domaine</th><th>Source attendue</th><th>Écart actuel</th></tr></thead>
+    <tbody>
+      <tr><td>Articles / prix vente</td><td>ArticlePricingProfile + publication</td><td>CATALOGUE TS + grilles 2026 encore actives en seed/legacy</td></tr>
+      <tr><td>Matières / stock</td><td>BaseMaterial + stock DB</td><td>Globalement aligné ; drift outillé</td></tr>
+      <tr><td>Formules</td><td>Formules &amp; moteurs (CPS)</td><td>OK macro sidebar ; alias Formules &amp; règles fusionnés</td></tr>
+      <tr><td>Flux / délais</td><td>production-flux + estimation-temps (SystemConfig)</td><td>OK ; templates auto par famille</td></tr>
+      <tr><td>Paiements</td><td>vérité paiement (drift service)</td><td>Surveiller alertes Centre sync</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Centre sync UI : <span class="path">/administration/synchronisation</span> (à garder visible / documenté dans le parcours Production).</p>
+</section>
+
+<section id="perf">
+  <h2>8. Performance &amp; optimisation</h2>
+  <table>
+    <thead><tr><th>Sujet</th><th>Constat</th><th>Reco</th></tr></thead>
+    <tbody>
+      <tr><td>Boot modules</td><td>Lazy-load shell / backoffice — bon</td><td>Maintenir ; éviter import panels lourds dans sidebar</td></tr>
+      <tr><td>Polling</td><td>Dashboard 45s · badges 150–180s · alert-ticker 90s · Talk backoff</td><td>OK global ; éviter &lt;5s hors timers UI</td></tr>
+      <tr><td>useEffect</td><td>~423 ; peu sans deps ; 4 eslint-disable exhaustive-deps</td><td>Revoir devis / clients / Materials / use-pos-server-price</td></tr>
+      <tr><td>Listes</td><td>Règle projet : pagination &gt;50, virtualisation &gt;60</td><td>Vérifier écrans stock / commandes / catalogue longs</td></tr>
+      <tr><td>Bundle</td><td>Deps Plotly, Chart.js, maplibre, formik, jotai, zustand, swr, lodash, dayjs, yup ~0 usage</td><td><strong>Purger</strong> → install &amp; audit plus légers</td></tr>
+      <tr><td>Charts</td><td>recharts utilisé ; Plotly/Chart.js orphelins</td><td>Retirer orphelins</td></tr>
+      <tr><td>Toolchain</td><td>next 14 vs eslint-config-next 15 / SWC wasm 13</td><td>Aligner versions</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="design">
+  <h2>9. Design system &amp; UX</h2>
+  <ul class="compact">
+    <li><strong>Canon :</strong> rouge <code>#cc0033</code>, vif <code>#ff1e56</code>, jaune <code>#eab308</code>, radius <strong>7px</strong>, Soft UI.</li>
+    <li><strong>Écarts :</strong> présence de <code>rounded-full</code> / <code>rounded-xl</code> hors design system ; gradients ponctuels (ex. anciens boutons Admin).</li>
+    <li><strong>Triple CSS Admin</strong> (admin / administration / backoffice-v2) → styles et patterns divergents.</li>
+    <li><strong>UX récente positive :</strong> menu compte dans sidebar (plus de doublon header) ; Temps &amp; capacités pleine largeur 2 colonnes.</li>
+    <li><strong>Accessibilité :</strong> labels / focus-ring partiels ; à renforcer sur formulaires POS et modales Admin.</li>
+    <li><strong>États vides / erreur :</strong> encore hétérogènes (certains catch silencieux = vide trompeur).</li>
+  </ul>
+</section>
+
+<section id="nav">
+  <h2>10. Navigation &amp; redondances</h2>
+  <h3>Macros Administration (sidebar)</h3>
+  <ol>
+    <li>Vue d’ensemble</li>
+    <li>Matières</li>
+    <li>Articles finis</li>
+    <li>Formules &amp; moteurs</li>
+    <li>Production &amp; Flux</li>
+    <li>Temps &amp; capacités</li>
+    <li>Organisation</li>
+  </ol>
+  <ul class="compact">
+    <li>~41 pages admin vs ~17 hrefs macro → beaucoup d’écrans « profonds » via CPS uniquement.</li>
+    <li>Alias legacy nombreux (volontaire) : charge mentale pour nouveaux développeurs.</li>
+    <li><span class="path">/parametres</span> recentré Mon compte (bonne direction) ; config métier = Admin uniquement.</li>
+  </ul>
+</section>
+
+<section id="deps">
+  <h2>11. Dépendances &amp; outillage</h2>
+  <div class="callout maj">
+    <strong>Purge recommandée (poids install / surface attaque) :</strong>
+    formik, yup, jotai, zustand, swr, chart.js, react-chartjs-2, plotly.js, react-plotly.js,
+    maplibre-gl, lodash, dayjs, gray-matter, react-use, webpack (si inutilisé runtime).
+  </div>
+  <ul class="compact">
+    <li>Garder : React Query, RHF+zod, date-fns, sonner/hot-toast (choisir <strong>une</strong> lib toast), recharts.</li>
+    <li>Scripts <code>deploy</code> / <code>vercel --prod</code> : risque ops — garder validation humaine (règle projet).</li>
+    <li>TypeScript 5.2 un peu ancien ; monter progressivement.</li>
+  </ul>
+</section>
+
+<section id="plan">
+  <h2>12. Plan d’action priorisé</h2>
+  <table>
+    <thead><tr><th>Prio</th><th>Action</th><th>Effort</th><th>Gain</th></tr></thead>
+    <tbody>
+      <tr><td><span class="sev sev-c">P0</span></td><td>Purger / rotator secrets ; env-only pour comptes démo ; verrouiller setup-db</td><td>0,5–1 j</td><td>Sécurité</td></tr>
+      <tr><td><span class="sev sev-c">P0</span></td><td>Remplacer catch vides paiements / production / tarifs</td><td>0,5 j</td><td>Fiabilité UX</td></tr>
+      <tr><td><span class="sev sev-m">P1</span></td><td>Audit requirePermission sur APIs admin* mutations</td><td>2–3 j</td><td>AuthZ</td></tr>
+      <tr><td><span class="sev sev-m">P1</span></td><td>Étendre page-access (RH + modules sensibles)</td><td>1 j</td><td>AuthZ</td></tr>
+      <tr><td><span class="sev sev-m">P1</span></td><td>Interdire montants runtime hors DB ; TS = seed</td><td>3–5 j</td><td>Vérité prix</td></tr>
+      <tr><td><span class="sev sev-m">P1</span></td><td>Typer finance / POS / event-pricing-sync</td><td>2–4 j</td><td>Bugs latents</td></tr>
+      <tr><td><span class="sev sev-n">P2</span></td><td>Fusion progressive piles Admin UI</td><td>1–2 sem.</td><td>Maintenabilité</td></tr>
+      <tr><td><span class="sev sev-n">P2</span></td><td>Purge deps mortes + alignement Next/eslint</td><td>1–2 j</td><td>Perf / CI</td></tr>
+      <tr><td><span class="sev sev-n">P2</span></td><td>Uniformiser radius 7px ; retirer rounded-full parasites</td><td>1–2 j</td><td>Design</td></tr>
+      <tr><td><span class="sev sev-i">P3</span></td><td>Archiver AUDIT_*.md ; enrichir SECURITY.md</td><td>0,5 j</td><td>Clarté</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Score global indicatif</h3>
+  <table>
+    <thead><tr><th>Axe</th><th>/10</th></tr></thead>
+    <tbody>
+      <tr><td>Couverture fonctionnelle métier</td><td><strong>8,5</strong></td></tr>
+      <tr><td>Cohérence architecture / hub</td><td><strong>7,5</strong></td></tr>
+      <tr><td>Source de vérité prix/catalogue</td><td><strong>5,5</strong></td></tr>
+      <tr><td>Sécurité production</td><td><strong>5,0</strong></td></tr>
+      <tr><td>Qualité code / typage</td><td><strong>6,0</strong></td></tr>
+      <tr><td>Performance perçue</td><td><strong>7,0</strong></td></tr>
+      <tr><td>Design system homogène</td><td><strong>6,5</strong></td></tr>
+      <tr><td>Maintenabilité Admin</td><td><strong>5,0</strong></td></tr>
+      <tr><td><strong>Moyenne pondérée (prod-ready)</strong></td><td><strong>~6,2 / 10</strong></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  ANS ORION — Audit généré le 30/07/2026 · Fichier téléchargeable ·
+  Ne pas inclure ce rapport dans un ZIP contenant des <code>.env</code> ·
+  Imprimer via Ctrl+P → « Enregistrer au format PDF » si besoin.
+</footer>
+
+</div>
+</body>
+</html>

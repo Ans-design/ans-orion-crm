@@ -1,0 +1,213 @@
+/**
+ * ANS ORION — Dropdown / Select / Menus (dark cohérent)
+ * Fond nuit · selected rouge sombre · hover subtil · pas de bleu clair
+ */
+
+:root {
+  --dropdown-bg: #ffffff;
+  --dropdown-bg-elevated: #ffffff;
+  --dropdown-text: #0f172a;
+  --dropdown-text-muted: #64748b;
+  --dropdown-border: #e2e8f0;
+  --dropdown-hover: #f1f5f9;
+  --dropdown-selected: rgba(255, 23, 77, 0.1);
+  --dropdown-selected-border: rgba(255, 23, 77, 0.28);
+  --dropdown-selected-fg: #C91443;
+  --dropdown-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  --dropdown-radius: var(--radius-ui, 12px);
+}
+
+.dark,
+html.dark {
+  color-scheme: dark;
+
+  --dropdown-bg: #0A1022;
+  --dropdown-bg-elevated: #0C1328;
+  --dropdown-text: #e8eefc;
+  --dropdown-text-muted: #a9b4d0;
+  --dropdown-border: rgba(255, 255, 255, 0.08);
+  --dropdown-hover: rgba(255, 255, 255, 0.04);
+  --dropdown-selected: rgba(255, 23, 77, 0.22);
+  --dropdown-selected-border: rgba(255, 23, 77, 0.35);
+  --dropdown-selected-fg: #ffffff;
+  --dropdown-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  /* shadcn tokens — bleu nuit ultra sombre */
+  --popover: 226 55% 8%;
+  --popover-foreground: 220 60% 95%;
+  --accent: 222 48% 12%;
+  --accent-foreground: 220 60% 95%;
+}
+
+/* ── Surfaces popover / menus Radix ── */
+.dark .bg-popover,
+html.dark .bg-popover {
+  background-color: var(--dropdown-bg) !important;
+  color: var(--dropdown-text) !important;
+  border-color: var(--dropdown-border) !important;
+}
+
+.dark [data-radix-popper-content-wrapper] > *,
+.dark [data-radix-select-content],
+.dark [data-radix-dropdown-menu-content],
+.dark [data-radix-context-menu-content],
+.dark [data-radix-popover-content],
+.dark [data-radix-menubar-content],
+.dark [role='listbox'],
+.dark [role='menu'] {
+  background-color: var(--dropdown-bg) !important;
+  color: var(--dropdown-text) !important;
+  border-color: var(--dropdown-border) !important;
+  border-radius: var(--dropdown-radius) !important;
+  box-shadow: var(--dropdown-shadow) !important;
+}
+
+/* Items — défaut */
+.dark [role='option'],
+.dark [role='menuitem'],
+.dark [role='menuitemcheckbox'],
+.dark [role='menuitemradio'],
+.dark [cmdk-item] {
+  color: var(--dropdown-text) !important;
+  border-radius: var(--orion-radius, 7px);
+}
+
+/* Hover subtil (pas de fond clair) */
+.dark [role='option']:hover:not([data-disabled]):not([data-highlighted]):not([aria-selected='true']),
+.dark [role='menuitem']:hover:not([data-disabled]):not([data-highlighted]),
+.dark [role='menuitemcheckbox']:hover:not([data-disabled]):not([data-highlighted]),
+.dark [role='menuitemradio']:hover:not([data-disabled]):not([data-highlighted]) {
+  background-color: var(--dropdown-hover) !important;
+  color: var(--dropdown-text) !important;
+}
+
+/* Highlight / focus / selected — rouge sombre premium */
+.dark [role='option'][data-highlighted],
+.dark [role='option']:focus,
+.dark [role='option'][aria-selected='true'],
+.dark [role='option'][data-state='checked'],
+.dark [role='menuitem'][data-highlighted],
+.dark [role='menuitem']:focus,
+.dark [role='menuitem'][data-state='open'],
+.dark [role='menuitemcheckbox'][data-highlighted],
+.dark [role='menuitemcheckbox']:focus,
+.dark [role='menuitemradio'][data-highlighted],
+.dark [role='menuitemradio']:focus,
+.dark [role='menuitemradio'][data-state='checked'],
+.dark [cmdk-item][data-selected='true'],
+.dark [cmdk-item][aria-selected='true'] {
+  background-color: var(--dropdown-selected) !important;
+  color: var(--dropdown-selected-fg, #ffffff) !important;
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--dropdown-selected-border);
+}
+
+/* Highlight / selected — mode clair (rouge soft, pas bleu navigateur) */
+html:not(.dark) [role='option'][data-highlighted],
+html:not(.dark) [role='option']:focus,
+html:not(.dark) [role='option'][aria-selected='true'],
+html:not(.dark) [role='option'][data-state='checked'],
+html:not(.dark) [role='menuitem'][data-highlighted],
+html:not(.dark) [role='menuitem']:focus,
+html:not(.dark) [role='menuitem'][data-state='open'],
+html:not(.dark) [cmdk-item][data-selected='true'],
+html:not(.dark) [cmdk-item][aria-selected='true'] {
+  background-color: var(--dropdown-selected) !important;
+  color: var(--dropdown-selected-fg, #C91443) !important;
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--dropdown-selected-border);
+}
+
+.dark [role='option'][data-disabled],
+.dark [role='menuitem'][data-disabled],
+.dark [cmdk-item][data-disabled='true'] {
+  color: var(--dropdown-text-muted) !important;
+  opacity: 0.45;
+}
+
+/* ── Select natif (filtres Admin / CPS / ab2) ── */
+.dark select,
+html.dark select,
+.dark .ab2-input,
+.dark .ab2-filter-select,
+.dark .cps-input,
+.dark .orion-material-toolbar-select,
+.cps-theme.dark select,
+.dark .cps-theme select {
+  color-scheme: dark;
+  background-color: var(--dropdown-bg-elevated) !important;
+  color: var(--dropdown-text) !important;
+  border-color: var(--dropdown-border) !important;
+}
+
+.dark select:focus,
+.dark .ab2-filter-select:focus,
+.dark .ab2-input:focus {
+  border-color: var(--border-focus-field, color-mix(in srgb, #94a3b8 40%, transparent)) !important;
+  outline: none;
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #94a3b8 32%, transparent));
+}
+
+.dark select:disabled,
+.dark .ab2-filter-select:disabled {
+  background-color: #07101c !important;
+  color: var(--dropdown-text-muted) !important;
+  opacity: 1;
+}
+
+.dark select option,
+html.dark select option,
+.dark .ab2-input option,
+.dark .ab2-filter-select option,
+.dark .orion-material-toolbar-select option,
+.dark .mp-row-menu-panel option {
+  background-color: #0A1022 !important;
+  color: #e8eefc !important;
+}
+
+.dark select option:checked,
+.dark select option:hover,
+.dark .ab2-filter-select option:checked,
+.dark .ab2-filter-select option:hover {
+  background-color: #2a1220 !important;
+  color: #ffffff !important;
+}
+
+/* Panels menus custom (matériaux / actions) */
+.dark .orion-material-columns-panel,
+.dark .mp-row-menu-panel,
+.dark .mp-row-menu-panel.is-portal,
+.dark .orion-material-new-menu-panel,
+.dark .ab2-shell .orion-material-columns-panel,
+.dark .ab2-shell .mp-row-menu-panel.is-portal,
+.dark .ab2-shell .orion-material-new-menu-panel {
+  background: var(--dropdown-bg) !important;
+  border-color: var(--dropdown-border) !important;
+  color: var(--dropdown-text) !important;
+  box-shadow: var(--dropdown-shadow) !important;
+  border-radius: var(--dropdown-radius);
+}
+
+.dark .mp-row-menu-item:hover,
+.dark .orion-material-columns-preset:hover,
+.dark .orion-material-columns-check:hover {
+  background: var(--dropdown-hover) !important;
+  color: var(--dropdown-text) !important;
+}
+
+.dark .mp-row-menu-item:focus,
+.dark .orion-material-columns-preset.is-active,
+.dark .orion-material-columns-preset:focus {
+  background: var(--dropdown-selected) !important;
+  color: #ffffff !important;
+}
+
+/* CPS scoped (force dark même si tokens hérités) */
+.dark .cps-theme select,
+.dark .cps-theme select option,
+.cps-theme.cps-theme--force-dark select,
+.cps-theme.cps-theme--force-dark select option {
+  background-color: #0A1022 !important;
+  color: #e8eefc !important;
+  color-scheme: dark;
+}

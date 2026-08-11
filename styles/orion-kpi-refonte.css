@@ -1,0 +1,250 @@
+﻿/**
+ * ANS ORION — Refonte KPI / cockpit (après Tailwind)
+ * Compact · pastels · zéro cadre · tons distincts
+ */
+
+html body .orion-viewport :is(
+  .orion-kpi-saas,
+  .orion-ds-metric,
+  .cps-kpi-card
+),
+html body .orion-kpi-saas,
+html body .orion-ds-metric {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-height: 4.35rem !important;
+  max-height: none !important;
+  height: auto !important;
+  padding: 0.7rem 0.85rem !important;
+  border: none !important;
+  border-radius: var(--radius-card, 7px) !important;
+  overflow: hidden !important;
+  text-align: left !important;
+  box-shadow: none !important;
+  transition:
+    transform 0.18s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.18s ease,
+    background 0.18s ease !important;
+}
+
+/* Anciennes utilitaires Tailwind encore présentes sur certains bundles */
+html body .orion-kpi-saas.p-5,
+html body .orion-ds-metric.p-5 {
+  padding: 0.7rem 0.85rem !important;
+}
+
+html body .orion-kpi-saas.min-h-\[120px\],
+html body .orion-ds-metric.min-h-\[120px\],
+html body .orion-kpi-saas.h-full,
+html body .orion-ds-metric.h-full {
+  min-height: 4.35rem !important;
+  height: auto !important;
+}
+
+html:not(.dark) body .orion-viewport :is(.orion-kpi-saas, .orion-ds-metric, .cps-kpi-card),
+html:not(.dark) body .orion-kpi-saas {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.03),
+    0 8px 20px -14px rgba(15, 23, 42, 0.18) !important;
+}
+
+html body .orion-viewport :is(.orion-kpi-saas, .orion-ds-metric):hover,
+html body .orion-kpi-saas:hover {
+  transform: translateY(-1px) !important;
+}
+
+html:not(.dark) body .orion-kpi-saas:hover {
+  box-shadow:
+    0 2px 4px rgba(15, 23, 42, 0.04),
+    0 12px 28px -14px rgba(15, 23, 42, 0.22) !important;
+}
+
+/* Liseré tonal uni (pas de dégradé) */
+html body .orion-kpi-saas::before,
+html body .orion-ds-metric::before,
+html body .cps-kpi-card::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 0.8rem !important;
+  right: 0.8rem !important;
+  top: 0 !important;
+  height: 2px !important;
+  border-radius: 9999px !important;
+  opacity: 0.9 !important;
+  z-index: 1 !important;
+  background: var(--brand-primary, #cc0033) !important;
+  background-image: none !important;
+}
+
+html body .orion-kpi-tint-success::before { background: #10b981 !important; background-image: none !important; }
+html body .orion-kpi-tint-gold::before { background: #f59e0b !important; background-image: none !important; }
+html body .orion-kpi-tint-info::before { background: #2563eb !important; background-image: none !important; }
+html body .orion-kpi-tint-danger::before { background: #ef4444 !important; background-image: none !important; }
+html body .orion-kpi-tint-neutral::before { background: #64748b !important; background-image: none !important; }
+html body .orion-kpi-tint-brand::before { background: var(--brand-primary, #cc0033) !important; background-image: none !important; }
+
+/* Pastels unis (pas de dégradé) — sélecteurs alignés sur light-saas-premium */
+html:not(.dark) body :is(.orion-kpi-saas, .orion-ds-metric, .cps-kpi-card).orion-kpi-tint-brand {
+  background: #fff5f8 !important;
+  background-image: none !important;
+}
+html:not(.dark) body :is(.orion-kpi-saas, .orion-ds-metric, .cps-kpi-card).orion-kpi-tint-success {
+  background: #f0fdf4 !important;
+  background-image: none !important;
+}
+html:not(.dark) body :is(.orion-kpi-saas, .orion-ds-metric, .cps-kpi-card).orion-kpi-tint-gold {
+  background: #fffbeb !important;
+  background-image: none !important;
+}
+html:not(.dark) body :is(.orion-kpi-saas, .orion-ds-metric, .cps-kpi-card).orion-kpi-tint-info {
+  background: #f0f9ff !important;
+  background-image: none !important;
+}
+html:not(.dark) body :is(.orion-kpi-saas, .orion-ds-metric, .cps-kpi-card).orion-kpi-tint-danger {
+  background: #fff1f2 !important;
+  background-image: none !important;
+}
+html:not(.dark) body :is(.orion-kpi-saas, .orion-ds-metric, .cps-kpi-card).orion-kpi-tint-neutral {
+  background: #f8fafc !important;
+  background-image: none !important;
+}
+
+html.dark body .orion-kpi-saas,
+html.dark body .orion-ds-metric {
+  box-shadow: none !important;
+}
+html.dark body :is(.orion-kpi-saas, .orion-ds-metric).orion-kpi-tint-brand {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 88%, #ff1e56 12%) !important;
+  background-image: none !important;
+}
+html.dark body :is(.orion-kpi-saas, .orion-ds-metric).orion-kpi-tint-success {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 90%, #10b981 10%) !important;
+  background-image: none !important;
+}
+html.dark body :is(.orion-kpi-saas, .orion-ds-metric).orion-kpi-tint-gold {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 88%, #f59e0b 12%) !important;
+  background-image: none !important;
+}
+html.dark body :is(.orion-kpi-saas, .orion-ds-metric).orion-kpi-tint-info {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 88%, #2563eb 12%) !important;
+  background-image: none !important;
+}
+html.dark body :is(.orion-kpi-saas, .orion-ds-metric).orion-kpi-tint-danger {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 88%, #ef4444 12%) !important;
+  background-image: none !important;
+}
+html.dark body :is(.orion-kpi-saas, .orion-ds-metric).orion-kpi-tint-neutral {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 92%, #64748b 8%) !important;
+  background-image: none !important;
+}
+
+.orion-kpi-saas__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+html body .orion-kpi-saas__label,
+html body .orion-kpi-saas .text-meta,
+html body .orion-kpi-saas p.text-meta {
+  margin: 0 !important;
+  font-size: 0.625rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+  color: var(--text-muted, #64748b) !important;
+}
+
+html body .orion-kpi-saas__value,
+html body .orion-kpi-saas .orion-text-kpi-value,
+html body .orion-kpi-saas h3 {
+  margin: 0.18rem 0 0 !important;
+  font-size: 1.15rem !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.15 !important;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main, #0f172a) !important;
+}
+
+html.dark body .orion-kpi-saas__value,
+html.dark body .orion-kpi-saas h3 {
+  color: #f8fafc !important;
+}
+
+html body .orion-kpi-saas__hint {
+  margin: 0.15rem 0 0 !important;
+  font-size: 0.65rem !important;
+  color: var(--text-muted, #64748b) !important;
+}
+
+html body .orion-kpi-saas__value--unavailable,
+html body .orion-kpi-saas h3.orion-kpi-saas__value--unavailable {
+  color: var(--text-muted, #64748b) !important;
+  font-size: 0.95rem !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+}
+
+html.dark body .orion-kpi-saas__value--unavailable {
+  color: #94a3b8 !important;
+}
+
+html body .orion-kpi-icon {
+  width: 2.05rem !important;
+  height: 2.05rem !important;
+  min-width: 2.05rem !important;
+  padding: 0 !important;
+  border-radius: var(--radius-card, 7px) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  border: none !important;
+}
+
+html body .orion-kpi-icon svg {
+  width: 0.95rem !important;
+  height: 0.95rem !important;
+}
+
+html body .orion-viewport :is(.kpi-grid, .orion-kpi-grid, .dashboard-kpi-grid, .cps-kpi-grid),
+html body .kpi-grid,
+html body .grid.grid-cols-2.sm\:grid-cols-4.gap-3:has(.orion-kpi-saas) {
+  gap: 0.55rem !important;
+}
+
+@media (max-width: 639.98px) {
+  html body .orion-kpi-saas,
+  html body .orion-ds-metric {
+    min-height: 3.85rem !important;
+    padding: 0.6rem 0.7rem !important;
+  }
+
+  html body .orion-kpi-saas__value,
+  html body .orion-kpi-saas h3 {
+    font-size: 1.05rem !important;
+  }
+}
+
+/* Annule le liseré « hover-only » design-modern (plein inset / opacity 0) */
+html body .orion-viewport :is(.orion-kpi-saas, .orion-ds-metric, .cps-kpi-card)::before {
+  inset: auto !important;
+  left: 0.8rem !important;
+  right: 0.8rem !important;
+  top: 0 !important;
+  bottom: auto !important;
+  height: 2px !important;
+  opacity: 0.9 !important;
+  border-radius: 9999px !important;
+}
+
+html body .orion-kpi-saas,
+html body .orion-ds-metric {
+  border-radius: var(--radius-card, 7px) !important;
+}

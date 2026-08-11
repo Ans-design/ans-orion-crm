@@ -1,0 +1,126 @@
+/**
+ * ANS ORION — Hauteur boutons unifiée = 32px (--control-h)
+ * Une seule hauteur pour CTA, chips cliquables, actions toolbar.
+ *
+ * Exceptions :
+ *  · FAB / gros ronds (.h-14, .w-14, panier)
+ *  · Tuiles POS (.pos-category-tile, .pos-chip)
+ *  · Auth / login (hors .orion-viewport)
+ *  · Toggles multi-lignes (.cmd-finalize__toggle)
+ *  · Mobile touch primary (media query ci-dessous → 44px)
+ */
+
+:root {
+  --btn-h: var(--control-h, 32px);
+  --control-h: 32px;
+  --chip-h: 32px;
+}
+
+/* ── Boutons app (viewport) ── */
+html body .orion-viewport :is(
+  .ans-btn-primary,
+  .ans-btn-gold,
+  .btn,
+  .btn-sm,
+  .btn-b,
+  .btn-g,
+  button.ui-button,
+  [data-slot='button'],
+  a.btn,
+  .orion-surface-chip,
+  .orion-surface-chip--active,
+  .orion-chip,
+  .cps-pill,
+  .app-filter-chip,
+  .cmd-guided__primary-cta,
+  .cmd-finalize__cta,
+  .cmd-finalize__force,
+  .cmd-finalize__prio-chip,
+  .ops-prog__btn,
+  .cmd-talk-banner__cta
+):not(.pos-category-tile):not(.pos-chip):not(.h-14):not(.w-14):not(.cmd-finalize__toggle) {
+  box-sizing: border-box !important;
+  height: var(--btn-h) !important;
+  min-height: var(--btn-h) !important;
+  max-height: var(--btn-h) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.25 !important;
+}
+
+/* Icônes carrées 32×32 */
+html body .orion-viewport :is(
+  button.h-8.w-8,
+  button.w-8.h-8,
+  [data-size='icon'],
+  [data-size='icon-sm'],
+  button[aria-label].p-2
+):not(.h-14):not(.w-14) {
+  width: var(--btn-h) !important;
+  height: var(--btn-h) !important;
+  min-width: var(--btn-h) !important;
+  min-height: var(--btn-h) !important;
+  max-height: var(--btn-h) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* FAB / ronds hors norme — ne pas écraser */
+html body .orion-viewport :is(
+  .ans-btn-primary.w-14,
+  button.ans-btn-primary.w-14,
+  .ans-btn-primary.h-14,
+  .h-14.w-14
+) {
+  height: 3.5rem !important;
+  min-height: 3.5rem !important;
+  max-height: 3.5rem !important;
+  width: 3.5rem !important;
+  padding: 0 !important;
+}
+
+/**
+ * CTA métier dans stacks colonnes (flex stretch) :
+ * largeur = contenu, jamais pleine justification.
+ * Exceptions : formulaires auth, sticky mobile (touch).
+ */
+html body .orion-viewport :is(
+  .cmd-guided__primary-cta,
+  .cmd-finalize__cta,
+  .cmd-finalize__force,
+  .ops-prog__btn--primary,
+  .ops-prog__btn--accent
+) {
+  align-self: flex-start !important;
+  width: auto !important;
+  max-width: max-content !important;
+  flex: 0 0 auto !important;
+}
+
+/* Mobile : même hauteur tactile pour tous les boutons (hors FAB / icônes) */
+@media (max-width: 767px) {
+  html body .orion-viewport :is(
+    .ans-btn-primary,
+    .btn,
+    .btn-sm,
+    button.ui-button,
+    [data-slot='button'],
+    a.btn,
+    .orion-surface-chip,
+    .cps-pill,
+    .app-filter-chip,
+    .cmd-guided__primary-cta,
+    .cmd-finalize__cta,
+    .cmd-finalize__force,
+    .cmd-finalize__prio-chip,
+    .ops-prog__btn,
+    .cmd-talk-banner__cta
+  ):not(.pos-category-tile):not(.pos-chip):not(.h-14):not(.w-14):not([data-size='icon']):not([data-size='icon-sm']):not(.cmd-finalize__toggle) {
+    min-height: 44px !important;
+    height: 44px !important;
+    max-height: 44px !important;
+  }
+}

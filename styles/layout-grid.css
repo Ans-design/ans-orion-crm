@@ -1,0 +1,343 @@
+/**
+ * ANS ORION — Grille layout 12 colonnes
+ * Source unique pour dashboards, analytics et cartes module.
+ */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gap-lg, 1rem);
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Spans standard — doivent toujours totaliser 12 par ligne logique */
+.card-span-3 { grid-column: span 3; }
+.card-span-4 { grid-column: span 4; }
+.card-span-6 { grid-column: span 6; }
+.card-span-8 { grid-column: span 8; }
+.card-span-12 { grid-column: span 12; }
+
+/* Grille modules cockpit (Board) — colonnes égales, pas d’orphelin span-3 */
+.dashboard-module-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gap-lg, 1rem);
+  width: 100%;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .dashboard-module-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .dashboard-module-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Carte analytics — structure flex pour hauteur homogène par ligne */
+.dashboard-chart-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--cockpit-surface, var(--bg-card));
+  border: none;
+  border-radius: var(--orion-radius, 10px);
+  padding: 1rem 16px;
+  box-shadow: var(--shadow-soft, 0 8px 24px rgba(15, 23, 42, 0.06));
+  transition: var(--orion-transition-card, background 150ms ease, box-shadow 180ms ease);
+}
+
+.dark .dashboard-chart-card {
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  background: var(--bg-card);
+}
+
+.dashboard-chart-card:hover {
+  background: var(--orion-surface-hover, var(--bg-hover));
+  box-shadow: var(--shadow-hover, var(--shadow-soft));
+}
+
+.dark .dashboard-chart-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
+.dashboard-chart-card-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard-chart-card-title {
+  margin: 0;
+  font-family: var(--font-display, inherit);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.dashboard-chart-card-subtitle {
+  margin: 0.125rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.dashboard-chart-card-body {
+  flex: 1;
+  min-height: 200px;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Surface Recharts — largeur stable dans grille flex */
+.orion-chart-frame {
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+.orion-chart-frame .recharts-responsive-container,
+.orion-chart-frame .recharts-wrapper {
+  max-width: 100% !important;
+}
+
+.dashboard-chart-card-body > .cockpit-empty-state,
+.dashboard-chart-card-body > .space-y-3,
+.dashboard-chart-card-body > .orion-chart-frame {
+  flex: 1;
+}
+
+/* Groupe analytics 2 colonnes égales (6+6) */
+.dashboard-analytics-pair {
+  display: contents;
+}
+
+@media (max-width: 1200px) {
+  .card-span-3,
+  .card-span-4 {
+    grid-column: span 6;
+  }
+
+  .card-span-6,
+  .card-span-8 {
+    grid-column: span 12;
+  }
+}
+
+/* Phone dashboard-grid : scroll L→R → styles/mobile-h-rail.css */
+
+/* KPI dashboard — grille responsive alignée ORION_GRID_KPI */
+.dashboard-kpi-grid,
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gap, 0.75rem);
+  width: 100%;
+  align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .dashboard-kpi-grid,
+  .kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-kpi-grid,
+  .kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .dashboard-kpi-grid,
+  .kpi-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Opérations — listes sans filets / design compact */
+.ops-list-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 10px;
+}
+
+.ops-list-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 12px 14px;
+}
+
+.ops-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  text-align: left;
+  border: 1px solid color-mix(in srgb, var(--border, #e2e8f0) 80%, transparent);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--card, #fff) 92%, transparent);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.ops-list-item:hover {
+  background: color-mix(in srgb, var(--accent, #f1f5f9) 70%, transparent);
+  border-color: color-mix(in srgb, var(--brand-primary, var(--primary, #FF174D)) 25%, var(--border, #e2e8f0));
+}
+
+.ops-list-item__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.ops-list-item__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.ops-list-item__ref {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--info, #3b82f6);
+}
+
+.ops-list-item__pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--foreground, #0f172a);
+}
+
+.ops-list-item__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--foreground, #0f172a);
+}
+
+.ops-list-item__meta {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  color: var(--muted-foreground, #64748b);
+}
+
+.ops-list-item__bar {
+  margin-top: 8px;
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border, #e2e8f0) 70%, transparent);
+  overflow: hidden;
+}
+
+.ops-list-item__bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand-primary, var(--primary, #FF174D)), var(--primary-soft, #FF3366));
+}
+
+.ops-list-item__amount {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground, #0f172a);
+}
+
+.ops-priority-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 12px 14px;
+}
+
+@media (max-width: 900px) {
+  .ops-priority-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ops-priority-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  text-align: left;
+  border: 1px solid color-mix(in srgb, var(--border, #e2e8f0) 85%, transparent);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--card, #fff) 94%, transparent);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+
+.ops-priority-chip:hover {
+  background: color-mix(in srgb, var(--primary, #FF174D) 6%, var(--card, #fff));
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 28%, var(--border, #e2e8f0));
+  transform: translateY(-1px);
+}
+
+.ops-priority-chip__icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--primary, #FF174D) 12%, transparent);
+  color: var(--ans-red, var(--primary, #FF174D));
+  flex: none;
+}
+
+.ops-priority-chip__label {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--foreground, #0f172a);
+  line-height: 1.35;
+}
+
+.ops-priority-chip__arrow {
+  color: var(--muted-foreground, #94a3b8);
+  flex: none;
+}
+
+html.dark .ops-list-item,
+html.dark .ops-priority-chip,
+.dark .ops-list-item,
+.dark .ops-priority-chip {
+  background: #091428;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .ops-list-item:hover,
+html.dark .ops-priority-chip:hover,
+.dark .ops-list-item:hover,
+.dark .ops-priority-chip:hover {
+  background: #0b1830;
+  border-color: rgba(255, 23, 77, 0.28);
+}
+
+html.dark .ops-list-item__bar,
+.dark .ops-list-item__bar {
+  background: rgba(255, 255, 255, 0.08);
+}

@@ -1,0 +1,846 @@
+/* Matières & tarifs — page complète (mockup + dark mode ORION) */
+
+.mt-page {
+  --mt-ink: #16213b;
+  --mt-muted: #6e7892;
+  --mt-line: #e4e9f2;
+  --mt-soft: #f5f7fb;
+  --mt-paper: #fff;
+  --mt-green: #16a071;
+  --mt-amber: #dd8b21;
+  --mt-red: #df5361;
+  --mt-brand: #FF174D;
+  --mt-shadow: 0 18px 48px rgba(25, 37, 75, 0.09);
+  --mt-radius: 7px;
+  --mt-surface: #ffffff;
+  --mt-surface-2: #fafbfe;
+  --mt-input: #fafbfe;
+  /* Table — une seule source de fond (évite blanc forcé en dark) */
+  --mt-table-bg: #ffffff;
+  --mt-table-header-bg: #ffffff;
+  --mt-table-header-fg: #475569;
+  --mt-table-cell-fg: #334155;
+  --mt-table-hover: #f8fafc;
+  --mt-table-selected: #fff5f7;
+  --mt-table-input-bg: #fafbfe;
+  --mt-table-input-fg: #16213b;
+  --mt-table-input-border: #e4e9f2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  width: 100%;
+  color: var(--mt-ink);
+}
+
+html.dark .mt-page,
+.dark .mt-page {
+  --mt-ink: #e8eef8;
+  --mt-muted: #94a3b8;
+  --mt-line: rgba(148, 163, 184, 0.18);
+  --mt-soft: #0b1220;
+  --mt-paper: #0f172a;
+  --mt-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --mt-surface: #0b1220;
+  --mt-surface-2: #111827;
+  --mt-input: #0b1220;
+  --mt-table-bg: #0b1220;
+  --mt-table-header-bg: #0f172a;
+  --mt-table-header-fg: #94a3b8;
+  --mt-table-cell-fg: #cbd5e1;
+  --mt-table-hover: #111827;
+  --mt-table-selected: rgba(204, 0, 51, 0.14);
+  --mt-table-input-bg: #111827;
+  --mt-table-input-fg: #e2e8f0;
+  --mt-table-input-border: rgba(148, 163, 184, 0.22);
+  color: var(--mt-ink);
+}
+
+.mt-page.is-compact .orion-master-data-row.is-data {
+  height: 48px !important;
+}
+
+.mt-page.is-compact .orion-mat-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  font-size: 8px;
+}
+
+.mt-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.mt-stat {
+  background: var(--mt-surface);
+  border: 1px solid var(--mt-line);
+  border-radius: 7px;
+  padding: 15px 16px;
+  box-shadow: 0 6px 22px rgba(24, 38, 76, 0.04);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+html.dark .mt-stat,
+.dark .mt-stat {
+  background: var(--mt-surface);
+  border-color: var(--mt-line);
+  box-shadow: none;
+}
+
+.mt-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 14px;
+  flex: none;
+}
+
+.mt-stat:nth-child(1) .mt-stat-icon {
+  background: #fff0f3;
+  color: var(--mt-brand);
+}
+
+.mt-stat:nth-child(2) .mt-stat-icon {
+  background: #e7f8f4;
+  color: var(--mt-green);
+}
+
+.mt-stat:nth-child(3) .mt-stat-icon {
+  background: #fff5e6;
+  color: var(--mt-amber);
+}
+
+.mt-stat:nth-child(4) .mt-stat-icon {
+  background: #ffedf0;
+  color: var(--mt-red);
+}
+
+html.dark .mt-stat:nth-child(1) .mt-stat-icon,
+.dark .mt-stat:nth-child(1) .mt-stat-icon {
+  background: rgba(204, 0, 51, 0.18);
+  color: #ff6b8a;
+}
+
+html.dark .mt-stat:nth-child(2) .mt-stat-icon,
+.dark .mt-stat:nth-child(2) .mt-stat-icon {
+  background: rgba(22, 160, 113, 0.18);
+  color: #34d399;
+}
+
+html.dark .mt-stat:nth-child(3) .mt-stat-icon,
+.dark .mt-stat:nth-child(3) .mt-stat-icon {
+  background: rgba(221, 139, 33, 0.18);
+  color: #fbbf24;
+}
+
+html.dark .mt-stat:nth-child(4) .mt-stat-icon,
+.dark .mt-stat:nth-child(4) .mt-stat-icon {
+  background: rgba(223, 83, 97, 0.18);
+  color: #fb7185;
+}
+
+.mt-stat small {
+  display: block;
+  color: var(--mt-muted);
+  font-size: 10px;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.mt-stat strong {
+  display: block;
+  font-size: 19px;
+  letter-spacing: -0.4px;
+  color: var(--mt-ink);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mt-stat em {
+  display: inline-block;
+  font-style: normal;
+  font-size: 9px;
+  color: var(--mt-green);
+  margin-top: 2px;
+  font-weight: 700;
+}
+
+.mt-stat em.is-warn {
+  color: var(--mt-amber);
+}
+
+.mt-workspace {
+  background: var(--mt-surface);
+  border: 1px solid var(--mt-line);
+  border-radius: var(--mt-radius);
+  box-shadow: var(--mt-shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+html.dark .mt-workspace,
+.dark .mt-workspace {
+  background: var(--mt-surface);
+  box-shadow: none;
+}
+
+.mt-workspace .orion-material-toolbar {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--mt-line);
+  background: var(--mt-surface);
+  gap: 0;
+}
+
+.mt-workspace .orion-material-toolbar-row-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mt-workspace .orion-material-toolbar-row-chips {
+  display: none;
+}
+
+.mt-workspace .orion-material-toolbar-search-wrap {
+  position: relative;
+  flex: 1 1 360px;
+  min-width: 220px;
+  max-width: none;
+}
+
+.mt-workspace .orion-material-toolbar-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.mt-workspace .orion-material-toolbar-search {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--mt-line);
+  border-radius: 7px;
+  padding: 0 72px 0 40px;
+  font-size: 13px;
+  color: var(--mt-ink);
+  background-color: #f8fafc;
+  background-image: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.mt-workspace .orion-material-toolbar-search-clear,
+.mt-workspace .orion-material-toolbar-kbd {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mt-workspace .orion-material-toolbar-search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.mt-workspace .orion-material-toolbar-search-clear:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.mt-workspace .orion-material-toolbar-kbd {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  border: 1px solid var(--mt-line);
+  border-radius: 5px;
+  padding: 2px 6px;
+  background: var(--mt-surface);
+  pointer-events: none;
+}
+
+.mt-workspace .orion-material-toolbar-active-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 14px 10px;
+}
+
+.mt-workspace .orion-material-active-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 7px;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mt-workspace .orion-material-active-pill:hover {
+  background: #dbeafe;
+}
+
+.mt-workspace .orion-material-toolbar-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.mt-workspace .orion-material-new-btn {
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  color: #fff !important;
+}
+
+.mt-workspace .orion-material-new-btn:hover {
+  background: #1e40af !important;
+  border-color: #1e40af !important;
+}
+
+.mt-workspace .orion-material-toolbar-search:focus {
+  border-color: #FF174D;
+  background-color: var(--mt-input);
+  box-shadow: 0 0 0 3px rgba(204, 0, 51, 0.12);
+  outline: none;
+}
+
+.mt-workspace .orion-material-toolbar-select,
+.mt-workspace .mt-select {
+  height: 38px;
+  border: 1px solid var(--mt-line);
+  border-radius: 7px;
+  padding: 0 32px 0 12px;
+  background: var(--mt-surface);
+  color: var(--mt-ink);
+  font-size: 12px;
+  font-weight: 600;
+  outline: none;
+  min-width: 148px;
+  cursor: pointer;
+}
+
+.mt-workspace .orion-material-toolbar-select:focus {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
+}
+
+html.dark .mt-workspace .orion-material-toolbar-select,
+html.dark .mt-workspace .mt-select,
+.dark .mt-workspace .orion-material-toolbar-select,
+.dark .mt-workspace .mt-select {
+  background: var(--mt-input);
+  color: #cbd5e1;
+}
+
+.mt-workspace .orion-material-toolbar-btn,
+.mt-workspace .mt-btn {
+  height: 38px;
+  border-radius: 7px;
+  border: 1px solid var(--mt-line);
+  padding: 0 12px;
+  background: var(--mt-surface);
+  color: #475569;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: none;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+html.dark .mt-workspace .orion-material-toolbar-btn,
+.dark .mt-workspace .orion-material-toolbar-btn {
+  background: var(--mt-input);
+  color: #cbd5e1;
+}
+
+.mt-workspace .orion-material-toolbar-btn:hover,
+.mt-workspace .mt-btn:hover {
+  transform: none;
+  border-color: #94a3b8;
+  color: var(--mt-ink);
+  background: #f8fafc;
+}
+
+.mt-view-toggle {
+  display: flex;
+  border: 1px solid var(--mt-line);
+  border-radius: 7px;
+  padding: 3px;
+  margin-left: auto;
+  background: #f8fafc;
+}
+
+html.dark .mt-view-toggle,
+.dark .mt-view-toggle {
+  background: var(--mt-input);
+}
+
+.mt-view-toggle button {
+  border: 0;
+  background: transparent;
+  border-radius: 7px;
+  height: 30px;
+  min-width: 32px;
+  color: #8a94aa;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.mt-view-toggle button.is-active {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+html.dark .mt-view-toggle button.is-active,
+.dark .mt-view-toggle button.is-active {
+  background: rgba(29, 78, 216, 0.22);
+  color: #93c5fd;
+}
+
+.mt-workspace .orion-master-data-card {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  /* Une seule surface : celle de .mt-workspace — pas de 2e fond blanc */
+  background: transparent !important;
+  flex: 0 1 auto !important;
+  height: auto !important;
+  max-height: min(68vh, 720px);
+}
+
+.mt-workspace .orion-master-data-root {
+  flex: 0 1 auto !important;
+  min-height: 0;
+}
+
+.mt-workspace .orion-master-data-scroll {
+  overflow-x: hidden !important;
+  flex: 0 1 auto !important;
+  max-height: min(58vh, 620px) !important;
+  background: var(--mt-table-bg, #fff) !important;
+}
+
+/* Force largeur viewport — jamais 2800px */
+.mt-page .orion-master-data-header,
+.mt-page .orion-master-data-row,
+.mt-page .orion-master-data-header-group-row {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
+
+.mt-page .orion-master-data-cell {
+  font-size: 11.5px !important;
+  padding: 8px 10px !important;
+  line-height: 1.35 !important;
+}
+
+.mt-page .orion-master-data-header-cell,
+.mt-page .orion-master-data-header-group-cell {
+  text-transform: none !important;
+  letter-spacing: 0.01em !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  min-height: 40px !important;
+  color: var(--mt-table-header-fg) !important;
+  background: var(--mt-table-header-bg) !important;
+  padding: 8px 10px !important;
+}
+
+.mt-page .orion-master-data-header,
+.mt-page .orion-master-data-header-group-row {
+  background: var(--mt-table-header-bg) !important;
+  isolation: isolate;
+}
+
+.mt-page .cps-mat-fiche-trigger__name {
+  font-size: 11.5px !important;
+}
+
+.mt-page .orion-mat-identity__meta {
+  font-size: 10px !important;
+}
+
+.mt-page .orion-mat-swatch {
+  width: 30px;
+  height: 30px;
+  font-size: 8px;
+}
+
+.mt-page .orion-mat-stock--qty-first {
+  justify-content: flex-end;
+}
+
+.mt-page .orion-mat-stock--gauge {
+  gap: 5px;
+}
+
+.mt-page .orion-mat-stock-bar {
+  height: 7px;
+}
+
+.mt-page .orion-mat-stock-qty {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.mt-page .orion-master-unit-select,
+.mt-page .orion-master-price-input,
+.mt-page .orion-master-char-type-select {
+  font-size: 11px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  background: var(--mt-table-input-bg) !important;
+  color: var(--mt-table-input-fg) !important;
+  border-color: var(--mt-table-input-border) !important;
+  box-shadow: none !important;
+}
+
+/* Fonds uniformes — aucune bande claire en dark (variables thème) */
+.mt-page .orion-master-data-row.is-data,
+.mt-page .orion-master-data-row.is-data.is-zebra,
+.mt-page .orion-master-data-row.is-data.is-group-active,
+.mt-page .orion-master-data-row.is-data.is-selected,
+.mt-page .orion-master-data-row.is-data:hover,
+.mt-page .orion-master-data-row.is-data.is-zebra:hover,
+.mt-page .orion-master-data-row.is-data.is-group-active:hover,
+.mt-page .orion-master-data-row.is-data.is-selected:hover {
+  height: 60px !important;
+  background: var(--mt-table-bg) !important;
+  box-shadow: none !important;
+}
+
+.mt-page .orion-master-data-row.is-data:hover,
+.mt-page .orion-master-data-row.is-data.is-zebra:hover,
+.mt-page .orion-master-data-row.is-data.is-group-active:hover {
+  background: var(--mt-table-hover) !important;
+}
+
+.mt-page .orion-master-data-row.is-data.is-selected,
+.mt-page .orion-master-data-row.is-data.is-selected:hover {
+  background: var(--mt-table-selected) !important;
+}
+
+.mt-page .orion-master-data-cell,
+.mt-page .orion-master-data-cell.is-sticky-left,
+.mt-page .orion-master-data-cell.is-sticky-right,
+.mt-page .orion-master-data-cell.is-sticky-left-2,
+.mt-page .orion-master-data-cell.is-sticky-right-2,
+.mt-page .orion-master-data-header-cell.is-sticky-left,
+.mt-page .orion-master-data-header-cell.is-sticky-right,
+.mt-page .orion-master-data-header-cell.is-sticky-left-2,
+.mt-page .orion-master-data-header-cell.is-sticky-right-2,
+.mt-page .orion-master-data-row.is-data.is-zebra .orion-master-data-cell,
+.mt-page .orion-master-data-row.is-data.is-zebra .orion-master-data-cell.is-sticky-left,
+.mt-page .orion-master-data-row.is-data.is-zebra .orion-master-data-cell.is-sticky-right,
+.mt-page .orion-master-data-row.is-data.is-group-active .orion-master-data-cell,
+.mt-page .orion-master-data-row.is-data.is-selected .orion-master-data-cell,
+.mt-page .orion-master-data-row.is-data.is-selected .orion-master-data-cell.is-sticky-left,
+.mt-page .orion-master-data-row.is-data.is-selected .orion-master-data-cell.is-sticky-right {
+  background: var(--mt-table-bg) !important;
+  color: var(--mt-table-cell-fg) !important;
+  box-shadow: none !important;
+}
+
+.mt-page .orion-master-data-row.is-data:hover .orion-master-data-cell,
+.mt-page .orion-master-data-row.is-data:hover .orion-master-data-cell.is-sticky-left,
+.mt-page .orion-master-data-row.is-data:hover .orion-master-data-cell.is-sticky-right,
+.mt-page .orion-master-data-row.is-data:hover .orion-master-data-cell.is-sticky-left-2,
+.mt-page .orion-master-data-row.is-data:hover .orion-master-data-cell.is-sticky-right-2,
+.mt-page .orion-master-data-row.is-data.is-group-active:hover .orion-master-data-cell,
+.mt-page .orion-master-data-row.is-data.is-group-active:hover .orion-master-data-cell.is-sticky-left,
+.mt-page .orion-master-data-row.is-data.is-group-active:hover .orion-master-data-cell.is-sticky-right {
+  background: var(--mt-table-hover) !important;
+}
+
+.mt-page .orion-master-data-row.is-data.is-selected .orion-master-data-cell,
+.mt-page .orion-master-data-row.is-data.is-selected .orion-master-data-cell.is-sticky-left,
+.mt-page .orion-master-data-row.is-data.is-selected .orion-master-data-cell.is-sticky-right {
+  background: var(--mt-table-selected) !important;
+}
+
+.mt-workspace .orion-master-data-footer {
+  background: var(--mt-table-bg) !important;
+  border-top: 1px solid var(--mt-line) !important;
+  color: var(--mt-muted) !important;
+  flex-shrink: 0;
+  margin-top: 0 !important;
+}
+
+/* Dark : héritage via variables --mt-table-* (pas de #fff forcé) */
+
+html.dark .mt-stat,
+.dark .mt-stat {
+  background: #071021 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark .mt-workspace,
+html.dark .mt-workspace .orion-master-data-card,
+html.dark .mt-workspace .orion-master-data-footer,
+html.dark .mt-workspace .orion-master-data-scroll,
+.dark .mt-workspace,
+.dark .mt-workspace .orion-master-data-card,
+.dark .mt-workspace .orion-master-data-footer,
+.dark .mt-workspace .orion-master-data-scroll {
+  background: var(--mt-table-bg, #0b1220) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+  color: #94a3b8 !important;
+}
+
+html.dark .mt-workspace,
+.dark .mt-workspace {
+  background: var(--mt-surface) !important;
+}
+
+/* Identité / textes tableau — lisibles en dark */
+html.dark .mt-page .cps-mat-fiche-trigger__name,
+.dark .mt-page .cps-mat-fiche-trigger__name,
+html.dark .mt-page .orion-mat-identity__name,
+.dark .mt-page .orion-mat-identity__name {
+  color: #f1f5f9 !important;
+}
+
+html.dark .mt-page .orion-mat-identity__meta,
+.dark .mt-page .orion-mat-identity__meta,
+html.dark .mt-page .orion-master-muted,
+.dark .mt-page .orion-master-muted {
+  color: #94a3b8 !important;
+}
+
+html.dark .mt-page .orion-mat-stock-qty,
+.dark .mt-page .orion-mat-stock-qty {
+  color: #e2e8f0;
+}
+
+html.dark .mt-page .orion-mat-stock-bar,
+.dark .mt-page .orion-mat-stock-bar {
+  background: rgba(148, 163, 184, 0.22);
+}
+
+html.dark .mt-page .orion-material-toolbar,
+.dark .mt-page .orion-material-toolbar,
+html.dark .mt-page .orion-material-toolbar-btn,
+.dark .mt-page .orion-material-toolbar-btn,
+html.dark .mt-page .orion-material-search,
+.dark .mt-page .orion-material-search {
+  background: var(--mt-surface-2) !important;
+  color: var(--mt-ink) !important;
+  border-color: var(--mt-line) !important;
+}
+
+/* Header CPS — variante Matières (aligné module-header compact, zéro billboard) */
+.cps-admin-header--matieres-tarifs {
+  border-bottom: 1px solid var(--border-soft, #e2e8f0) !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  padding: 0.25rem 0 0.4rem !important;
+  margin-bottom: 0.4rem !important;
+  position: relative !important;
+  top: auto !important;
+}
+
+.cps-admin-header--matieres-tarifs .mt-eyebrow,
+.cps-admin-header--matieres-tarifs .orion-module-header__kicker {
+  font-size: 0.5625rem !important; /* 9 */
+  font-weight: 800;
+  color: var(--mt-brand, #ff174d);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.1rem !important;
+  line-height: 1.2;
+}
+
+.cps-admin-header--matieres-tarifs h1,
+.cps-admin-header--matieres-tarifs .orion-module-header__title {
+  font-size: 0.9375rem !important; /* 15 */
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  letter-spacing: -0.02em !important;
+  font-weight: 750 !important;
+  color: var(--cps-title, #16213b) !important;
+}
+
+html.dark .cps-admin-header--matieres-tarifs h1,
+.dark .cps-admin-header--matieres-tarifs h1 {
+  color: #f1f5f9 !important;
+}
+
+.cps-admin-header--matieres-tarifs .cps-admin-header__subtitle-matieres,
+.cps-admin-header--matieres-tarifs .orion-module-header__desc {
+  display: none !important;
+}
+
+.cps-admin-header--matieres-tarifs .cps-header-actions .app-btn,
+.cps-admin-header--matieres-tarifs .cps-header-actions button {
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.cps-hub__layout--matieres-tarifs .cps-hub__main {
+  gap: 0;
+}
+
+.cps-hub__layout--matieres-tarifs .cps-content-flat {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.mt-corbeille-btn {
+  color: #64748b !important;
+}
+
+.mt-corbeille-btn:hover {
+  color: #FF174D !important;
+  border-color: color-mix(in srgb, #FF174D 35%, var(--mt-line)) !important;
+  background: color-mix(in srgb, #FF174D 10%, transparent) !important;
+}
+
+/* Tableau plein largeur — pas de bandes grises latérales */
+.mt-workspace .orion-master-data-root,
+.mt-workspace .orion-master-data-card,
+.mt-workspace .orion-master-data-scroll {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  background: var(--mt-table-bg) !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.mt-workspace .orion-master-data-header,
+.mt-workspace .orion-master-data-header-cell,
+.mt-workspace .orion-master-data-cell,
+.mt-workspace .orion-master-data-cell.is-sticky-left,
+.mt-workspace .orion-master-data-cell.is-sticky-right,
+.mt-workspace .orion-master-data-cell.is-sticky-left-2,
+.mt-workspace .orion-master-data-cell.is-sticky-right-2 {
+  background: var(--mt-table-bg) !important;
+  color: var(--mt-table-cell-fg) !important;
+}
+
+.mt-workspace .orion-master-data-header-cell {
+  background: var(--mt-table-header-bg) !important;
+  color: var(--mt-table-header-fg) !important;
+}
+
+.cps-admin-header--matieres-tarifs .cps-matieres-new-btn,
+.cps-admin-header--matieres-tarifs .cps-matieres-new-btn.app-btn {
+  background: #FF174D !important;
+  border-color: #FF174D !important;
+  color: #fff !important;
+}
+
+.cps-admin-header--matieres-tarifs .cps-matieres-new-btn:hover {
+  background: #a8002a !important;
+  border-color: #a8002a !important;
+}
+
+.cps-hub__layout--matieres-tarifs {
+  gap: 12px !important;
+  width: 100%;
+  max-width: none;
+}
+
+.cps-hub__layout--matieres-tarifs .cps-hub__main {
+  gap: 12px;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100%;
+  max-width: none;
+}
+
+html.dark .mt-workspace .orion-master-data-root,
+html.dark .mt-workspace .orion-master-data-card,
+html.dark .mt-workspace .orion-master-data-scroll,
+.dark .mt-workspace .orion-master-data-root,
+.dark .mt-workspace .orion-master-data-card,
+.dark .mt-workspace .orion-master-data-scroll,
+html.dark .mt-workspace .orion-master-data-header,
+html.dark .mt-workspace .orion-master-data-header-cell,
+html.dark .mt-workspace .orion-master-data-cell,
+html.dark .mt-workspace .orion-master-data-cell.is-sticky-left,
+html.dark .mt-workspace .orion-master-data-cell.is-sticky-right,
+.dark .mt-workspace .orion-master-data-header,
+.dark .mt-workspace .orion-master-data-header-cell,
+.dark .mt-workspace .orion-master-data-cell,
+.dark .mt-workspace .orion-master-data-cell.is-sticky-left,
+.dark .mt-workspace .orion-master-data-cell.is-sticky-right {
+  background: var(--mt-table-bg) !important;
+  color: var(--mt-table-cell-fg) !important;
+}
+
+html.dark .mt-workspace .orion-master-data-header-cell,
+.dark .mt-workspace .orion-master-data-header-cell {
+  background: var(--mt-table-header-bg) !important;
+  color: var(--mt-table-header-fg) !important;
+}
+
+@media (max-width: 1050px) {
+  .mt-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .mt-stats {
+    display: flex;
+    overflow: auto;
+    gap: 9px;
+  }
+
+  .mt-stat {
+    min-width: 170px;
+  }
+
+  .cps-admin-header--matieres-tarifs h1 {
+    font-size: 0.875rem !important; /* 14 phone */
+  }
+
+  .mt-view-toggle {
+    margin-left: 0;
+  }
+}

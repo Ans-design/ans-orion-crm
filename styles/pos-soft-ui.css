@@ -1,0 +1,4754 @@
+/**
+ * ANS ORION ? POS Soft UI (maquettes Soft + Bento)
+ * Import? depuis app/layout.tsx APR?S globals.css ? cascade prioritaire
+ */
+
+:root {
+  --font-main: Manrope, Inter, 'Plus Jakarta Sans', Geist, system-ui, sans-serif;
+
+  /* Typo POS ? corps STRICTEMENT < sidebar (13px) */
+  --fs-sidebar: 13px;
+  --fs-sidebar-sub: 12px;
+  --fs-sidebar-label: 10px;
+
+  --fs-micro: 8px;
+  --fs-xxs: 9px;
+  --fs-badge: 9px;
+  --fs-xs: 10px;
+  --fs-helper: 10px;
+  --fs-sm: 10px;
+  --fs-label: 11px;
+  --fs-summary-label: 11px;
+  /* Corps / chips ? 11px pour rester sous le sidebar 13px (poids visuel inclus) */
+  --fs-body: 11px;
+  --fs-config-body: 11px;
+  --fs-project-body: 11px;
+  --fs-chip: 11px;
+  --fs-summary-value: 11px;
+  --fs-step: 12px;
+  --fs-md: 12px;
+  --fs-lg: 12px;
+  --fs-section: 22px;
+  --fs-section-title: 22px;
+  --fs-panel-title: 22px;
+  --fs-product-title: 28px;
+  --fs-price: 26px;
+
+  --lh-tight: 1.15;
+  --lh-title: 1.15;
+  --lh-heading: 1.25;
+  --lh-ui: 1.35;
+  --lh-body: 1.45;
+  --lh-comfort: 1.6;
+
+  --sidebar-width: 264px;
+  --page-padding-desktop: 24px;
+  --page-padding-laptop: 20px;
+  --page-padding-tablet: 16px;
+  --page-padding-mobile: 12px;
+  --grid-gap-desktop: 24px;
+  --grid-gap-laptop: 20px;
+  --grid-gap-tablet: 16px;
+  --grid-gap-mobile: 12px;
+  --section-gap: 24px;
+  --card-padding: 24px;
+  --inner-padding: 16px;
+  --chip-gap: 10px;
+  --radius-card: 7px;
+  --radius-control: 7px;
+  --control-height: 44px;
+  --chip-height: 40px;
+
+  --pos-soft-bg: #f2f5fb;
+  --pos-soft-surface: #ffffff;
+  --pos-soft-muted: #f8f9fc;
+  --pos-soft-ink: #0f172a;
+  --pos-soft-radius: var(--radius-card);
+  --pos-soft-radius-sm: var(--radius-control);
+  --pos-soft-radius-chip: var(--radius-control);
+  --pos-soft-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.06);
+  --pos-soft-shadow-lg: 0 30px 60px -20px rgba(15, 23, 42, 0.1);
+  --pos-soft-glow: 0 8px 20px -8px rgba(15, 23, 42, 0.12);
+  --pos-brand: #ff174d;
+  --pos-brand-deep: #C91443;
+  --pos-success: #06d6a0;
+  --pos-chip-active: #0f172a;
+}
+
+.dark {
+  --pos-soft-bg: #030810;
+  --pos-soft-surface: #071021;
+  --pos-soft-muted: #0b1528;
+  --pos-soft-ink: #f8fafc;
+  --pos-chip-active: #ff174d;
+  --pos-soft-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.5);
+  --pos-soft-shadow-lg: 0 24px 48px -16px rgba(0, 0, 0, 0.55);
+}
+
+/* ??????????? TYPO POS ? application stricte 8?32px ??????????? */
+.pos-soft-shell,
+.pos-soft-shell button,
+.pos-soft-shell input,
+.pos-soft-shell select,
+.pos-soft-shell textarea {
+  font-family: var(--font-main) !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-summary-soft__price,
+.pos-soft-shell .pos-summary-soft__price {
+  font-size: var(--fs-price) !important;
+  font-weight: 800 !important;
+  line-height: var(--lh-tight) !important;
+  letter-spacing: -0.02em !important;
+}
+
+.pos-soft-shell .pos-cta-status__title {
+  font-size: var(--fs-body) !important;
+  font-weight: 750 !important;
+  line-height: var(--lh-ui) !important;
+  letter-spacing: 0 !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-product-hero h1,
+.pos-soft-shell .pos-product-hero h1,
+.orion-viewport .pos-soft-shell .pos-catalog-hero h1,
+.pos-soft-shell .pos-catalog-hero h1 {
+  font-size: var(--fs-product-title) !important;
+  font-weight: 800 !important;
+  line-height: var(--lh-title) !important;
+  letter-spacing: -0.03em !important;
+  color: var(--pos-soft-ink) !important;
+  max-width: none !important;
+}
+
+.pos-soft-shell .pos-panel-title,
+.pos-soft-shell h3.pos-panel-title {
+  font-size: var(--fs-panel-title) !important;
+  font-weight: 800 !important;
+  line-height: var(--lh-heading) !important;
+  color: var(--pos-soft-ink) !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 0 0.5rem !important;
+}
+
+.pos-soft-shell .pos-tarif-soft__title {
+  font-size: var(--fs-xs) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: #94a3b8 !important;
+  margin-bottom: 0.55rem !important;
+  line-height: var(--lh-ui) !important;
+}
+
+/* Garde-fou : rien > 32px ni < 8px dans le shell POS */
+.pos-soft-shell .text-5xl,
+.pos-soft-shell .text-4xl,
+.pos-soft-shell .text-3xl,
+.pos-soft-shell .text-2xl {
+  font-size: var(--fs-price) !important;
+  line-height: var(--lh-tight) !important;
+}
+.pos-soft-shell .text-\[7px\],
+.pos-soft-shell .text-\[6px\] {
+  font-size: var(--fs-micro) !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card__title,
+.pos-soft-shell .pos-section-card__title {
+  font-size: var(--fs-section) !important;
+  font-weight: 700 !important;
+  line-height: var(--lh-heading) !important;
+  color: var(--pos-soft-ink) !important;
+}
+
+.pos-soft-shell .pos-section-card__hint,
+.pos-soft-shell .pos-product-hero p,
+.pos-soft-shell .pos-catalog-hero > p,
+.pos-soft-shell .pos-catalog-card__desc {
+  font-size: var(--fs-helper) !important;
+  font-weight: 500 !important;
+  line-height: var(--lh-body) !important;
+  color: #64748b !important;
+}
+
+.pos-soft-shell .pos-product-hero p,
+.pos-soft-shell .pos-catalog-hero > p,
+.pos-soft-shell .pos-catalog-card__desc {
+  font-size: var(--fs-project-body) !important;
+}
+
+.pos-soft-shell,
+.pos-soft-shell .pos-catalog-meta__count,
+.pos-soft-shell .pos-soft-select,
+.pos-soft-shell .pos-cta-status__detail,
+.pos-soft-shell .pos-option-card__sub {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.pos-soft-shell .pos-field-label,
+.pos-soft-shell .orion-text-label,
+.pos-soft-shell label.orion-text-label,
+.pos-soft-shell .pos-synth-soft__label {
+  font-size: var(--fs-label) !important;
+  font-weight: 600 !important;
+  line-height: var(--lh-ui) !important;
+  color: #475569 !important;
+}
+
+.pos-soft-shell button.pos-chip,
+.pos-soft-shell .pos-chip,
+.pos-soft-shell button.pos-option-card .pos-option-card__title,
+.pos-soft-shell .pos-option-card__title {
+  font-size: var(--fs-chip) !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+}
+
+.pos-soft-shell .pos-synth-soft__value {
+  font-size: var(--fs-label) !important;
+  font-weight: 600 !important;
+  line-height: var(--lh-ui) !important;
+}
+
+.pos-soft-shell .pos-step-soft__num,
+.pos-soft-shell .pos-stepper-premium__num {
+  font-size: var(--fs-step) !important;
+  font-weight: 700 !important;
+}
+
+.pos-soft-shell .pos-step-soft__meta,
+.pos-soft-shell .pos-step-soft__pill .pos-step-soft__meta,
+.pos-soft-shell .pos-stepper-premium__meta {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+.pos-soft-shell .pos-step-soft__name,
+.pos-soft-shell .pos-stepper-premium__label {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  color: inherit !important;
+}
+
+.pos-soft-shell .pos-impact-badge,
+.pos-soft-shell .pos-badge,
+.pos-soft-shell .pos-cat-chip,
+.pos-soft-shell .pos-catalog-meta__chip,
+.pos-soft-shell .pos-catalog-hero__eyebrow,
+.pos-soft-shell .pos-product-hero__badge,
+.pos-soft-shell .pos-tech-block__badge {
+  font-size: var(--fs-badge) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+}
+
+.pos-soft-shell .pos-impact-badge--mini {
+  font-size: var(--fs-xxs) !important;
+}
+
+.pos-soft-shell .pos-synth-soft__missing,
+.pos-soft-shell .pos-synth-soft__more,
+.pos-soft-shell .pos-tarif-soft__note,
+.pos-soft-shell .pos-tarif-soft__margin,
+.pos-soft-shell .pos-cta-draft__hint,
+.pos-soft-shell .pos-soft-missing__head,
+.pos-soft-shell .pos-soft-alert,
+.pos-soft-shell .orion-text-meta {
+  font-size: var(--fs-xs) !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+.pos-soft-shell .pos-tarif-soft__manual > span,
+.pos-soft-shell .text-\[9px\],
+.pos-soft-shell .text-\[8px\] {
+  font-size: var(--fs-xxs) !important;
+  font-weight: 500 !important;
+}
+
+/* Catalogue cards titles */
+.orion-viewport .pos-soft-shell .pos-article-title,
+.pos-soft-shell .pos-article-title {
+  font-size: var(--fs-config-body) !important;
+  font-weight: 750 !important;
+  line-height: var(--lh-heading) !important;
+}
+
+.pos-soft-shell .pos-catalog-card__amount {
+  font-size: var(--fs-config-body) !important;
+  font-weight: 800 !important;
+  line-height: var(--lh-tight) !important;
+}
+
+.pos-soft-shell .pos-catalog-card__from,
+.pos-soft-shell .pos-catalog-card__amount small {
+  font-size: var(--fs-micro) !important;
+  font-weight: 500 !important;
+}
+
+.pos-soft-shell .pos-catalog-card__cta,
+.pos-soft-shell .pos-category-tile__label {
+  font-size: var(--fs-body) !important;
+  font-weight: 700 !important;
+  line-height: var(--lh-ui) !important;
+}
+
+.pos-soft-shell .pos-category-tile__count,
+.pos-soft-shell .pos-catalog-stat {
+  font-size: var(--fs-sm) !important;
+  font-weight: 700 !important;
+}
+
+.pos-soft-shell .pos-cta-main,
+.pos-soft-shell .pos-cta-main__label {
+  font-size: var(--fs-config-body) !important;
+  font-weight: 800 !important;
+  line-height: var(--lh-ui) !important;
+}
+
+.pos-soft-shell .pos-cta-secondary {
+  font-size: var(--fs-body) !important;
+  font-weight: 700 !important;
+}
+
+.pos-soft-shell .pos-cta-tertiary {
+  font-size: var(--fs-body) !important;
+  font-weight: 600 !important;
+}
+
+.pos-soft-shell .pos-summary-soft__label {
+  font-size: var(--fs-xs) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+}
+
+.pos-soft-shell .pos-summary-soft__currency {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+.pos-soft-shell .pos-summary-soft__hero-meta {
+  font-size: var(--fs-xs) !important;
+  font-weight: 500 !important;
+}
+
+.pos-soft-shell .pos-back-link {
+  font-size: var(--fs-body) !important;
+  font-weight: 500 !important;
+}
+
+.pos-soft-shell .pos-tarif-soft__line {
+  font-size: var(--fs-body) !important;
+}
+
+/* ??????????? SHELL ? pleine largeur (fond plat, sans orbes / glow) ??????????? */
+.orion-viewport:has(.pos-soft-shell) {
+  background: var(--pos-soft-bg) !important;
+  width: 100% !important;
+  max-width: none !important;
+  padding-left: var(--page-padding-mobile) !important;
+  padding-right: var(--page-padding-mobile) !important;
+}
+
+@media (min-width: 768px) {
+  .orion-viewport:has(.pos-soft-shell) {
+    padding-left: var(--page-padding-tablet) !important;
+    padding-right: var(--page-padding-tablet) !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .orion-viewport:has(.pos-soft-shell) {
+    padding-left: var(--page-padding-laptop) !important;
+    padding-right: var(--page-padding-laptop) !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .orion-viewport:has(.pos-soft-shell) {
+    padding-left: var(--page-padding-desktop) !important;
+    padding-right: var(--page-padding-desktop) !important;
+  }
+}
+
+.pos-soft-shell,
+.pos-soft-shell > *,
+.pos-cat-rail,
+.pos-soft-toolbar,
+.pos-catalog-hero-bar {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+/* Annule le padding large du shell global sur pages POS */
+main.orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+.orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+.orion-viewport:has(.pos-soft-shell) {
+  padding-left: var(--page-padding-mobile) !important;
+  padding-right: var(--page-padding-mobile) !important;
+}
+
+@media (min-width: 768px) {
+  main.orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+  .orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+  .orion-viewport:has(.pos-soft-shell) {
+    padding-left: var(--page-padding-tablet) !important;
+    padding-right: var(--page-padding-tablet) !important;
+  }
+}
+
+@media (min-width: 992px) {
+  main.orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+  .orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+  .orion-viewport:has(.pos-soft-shell) {
+    padding-left: var(--page-padding-laptop) !important;
+    padding-right: var(--page-padding-laptop) !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  main.orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+  .orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+  .orion-viewport:has(.pos-soft-shell) {
+    padding-left: var(--page-padding-desktop) !important;
+    padding-right: var(--page-padding-desktop) !important;
+  }
+}
+
+/* ??????????? LAYOUT config ? config large + synth?se compacte ??????????? */
+.orion-viewport .pos-soft-shell .pos-config-layout {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: var(--grid-gap-mobile) !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+@media (min-width: 768px) {
+  .orion-viewport .pos-soft-shell .pos-config-layout {
+    gap: var(--grid-gap-tablet) !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .orion-viewport .pos-soft-shell .pos-config-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 300px) !important;
+    gap: var(--grid-gap-laptop) !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .orion-viewport .pos-soft-shell .pos-config-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px) !important;
+    gap: var(--grid-gap-desktop) !important;
+  }
+}
+
+.orion-viewport .pos-soft-shell .pos-config-main {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--section-gap) !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-x: hidden;
+}
+
+.orion-viewport .pos-soft-shell .pos-config-summary,
+.orion-viewport .pos-soft-shell .pos-summary-sticky {
+  position: sticky !important;
+  top: 5.5rem !important;
+  max-height: calc(100vh - 6.5rem) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 320px !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  align-self: start !important;
+  z-index: 12;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+}
+
+/* ??????????? TOP BAR ? 3 zones r?organis?es (produit | prix | client) ??????????? */
+.pos-config-topbar {
+  --pos-cat: var(--pos-brand, #ff174d);
+  position: relative;
+  margin-bottom: 0.25rem;
+  border-radius: 7px;
+  background: #fff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 14px 36px -22px rgba(15, 23, 42, 0.2);
+  overflow: hidden;
+  flex: none !important;
+}
+
+.pos-config-topbar__back {
+  padding: 0.4rem 0.7rem 0;
+}
+
+.pos-config-topbar__back .pos-back-link--inline {
+  margin-bottom: 0 !important;
+}
+
+.pos-config-topbar__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+  padding: 0.45rem 0.7rem 0.65rem;
+  align-items: stretch;
+}
+
+.pos-config-topbar__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+@media (min-width: 960px) {
+  .pos-config-topbar__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    padding: 0.5rem 0.7rem 0.6rem;
+    align-items: center;
+  }
+
+  .pos-config-topbar__aside {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .pos-config-topbar__policy {
+    width: 15.5rem;
+    flex: none;
+  }
+
+  .pos-config-topbar__client {
+    display: flex;
+    align-items: stretch;
+  }
+}
+
+.pos-product-hero {
+  position: relative;
+  overflow: visible;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.1rem 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.pos-product-hero::before { display: none !important; }
+
+.pos-product-hero__icon {
+  width: 2.75rem !important;
+  height: 2.75rem !important;
+  border-radius: 7px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background:
+    linear-gradient(155deg, #fff 0%, color-mix(in srgb, var(--pos-cat) 14%, #fff) 100%) !important;
+  box-shadow:
+    0 10px 20px -12px color-mix(in srgb, var(--pos-brand, #ff174d) 45%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--pos-cat) 18%, transparent) !important;
+  flex-shrink: 0 !important;
+  border: none !important;
+}
+
+.dark .pos-product-hero__icon {
+  background: color-mix(in srgb, var(--pos-brand) 18%, var(--pos-soft-surface)) !important;
+}
+
+.pos-product-hero__copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.pos-product-hero__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pos-product-hero__title,
+.pos-product-hero h1 {
+  font-size: clamp(1rem, 1.35vw, 1.22rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.035em !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+  line-height: 1.15 !important;
+}
+
+.pos-product-hero__badge {
+  align-self: flex-start;
+  font-size: 0.5625rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.45rem;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--pos-cat) 12%, #fff) !important;
+  color: color-mix(in srgb, var(--pos-cat) 78%, #111b2e) !important;
+  border: 1px solid color-mix(in srgb, var(--pos-cat) 22%, transparent);
+  line-height: 1.1;
+}
+
+.pos-product-hero__desc {
+  margin: 0 !important;
+  max-width: 34rem;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  line-height: 1.35 !important;
+  color: #64748b !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pos-product-hero__banner {
+  margin: 0.08rem 0 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+  font-size: 9px !important;
+  font-weight: 650 !important;
+  color: var(--pos-brand, #ff174d) !important;
+}
+
+/* Prix ? 2 lignes, meme hauteur que client-pill */
+.pos-policy-hero {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 0.12rem !important;
+  width: 100% !important;
+  min-height: 3rem !important;
+  height: 3rem !important;
+  max-height: 3rem !important;
+  padding: 0.28rem 0.55rem !important;
+  border-radius: 7px !important;
+  background: linear-gradient(145deg, #0f172a 0%, #1e293b 55%, #3f0d22 145%) !important;
+  color: #fff !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 18px -12px rgba(15, 23, 42, 0.5) !important;
+  border: none !important;
+  box-sizing: border-box !important;
+}
+
+.pos-policy-hero::before {
+  content: '';
+  position: absolute;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 50%;
+  right: -1.6rem;
+  top: -2rem;
+  pointer-events: none;
+}
+
+.pos-policy-hero__row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.pos-policy-hero__label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0 !important;
+  min-width: 0;
+  font-size: 0.5rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.68) !important;
+  line-height: 1.15 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pos-policy-hero__price-line {
+  position: relative;
+  z-index: 1;
+  display: flex !important;
+  align-items: baseline;
+  gap: 0.15rem;
+  margin: 0 !important;
+  min-width: 0;
+  font-size: 0.62rem !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  line-height: 1.15 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pos-policy-hero__price-line strong {
+  font-size: 0.95rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.03em !important;
+  color: #fff !important;
+  line-height: 1 !important;
+}
+
+.pos-policy-hero__live {
+  margin-left: 0.35rem;
+  font-style: normal !important;
+  font-size: 0.5rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8ee0c2 !important;
+  background: rgba(42, 185, 136, 0.16);
+  border-radius: 7px;
+  padding: 0.1rem 0.28rem;
+  flex: none;
+}
+
+.pos-policy-hero__admin {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 7px;
+  color: #fda4af !important;
+  background: rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  flex: none;
+}
+
+.pos-policy-hero__admin:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.12);
+}
+.pos-policy-inline {
+  display: none !important;
+}
+
+.dark .pos-config-topbar {
+  background: var(--pos-soft-surface, #0b1528);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+
+.pos-client-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 3rem;
+  min-height: 3rem;
+  max-height: 3rem;
+  background: #f8fafc;
+  padding: 0.25rem 0.4rem 0.25rem 0.4rem;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: none;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.dark .pos-client-pill {
+  background: var(--pos-soft-muted, #111827);
+}
+
+.pos-client-pill__avatar {
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 7px;
+  background: linear-gradient(145deg, #ffe5ec, #fff2e8);
+  color: var(--pos-brand, #ff174d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.68rem;
+  letter-spacing: -0.02em;
+  border: 1px solid color-mix(in srgb, var(--pos-brand) 16%, transparent);
+}
+
+.pos-client-pill__name {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  line-height: 1.15 !important;
+  max-width: 8.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pos-client-pill__role {
+  margin-top: 0.15rem;
+  font-size: 8px !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8 !important;
+}
+
+.pos-client-pill__btn {
+  height: 1.7rem !important;
+  min-height: 1.7rem !important;
+  padding: 0 0.55rem !important;
+  border-radius: 7px !important;
+  font-size: 10px !important;
+  font-weight: 750 !important;
+  color: #536076 !important;
+  background: #fff !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+
+.pos-client-pill__btn:hover {
+  background: linear-gradient(135deg, #ff174d, #c91443) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+.pos-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fs-body) !important;
+  font-weight: 500 !important;
+  color: #94a3b8 !important;
+  margin-bottom: 0.75rem;
+  transition: color 0.15s ease;
+}
+
+.pos-back-link:hover {
+  color: var(--pos-brand) !important;
+}
+
+.pos-back-link__ico {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark .pos-back-link__ico {
+  background: var(--pos-soft-surface);
+}
+
+/* ??????????? STEPPER PREMIUM ? bandeau unifi?, sans raccords ??????????? */
+.pos-stepper-premium {
+  --pos-step-tint: #ffffff;
+  --pos-step-line: rgba(148, 163, 184, 0.18);
+  --pos-step-item-w: 228px;
+  background: #fff !important;
+  border-radius: 7px !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  padding: 0.55rem 0.65rem 0.6rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden;
+}
+
+.dark .pos-stepper-premium {
+  --pos-step-tint: var(--pos-soft-surface, #0b1528);
+  --pos-step-line: rgba(255, 255, 255, 0.08);
+  background: var(--pos-step-tint) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Cadres sections : blanc neutre au repos — flash couleur uniquement en localisation */
+.orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card,
+.orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card--dense,
+.orion-viewport .pos-soft-shell .pos-section-card--dense,
+.orion-viewport .pos-soft-shell .pos-section-card {
+  background: #fff !important;
+  border: 1px solid rgba(148, 163, 184, 0.12) !important;
+}
+
+html.dark .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card,
+html.dark .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card--dense,
+html.dark .orion-viewport .pos-soft-shell .pos-section-card--dense,
+html.dark .orion-viewport .pos-soft-shell .pos-section-card,
+.dark .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card,
+.dark .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card--dense,
+.dark .orion-viewport .pos-soft-shell .pos-section-card--dense,
+.dark .orion-viewport .pos-soft-shell .pos-section-card {
+  background: var(--pos-soft-surface, var(--bg-card, #0b1528)) !important;
+  border-color: rgba(148, 163, 184, 0.16) !important;
+}
+
+.pos-stepper-premium__scroll-wrap {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #fff;
+  border: none;
+}
+
+.dark .pos-stepper-premium__scroll-wrap {
+  background: transparent;
+  border: none;
+}
+
+/* Fades gauche / droite — indiquent le défilement horizontal */
+.pos-stepper-premium__scroll-wrap::before,
+.pos-stepper-premium__scroll-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1.75rem;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.pos-stepper-premium__scroll-wrap::before {
+  left: 0;
+  background: linear-gradient(90deg, #ffffff 20%, transparent 100%);
+}
+
+.pos-stepper-premium__scroll-wrap::after {
+  right: 0;
+  background: linear-gradient(270deg, #ffffff 20%, transparent 100%);
+}
+
+.pos-stepper-premium__scroll-wrap.is-overflow::after,
+.pos-stepper-premium__scroll-wrap.can-scroll-right::after {
+  opacity: 1;
+}
+
+.pos-stepper-premium__scroll-wrap.can-scroll-left::before {
+  opacity: 1;
+}
+
+.dark .pos-stepper-premium__scroll-wrap::before {
+  background: linear-gradient(90deg, var(--pos-soft-surface, #0b1528) 20%, transparent 100%);
+}
+
+.dark .pos-stepper-premium__scroll-wrap::after {
+  background: linear-gradient(270deg, var(--pos-soft-surface, #0b1528) 20%, transparent 100%);
+}
+
+.pos-stepper-premium__scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  padding: 0.2rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  cursor: grab;
+  touch-action: pan-x;
+  user-select: none;
+}
+
+.pos-stepper-premium__scroll .pos-stepper-premium__item {
+  cursor: pointer;
+}
+
+.pos-stepper-premium__scroll.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+}
+
+.pos-stepper-premium__scroll.is-dragging .pos-stepper-premium__item {
+  pointer-events: none;
+}
+
+.pos-stepper-premium__scroll::-webkit-scrollbar {
+  display: none;
+  height: 0;
+}
+
+.pos-stepper-premium__item {
+  /* Largeur unique Packaging (228px) — élargie si libellé plus long via --pos-step-item-w */
+  flex: 0 0 var(--pos-step-item-w, 228px) !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  width: var(--pos-step-item-w, 228px) !important;
+  min-width: var(--pos-step-item-w, 228px) !important;
+  max-width: var(--pos-step-item-w, 228px) !important;
+  height: auto !important;
+  min-height: 2.65rem !important;
+  max-height: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  padding: 0.4rem 0.55rem !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  border: none !important;
+  background: transparent !important;
+  color: #5b6577 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  cursor: pointer;
+  box-sizing: border-box !important;
+  box-shadow: none !important;
+  position: relative;
+  scroll-snap-align: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* S?parateurs discrets entre ?tapes ? pas de cartes disjointes */
+.pos-stepper-premium__item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  right: 0;
+  width: 1px;
+  background: color-mix(in srgb, var(--pos-cat, var(--pos-brand, #ff174d)) 12%, rgba(148, 163, 184, 0.28));
+  pointer-events: none;
+}
+
+.pos-stepper-premium__item.flex-1,
+.pos-stepper-premium__item.is-mobile-current {
+  max-width: none !important;
+  width: 100% !important;
+  flex: 1 1 auto !important;
+}
+
+.pos-soft-shell .pos-stepper-premium button,
+.pos-soft-shell .pos-stepper-premium .pos-stepper-premium__item {
+  height: auto !important;
+  max-height: none !important;
+  white-space: nowrap !important;
+}
+
+.pos-stepper-premium__item.is-pending {
+  background: transparent !important;
+  color: #5b6577 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.pos-stepper-premium__item.is-pending:hover {
+  background: color-mix(in srgb, var(--pos-cat, var(--pos-brand, #ff174d)) 8%, #fff) !important;
+  color: #334155 !important;
+}
+
+.pos-stepper-premium__item.is-current {
+  background: linear-gradient(135deg, #ff174d, #c91443) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 18px -10px rgba(255, 23, 77, 0.45) !important;
+  z-index: 1;
+}
+
+.pos-stepper-premium__item.is-current::after {
+  display: none;
+}
+
+.pos-stepper-premium__item.is-done {
+  background: transparent !important;
+  color: #0f766e !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.pos-stepper-premium__item.is-done:hover {
+  background: color-mix(in srgb, #10b981 10%, #fff) !important;
+}
+
+.pos-stepper-premium__num {
+  width: 1.45rem !important;
+  height: 1.45rem !important;
+  min-width: 1.45rem !important;
+  max-height: none !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  background: color-mix(in srgb, var(--pos-cat, var(--pos-brand, #ff174d)) 12%, #e8edf5) !important;
+  color: inherit !important;
+  flex-shrink: 0 !important;
+}
+
+.pos-stepper-premium__item.is-current .pos-stepper-premium__num {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+}
+
+.pos-stepper-premium__item.is-done .pos-stepper-premium__num {
+  background: color-mix(in srgb, #10b981 18%, #fff) !important;
+  color: #0f766e !important;
+}
+
+.pos-stepper-premium__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.pos-stepper-premium__meta {
+  font-size: 8px !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  opacity: 0.75;
+}
+
+.pos-stepper-premium__item.is-current .pos-stepper-premium__meta {
+  opacity: 0.9;
+  color: #ffdce4 !important;
+}
+
+.pos-stepper-premium__label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+}
+
+.pos-stepper-premium__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.45rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.pos-stepper-premium__footer-copy {
+  margin: 0;
+  font-size: 10px !important;
+  font-weight: 550 !important;
+  color: #475569 !important;
+  line-height: 1.35;
+  min-width: 0;
+}
+
+.pos-stepper-premium__pct {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  color: var(--pos-brand) !important;
+  flex-shrink: 0;
+}
+
+.pos-stepper-premium__track {
+  margin-top: 0.4rem;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: #e8edf4;
+  overflow: hidden;
+  border: none;
+}
+
+.pos-stepper-premium__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff174d, #c91443);
+  transition: width 0.3s ease;
+}
+
+.pos-stepper-premium__fill.is-done {
+  background: linear-gradient(90deg, #06d6a0, #34d399);
+}
+.pos-stepper-premium__nav-btn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  min-height: 44px !important;
+  max-height: none !important;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.pos-stepper-premium__all-btn {
+  width: 100%;
+  min-height: 40px !important;
+  height: auto !important;
+  max-height: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 0.55rem 0.75rem;
+  white-space: nowrap !important;
+}
+
+.pos-stepper-premium__mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 14rem;
+  overflow-y: auto;
+  padding: 0.25rem 0;
+}
+
+.pos-stepper-premium__mobile-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 44px !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 0.55rem 0.75rem;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: #fff;
+  color: #475569;
+  font-size: 12px !important;
+  text-align: left;
+  white-space: normal !important;
+  width: 100%;
+}
+
+.pos-stepper-premium__mobile-row.is-current {
+  background: color-mix(in srgb, var(--pos-brand) 8%, #fff);
+  border-color: color-mix(in srgb, var(--pos-brand) 28%, transparent);
+  color: var(--pos-brand-deep);
+}
+
+.pos-stepper-premium__mobile-row.is-done {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.dark .pos-stepper-premium__mobile-row {
+  background: var(--pos-soft-surface, #0b1528);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-main, #e2e8f0);
+}
+
+.dark .pos-stepper-premium__mobile-row.is-current {
+  background: color-mix(in srgb, var(--pos-brand) 16%, var(--pos-soft-surface, #0b1528));
+  border-color: color-mix(in srgb, var(--pos-brand) 36%, transparent);
+  color: #fda4af;
+}
+
+.dark .pos-stepper-premium__mobile-row.is-done {
+  background: color-mix(in srgb, #10b981 14%, var(--pos-soft-surface, #0b1528));
+  color: #6ee7b7;
+}
+
+.pos-stepper-premium__stock {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: var(--fs-helper) !important;
+  line-height: 1.4;
+}
+
+.pos-stepper-premium__stock.is-warn {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.pos-stepper-premium__stock.is-danger {
+  background: #fff1f2;
+  color: #C91443;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pos-stepper-premium__item {
+    min-width: var(--pos-step-item-w, 228px) !important;
+  }
+}
+
+/* Legacy stepper soft (si encore r?f?renc?) */
+.pos-step-soft {
+  background: #fff !important;
+  border-radius: var(--pos-soft-radius) !important;
+  box-shadow: var(--pos-soft-shadow) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+  padding: 1rem 1.35rem !important;
+}
+
+.dark .pos-step-soft {
+  background: var(--pos-soft-surface) !important;
+}
+
+.pos-step-soft__pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
+  padding: 0.35rem 0.25rem !important;
+  border-radius: 0.75rem !important;
+  font-size: var(--fs-body) !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  border: none !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+
+.pos-step-soft__pill.is-current {
+  color: var(--pos-soft-ink) !important;
+}
+
+.pos-step-soft__pill.is-done {
+  color: #059669 !important;
+}
+
+.pos-step-soft__num {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0.75rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.875rem !important;
+  font-weight: 800 !important;
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+}
+
+.pos-step-soft__pill.is-current .pos-step-soft__num {
+  background: linear-gradient(135deg, #ff174d, #C91443) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 20px -4px rgba(255, 23, 77, 0.45) !important;
+}
+
+.pos-step-soft__pill.is-done .pos-step-soft__num {
+  background: color-mix(in srgb, var(--pos-success) 18%, transparent) !important;
+  color: #059669 !important;
+}
+
+.pos-step-soft__meta {
+  font-size: 0.625rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  line-height: 1.2;
+}
+
+.pos-step-soft__pill.is-current .pos-step-soft__meta {
+  color: var(--pos-brand) !important;
+}
+
+/* ??????????? SECTION CARDS ??????????? */
+.pos-soft-shell .pos-section-card,
+.orion-viewport .pos-soft-shell .pos-section-card {
+  position: relative !important;
+  overflow: visible !important;
+  background: #fff !important;
+  border-radius: var(--pos-soft-radius) !important;
+  box-shadow: var(--pos-soft-shadow) !important;
+  border: 1px solid rgba(148, 163, 184, 0.12) !important;
+  padding: var(--card-padding) !important;
+}
+
+.pos-soft-shell .pos-section-card::before {
+  content: none !important;
+  display: none !important;
+}
+
+.dark .pos-soft-shell .pos-section-card,
+.dark .orion-viewport .pos-soft-shell .pos-section-card {
+  background: var(--pos-soft-surface) !important;
+  border-color: rgba(148, 163, 184, 0.16) !important;
+}
+
+.pos-section-card__head {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 0.75rem !important;
+  margin-bottom: 0.9rem !important;
+  position: relative;
+  z-index: 1;
+}
+
+.pos-section-card__icon {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0.85rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.15rem !important;
+  background: var(--pos-soft-muted) !important;
+  box-shadow: none !important;
+  flex-shrink: 0 !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+.pos-section-card__title {
+  font-size: var(--fs-section) !important;
+  font-weight: 700 !important;
+  color: var(--pos-soft-ink) !important;
+  line-height: var(--lh-heading) !important;
+}
+
+.pos-section-card__hint {
+  font-size: var(--fs-helper) !important;
+  font-weight: 500 !important;
+  color: #64748b !important;
+  margin: 0.2rem 0 0 !important;
+  line-height: var(--lh-body) !important;
+  max-width: 36rem;
+}
+
+/* Grille options ? padding tokenis?, sans override Tailwind p-* */
+.pos-section-card--grid {
+  padding: var(--inner-padding) !important;
+}
+
+.pos-impact-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0.4rem 0.7rem !important;
+  border-radius: 7px !important;
+  font-size: var(--fs-xs) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  background: #fff1f5 !important;
+  color: #e11d48 !important;
+  white-space: nowrap !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+
+.pos-impact-badge--info {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+}
+
+/* Niche champ : transparente au repos — flash sur le cadre section uniquement */
+.orion-viewport .pos-soft-shell .pos-field-nest {
+  background: transparent !important;
+  border: none !important;
+  border-radius: var(--pos-soft-radius-sm) !important;
+  padding: 0.15rem 0 !important;
+  box-shadow: none !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Grille multi-champs numériques (L×P×H) : niche soft — pas pour les rails chips */
+.orion-viewport .pos-soft-shell .pos-section-card--grid .pos-field-nest:not(:has(.pos-chip-rail)):not(:has(.pos-option-card-grid)) {
+  background: var(--pos-soft-muted, #f8f9fc) !important;
+  border: 1px solid rgba(148, 163, 184, 0.12) !important;
+  padding: 0.55rem 0.7rem !important;
+  min-width: 0;
+}
+
+html.dark .orion-viewport .pos-soft-shell .pos-section-card--grid .pos-field-nest:not(:has(.pos-chip-rail)):not(:has(.pos-option-card-grid)),
+.dark .orion-viewport .pos-soft-shell .pos-section-card--grid .pos-field-nest:not(:has(.pos-chip-rail)):not(:has(.pos-option-card-grid)) {
+  background: color-mix(in srgb, var(--pos-soft-muted, #111827) 80%, transparent) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--grid .pos-field-nest:has(.pos-chip-rail),
+.orion-viewport .pos-soft-shell .pos-section-card--grid .pos-field-nest:has(.pos-option-card-grid) {
+  background: transparent !important;
+  border: none !important;
+  padding: 0.15rem 0 !important;
+  box-shadow: none !important;
+  min-width: 0;
+}
+
+/* ??????????? CHIPS ? override ui-consistency 32px ??????????? */
+.pos-soft-shell .flex.flex-wrap:has(> button.pos-chip),
+.orion-viewport .pos-soft-shell .flex.flex-wrap:has(> button.pos-chip) {
+  gap: var(--chip-gap) !important;
+}
+
+.pos-soft-shell button.pos-chip,
+.pos-soft-shell .pos-chip,
+.pos-soft-shell .flex.flex-wrap > button.pos-chip,
+.orion-viewport .pos-soft-shell button.pos-chip,
+.orion-viewport .pos-soft-shell .pos-chip,
+.orion-viewport .pos-soft-shell .flex.flex-wrap > button.pos-chip {
+  box-sizing: border-box !important;
+  height: auto !important;
+  min-height: 40px !important;
+  max-height: none !important;
+  padding: 10px 14px !important;
+  border-radius: var(--pos-soft-radius-chip) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.35rem !important;
+}
+
+.pos-soft-shell button.pos-chip.is-selected,
+.pos-soft-shell button.pos-chip.chip-selected-accent,
+.pos-soft-shell .chip-selected-accent,
+.orion-viewport .pos-soft-shell button.pos-chip.is-selected,
+.orion-viewport .pos-soft-shell button.pos-chip.chip-selected-accent,
+.orion-viewport .pos-soft-shell .chip-selected-accent {
+  background: var(--pos-chip-active) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.35) !important;
+}
+
+.pos-soft-shell button.pos-chip.orion-chip-idle,
+.pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled),
+.orion-viewport .pos-soft-shell button.pos-chip.orion-chip-idle,
+.orion-viewport .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled) {
+  background: var(--pos-soft-muted) !important;
+  border: 1px solid rgba(148, 163, 184, 0.14) !important;
+  color: #475569 !important;
+  box-shadow: none !important;
+}
+
+html.dark .pos-soft-shell button.pos-chip.orion-chip-idle,
+html.dark .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled),
+html.dark .orion-viewport .pos-soft-shell button.pos-chip.orion-chip-idle,
+html.dark .orion-viewport .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled),
+.dark .pos-soft-shell button.pos-chip.orion-chip-idle,
+.dark .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled),
+.dark .orion-viewport .pos-soft-shell button.pos-chip.orion-chip-idle,
+.dark .orion-viewport .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled) {
+  color: #cbd5e1 !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+.orion-viewport .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled):hover,
+.pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled):hover {
+  background: var(--pos-soft-surface, #fff) !important;
+  border-color: color-mix(in srgb, var(--pos-brand) 30%, transparent) !important;
+  color: var(--pos-brand) !important;
+  box-shadow: 0 8px 20px -10px rgba(15, 23, 42, 0.12) !important;
+  transform: translateY(-1px);
+}
+
+html.dark .orion-viewport .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled):hover,
+html.dark .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled):hover,
+.dark .orion-viewport .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled):hover,
+.dark .pos-soft-shell button.pos-chip:not(.is-selected):not(:disabled):hover {
+  background: color-mix(in srgb, var(--pos-brand) 12%, var(--pos-soft-surface, #0b1528)) !important;
+}
+
+/* Chips POS — 1 ligne + scroll horizontal (tous articles) */
+.orion-viewport .pos-soft-shell .pos-chip-rail,
+.pos-soft-shell .pos-chip-rail {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 0 0 0.35rem !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.orion-viewport .pos-soft-shell .pos-chip-rail--presets,
+.pos-soft-shell .pos-chip-rail--presets {
+  flex-wrap: nowrap !important;
+}
+
+/* ── Quantité unifiée (tous articles) ── */
+.pos-qty-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pos-qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 100%;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.pos-qty-stepper.is-warn .pos-qty-stepper__input {
+  border-color: rgba(245, 158, 11, 0.7) !important;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.14);
+}
+
+.pos-qty-stepper__btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2.35rem !important;
+  min-width: 2.35rem !important;
+  height: 2.35rem !important;
+  min-height: 2.35rem !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background: #eef2f6 !important;
+  color: #334155 !important;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.pos-qty-stepper__btn:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.pos-qty-stepper__btn:active {
+  background: #cbd5e1 !important;
+  transform: scale(0.96);
+}
+
+html.dark .pos-qty-stepper__btn,
+.dark .pos-qty-stepper__btn {
+  background: rgba(148, 163, 184, 0.14) !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .pos-qty-stepper__btn:hover,
+.dark .pos-qty-stepper__btn:hover {
+  background: rgba(148, 163, 184, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+.pos-qty-stepper__input {
+  width: 4.5rem !important;
+  min-width: 3.75rem !important;
+  height: 2.35rem !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  text-align: center !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 0.9375rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  outline: none !important;
+  line-height: 1 !important;
+  padding: 0 0.35rem !important;
+  -moz-appearance: textfield;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pos-qty-stepper__input:focus {
+  border-color: color-mix(in srgb, var(--pos-brand, #ff174d) 45%, #94a3b8) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--pos-brand, #ff174d) 14%, transparent);
+}
+
+.pos-qty-stepper__input::-webkit-outer-spin-button,
+.pos-qty-stepper__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+html.dark .pos-qty-stepper__input,
+.dark .pos-qty-stepper__input {
+  color: #f8fafc !important;
+  background: var(--pos-soft-surface, #0b1528) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+}
+
+.pos-qty-stepper__suffix {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -0.15rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.pos-qty-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+  max-width: 100%;
+}
+
+.pos-qty-presets__chip {
+  min-width: 2.2rem;
+  height: 1.75rem;
+  padding: 0 0.6rem !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background: #eef2f6 !important;
+  color: #475569 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 0.75rem !important;
+  font-weight: 650 !important;
+  line-height: 1 !important;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.pos-qty-presets__chip:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.pos-qty-presets__chip:active {
+  transform: scale(0.97);
+}
+
+.pos-qty-presets__chip.is-selected {
+  background: color-mix(in srgb, var(--pos-brand, #ff174d) 14%, #fff) !important;
+  color: var(--pos-brand, #ff174d) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pos-brand, #ff174d) 45%, transparent);
+}
+
+html.dark .pos-qty-presets__chip,
+.dark .pos-qty-presets__chip {
+  background: rgba(148, 163, 184, 0.14) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark .pos-qty-presets__chip.is-selected,
+.dark .pos-qty-presets__chip.is-selected {
+  background: color-mix(in srgb, var(--pos-brand, #ff174d) 22%, transparent) !important;
+  color: #fda4af !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pos-brand, #ff174d) 50%, transparent);
+}
+
+/* Palettes couleurs — wrap sans scroll, tous articles */
+.orion-viewport .pos-soft-shell .pos-chip-rail--swatches,
+.pos-soft-shell .pos-chip-rail--swatches {
+  flex-wrap: wrap !important;
+  overflow: visible !important;
+  overflow-x: visible !important;
+  gap: 0.35rem !important;
+  padding: 0 !important;
+  scrollbar-width: none !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-chip-rail > button.pos-chip,
+.pos-soft-shell .pos-chip-rail > button.pos-chip {
+  white-space: nowrap !important;
+  max-width: none !important;
+  min-height: 2.25rem !important;
+  padding: 0.45rem 0.75rem !important;
+  flex: 0 0 auto !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-chip-rail > button.pos-chip .pos-chip__label,
+.pos-soft-shell .pos-chip-rail > button.pos-chip .pos-chip__label {
+  display: block !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  max-width: none !important;
+}
+
+/* Chips avec sous-titre (oriflamme, présentoir, reliure…) */
+.orion-viewport .pos-soft-shell button.pos-chip.pos-chip--with-sub,
+.pos-soft-shell button.pos-chip.pos-chip--with-sub {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  white-space: normal !important;
+  text-align: left !important;
+  min-height: 2.65rem !important;
+  padding-top: 0.4rem !important;
+  padding-bottom: 0.4rem !important;
+}
+
+/* Compat ancien sélecteur flex-wrap chips — même principe 1 ligne */
+.pos-soft-shell .flex.flex-wrap:has(> button.pos-chip),
+.orion-viewport .pos-soft-shell .flex.flex-wrap:has(> button.pos-chip) {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding-bottom: 0.35rem !important;
+}
+
+/* ??? Option cards (maquette Soft ? Mati?re Kraft / Alu / PET) ??? */
+.pos-option-card-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0.85rem !important;
+}
+@media (min-width: 640px) {
+  .pos-option-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  .pos-option-card-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .pos-option-card-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 900px) {
+  .pos-option-card-grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+.pos-soft-shell button.pos-option-card {
+  position: relative !important;
+  text-align: left !important;
+  padding: 0.85rem 1rem !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  border-radius: 0.85rem !important;
+  border: 1px solid rgba(148, 163, 184, 0.22) !important;
+  background: var(--pos-soft-muted) !important;
+  color: #475569 !important;
+  box-shadow: none !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 0.25rem !important;
+}
+.pos-soft-shell button.pos-option-card:hover:not(:disabled):not(.is-selected) {
+  background: #fff !important;
+  border-color: color-mix(in srgb, var(--pos-brand) 28%, transparent) !important;
+  box-shadow: 0 10px 24px -12px rgba(15, 23, 42, 0.14) !important;
+  transform: translateY(-2px);
+}
+html.dark .pos-soft-shell button.pos-option-card:hover:not(:disabled):not(.is-selected),
+.dark .pos-soft-shell button.pos-option-card:hover:not(:disabled):not(.is-selected) {
+  background: color-mix(in srgb, var(--pos-brand) 12%, var(--pos-soft-surface, #0b1528)) !important;
+  box-shadow: none !important;
+}
+.pos-soft-shell button.pos-option-card.is-selected {
+  background: var(--pos-chip-active) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 14px 32px -10px rgba(15, 23, 42, 0.4) !important;
+}
+.pos-soft-shell button.pos-option-card .pos-option-card__title {
+  font-size: var(--fs-chip) !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+}
+.pos-soft-shell button.pos-option-card .pos-option-card__sub {
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  opacity: 0.75;
+  line-height: 1.35 !important;
+}
+.pos-soft-shell button.pos-option-card.is-selected .pos-option-card__sub {
+  color: rgba(255, 255, 255, 0.78) !important;
+  opacity: 1;
+}
+.pos-option-card__check {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--pos-chip-active);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+html.dark .pos-option-card__check,
+.dark .pos-option-card__check {
+  background: var(--pos-soft-surface, #0b1528);
+  color: #fda4af;
+}
+.pos-soft-shell button.pos-option-card.is-selected .pos-option-card__check {
+  display: inline-flex !important;
+}
+
+/* Color swatches Soft UI — unifié, compact, sans défilement */
+.pos-swatch-nest {
+  background: var(--pos-soft-muted) !important;
+  border: 1px solid rgba(148, 163, 184, 0.12) !important;
+  border-radius: 0.75rem !important;
+  padding: 0.55rem 0.65rem !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+.pos-swatch-nest > p {
+  margin-top: 0.4rem !important;
+  font-size: 0.6875rem !important;
+}
+.pos-soft-shell button.pos-color-swatch {
+  width: 1.55rem !important;
+  height: 1.55rem !important;
+  min-width: 1.55rem !important;
+  min-height: 1.55rem !important;
+  max-height: none !important;
+  flex: 0 0 auto !important;
+  border-radius: 999px !important;
+  padding: 0 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+.pos-soft-shell button.pos-color-swatch:hover {
+  transform: scale(1.12) !important;
+}
+.pos-soft-shell button.pos-color-swatch.is-selected {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--pos-brand, #ff174d) !important;
+  transform: scale(1.08) !important;
+}
+
+.pos-soft-shell button.pos-color-swatch.is-light {
+  border: 1px solid rgba(148, 163, 184, 0.45) !important;
+}
+
+.pos-soft-shell button.pos-color-swatch--translucent {
+  background-color: transparent !important;
+  background-image:
+    linear-gradient(45deg, rgba(148, 163, 184, 0.35) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(148, 163, 184, 0.35) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(148, 163, 184, 0.35) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(148, 163, 184, 0.35) 75%),
+    linear-gradient(0deg, color-mix(in srgb, var(--swatch-tint, #e0f2fe) 55%, transparent), color-mix(in srgb, var(--swatch-tint, #e0f2fe) 55%, transparent)) !important;
+  background-size: 6px 6px, 6px 6px, 6px 6px, 6px 6px, 100% 100% !important;
+  background-position: 0 0, 0 3px, 3px -3px, -3px 0, 0 0 !important;
+  border: 1px solid rgba(56, 189, 248, 0.55) !important;
+}
+
+.pos-soft-shell button.pos-color-swatch--metallic {
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    transparent 42%,
+    rgba(15, 23, 42, 0.18) 100%
+  ) !important;
+  border: 1px solid rgba(148, 163, 184, 0.4) !important;
+}
+
+.pos-soft-shell button.pos-color-swatch--kraft {
+  border: 1px solid rgba(139, 105, 20, 0.35) !important;
+}
+
+/* Catalogue hero Soft — densifié (détail dans orion-header-dense.css) */
+.pos-catalog-hero-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+}
+@media (min-width: 900px) {
+  .pos-catalog-hero-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+}
+.pos-catalog-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.pos-catalog-hero__eyebrow {
+  font-size: 0.625rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--pos-brand) !important;
+  margin: 0 !important;
+}
+.pos-catalog-hero h1 {
+  font-size: 1.125rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--pos-soft-ink) !important;
+  line-height: 1.15 !important;
+  margin: 0 !important;
+}
+.pos-catalog-hero p {
+  font-size: 0.75rem !important;
+  color: #64748b !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  max-width: 28rem;
+  line-height: 1.35;
+}
+.pos-catalog-hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+}
+.pos-catalog-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 7px;
+  background: #fff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 4px 12px -8px rgba(15, 23, 42, 0.12);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+}
+.pos-catalog-stat strong {
+  color: #0f172a;
+  font-weight: 800;
+}
+.pos-catalog-stat--ok {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+.pos-catalog-stat--ok strong {
+  color: #047857;
+}
+.pos-catalog-hero__aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+.pos-catalog-cart-btn {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  min-height: 2.125rem !important;
+  height: 2.125rem !important;
+  padding: 0 0.7rem !important;
+  border-radius: 7px !important;
+  font-size: 0.75rem !important;
+  font-weight: 750 !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #C91443, #ff174d) !important;
+  border: none !important;
+  box-shadow: 0 6px 14px -8px rgba(230, 0, 60, 0.5) !important;
+  cursor: pointer;
+}
+.pos-catalog-cart-btn:hover {
+  filter: brightness(1.05);
+}
+.pos-catalog-cart-btn__badge {
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #C91443;
+  font-size: 0.625rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Rail cat?gories Soft */
+.pos-cat-rail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .pos-cat-rail {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .pos-cat-rail {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1280px) {
+  .pos-cat-rail {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1536px) {
+  .pos-cat-rail {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+}
+
+.orion-viewport .pos-soft-shell .pos-category-tile,
+.pos-soft-shell .pos-category-tile {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  gap: 0.65rem !important;
+  min-height: 5.25rem !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 0.85rem 0.9rem !important;
+  border-radius: 1.1rem !important;
+  background: #fff !important;
+  border: 1px solid rgba(148, 163, 184, 0.12) !important;
+  box-shadow: 0 10px 24px -16px rgba(15, 23, 42, 0.14) !important;
+  color: #334155 !important;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease !important;
+  text-align: left !important;
+  cursor: pointer;
+}
+.pos-soft-shell .pos-category-tile:hover:not(.pos-category-tile--active) {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--pos-brand) 28%, transparent) !important;
+  box-shadow: var(--pos-soft-shadow) !important;
+}
+.pos-category-tile__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.pos-category-tile__icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.pos-category-tile__count {
+  font-size: 0.6875rem !important;
+  font-weight: 800 !important;
+  font-variant-numeric: tabular-nums;
+  padding: 0.2rem 0.5rem !important;
+  border-radius: 999px !important;
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: none !important;
+}
+.pos-category-tile__label {
+  font-size: var(--fs-body) !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  color: inherit !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pos-soft-shell .pos-category-tile--active,
+.orion-viewport .pos-soft-shell .pos-category-tile--active {
+  background: linear-gradient(145deg, #0f172a 0%, #1e293b 70%, #3f0d22 140%) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 16px 30px -14px rgba(15, 23, 42, 0.45) !important;
+}
+.pos-soft-shell .pos-category-tile--active .pos-category-tile__count {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #fff !important;
+}
+
+/* Toolbar Soft */
+.pos-soft-toolbar {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  background: #fff !important;
+  border-radius: var(--pos-soft-radius-sm) !important;
+  box-shadow: var(--pos-soft-shadow) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+  padding: 0.9rem !important;
+}
+@media (min-width: 768px) {
+  .pos-soft-toolbar {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+}
+.pos-soft-toolbar__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.pos-soft-select {
+  background: var(--pos-soft-muted) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 0.75rem !important;
+  padding: 0.55rem 0.75rem !important;
+  font-size: var(--fs-body) !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  outline: none;
+  min-height: 2.5rem;
+}
+.pos-soft-select:focus {
+  border-color: color-mix(in srgb, var(--pos-brand) 40%, transparent) !important;
+}
+.pos-view-toggle {
+  display: inline-flex;
+  padding: 0.2rem;
+  border-radius: 0.75rem;
+  background: #f1f5f9;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+.pos-view-toggle button {
+  min-width: 2.35rem !important;
+  min-height: 2.15rem !important;
+  height: auto !important;
+  padding: 0.35rem 0.55rem !important;
+  border-radius: 0.55rem !important;
+  border: none !important;
+  background: transparent !important;
+  color: #64748b !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+.pos-view-toggle button.is-active {
+  background: #fff !important;
+  color: var(--pos-brand) !important;
+  box-shadow: 0 4px 10px -6px rgba(15, 23, 42, 0.25) !important;
+}
+.pos-touch-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  min-height: 2.5rem !important;
+  height: auto !important;
+  padding: 0.45rem 0.75rem !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  background: var(--pos-soft-muted) !important;
+  color: #475569 !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+.pos-touch-toggle.is-active {
+  background: color-mix(in srgb, var(--pos-brand) 10%, #fff) !important;
+  border-color: color-mix(in srgb, var(--pos-brand) 30%, transparent) !important;
+  color: var(--pos-brand) !important;
+}
+
+.pos-catalog-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pos-catalog-meta__count {
+  font-size: var(--fs-body);
+  color: #64748b;
+  font-weight: 500;
+}
+.pos-catalog-meta__count strong {
+  color: #0f172a;
+  font-weight: 800;
+}
+.pos-catalog-meta__chip {
+  font-size: 0.6875rem;
+  font-weight: 750;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--pos-brand) 10%, transparent);
+  color: var(--pos-brand);
+}
+
+/* Cartes produits Soft */
+.pos-catalog-card {
+  background: #fff !important;
+  border: 1px solid rgba(148, 163, 184, 0.12) !important;
+  border-radius: 1.15rem !important;
+  box-shadow: 0 12px 28px -18px rgba(15, 23, 42, 0.16) !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+  cursor: pointer;
+  overflow: hidden;
+}
+.pos-catalog-card--grid {
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+}
+.pos-catalog-card--list {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem !important;
+}
+.pos-catalog-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--pos-brand) 28%, transparent) !important;
+  box-shadow: var(--pos-soft-shadow) !important;
+}
+.pos-catalog-card.is-disabled {
+  opacity: 0.58;
+}
+.pos-catalog-card.is-quote {
+  border-color: color-mix(in srgb, #f59e0b 35%, transparent) !important;
+}
+.pos-catalog-card__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.5rem;
+  background: #f8fafc;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+.pos-catalog-card__emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 7px;
+  background: #f8fafc;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.pos-catalog-card__emoji--sm {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 7px;
+  background: #f8fafc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pos-catalog-card__badges {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  max-width: 70%;
+}
+.pos-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.625rem;
+  font-weight: 800;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #475569;
+  box-shadow: 0 4px 10px -6px rgba(15, 23, 42, 0.25);
+}
+.pos-badge--top {
+  background: #fffbeb;
+  color: #b45309;
+}
+.pos-badge--new {
+  background: #fff1f2;
+  color: #C91443;
+}
+.pos-badge--warn {
+  background: #fff7ed;
+  color: #c2410c;
+}
+.pos-badge--muted {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+.pos-catalog-card__body {
+  padding: 0.9rem 1rem 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+.pos-cat-chip {
+  align-self: flex-start;
+  font-size: 0.625rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--pos-brand) 10%, transparent) !important;
+  color: var(--pos-brand) !important;
+}
+.pos-article-title {
+  font-size: var(--fs-config-body) !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pos-catalog-card:hover .pos-article-title {
+  color: var(--pos-brand) !important;
+}
+.pos-catalog-card__desc {
+  font-size: 0.75rem !important;
+  color: #94a3b8 !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pos-catalog-card__foot {
+  margin-top: auto;
+  padding: 0.75rem 1rem 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+.pos-catalog-card__foot--inline {
+  margin-top: 0;
+  padding: 0;
+  border: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+.pos-catalog-card__from {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.1rem;
+}
+.pos-catalog-card__amount {
+  font-size: 12px !important;
+  font-weight: 800;
+  color: var(--pos-brand);
+  font-variant-numeric: tabular-nums;
+}
+.pos-catalog-card__amount small {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+.pos-catalog-card__price .is-soft {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #b45309;
+}
+.pos-catalog-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pos-brand);
+  white-space: nowrap;
+  transition: gap 0.15s ease;
+}
+.pos-catalog-card:hover .pos-catalog-card__cta {
+  gap: 0.4rem;
+}
+
+.dark .pos-catalog-card,
+.dark .pos-soft-toolbar,
+.dark .pos-catalog-stat {
+  background: var(--pos-soft-surface) !important;
+}
+.dark .pos-catalog-card__media {
+  background: #0b1528;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+.dark .pos-article-title {
+  color: #f8fafc !important;
+}
+.dark .pos-soft-shell .pos-category-tile:not(.pos-category-tile--active) {
+  background: var(--pos-soft-surface) !important;
+}
+
+
+/* ??????????? SUMMARY PANEL (maquette sticky) ??????????? */
+.pos-summary-soft {
+  background: #fff !important;
+  border-radius: var(--pos-soft-radius) !important;
+  box-shadow: var(--pos-soft-shadow-lg) !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+.dark .pos-summary-soft {
+  background: var(--pos-soft-surface) !important;
+}
+
+.pos-summary-soft__hero {
+  position: relative !important;
+  background: linear-gradient(145deg, #0f172a 0%, #1e293b 60%, #3f0d22 140%) !important;
+  padding: 0.7rem 0.85rem 1.35rem !important;
+  color: #fff !important;
+  text-align: center !important;
+}
+
+.pos-summary-soft__hero::before,
+.pos-summary-soft__hero::after {
+  content: none !important;
+  display: none !important;
+}
+
+.pos-summary-soft__label {
+  position: relative;
+  z-index: 1;
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.pos-summary-soft__price {
+  position: relative;
+  z-index: 1;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.1 !important;
+  color: #fff !important;
+}
+
+.pos-summary-soft__hero-meta {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.3rem !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.pos-summary-soft__hero-bar {
+  position: relative;
+  z-index: 1;
+  margin: 0.45rem auto 0;
+  width: min(100%, 10rem);
+  height: 0.28rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+
+.pos-summary-soft__hero-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff174d, #ff4d6d);
+  transition: width 0.3s ease;
+}
+
+.pos-summary-soft__hero-fill.is-done {
+  background: linear-gradient(90deg, #06d6a0, #34d399);
+}
+
+.pos-summary-soft__body {
+  position: relative !important;
+  z-index: 2 !important;
+  margin: -0.85rem 0.55rem 0 !important;
+  background: #fff !important;
+  border-radius: var(--pos-soft-radius-sm) !important;
+  box-shadow: 0 12px 28px -18px rgba(15, 23, 42, 0.18) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+  padding: 0.4rem 0.55rem !important;
+}
+
+.dark .pos-summary-soft__body {
+  background: var(--pos-soft-muted) !important;
+}
+
+.pos-summary-soft__status-note {
+  margin: 0.5rem 0 0 !important;
+  padding-top: 0.45rem !important;
+  border-top: 1px solid rgba(226, 232, 240, 0.9) !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  line-height: 1.35 !important;
+  color: #94a3b8 !important;
+}
+html.dark .pos-summary-soft__status-note,
+.dark .pos-summary-soft__status-note {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+.pos-summary-soft__actions {
+  padding: 0.5rem 0.55rem 0.65rem !important;
+}
+
+.pos-summary-soft__currency {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  margin-left: 0.25rem;
+}
+
+/* ??? Zone CTA Soft UI premium (sticky) ??? */
+.pos-cta-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.pos-cta-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 7px;
+  border: 1px solid transparent;
+}
+
+.pos-cta-status__ico {
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pos-cta-status__title {
+  font-size: var(--fs-body) !important;
+  font-weight: 750 !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+}
+
+.pos-cta-status__detail {
+  font-size: 0.6875rem !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  margin: 0.2rem 0 0 !important;
+  opacity: 0.92;
+}
+
+.pos-cta-status--ready {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+.pos-cta-status--ready .pos-cta-status__ico {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.pos-cta-status--incomplete {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #9a3412;
+}
+.pos-cta-status--incomplete .pos-cta-status__ico {
+  background: #ffedd5;
+  color: #ea580c;
+}
+
+.pos-cta-status--pending {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #334155;
+}
+.pos-cta-status--pending .pos-cta-status__ico {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.pos-cta-status--error {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #9f1239;
+}
+.pos-cta-status--error .pos-cta-status__ico {
+  background: #ffe4e6;
+  color: #e11d48;
+}
+
+/* CTA principal ? rouge ANS, pleine largeur */
+.pos-soft-shell .pos-cta-zone .pos-cta-main,
+html:not(.dark) .pos-soft-shell .pos-cta-zone .pos-cta-main,
+html.dark .pos-soft-shell .pos-cta-zone .pos-cta-main,
+.pos-cta-main {
+  width: 100% !important;
+  min-height: 2.5rem !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 0.65rem 0.9rem !important;
+  border-radius: 7px !important;
+  border: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  font-size: var(--fs-config-body) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #C91443 0%, #ff174d 55%, #ff4d6d 100%) !important;
+  box-shadow: 0 10px 22px -10px rgba(230, 0, 60, 0.5) !important;
+  transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease, background 0.18s ease !important;
+  cursor: pointer;
+}
+
+.pos-cta-main:hover:not(:disabled):not([aria-disabled='true']) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 18px 32px -10px rgba(230, 0, 60, 0.62) !important;
+}
+
+.pos-cta-main:focus-visible {
+  outline: 2px solid #ff174d !important;
+  outline-offset: 3px !important;
+}
+
+.pos-cta-main__arrow {
+  transition: transform 0.18s ease;
+}
+
+.pos-cta-main:hover:not(:disabled) .pos-cta-main__arrow {
+  transform: translateX(3px);
+}
+
+/* Disabled ?l?gant ? pas ? mort ? */
+.pos-soft-shell .pos-cta-zone .pos-cta-main:disabled,
+.pos-soft-shell .pos-cta-zone .pos-cta-main[aria-disabled='true'],
+html:not(.dark) .pos-soft-shell .pos-cta-zone .pos-cta-main:disabled,
+html:not(.dark) .pos-soft-shell .pos-cta-zone .pos-cta-main[aria-disabled='true'],
+.pos-cta-main:disabled,
+.pos-cta-main[aria-disabled='true'] {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+  color: #64748b !important;
+  box-shadow: inset 0 0 0 1px #cbd5e1 !important;
+  cursor: not-allowed !important;
+  filter: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+.dark .pos-cta-main:disabled,
+.dark .pos-cta-main[aria-disabled='true'] {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  color: #94a3b8 !important;
+  box-shadow: inset 0 0 0 1px #475569 !important;
+}
+
+/* Secondaire */
+.pos-cta-secondary {
+  width: 100% !important;
+  min-height: 3rem !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 0.8rem 1.1rem !important;
+  border-radius: 1rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  font-size: var(--fs-config-body) !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  background: #fff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.12) !important;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+  cursor: pointer;
+}
+
+.pos-cta-secondary:hover:not(:disabled):not([aria-disabled='true']) {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.pos-cta-secondary:focus-visible {
+  outline: 2px solid #ff174d !important;
+  outline-offset: 2px !important;
+}
+
+.pos-cta-secondary:disabled,
+.pos-cta-secondary[aria-disabled='true'] {
+  background: #f8fafc !important;
+  color: #94a3b8 !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}
+
+.dark .pos-cta-secondary {
+  background: #0b1528 !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+.dark .pos-cta-secondary:disabled,
+.dark .pos-cta-secondary[aria-disabled='true'] {
+  background: #071021 !important;
+  color: #64748b !important;
+  border-color: #1e293b !important;
+}
+
+/* Demande devis brouillon */
+.pos-cta-draft__btn {
+  width: 100% !important;
+  min-height: 2.75rem !important;
+  height: auto !important;
+  padding: 0.7rem 1rem !important;
+  border-radius: 0.9rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  font-size: var(--fs-body) !important;
+  font-weight: 700 !important;
+  background: #fff7ed !important;
+  color: #9a3412 !important;
+  border: 1px solid #fdba74 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.pos-cta-draft__btn:hover:not(:disabled) {
+  background: #ffedd5 !important;
+}
+
+.pos-cta-draft__btn:disabled {
+  opacity: 0.75 !important;
+  cursor: wait !important;
+}
+
+.pos-cta-draft__hint {
+  margin: 0.4rem 0 0 !important;
+  font-size: 0.6875rem !important;
+  line-height: 1.4 !important;
+  color: #b45309 !important;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Tertiaire ? R?initialiser */
+.pos-cta-tertiary {
+  width: 100% !important;
+  min-height: 2.75rem !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 0.55rem 0.75rem !important;
+  border-radius: 0.75rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.4rem !important;
+  font-size: var(--fs-body) !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease !important;
+}
+
+.pos-cta-tertiary:hover {
+  color: #0f172a !important;
+  background: #f1f5f9 !important;
+}
+
+.pos-cta-tertiary:focus-visible {
+  outline: 2px solid #94a3b8 !important;
+  outline-offset: 2px !important;
+}
+
+.dark .pos-cta-tertiary {
+  color: #94a3b8 !important;
+}
+
+.dark .pos-cta-tertiary:hover {
+  color: #f8fafc !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Ancien CTA Soft remplac? par .pos-cta-main (rouge ANS) */
+.pos-soft-shell .pos-cta-primary,
+.orion-viewport .pos-soft-shell .pos-summary-soft .ans-btn-primary,
+.orion-viewport .pos-soft-shell .pos-cta-primary,
+html:not(.dark) .pos-soft-shell .pos-summary-soft .ans-btn-primary:not(:disabled):not([aria-disabled='true']),
+html:not(.dark) .pos-soft-shell .pos-cta-primary.ans-btn-primary:not(:disabled):not([aria-disabled='true']),
+html.dark .pos-soft-shell .pos-summary-soft .ans-btn-primary:not(:disabled):not([aria-disabled='true']) {
+  height: auto !important;
+  min-height: var(--control-height) !important;
+  max-height: none !important;
+  padding: 0.9rem 1.25rem !important;
+  border-radius: 1rem !important;
+  font-size: var(--fs-config-body) !important;
+  font-weight: 800 !important;
+  background: linear-gradient(135deg, #C91443 0%, #ff174d 55%, #ff4d6d 100%) !important;
+  box-shadow: 0 14px 28px -8px rgba(230, 0, 60, 0.5) !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+.pos-soft-shell .pos-summary-soft .ans-btn-primary:hover:not(:disabled),
+.orion-viewport .pos-soft-shell .pos-summary-soft .ans-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.pos-soft-shell .pos-summary-soft .ans-btn-primary:disabled,
+.pos-soft-shell .pos-summary-soft .ans-btn-primary[aria-disabled='true'],
+.orion-viewport .pos-soft-shell .pos-summary-soft .ans-btn-primary:disabled {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+  color: #64748b !important;
+  box-shadow: inset 0 0 0 1px #cbd5e1 !important;
+}
+
+.pos-summary-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.pos-summary-soft__currency {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  margin-left: 0.25rem;
+}
+
+.pos-summary-soft__price-pending {
+  opacity: 0.55;
+  letter-spacing: 0.08em;
+}
+
+.pos-summary-soft__hero-meta {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.3rem !important;
+  font-size: 0.65rem !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.pos-summary-soft__body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.35rem !important;
+}
+
+/* Synthèse Soft — lignes compactes */
+.pos-synth-soft {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pos-synth-soft__title,
+.pos-soft-shell .pos-synth-soft__title.pos-panel-title,
+html body .pos-soft-shell .pos-synth-soft__title.pos-panel-title {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: #64748b !important;
+  margin: 0 0 0.2rem !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.pos-synth-soft__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.28rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  min-height: 0;
+}
+
+html.dark .pos-synth-soft__row,
+.dark .pos-synth-soft__row {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.pos-synth-soft__row:last-of-type {
+  border-bottom: none;
+}
+
+.pos-synth-soft__left {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.pos-synth-soft__ico {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: #f8fafc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
+
+html.dark .pos-synth-soft__ico,
+.dark .pos-synth-soft__ico {
+  background: color-mix(in srgb, #fff 8%, var(--pos-soft-surface, #0b1528));
+}
+
+.pos-synth-soft__label {
+  font-size: var(--fs-label) !important;
+  font-weight: 500 !important;
+  color: #64748b !important;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  line-height: 1.25 !important;
+}
+
+.pos-synth-soft__value {
+  font-size: var(--fs-label) !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  text-align: right;
+  max-width: 55%;
+  word-break: break-word;
+  line-height: 1.25 !important;
+}
+
+.pos-synth-soft__value.is-empty {
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+  font-style: italic;
+}
+
+.dark .pos-synth-soft__value {
+  color: #f8fafc !important;
+}
+
+.pos-synth-soft__more,
+.pos-synth-soft__missing {
+  font-size: 0.6875rem !important;
+  color: #94a3b8 !important;
+  margin-top: 0.2rem;
+  line-height: 1.3;
+}
+
+.pos-synth-soft__missing {
+  color: #d97706 !important;
+}
+
+.pos-impact-badge--mini {
+  font-size: var(--fs-xxs) !important;
+  padding: 0.08rem 0.28rem !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* Alertes Soft */
+.pos-soft-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 7px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.pos-soft-alert--ok {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.pos-soft-alert--warn {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.pos-soft-alert--danger {
+  background: #fff1f2;
+  color: #e11d48;
+}
+
+.pos-soft-alert--neutral {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.pos-soft-alert--info {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  background: #fff7fa;
+  color: #9f1239;
+  border: 1px solid rgba(255, 23, 77, 0.12);
+}
+
+.pos-soft-alert__title {
+  margin: 0;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #9f1239 !important;
+  line-height: 1.35 !important;
+}
+
+.pos-soft-alert__text {
+  margin: 0;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: #64748b !important;
+  line-height: 1.45 !important;
+}
+
+.pos-soft-alert--ok .pos-soft-alert__text,
+.pos-soft-alert--warn .pos-soft-alert__text,
+.pos-soft-alert--danger .pos-soft-alert__text,
+.pos-soft-alert--neutral .pos-soft-alert__text {
+  color: inherit !important;
+}
+
+.pos-soft-alert__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  background: #fff;
+  color: #C91443;
+  border: 1px solid rgba(255, 23, 77, 0.16);
+}
+
+.pos-soft-alert__chip--warn {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+.pos-soft-alert__link {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: var(--pos-brand, #ff174d) !important;
+  text-decoration: none;
+}
+
+.pos-soft-alert__link:hover {
+  text-decoration: underline;
+}
+
+.pos-soft-missing__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 0.5rem;
+}
+
+.pos-soft-missing__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pos-soft-missing__chip {
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0.35rem 0.65rem !important;
+  border-radius: 999px !important;
+  font-size: 0.6875rem !important;
+  font-weight: 600 !important;
+  background: #fff7ed !important;
+  color: #c2410c !important;
+  border: 1px solid #fed7aa !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.pos-soft-missing__chip.is-more {
+  cursor: default;
+  opacity: 0.75;
+}
+
+/* Tarification Soft ? plat, sans sous-carte lourde */
+.pos-tarif-soft {
+  background: transparent;
+  border-radius: 0;
+  padding: 0.25rem 0 0;
+  border: none;
+  border-top: 1px solid rgba(226, 232, 240, 0.95);
+  margin-top: 0.35rem;
+}
+
+.pos-tarif-soft.is-recalculating {
+  opacity: 0.72;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.pos-tarif-soft__title {
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: #94a3b8 !important;
+  margin-bottom: 0.55rem !important;
+}
+
+.pos-tarif-soft__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pos-tarif-soft__line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px !important;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.pos-tarif-soft__line span:last-child {
+  font-weight: 700;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+}
+
+.pos-tarif-soft__line.is-ok span:last-child {
+  color: #059669;
+}
+
+.pos-tarif-soft__line.is-warn span:last-child {
+  color: #d97706;
+}
+
+.pos-tarif-soft__tier {
+  margin-top: 0.4rem;
+  font-size: 10px;
+  font-weight: 700;
+  color: #059669;
+}
+
+.pos-tarif-soft__margin,
+.pos-tarif-soft__note {
+  margin-top: 0.5rem;
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.pos-tarif-soft--pending {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--pos-soft-radius-sm);
+  padding: 0.75rem;
+  margin-top: 0.65rem;
+}
+
+.pos-tarif-soft__pending-head {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.pos-tarif-soft__pending-ico {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #d97706;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pos-tarif-soft__manual {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--pos-brand);
+}
+
+.pos-tarif-soft__input {
+  width: 100%;
+  border-radius: 0.75rem !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #fff !important;
+  padding: 0.65rem 0.75rem !important;
+  font-size: var(--fs-body) !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  outline: none;
+}
+
+.pos-tarif-soft__input:focus {
+  border-color: var(--border-focus-field, #94a3b8) !important;
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 18%, transparent));
+}
+
+/* Carte ?tat (sous la carte sticky) */
+.pos-status-card {
+  margin: 0 !important;
+  background: #fff !important;
+  border-radius: 1.35rem !important;
+  box-shadow: var(--pos-soft-shadow) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+  padding: 1.1rem 1.15rem !important;
+}
+
+.dark .pos-status-card {
+  background: var(--pos-soft-muted) !important;
+}
+
+.pos-status-card__bar {
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  overflow: hidden;
+}
+
+.pos-status-card__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff174d, #C91443);
+  transition: width 0.3s ease;
+}
+
+.pos-status-card__fill.is-done {
+  background: linear-gradient(90deg, #06d6a0, #34d399);
+}
+
+.pos-summary-extras,
+.pos-tech-panel {
+  background: #fff;
+  border-radius: var(--pos-soft-radius-sm);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: none;
+  padding: var(--inner-padding);
+  font-size: var(--fs-config-body);
+}
+
+.dark .pos-tech-panel,
+.dark .pos-summary-extras {
+  background: var(--pos-soft-surface);
+}
+
+.pos-tech-panel--warn {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: color-mix(in srgb, #f59e0b 4%, #fff);
+}
+
+.dark .pos-tech-panel--warn {
+  background: color-mix(in srgb, #f59e0b 8%, var(--pos-soft-surface));
+}
+
+/* Bâche — récap compact (colonne résumé, même largeur) */
+.pos-bache-tech--summary {
+  width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  box-sizing: border-box;
+}
+
+.pos-bache-tech__body {
+  margin-top: 0.55rem !important;
+  gap: 0.4rem !important;
+}
+
+.pos-bache-tech__meta {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #64748b;
+}
+
+.pos-bache-tech__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pos-bache-tech__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.pos-bache-tech__row strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.pos-bache-tech__row--focus span {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.pos-bache-tech__row--focus strong {
+  color: #ff174d;
+  font-weight: 700;
+}
+
+.pos-bache-tech__calc {
+  margin: 0;
+  padding: 0.35rem 0.45rem;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.04);
+  font-size: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  line-height: 1.4;
+  color: #475569;
+}
+
+.pos-bache-tech__calc strong {
+  color: #ff174d;
+}
+
+.pos-bache-tech__rule {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.35;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.pos-bache-tech__warn {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: #b45309;
+}
+
+.pos-bache-tech__btn {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 7px;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  background: transparent;
+  color: #b45309;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pos-bache-tech__btn:hover {
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.pos-tech-panel__summary,
+.pos-summary-extras summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  line-height: 1.3;
+}
+
+.pos-tech-panel__summary::-webkit-details-marker,
+.pos-summary-extras summary::-webkit-details-marker {
+  display: none;
+}
+
+.pos-tech-panel__summary::before,
+.pos-summary-extras summary::before {
+  content: '?';
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.pos-tech-panel[open] > .pos-tech-panel__summary::before,
+.pos-summary-extras[open] summary::before {
+  content: '?';
+}
+
+.pos-tech-panel__summary-title {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.pos-tech-panel__body {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.pos-tech-block {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.pos-tech-block + .pos-tech-block {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.pos-tech-block__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.pos-tech-block__title {
+  margin: 0;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  letter-spacing: 0;
+  text-transform: none !important;
+}
+
+.pos-tech-block__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: var(--fs-badge) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.pos-tech-dl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.pos-tech-dl__group {
+  margin-top: 0.35rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.pos-tech-panel .pos-tech-dl > .flex,
+.pos-tech-panel .pos-tech-dl__group > .flex {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+  justify-content: stretch !important;
+}
+
+@media (max-width: 767px) {
+  .pos-tech-panel .pos-tech-dl > .flex,
+  .pos-tech-panel .pos-tech-dl__group > .flex {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+.pos-tech-panel .pos-tech-dl .text-muted-foreground,
+.pos-tech-panel .pos-tech-dl__group .text-muted-foreground {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: #64748b !important;
+}
+
+.pos-tech-panel .pos-tech-dl .font-mono,
+.pos-tech-panel .pos-tech-dl .font-semibold,
+.pos-tech-panel .pos-tech-dl .font-bold,
+.pos-tech-panel .pos-tech-dl__group .font-mono,
+.pos-tech-panel .pos-tech-dl__group .font-semibold,
+.pos-tech-panel .pos-tech-dl__group .font-bold {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #0f172a;
+  text-align: right;
+  word-break: break-word;
+}
+
+.pos-tech-panel .pos-tech-dl .text-\[\#FF174D\],
+.pos-tech-panel .pos-tech-dl__group .text-\[\#FF174D\],
+.pos-tech-panel .pos-tech-dl .text-\[var\(--pos-brand\)\],
+.pos-tech-panel .pos-tech-dl__group .text-\[var\(--pos-brand\)\] {
+  color: #ff174d !important;
+}
+
+.pos-tech-panel .pos-tech-dl .text-amber-700,
+.pos-tech-panel .pos-tech-dl__group .text-amber-700 {
+  color: #b45309 !important;
+}
+
+@media (max-width: 767px) {
+  .pos-tech-panel .pos-tech-dl .font-mono,
+  .pos-tech-panel .pos-tech-dl .font-semibold,
+  .pos-tech-panel .pos-tech-dl .font-bold,
+  .pos-tech-panel .pos-tech-dl__group .font-mono,
+  .pos-tech-panel .pos-tech-dl__group .font-semibold,
+  .pos-tech-panel .pos-tech-dl__group .font-bold {
+    text-align: left;
+  }
+}
+
+.pos-tech-note {
+  margin: 0 0 0.65rem;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.pos-tech-block--empty {
+  text-align: left;
+}
+
+/* Reliure technique : plat, pas de carte imbriqu?e */
+.pos-tech-panel .pos-tech-inline,
+.pos-tech-panel .pos-tech-inline > div {
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 0 0.85rem !important;
+  margin-bottom: 0.15rem !important;
+}
+
+/* ??????????? CATALOGUE (legacy overrides retir?s ? styles Soft plus haut) ??????????? */
+
+/* Masquer l?ancien bandeau client rouge quand version pill est utilis?e */
+.pos-soft-shell .pos-legacy-client-banner {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pos-catalog-card,
+  .orion-viewport .pos-soft-shell button.pos-chip {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ??????????? VERROU TYPO ? pixels durs, corps < sidebar 13px ??????????? */
+html body .orion-viewport .pos-soft-shell,
+html body .pos-soft-shell {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-config-main,
+html body .pos-soft-shell .pos-config-main,
+html body .orion-viewport .pos-soft-shell .pos-config-summary,
+html body .pos-soft-shell .pos-config-summary {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-config-main :is(p, li, label, small, input, select, textarea, .text-sm, .text-base, .text-lg, .text-xl, .text-xs),
+html body .pos-soft-shell .pos-config-main :is(p, li, label, small, input, select, textarea, .text-sm, .text-base, .text-lg, .text-xl, .text-xs) {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-synth-soft__label,
+html body .pos-soft-shell .pos-synth-soft__label,
+html body .orion-viewport .pos-soft-shell .pos-synth-soft__value,
+html body .pos-soft-shell .pos-synth-soft__value,
+html body .orion-viewport .pos-soft-shell .pos-tarif-soft__line,
+html body .pos-soft-shell .pos-tarif-soft__line,
+html body .orion-viewport .pos-soft-shell .pos-cta-status__detail,
+html body .pos-soft-shell .pos-cta-status__detail,
+html body .orion-viewport .pos-soft-shell .pos-cta-status__title,
+html body .pos-soft-shell .pos-cta-status__title,
+html body .orion-viewport .pos-soft-shell .pos-soft-missing__head,
+html body .pos-soft-shell .pos-soft-missing__head {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+html body .orion-viewport .pos-soft-shell button.pos-chip,
+html body .orion-viewport .pos-soft-shell .pos-chip,
+html body .orion-viewport .pos-soft-shell button.pos-chip span,
+html body .orion-viewport .pos-soft-shell button.pos-option-card,
+html body .orion-viewport .pos-soft-shell button.pos-option-card .pos-option-card__title,
+html body .pos-soft-shell button.pos-chip,
+html body .pos-soft-shell .pos-chip,
+html body .pos-soft-shell button.pos-chip span,
+html body .pos-soft-shell button.pos-option-card,
+html body .pos-soft-shell button.pos-option-card .pos-option-card__title {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-option-card__sub,
+html body .pos-soft-shell .pos-option-card__sub,
+html body .orion-viewport .pos-soft-shell .pos-section-card__hint,
+html body .pos-soft-shell .pos-section-card__hint,
+html body .orion-viewport .pos-soft-shell .pos-field-hint,
+html body .pos-soft-shell .pos-field-hint,
+html body .orion-viewport .pos-soft-shell .pos-product-hero p,
+html body .pos-soft-shell .pos-product-hero p {
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-field-label,
+html body .orion-viewport .pos-soft-shell label.orion-text-label,
+html body .orion-viewport .pos-soft-shell .orion-text-label,
+html body .orion-viewport .pos-soft-shell .pos-synth-soft__label,
+html body .pos-soft-shell .pos-field-label,
+html body .pos-soft-shell label.orion-text-label,
+html body .pos-soft-shell .orion-text-label,
+html body .pos-soft-shell .pos-synth-soft__label {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-synth-soft__value,
+html body .pos-soft-shell .pos-synth-soft__value {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-stepper-premium__label,
+html body .pos-soft-shell .pos-stepper-premium__label,
+html body .orion-viewport .pos-soft-shell .pos-stepper-premium__footer-copy,
+html body .pos-soft-shell .pos-stepper-premium__footer-copy {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-stepper-premium__meta,
+html body .pos-soft-shell .pos-stepper-premium__meta {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+}
+
+/* Titres autoris?s (hors plafond corps) */
+html body .orion-viewport .pos-soft-shell .pos-section-card__title,
+html body .pos-soft-shell .pos-section-card__title {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-product-hero h1,
+html body .pos-soft-shell .pos-product-hero h1,
+html body .orion-viewport .pos-soft-shell .pos-catalog-hero h1,
+html body .pos-soft-shell .pos-catalog-hero h1 {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-summary-soft__price,
+html body .pos-soft-shell .pos-summary-soft__price {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-panel-title,
+html body .pos-soft-shell .pos-panel-title {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-synth-soft__title.pos-panel-title,
+html body .pos-soft-shell .pos-synth-soft__title.pos-panel-title {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+/* Micro non essentiels */
+html body .orion-viewport .pos-soft-shell .text-\[9px\],
+html body .orion-viewport .pos-soft-shell .text-\[8px\],
+html body .pos-soft-shell .text-\[9px\],
+html body .pos-soft-shell .text-\[8px\] {
+  font-size: 9px !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-product-hero__desc,
+html body .pos-soft-shell .pos-product-hero__desc {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-product-hero__banner,
+html body .pos-soft-shell .pos-product-hero__banner {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+html body .orion-viewport .pos-soft-shell .pos-tech-panel__summary,
+html body .pos-soft-shell .pos-tech-panel__summary,
+html body .orion-viewport .pos-soft-shell .pos-tech-block__title,
+html body .pos-soft-shell .pos-tech-block__title {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* ----------- WIZARD POS ? 1 ?tape ? la fois (maquette refonte) ----------- */
+.pos-wizard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.pos-wizard__stepper.pos-stepper-premium,
+.pos-wizard .pos-stepper-premium {
+  padding: 0.65rem 0.75rem !important;
+}
+
+.pos-wizard .pos-stepper-premium__footer {
+  margin-top: 0.45rem;
+  padding-top: 0.4rem;
+}
+
+.pos-wizard-stage {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  background: #fff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--radius-card, 7px);
+  box-shadow: var(--pos-soft-shadow, 0 8px 28px rgba(15, 23, 42, 0.06));
+  overflow: hidden;
+}
+
+@media (min-width: 992px) {
+  .pos-wizard-stage {
+    /* Viewport compact : peu de scroll page, scroll interne si besoin */
+    max-height: min(520px, calc(100vh - 17rem));
+  }
+}
+
+.dark .pos-wizard-stage {
+  background: var(--pos-soft-surface, #111827);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.pos-wizard-stage__head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  min-width: 0;
+}
+
+.pos-wizard-stage__icon {
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--pos-brand, #ff174d) 10%, #fff);
+  color: var(--pos-brand, #ff174d);
+  display: grid;
+  place-items: center;
+  flex: none;
+  font-size: 0.95rem;
+}
+
+.dark .pos-wizard-stage__icon {
+  background: color-mix(in srgb, var(--pos-brand, #ff174d) 18%, transparent);
+}
+
+.pos-wizard-stage__titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.pos-wizard-stage__title {
+  margin: 0;
+  font-size: 0.95rem !important;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-main, #0f172a);
+}
+
+.pos-wizard-stage__sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.7rem !important;
+  color: #78849a;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pos-wizard-stage__count {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #8792a4;
+  flex: none;
+  white-space: nowrap;
+}
+
+.pos-wizard-stage__body {
+  min-height: 0;
+  overflow: auto;
+  padding: 0.75rem 0.9rem;
+  scrollbar-width: thin;
+  scrollbar-color: #d5dbe5 transparent;
+  animation: pos-wizard-fade 0.18s ease;
+}
+
+@keyframes pos-wizard-fade {
+  from { opacity: 0.25; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+
+.pos-wizard-stage__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  background: #fcfcfd;
+}
+
+.dark .pos-wizard-stage__actions {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.pos-wizard-stage__btn {
+  height: 2.25rem;
+  border-radius: 7px;
+  padding: 0 0.9rem;
+  font-size: 0.7rem !important;
+  font-weight: 750;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.pos-wizard-stage__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pos-wizard-stage__btn--prev {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: #fff;
+  color: #657187;
+}
+
+.dark .pos-wizard-stage__btn--prev {
+  background: transparent;
+  color: #cbd5e1;
+}
+
+.pos-wizard-stage__btn--prev:hover:not(:disabled) {
+  background: #f6f7fa;
+}
+
+.pos-wizard-stage__btn--next {
+  margin-left: auto;
+  border: 0;
+  background: #111b2e;
+  color: #fff;
+  box-shadow: 0 7px 16px rgba(17, 27, 46, 0.14);
+}
+
+.pos-wizard-stage__btn--next:hover:not(:disabled) {
+  background: #202e47;
+}
+
+.pos-wizard-stage__progress {
+  font-size: 0.65rem !important;
+  color: #8d97a8;
+  margin-left: 0.15rem;
+}
+
+.pos-wizard-stage__progress b {
+  color: var(--text-main, #0f172a);
+  font-weight: 800;
+}
+
+/* Carte section dans le wizard : sans double cadre / en-t?te */
+.pos-section-card--wizard {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.pos-section-card--wizard::before {
+  display: none !important;
+}
+
+@media (min-width: 992px) {
+  .orion-viewport .pos-soft-shell:has(.pos-wizard) .pos-config-main {
+    gap: 0.55rem !important;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-wizard) {
+    /* R?duit le scroll page : la synth?se sticky + stage born? */
+    padding-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .pos-wizard-stage {
+    max-height: none;
+  }
+
+  .pos-wizard-stage__sub {
+    white-space: normal;
+  }
+
+  .pos-wizard-stage__progress {
+    display: none;
+  }
+}
+
+/* ----------- PAGE UNIQUE densifi?e ? moins de scroll, pas de wizard ----------- */
+.orion-viewport .pos-soft-shell:has(.pos-config-sections) {
+  --section-gap: 10px;
+  --card-padding: 12px 14px;
+  --inner-padding: 10px;
+  --chip-gap: 6px;
+  --chip-height: 34px;
+  --control-height: 36px;
+}
+
+.orion-viewport .pos-soft-shell .pos-config-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-stepper-premium {
+  position: sticky;
+  top: 4.75rem;
+  z-index: 25;
+  padding: 0.55rem 0.7rem !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--dense {
+  padding: 0.65rem 0.8rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--dense .pos-section-card__head {
+  margin-bottom: 0.5rem !important;
+  align-items: center !important;
+  flex: none;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--dense .pos-section-card__icon {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  border-radius: 7px !important;
+  font-size: 0.85rem !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--dense .pos-section-card__title {
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--dense .pos-section-card__hint {
+  display: block !important;
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+  color: #64748b !important;
+  margin-top: 0.15rem !important;
+  opacity: 0.92;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--dense .pos-impact-badge {
+  padding: 0.25rem 0.45rem !important;
+  font-size: 8px !important;
+}
+
+/* Corps de section : meme hauteur de ligne (Quantite / Remarques) */
+.orion-viewport .pos-soft-shell .pos-section-card--dense > div:last-child {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Grille L×P×H / multi-champs : ne pas écraser display:grid */
+.orion-viewport .pos-soft-shell .pos-section-card--dense.pos-section-card--grid > div:last-child {
+  display: grid !important;
+  flex-direction: unset;
+  align-content: start;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--dense > div:last-child > .pos-select-zone,
+.orion-viewport .pos-soft-shell .pos-section-card--dense:not(.pos-section-card--grid) .pos-select-zone {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.orion-viewport .pos-soft-shell .pos-section-card--dense:has(.pos-field-textarea) > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.orion-viewport .pos-soft-shell .pos-field-textarea {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+.orion-viewport .pos-soft-shell .pos-field-textarea__input {
+  flex: 1 1 auto !important;
+  min-height: 5.5rem !important;
+  height: 100% !important;
+  resize: none !important;
+}
+.pos-section-card__collapse-btn {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: var(--pos-soft-surface, #fff);
+  color: #657187;
+  border-radius: 7px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 0.3rem 0.55rem;
+  line-height: 1;
+}
+
+.pos-section-card__collapse-btn:hover {
+  background: var(--pos-soft-muted, #f6f7fa);
+}
+
+html.dark .pos-section-card__collapse-btn,
+.dark .pos-section-card__collapse-btn {
+  background: var(--pos-soft-surface, #0b1528);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+.pos-section-card--collapsed {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+  text-align: left !important;
+  padding: 0.45rem 0.7rem !important;
+  min-height: 2.35rem !important;
+  cursor: pointer !important;
+  background: var(--pos-soft-muted, #f8fafc) !important;
+  border: 1px solid rgba(148, 163, 184, 0.16) !important;
+  box-shadow: none !important;
+}
+
+.pos-section-card--collapsed:hover {
+  border-color: rgba(240, 68, 99, 0.28) !important;
+  background: var(--pos-soft-surface, #fff) !important;
+}
+
+html.dark .pos-section-card--collapsed,
+.dark .pos-section-card--collapsed {
+  background: color-mix(in srgb, var(--pos-soft-surface, #0b1528) 88%, #fff) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+html.dark .pos-section-card--collapsed:hover,
+.dark .pos-section-card--collapsed:hover {
+  background: var(--pos-soft-surface, #0b1528) !important;
+}
+
+.pos-section-card--collapsed__check {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: #dff3ea;
+  color: #16815f;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.pos-section-card--collapsed__icon {
+  font-size: 0.85rem;
+  flex: none;
+}
+
+.pos-section-card--collapsed__title {
+  font-size: 11px !important;
+  font-weight: 750;
+  color: var(--pos-soft-ink);
+  white-space: nowrap;
+}
+
+.pos-section-card--collapsed__sum {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px !important;
+  color: #78849a;
+  text-align: right;
+}
+
+html.dark .pos-section-card--collapsed__sum,
+.dark .pos-section-card--collapsed__sum {
+  color: #94a3b8;
+}
+
+.pos-section-card--collapsed__chev {
+  color: #94a3b8;
+  flex: none;
+}
+
+@media (min-width: 1200px) {
+  .orion-viewport .pos-soft-shell .pos-config-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem 0.65rem;
+    align-items: stretch;
+  }
+
+  /* Structure, Dimensions, Matiere, Impression, Œillets = pleine largeur */
+  .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card--dense {
+    grid-column: 1 / -1;
+  }
+
+  /* Quantité + Remarques côte à côte uniquement (pas Œillets : a un input number + boutons) */
+  .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card--dense:has(.pos-field-textarea),
+  .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card--dense:not(.pos-section-card--grid):has(input[type="number"]):has(button):not(:has(#pos-field-oeillets_data)) {
+    grid-column: span 1;
+    min-height: 10.5rem;
+  }
+
+  /* Œillets : largeur fixe pleine grille, hauteur libre selon le contenu */
+  .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card--dense:has(#pos-field-oeillets_data) {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    align-self: start;
+  }
+
+  .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card--collapsed {
+    grid-column: 1 / -1;
+    height: auto;
+    align-self: start;
+  }
+}
+/* ═══════════ LAYOUT FIXE — stepper + synthèse, scroll formulaire seul ═══════════ */
+@media (min-width: 992px) {
+  /* Verrouille la fenêtre : header app + topbar + stepper + synthèse fixes */
+  body:has(.pos-config-sections),
+  body:has(.pos-soft-shell--config) {
+    overflow: hidden !important;
+  }
+
+  /* Shell actuel = min-h-[100dvh] (+ wrapper insets min-h-0). Legacy min-h-screen conservé. */
+  .min-h-0.flex-1.flex.flex-col:has(.pos-config-sections),
+  .min-h-0.flex-1.flex.flex-col:has(.pos-soft-shell--config) {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  .min-h-\[100dvh\].flex:has(.pos-config-sections),
+  .min-h-\[100dvh\].flex:has(.pos-soft-shell--config),
+  .min-h-screen.flex:has(.pos-config-sections),
+  .min-h-screen.flex:has(.pos-soft-shell--config) {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .min-h-\[100dvh\].flex:has(.pos-config-sections) > .flex-1.flex.flex-col,
+  .min-h-\[100dvh\].flex:has(.pos-soft-shell--config) > .flex-1.flex.flex-col,
+  .min-h-screen.flex:has(.pos-config-sections) > .flex-1.flex.flex-col,
+  .min-h-screen.flex:has(.pos-soft-shell--config) > .flex-1.flex.flex-col {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+  }
+
+  main.orion-viewport:has(.pos-config-sections),
+  main.orion-viewport:has(.pos-soft-shell--config),
+  .orion-viewport:has(.pos-config-sections),
+  .orion-viewport:has(.pos-soft-shell--config) {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    padding-bottom: 0.45rem !important;
+  }
+
+  .orion-viewport:has(.pos-config-sections) > .pos-soft-shell,
+  .orion-viewport:has(.pos-soft-shell--config) > .pos-soft-shell,
+  .orion-viewport > .pos-soft-shell--config {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-legacy-client-banner,
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) > :not(.pos-config-layout),
+  .orion-viewport .pos-soft-shell--config .pos-legacy-client-banner,
+  .orion-viewport .pos-soft-shell--config > :not(.pos-config-layout) {
+    flex: none !important;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-config-layout,
+  .orion-viewport .pos-soft-shell--config .pos-config-layout {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-config-main,
+  .orion-viewport .pos-soft-shell--config .pos-config-main {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    gap: 0.4rem !important;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-config-topbar,
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-back-link,
+  .orion-viewport .pos-soft-shell--config .pos-config-topbar,
+  .orion-viewport .pos-soft-shell--config .pos-back-link {
+    flex: none !important;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-back-link,
+  .orion-viewport .pos-soft-shell--config .pos-back-link {
+    margin-bottom: 0.1rem !important;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-stepper-premium,
+  .orion-viewport .pos-soft-shell--config .pos-stepper-premium {
+    position: relative !important;
+    top: auto !important;
+    flex: none !important;
+    z-index: 20;
+    padding: 0.45rem 0.6rem !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-config-scroll,
+  .orion-viewport .pos-soft-shell--config .pos-config-scroll {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-right: 0.2rem;
+    padding-bottom: 0.85rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+  }
+
+  /* Synthèse fixe à droite — tous articles /pos/[id] (≈95) */
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-config-summary,
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-summary-sticky,
+  .orion-viewport .pos-soft-shell--config .pos-config-summary,
+  .orion-viewport .pos-soft-shell--config .pos-summary-sticky {
+    position: sticky !important;
+    top: 0 !important;
+    align-self: stretch !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    z-index: 12;
+  }
+}
+
+@media (max-width: 991px) {
+  /* Garder un vrai conteneur scrollable — display:contents cassait sticky/stepper */
+  .orion-viewport .pos-soft-shell .pos-config-scroll {
+    display: block;
+    min-width: 0;
+  }
+
+  .orion-viewport .pos-soft-shell:has(.pos-config-sections) .pos-stepper-premium {
+    position: sticky;
+    top: 4.5rem;
+    z-index: 25;
+  }
+}
+/* ??????????? FADE blanc sous stepper ? casse le passage au scroll ??????????? */
+.pos-stepper-fade {
+  position: relative;
+  z-index: 21;
+  flex: none;
+  height: 0;
+  pointer-events: none;
+}
+
+.pos-stepper-fade::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -2px;
+  height: 1.5rem;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.88) 45%,
+    rgba(255, 255, 255, 0.4) 72%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.dark .pos-stepper-fade::before {
+  background: linear-gradient(
+    180deg,
+    var(--pos-soft-surface, #0b1528) 0%,
+    rgba(11, 21, 40, 0.75) 50%,
+    rgba(11, 21, 40, 0) 100%
+  );
+}
+
+/* Voile sticky en t?te de zone scroll : contenu qui passe s?efface en blanc */
+.orion-viewport .pos-soft-shell .pos-config-scroll {
+  position: relative;
+}
+
+.orion-viewport .pos-soft-shell .pos-config-scroll::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  display: block;
+  height: 0.95rem;
+  margin-bottom: -0.95rem;
+  z-index: 12;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.78) 40%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.dark .orion-viewport .pos-soft-shell .pos-config-scroll::before {
+  background: linear-gradient(
+    180deg,
+    var(--pos-soft-bg, #030810) 0%,
+    transparent 100%
+  );
+}
+
+/* Localisation 2 passages — cadre extérieur (tous articles /pos/[id]) :
+   1) contour rouge SVG — 1 tour fluide
+   2) flash fond famille — sans bordure colorée */
+@keyframes pos-locate-run {
+  0% {
+    stroke-dashoffset: 0;
+    stroke-width: 2.75;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+    stroke-width: 2.75;
+  }
+  78% {
+    opacity: 1;
+    stroke-width: 2.4;
+  }
+  100% {
+    stroke-dashoffset: -100;
+    stroke-width: 1.6;
+    opacity: 0;
+  }
+}
+
+@keyframes pos-locate-glow {
+  0% {
+    stroke-dashoffset: 6;
+    stroke-width: 7;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.32;
+  }
+  78% {
+    opacity: 0.22;
+  }
+  100% {
+    stroke-dashoffset: -94;
+    stroke-width: 2;
+    opacity: 0;
+  }
+}
+
+@keyframes pos-locate-flash {
+  0% {
+    background-color: var(--pos-soft-surface, #ffffff);
+  }
+  22% {
+    background-color: color-mix(
+      in srgb,
+      var(--pos-locate-tint, var(--pos-cat, #F79009)) 14%,
+      var(--pos-soft-surface, #ffffff)
+    );
+  }
+  62% {
+    background-color: color-mix(
+      in srgb,
+      var(--pos-locate-tint, var(--pos-cat, #F79009)) 12%,
+      var(--pos-soft-surface, #ffffff)
+    );
+  }
+  100% {
+    background-color: var(--pos-soft-surface, #ffffff);
+  }
+}
+
+.pos-section-card.is-locate-section,
+.pos-section-card.is-locate-zone,
+.pos-section-card.is-locate-path,
+.pos-section-card.is-locate-tint {
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+/* Passage 1 : laisser dépasser le trait SVG (1 tour) */
+html body .orion-viewport .pos-soft-shell .pos-section-card.is-locate-path,
+.pos-section-card.is-locate-path {
+  overflow: visible !important;
+  background: var(--pos-soft-surface, #fff) !important;
+  border-color: rgba(148, 163, 184, 0.12) !important;
+}
+
+.pos-section-card.is-locate-tint {
+  overflow: hidden !important;
+}
+
+.pos-section-locate-path {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 6;
+  overflow: visible;
+}
+
+.pos-section-locate-path__stroke {
+  stroke: var(--pos-brand, #ff174d);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* Segment plus long = parcours plus fluide */
+  stroke-dasharray: 32 68;
+  stroke-dashoffset: 0;
+  will-change: stroke-dashoffset, opacity, stroke-width;
+  animation: pos-locate-run 1.35s cubic-bezier(0.33, 0, 0.2, 1) forwards;
+}
+
+.pos-section-locate-path__glow {
+  stroke: color-mix(in srgb, var(--pos-brand, #ff174d) 45%, transparent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 24 76;
+  stroke-dashoffset: 6;
+  filter: blur(1.5px);
+  will-change: stroke-dashoffset, opacity;
+  animation: pos-locate-glow 1.35s cubic-bezier(0.33, 0, 0.2, 1) forwards;
+}
+
+/* Passage 2 : flash fond — pas de bordure colorée */
+html body .orion-viewport .pos-soft-shell .pos-config-sections > .pos-section-card.is-locate-tint,
+html body .orion-viewport .pos-soft-shell .pos-section-card.is-locate-tint,
+html body .pos-soft-shell .pos-section-card.is-locate-tint,
+.pos-section-card.is-locate-tint {
+  background: color-mix(
+    in srgb,
+    var(--pos-locate-tint, var(--pos-cat, #F79009)) 14%,
+    var(--pos-soft-surface, #ffffff)
+  ) !important;
+  background-color: color-mix(
+    in srgb,
+    var(--pos-locate-tint, var(--pos-cat, #F79009)) 14%,
+    var(--pos-soft-surface, #ffffff)
+  ) !important;
+  border-color: rgba(148, 163, 184, 0.12) !important;
+  box-shadow: var(--pos-soft-shadow, 0 12px 28px -16px rgba(15, 23, 42, 0.12)) !important;
+  animation: pos-locate-flash 1.15s cubic-bezier(0.33, 0, 0.2, 1) forwards;
+}
+
+/* Pendant localisation : niches internes transparentes */
+html body .orion-viewport .pos-soft-shell .pos-section-card.is-locate-tint .pos-field-nest,
+html body .orion-viewport .pos-soft-shell .pos-section-card.is-locate-path .pos-field-nest,
+.pos-section-card.is-locate-tint .pos-field-nest,
+.pos-section-card.is-locate-path .pos-field-nest,
+.pos-section-card.is-locate-tint .pos-select-zone,
+.pos-section-card.is-locate-path .pos-select-zone {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.pos-select-zone {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Finitions : pleine largeur, 1 ligne + scroll (même principe que les autres rails) */
+#pos-field-finitions.pos-select-zone,
+.pos-select-zone#pos-field-finitions {
+  grid-column: 1 / -1;
+}
+
+#pos-field-finitions .flex.flex-wrap,
+#pos-field-finitions .pos-chip-rail {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  gap: 0.35rem 0.4rem !important;
+}
+
+#pos-field-finitions button.pos-chip,
+#pos-field-finitions .pos-chip {
+  min-height: 32px !important;
+  height: auto !important;
+  padding: 6px 10px !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap;
+  flex: 0 0 auto !important;
+}

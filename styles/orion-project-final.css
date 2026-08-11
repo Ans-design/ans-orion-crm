@@ -1,0 +1,318 @@
+/**
+ * ANS ORION — Couche FINALE projet (après color-harmony + radius-unify)
+ * Unifie : en-têtes densifiés · shell bas · mobile · ticker · tables · safe-areas.
+ * Ne supprime aucune feature ; force la densité et le correctif responsive.
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   1. TOKENS SHELL
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --orion-radius: 7px;
+  --orion-bottom-nav: 72px;
+  --orion-bottom-nav-height: 72px;
+  --orion-app-header-h: 52px;
+  --orion-ticker-h: 44px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2. EN-TÊTES MODULES (tous écrans, hors POS Soft hero)
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport:not(:has(.pos-soft-shell)) main :is(h1, h1.font-display, h1.text-2xl, h1.text-xl, h1.text-3xl),
+.orion-viewport:not(:has(.pos-soft-shell)) [role='main'] :is(h1, h1.font-display),
+.orion-viewport .orion-ds-page-title,
+.orion-viewport .orion-module-header__title,
+.orion-viewport .orion-admin-page-title,
+.orion-viewport .ab2-page-title,
+.orion-viewport .orion-text-page-title,
+.cps-theme :is(h1, .orion-admin-page-title, .ab2-page-title),
+.cps-admin-header h1 {
+  font-size: 0.875rem !important;
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 !important;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .orion-viewport:not(:has(.pos-soft-shell)) main h1,
+  .orion-viewport .orion-ds-page-title,
+  .orion-viewport .orion-module-header__title,
+  .cps-theme h1,
+  .cps-admin-header h1 {
+    font-size: 0.9375rem !important;
+  }
+}
+
+.orion-viewport :is(
+  .orion-ds-page-header,
+  .orion-module-header,
+  .cps-admin-header,
+  .ab2-page-header
+) {
+  padding-top: 0.15rem !important;
+  padding-bottom: 0.35rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.orion-viewport :is(
+  .orion-module-header__kicker,
+  .ab2-page-kicker,
+  .mt-eyebrow
+) {
+  font-size: 0.5625rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 0.08rem !important;
+  line-height: 1.15 !important;
+}
+
+/* Descriptions billboard → 1 ligne */
+.orion-viewport :is(
+  .orion-ds-page-desc,
+  .orion-module-header__desc,
+  .ab2-page-subtitle
+),
+.orion-viewport main > header > div > p.text-sm,
+.orion-viewport main > header p.max-w-2xl,
+.orion-viewport .dashboard-full > header p:not(.orion-module-header__kicker) {
+  font-size: 0.6875rem !important;
+  line-height: 1.3 !important;
+  max-width: 36rem !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.orion-module-header--compact .orion-module-header__desc,
+.orion-ds-page-header--compact .orion-ds-page-desc,
+.cps-admin-header--dense p:not(.orion-module-header__kicker):not(.mt-eyebrow) {
+  display: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3. SHELL BAS — une seule source (--orion-inset-bottom)
+   ═══════════════════════════════════════════════════════════════ */
+html {
+  scroll-padding-bottom: calc(
+    var(--orion-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 1.25rem
+  );
+}
+
+main.orion-viewport.orion-shell-pad {
+  /* Phone : inset stack. md+ ticker en flux → inset 0 + gap dock */
+  padding-bottom: calc(
+    var(--orion-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + var(--orion-content-ticker-gap, 5mm)
+  ) !important;
+  scroll-padding-bottom: calc(
+    var(--orion-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + var(--orion-content-ticker-gap, 5mm)
+  );
+}
+
+/* md+ : ticker fixed — réserve hauteur ticker + filet sous le contenu */
+@media (min-width: 768px) {
+  html[data-orion-ticker='1'] main.orion-viewport.orion-shell-pad {
+    padding-bottom: calc(
+      var(--orion-ticker-h, 44px) + var(--orion-sidebar-inset-y, 14px) + var(--orion-content-ticker-gap, 5mm)
+    ) !important;
+    scroll-padding-bottom: calc(
+      var(--orion-ticker-h, 44px) + var(--orion-sidebar-inset-y, 14px) + var(--orion-content-ticker-gap, 5mm)
+    );
+  }
+}
+
+/* POS : le contenu gère déjà son bas — inset ticker seul, sans filet gris */
+html[data-orion-ticker='1'] main.orion-viewport.orion-shell-pad:has(.pos-soft-shell) {
+  padding-bottom: calc(
+    var(--orion-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px)
+  ) !important;
+}
+
+.orion-shell-bottom-clearance {
+  width: 100%;
+  flex-shrink: 0;
+  pointer-events: none;
+  height: 0 !important;
+}
+
+html[data-orion-ticker='1'] .orion-shell-bottom-clearance {
+  height: 0 !important;
+}
+
+/* Tables : pas de double pad (main / dock gèrent le bas) */
+html[data-orion-ticker='1'] .orion-viewport :is(
+  .orion-ds-table-wrap,
+  .orion-master-data-scroll,
+  .orion-master-data-root,
+  [data-orion-table]
+) {
+  scroll-padding-bottom: var(--orion-content-ticker-gap, 5mm);
+  padding-bottom: 0;
+}
+
+/* Pages flux document : pad géré par main — petit filet seulement */
+html[data-orion-ticker='1'] .orion-viewport :is(
+  .pos-soft-shell,
+  .cps-hub,
+  .orion-module-page,
+  .dashboard-full
+) {
+  padding-bottom: 0.35rem;
+}
+
+/* Legacy padding bas pages → inutile (main gère) */
+.orion-viewport :is(.pb-24, .pb-20, .pb-28, .pb-32),
+.orion-module-page:is(.pb-24, .pb-20),
+.dashboard-full:is(.pb-24, .pb-20),
+.orion-page:is(.pb-24, .pb-20) {
+  padding-bottom: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   4. TICKER — fixed (styles dans alert-ticker.css)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════
+   5. PHONE FINAL
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 767.98px) {
+  html,
+  body {
+    overflow-x: clip;
+    max-width: 100vw;
+  }
+
+  main.orion-viewport.orion-shell-pad {
+    padding-bottom: calc(
+      var(--orion-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 0.5rem
+    ) !important;
+    padding-left: max(0.65rem, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(0.65rem, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) main h1,
+  .orion-viewport .orion-module-header__title {
+    font-size: 0.875rem !important; /* 14 — lisible */
+  }
+
+  /* iOS no-zoom */
+  .orion-viewport
+    :is(
+      input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+      select,
+      textarea
+    ),
+  .module-date-filter__input {
+    font-size: 16px !important;
+    min-height: 2.5rem;
+  }
+
+  .orion-viewport :is(.orion-ds-table-wrap, .orion-master-data-scroll) {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .orion-viewport table {
+    min-width: 520px;
+  }
+
+  .talk-floating-bubble-btn {
+    display: none !important;
+  }
+
+  .orion-module-toolbar {
+    flex-direction: column !important;
+    gap: 0.4rem !important;
+  }
+
+  .orion-module-toolbar-actions,
+  .orion-ds-page-header__actions,
+  .cps-header-actions {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  .orion-viewport .orion-module-help-banner {
+    display: none !important;
+  }
+
+  .orion-phone-tabbar .orion-phone-tab {
+    min-height: 48px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6. MODULE SHELL + WORKSPACES (headers legacy)
+   ═══════════════════════════════════════════════════════════════ */
+.orion-module-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.orion-viewport .dashboard-full > header,
+.orion-viewport .orion-page > header {
+  padding: 0.15rem 0 0.35rem !important;
+  margin-bottom: 0.4rem !important;
+  border-bottom-color: var(--border-soft, #e2e8f0) !important;
+}
+
+.orion-viewport .dashboard-full > header h1,
+.orion-viewport .orion-page > header h1 {
+  font-size: 0.875rem !important;
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+}
+
+@media (min-width: 768px) {
+  .orion-viewport .dashboard-full > header h1,
+  .orion-viewport .orion-page > header h1 {
+    font-size: 0.9375rem !important;
+  }
+}
+
+.orion-viewport .dashboard-full > header p,
+.orion-viewport .orion-page > header p {
+  font-size: 0.6875rem !important;
+  line-height: 1.3 !important;
+  margin-top: 0.1rem !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  max-width: 36rem !important;
+  color: var(--text-muted, #64748b) !important;
+}
+
+/* Icônes dans h1 billboard (legacy) */
+.orion-viewport .dashboard-full > header h1 svg,
+.orion-viewport main > header h1 svg {
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7. RAYONS 7px (rappel final hors boutons ronds)
+   ═══════════════════════════════════════════════════════════════ */
+.orion-viewport :is(
+  .orion-module-header,
+  .orion-ds-page-header,
+  .orion-card,
+  [data-slot='card'],
+  .orion-ds-table-wrap,
+  .cps-admin-header
+) {
+  border-radius: var(--orion-radius, 7px);
+}

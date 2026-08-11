@@ -1,0 +1,602 @@
+/**
+ * Génère le PDF d'audit ultra-complet Catalogue / Prix / Stock.
+ * Usage : node scripts/generate-cps-audit-pdf.mjs
+ */
+import { chromium } from 'playwright';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(__dirname, '..');
+const outDir = path.join(root, 'docs', 'audit');
+const downloads = path.join(process.env.USERPROFILE || process.env.HOME || '', 'Downloads');
+const htmlPath = path.join(outDir, 'AUDIT_ULTRACOMPLET_CATALOGUE_PRIX_STOCK.html');
+const pdfName = 'AUDIT_ULTRACOMPLET_ADMINISTRATION_CATALOGUE_PRIX_STOCK_ANS_ORION.pdf';
+const pdfProject = path.join(outDir, pdfName);
+const pdfDownloads = path.join(downloads, pdfName);
+
+const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Audit ultracomplet — Administration Catalogue / Prix &amp; Stock — ANS ORION</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Calibri, Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.45;
+    color: #0f172a;
+    margin: 0;
+    padding: 0;
+  }
+  h1 { font-size: 20pt; color: #cc0033; margin: 0 0 8px; border-bottom: 3px solid #cc0033; padding-bottom: 8px; }
+  h2 { font-size: 13.5pt; color: #cc0033; margin: 22px 0 8px; page-break-after: avoid; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+  h3 { font-size: 11.5pt; color: #1e293b; margin: 14px 0 6px; page-break-after: avoid; }
+  h4 { font-size: 10.5pt; color: #334155; margin: 10px 0 4px; }
+  p, li { margin: 4px 0; }
+  ul, ol { margin: 4px 0 8px; padding-left: 18px; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 9pt; page-break-inside: auto; }
+  th, td { border: 1px solid #cbd5e1; padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background: #f1f5f9; font-weight: 600; color: #0f172a; }
+  tr { page-break-inside: avoid; }
+  code, .mono { font-family: Consolas, "Courier New", monospace; font-size: 8.5pt; background: #f8fafc; padding: 1px 3px; }
+  .cover {
+    page-break-after: always;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px 8px;
+  }
+  .cover .brand { font-size: 11pt; letter-spacing: 0.12em; text-transform: uppercase; color: #64748b; margin-bottom: 12px; }
+  .cover h1 { font-size: 26pt; border: none; }
+  .cover .subtitle { font-size: 13pt; color: #475569; margin: 8px 0 24px; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 9pt; font-weight: 600; margin-right: 6px; margin-bottom: 6px;
+  }
+  .badge-danger { background: #fee2e2; color: #991b1b; }
+  .badge-warn { background: #fef3c7; color: #92400e; }
+  .badge-ok { background: #dcfce7; color: #166534; }
+  .badge-info { background: #e2e8f0; color: #334155; }
+  .callout {
+    border-left: 4px solid #cc0033; background: #fff5f7; padding: 10px 12px; margin: 10px 0 14px;
+  }
+  .callout.warn { border-left-color: #d97706; background: #fffbeb; }
+  .callout.ok { border-left-color: #16a34a; background: #f0fdf4; }
+  .meta { color: #64748b; font-size: 9.5pt; }
+  .toc a { color: #0f172a; text-decoration: none; }
+  .toc li { margin: 3px 0; }
+  .footer-note { font-size: 8.5pt; color: #64748b; margin-top: 20px; }
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .kpi { border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; background: #f8fafc; }
+  .kpi .v { font-size: 18pt; font-weight: 700; color: #cc0033; }
+  .kpi .l { font-size: 8.5pt; color: #64748b; }
+  .section-break { page-break-before: always; }
+  pre {
+    background: #0f172a; color: #e2e8f0; padding: 10px 12px; border-radius: 6px;
+    font-size: 8pt; overflow: hidden; white-space: pre-wrap; page-break-inside: avoid;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== COUVERTURE ========== -->
+<section class="cover">
+  <div class="brand">ANS DESIGN PRINT · ANS ORION</div>
+  <h1>Audit ultracomplet<br/>Administration Catalogue / Prix &amp; Stock</h1>
+  <p class="subtitle">Analyse A→Z approfondie — inventaire, flux, APIs, Prisma, sync, risques, plan d’action</p>
+  <div>
+    <span class="badge badge-ok">GO local</span>
+    <span class="badge badge-warn">GO staging conditionnel</span>
+    <span class="badge badge-danger">NO-GO PRODUCTION</span>
+  </div>
+  <table style="margin-top:28px; max-width:520px;">
+    <tr><th>Projet</th><td>ANS ORION — CRM / GPAO / POS</td></tr>
+    <tr><th>Périmètre</th><td>Hub Catalogue-Prix-Stock + pages spécialisées + APIs + services + Prisma + tests + docs</td></tr>
+    <tr><th>Date</th><td>19 juillet 2026</td></tr>
+    <tr><th>Méthode</th><td>Lecture code exhaustive (aucune mutation métier)</td></tr>
+    <tr><th>Version document</th><td>2.0 — Ultracomplet / PDF</td></tr>
+  </table>
+  <p class="footer-note">Document confidentiel interne · Source de vérité code : CatalogStudioNav + CataloguePrixStockWorkspace · Règle maître : Backoffice configure → DB stocke → Modules consomment</p>
+</section>
+
+<!-- ========== SOMMAIRE ========== -->
+<section>
+  <h1>Sommaire</h1>
+  <ol class="toc">
+    <li>Synthèse exécutive &amp; verdict</li>
+    <li>Cartographie quantitative</li>
+    <li>Architecture &amp; sources de vérité</li>
+    <li>Routes &amp; pages (inventaire exhaustif)</li>
+    <li>Navigation 5 domaines &amp; alias</li>
+    <li>Matrice studio → tab → composant (analyse)</li>
+    <li>Composants UI &amp; fiche produit</li>
+    <li>APIs &amp; matrice permissions</li>
+    <li>Services, sync &amp; graphes d’appels</li>
+    <li>Modèle Prisma &amp; dualités</li>
+    <li>Flux métier (publication, stock, drift)</li>
+    <li>Pipelines Excel (24 routes)</li>
+    <li>Tests &amp; preuves</li>
+    <li>Risques P0 / P1 / P2 détaillés</li>
+    <li>Incohérences documentation</li>
+    <li>Checklist validation A→Z</li>
+    <li>Plan d’action priorisé</li>
+    <li>Annexes — références documentaires</li>
+  </ol>
+</section>
+
+<section class="section-break">
+  <h2>1. Synthèse exécutive &amp; verdict</h2>
+
+  <div class="callout">
+    <strong>Verdict Release Candidate :</strong> le code Vague 2 / hub Catalogue-Prix-Stock est largement avancé et testable en local.
+    La production reste <strong>NO-GO</strong> faute de backup PostgreSQL restaurable, de sync multi-entités non atomique,
+    et de décisions propriétaire ouvertes (payment drift, staging Hostinger, PDF V17).
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="v">40</div><div class="l">Pages administration</div></div>
+    <div class="kpi"><div class="v">138</div><div class="l">Routes API admin-backoffice</div></div>
+    <div class="kpi"><div class="v">5</div><div class="l">Domaines nav visibles</div></div>
+    <div class="kpi"><div class="v">24</div><div class="l">Pipelines Excel import/export</div></div>
+  </div>
+
+  <h3>1.1 Ce qui est solide</h3>
+  <ul>
+    <li>Hub canonique unique <code>/administration/catalogue-prix-stock</code></li>
+    <li>Navigation 5 domaines + alias techniques (zéro suppression de routes)</li>
+    <li><code>getPosCatalogue()</code> en lecture pure — maintenance explicite via sync</li>
+    <li>Fiche produit unifiée (liste dense, OptionsChips embarqué, garde dirty/beforeunload)</li>
+    <li>Matières unifiées (6 sous-vues) + lien stock</li>
+    <li>Consommation stock production centralisée + idempotence</li>
+    <li>Guards déploiement fail-closed (<code>ALLOW_VERCEL_DB_PUSH_DATA_LOSS</code>, <code>ALLOW_PROD_DB_SETUP</code>, <code>ALLOW_NEON_DB_PUSH</code>)</li>
+  </ul>
+
+  <h3>1.2 Bloquants production</h3>
+  <table>
+    <tr><th>ID</th><th>Bloquant</th><th>Impact</th></tr>
+    <tr><td>D-01</td><td>Backup PostgreSQL restaurable manquant</td><td>NO-GO migrate / seed / rollback / repair</td></tr>
+    <tr><td>D-02</td><td>Drift Prisma sqlite ↔ postgres</td><td>Patch au build Hostinger seulement</td></tr>
+    <tr><td>D-03</td><td>Formules custom perdues sans backup</td><td>Perte données métier irréversible</td></tr>
+    <tr><td>M-02</td><td>Payment drift live (ex. CMD-2024-013)</td><td>Réparation bloquée sans backup + D-012</td></tr>
+    <tr><td>S-01</td><td>Sync Admin→POS non atomique</td><td>État partiel possible après sync</td></tr>
+  </table>
+
+  <h3>1.3 Architecture cible (règle maître)</h3>
+  <pre>Backoffice configure → Prisma stocke → Modules consomment
+Admin → DB → sync (catalogue + matières + options) → POS / Devis / Stock / Production
+
+Hub métier : /commandes/[id]
+Hub admin  : /administration/catalogue-prix-stock</pre>
+</section>
+
+<section class="section-break">
+  <h2>2. Cartographie quantitative</h2>
+  <table>
+    <tr><th>Zone</th><th>Quantité</th><th>Commentaire</th></tr>
+    <tr><td>Pages <code>administration/**/page.tsx</code></td><td><strong>40</strong></td><td>Hub + spécialisées + alias</td></tr>
+    <tr><td>Routes <code>api/admin-backoffice/**</code></td><td><strong>~138</strong></td><td>Pricing, matières, options, Excel, sync</td></tr>
+    <tr><td>Composants CPS (<code>catalogue-prix-stock/*.tsx</code>)</td><td><strong>28</strong></td><td>Studios + primitives</td></tr>
+    <tr><td>Studios techniques</td><td><strong>8</strong></td><td>Dont 3 alias cachés</td></tr>
+    <tr><td>Domaines visibles</td><td><strong>5</strong></td><td>cockpit · matières · prix · excel · historique</td></tr>
+    <tr><td>Pipelines Excel</td><td><strong>24</strong></td><td>17 imports + 7 exports dédiés</td></tr>
+    <tr><td>Usages <code>ArticlePricingProfile</code></td><td><strong>~170</strong></td><td>Modèle dominant</td></tr>
+    <tr><td>Usages <code>ProductPricingProfile</code></td><td><strong>~4</strong></td><td>Couche secondaire</td></tr>
+    <tr><td>Usages <code>baseMaterial</code></td><td><strong>~123</strong></td><td>Source matière actuelle</td></tr>
+    <tr><td>Usages <code>materialCatalog</code></td><td><strong>~7</strong></td><td>Legacy encore synchronisé</td></tr>
+    <tr><td>Réfs <code>SalePrice2026</code></td><td><strong>~50</strong></td><td>Fallback calcul encore actif</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>3. Architecture &amp; sources de vérité</h2>
+  <table>
+    <tr><th>Domaine</th><th>Source primaire</th><th>Legacy / fallback</th></tr>
+    <tr><td>Produit tarifaire</td><td><code>ArticlePricingProfile</code></td><td><code>lib/data/catalogue.ts</code></td></tr>
+    <tr><td>Formule active</td><td><code>FormulaVersion</code> published</td><td>—</td></tr>
+    <tr><td>Options / chips</td><td><code>ProductOptionGroup/Value</code></td><td>Pas de modèle OptionChip</td></tr>
+    <tr><td>Matière</td><td><code>BaseMaterial</code></td><td><code>MaterialCatalog</code></td></tr>
+    <tr><td>Prix contexte</td><td><code>MaterialContextPrice</code></td><td>—</td></tr>
+    <tr><td>Stock</td><td><code>StockItem</code> + movements + reservations</td><td>—</td></tr>
+    <tr><td>Prix legacy</td><td>—</td><td><code>SalePrice2026</code></td></tr>
+    <tr><td>Profil alternatif</td><td><code>ProductPricingProfile</code> (faible usage)</td><td>Dualité à surveiller</td></tr>
+  </table>
+  <div class="callout warn">
+    Le catalogue n’est <strong>pas encore 100 % DB-primary</strong> : hybridation DB + données statiques + fallback PRIX 2026.
+    Toute analyse de drift doit couvrir ces trois couches.
+  </div>
+</section>
+
+<section class="section-break">
+  <h2>4. Routes &amp; pages (inventaire exhaustif)</h2>
+
+  <h3>4.1 Hub canonique</h3>
+  <p><code>/administration/catalogue-prix-stock</code> → <code>CataloguePrixStockWorkspace.tsx</code></p>
+
+  <h3>4.2 Alias → hub</h3>
+  <table>
+    <tr><th>Route</th><th>Redirection</th></tr>
+    <tr><td><code>/administration/catalogue-pos</code></td><td>Hub CPS (mapping studio/view/article)</td></tr>
+    <tr><td><code>/administration/matieres</code></td><td><code>?studio=matieres</code></td></tr>
+    <tr><td><code>/administration/prix-matieres-stock</code></td><td>Hub (conserve tab/view)</td></tr>
+    <tr><td><code>/administration/base-prix-matieres</code></td><td><code>?tab=vue</code></td></tr>
+    <tr><td><code>/administration/prix-calculs</code></td><td><code>?tab=vue</code></td></tr>
+  </table>
+
+  <h4>Mapping catalogue-pos</h4>
+  <table>
+    <tr><th>Entrée</th><th>Sortie</th></tr>
+    <tr><td>view=anomalies / action=detect-duplicates</td><td>studio=cockpit&amp;tab=anomalies</td></tr>
+    <tr><td>view=corbeille</td><td>studio=historique&amp;tab=corbeille</td></tr>
+    <tr><td>studio=chips (sans article)</td><td>studio=prix&amp;tab=chips</td></tr>
+    <tr><td>défaut</td><td>studio=prix&amp;tab=articles</td></tr>
+    <tr><td>+ article</td><td>conserve article + sheet=options</td></tr>
+  </table>
+
+  <h3>4.3 Paramètres URL</h3>
+  <p><code>studio</code> · <code>tab</code> · <code>view</code> · <code>article</code> · <code>sheet</code>/<code>section</code> · <code>legacyConfig=1</code> · <code>action</code></p>
+
+  <h3>4.4 Pages spécialisées conservées</h3>
+  <p><strong>Catalogue / matières / prix :</strong> articles-vente-directe, paliers-vente-directe, matieres-vierges, impression-sf, grand-format-prix, finitions-reliures, design-graphique, base-prix-matieres, prix-matieres-stock, prix-calculs</p>
+  <p><strong>Règles :</strong> parametres-formats-papier, parametres-impression, equivalences-services/matieres, regles-support, regles-promo-articles, limites-matieres-formats, flyer/carterie/publications-regles</p>
+  <p><strong>Familles :</strong> packaging(-sac/-soft), textile, goodies, tampons, photobook, tirage-photo, formats-photo, cadre-photo, carnet-autocopiant</p>
+  <p><strong>Contrôle :</strong> synchronisation, vue-ensemble, backoffice, production-flux, [section], index</p>
+
+  <h3>4.5 Legacy hors /administration</h3>
+  <table>
+    <tr><th>Route</th><th>État</th></tr>
+    <tr><td><code>/admin/pricing</code></td><td>Encore chargé — conservé (zéro suppression)</td></tr>
+    <tr><td><code>/admin-control</code></td><td>Redirect → /admin/pricing</td></tr>
+    <tr><td><code>/admin</code></td><td>Hub admin legacy</td></tr>
+  </table>
+</section>
+
+<section class="section-break">
+  <h2>5. Navigation 5 domaines &amp; alias</h2>
+  <p>Source : <code>components/admin/catalogue-prix-stock/CatalogStudioNav.tsx</code></p>
+  <table>
+    <tr><th>ID</th><th>Label</th><th>Visibilité</th><th>Canonicalise vers</th></tr>
+    <tr><td>cockpit</td><td>Vue d’ensemble</td><td>Visible</td><td>—</td></tr>
+    <tr><td>matieres</td><td>Matières, formats &amp; coûts</td><td>Visible</td><td>—</td></tr>
+    <tr><td>prix</td><td>Studio Prix &amp; Calculs</td><td>Visible</td><td>—</td></tr>
+    <tr><td>excel</td><td>Données &amp; contrôle</td><td>Visible</td><td>—</td></tr>
+    <tr><td>historique</td><td>Historique</td><td>Visible</td><td>—</td></tr>
+    <tr><td>articles</td><td>Produits</td><td>Caché</td><td>prix</td></tr>
+    <tr><td>finitions</td><td>Finitions</td><td>Caché</td><td>prix</td></tr>
+    <tr><td>anomalies</td><td>Diagnostics</td><td>Caché</td><td>cockpit</td></tr>
+  </table>
+  <p>Defaults : prix→articles · finitions→chips · cockpit→vue · matières→matieres · excel→excel · historique→historique</p>
+</section>
+
+<section>
+  <h2>6. Matrice studio → tab → composant (analyse approfondie)</h2>
+  <table>
+    <tr><th>Studio</th><th>Tab</th><th>Composant rendu</th></tr>
+    <tr><td>cockpit</td><td>vue</td><td>CockpitStudio</td></tr>
+    <tr><td>cockpit</td><td>anomalies</td><td>AnomalyCenter</td></tr>
+    <tr><td>matieres</td><td>matieres / couts / stock</td><td>MaterialStockStudio (+ view=)</td></tr>
+    <tr><td>prix</td><td>articles</td><td>PricingArticlesWorkspace</td></tr>
+    <tr><td>prix</td><td>articles + legacyConfig=1</td><td>CataloguePosUnifiedWorkspace</td></tr>
+    <tr><td>prix</td><td>overview</td><td>PricingStudioOverview</td></tr>
+    <tr><td>prix</td><td>engines</td><td>PricingEnginesGallery</td></tr>
+    <tr><td>prix</td><td>regles / formulas</td><td>PricingFormulasStudio</td></tr>
+    <tr><td>prix</td><td>chips</td><td>OptionsChipsWorkspace</td></tr>
+    <tr><td>prix</td><td>finitions</td><td>OptionsFinitionsHealthStrip + PrixMatieresStockWorkspace</td></tr>
+    <tr><td>prix</td><td>isf / flyers / carterie / … / paliers</td><td>PrixMatieresStockWorkspace(forcedTab)</td></tr>
+    <tr><td>prix</td><td>anomalies</td><td>AnomalyCenter</td></tr>
+    <tr><td>prix</td><td>dependencies</td><td><strong>GAP</strong> — « Section indisponible » (pas de panneau)</td></tr>
+    <tr><td>excel</td><td>excel</td><td>ExcelManager</td></tr>
+    <tr><td>excel</td><td>anomalies / historique / corbeille</td><td>AnomalyCenter / Historique / MaterialsCorbeille</td></tr>
+    <tr><td>historique</td><td>historique / corbeille</td><td>AdminHistoriquePlaceholder / MaterialsCorbeille</td></tr>
+  </table>
+  <div class="callout warn">
+    <strong>Dette UI confirmée :</strong> <code>dependencies</code> est autorisé dans STUDIO_TABS et la sous-nav finitions,
+    mais aucun composant n’est branché — dead-end utilisateur.
+  </div>
+</section>
+
+<section class="section-break">
+  <h2>7. Composants UI &amp; fiche produit</h2>
+  <h3>7.1 Hub</h3>
+  <p>Workspace : <code>CataloguePrixStockWorkspace.tsx</code> — normalisation URL, lazy-load, KPI, sync, permissions UI admin|manager|direction.</p>
+  <p>Studios : CockpitStudio, MaterialStockStudio, Pricing*, ExcelManager, AnomalyCenter, Options*, SmartDataGrid, PillTabs…</p>
+
+  <h3>7.2 Fiche produit</h3>
+  <ul>
+    <li><code>article-pricing-card.tsx</code> — sticky actions, OptionsChips embarqué (<code>lockedArticleId</code>), dirty/beforeunload, AdminEmptyState</li>
+    <li>Matières en <strong>lecture seule</strong> depuis la fiche Prix (canEdit=false) + lien studio Matières</li>
+    <li>Vocabulaire : Activer / Archiver / À compléter — plus « Publier/Options POS »</li>
+  </ul>
+
+  <h3>7.3 Gap performance</h3>
+  <p><code>MasterDataVirtualTable</code> fait <code>items.map</code> — <strong>pas de vraie virtualisation</strong>. Contredit la règle projet (&gt;60 lignes).</p>
+</section>
+
+<section>
+  <h2>8. APIs &amp; matrice permissions</h2>
+  <p>~138 routes sous <code>app/api/admin-backoffice</code>. Quatre styles coexistent : <code>requirePermission</code>, <code>requireAnyPermission</code>, <code>requireAdmin</code>, <code>withAuthApi</code>.</p>
+
+  <h3>8.1 Échantillon permissions clés</h3>
+  <table>
+    <tr><th>Route</th><th>Méthode</th><th>Protection</th></tr>
+    <tr><td>/pricing/sync-pos</td><td>POST</td><td>config:publish</td></tr>
+    <tr><td>/pricing/base-materials</td><td>GET</td><td>config:view | tarifs:read</td></tr>
+    <tr><td>/pricing/base-materials</td><td>POST</td><td>tarifs:write</td></tr>
+    <tr><td>/pricing/base-material-prices/[id]/publish</td><td>POST</td><td>tarifs:write</td></tr>
+    <tr><td>/pricing/prix-matieres-stock/import-excel</td><td>POST</td><td>tarifs:write | config:edit_price | config:import</td></tr>
+    <tr><td>/materials/clean-merge</td><td>POST</td><td>requireAdmin()</td></tr>
+    <tr><td>/options/chips/dedupe-formats</td><td>POST</td><td>requireAdmin()</td></tr>
+    <tr><td>/materials/[id]/link-stock</td><td>POST</td><td>tarifs:write | production:write</td></tr>
+    <tr><td>/option-dependencies</td><td>POST/DELETE</td><td>tarifs:write | config:edit_chips | config:edit_features</td></tr>
+    <tr><td>/catalogue-pos/import-excel</td><td>POST</td><td>withAuthApi tarifs:write</td></tr>
+    <tr><td>/pricing/articles/import-excel</td><td>POST</td><td>withAuthApi tarifs:write</td></tr>
+    <tr><td>/direct-sale/sync-all</td><td>POST</td><td>withAuthApi tarifs:write | config:edit_price</td></tr>
+  </table>
+
+  <h3>8.2 Familles d’endpoints</h3>
+  <ul>
+    <li><strong>Catalogue</strong> : backoffice/articles, sync-catalogue, pos-catalog-index, cockpit, pos/catalogue</li>
+    <li><strong>Dynamic pricing</strong> : dynamic-pricing/*, pricing/articles/*, simulate, anomalies, publish</li>
+    <li><strong>Matières</strong> : materials/*, base-materials/*, base-material-prices/*, completeness, from-stock</li>
+    <li><strong>Options</strong> : options/chips/*, option-dependencies, articles/[id]/chips</li>
+    <li><strong>Stock</strong> : /api/stock/*, movements, reservations, check</li>
+    <li><strong>Règles spécialisées</strong> : flyer/carterie/publications/photo/photobook/tampons/…</li>
+  </ul>
+</section>
+
+<section class="section-break">
+  <h2>9. Services, sync &amp; graphes d’appels</h2>
+
+  <h3>9.1 Route /pricing/sync-pos</h3>
+  <pre>1. requirePermission('config:publish')
+2. runPosCatalogueMaintenance({ force: true })
+3. Promise.all([
+     syncBackofficeCatalog(),
+     syncPricingMaterialsToPos({ publish: true, userId })
+   ])
+4. Retourne { catalog, materials, maintenance }
+5. Exception → HTTP 500 SYNC_POS_ERROR</pre>
+
+  <h3>9.2 admin-to-commercial-sync.syncAll()</h3>
+  <pre>1. Options full / options / directSale / prices
+2. full → runPosCatalogueMaintenance + syncCatalogueProfilesToDb
+3. options → syncArticleOptionsToPOS + deps + merge formats (toléré)
+4. directSale → syncAllPublishedDirectSaleToPos (toléré)
+5. prices → rebuildPOSPriceIndex (toléré)
+6. Parallèle : detectCatalogDuplicates + detectPricingDrift + recalculateCategoryCounters
+7. getPosCatalogue('commercial') + notify + audit log
+8. Retourne ok:true même si erreurs secondaires absorbées</pre>
+
+  <div class="callout">
+    <strong>Analyse critique :</strong> deux orchestrations distinctes coexistent.
+    <code>sync-pos</code> est fail-fast global ; <code>syncAll</code> est tolérant/partiel.
+    Risque : l’UI peut afficher « Synchronisé » alors que options/index/drift ont échoué silencieusement.
+  </div>
+</section>
+
+<section>
+  <h2>10. Modèle Prisma &amp; dualités</h2>
+
+  <h3>10.1 Dualités quantifiées</h3>
+  <table>
+    <tr><th>Couple</th><th>Dominant</th><th>Secondaire</th><th>Risque</th></tr>
+    <tr><td>ArticlePricingProfile / ProductPricingProfile</td><td>~170</td><td>~4</td><td>Migration inachevée</td></tr>
+    <tr><td>BaseMaterial / MaterialCatalog</td><td>~123</td><td>~7</td><td>syncFromCatalog encore actif</td></tr>
+    <tr><td>Moteur dynamique / SalePrice2026</td><td>moteur</td><td>~50 refs</td><td>Fallback calcul encore branché</td></tr>
+  </table>
+
+  <h3>10.2 Modèles liés (liste)</h3>
+  <p><strong>Pricing :</strong> Tarif, BusinessRule, PriceFormula, ArticleTemplate, ArticlePricingProfile, ProductPricingProfile, PricingVariable, FormulaVersion, RuleVersion, DiscountTier, UrgencyRule, ArticlePromotionalRule, PriceHistory, SalePrice2026</p>
+  <p><strong>Matières :</strong> MaterialPrice, BaseMaterial, MaterialContextPrice, BasePrintingPrice, MaterialCatalog, GrammageCatalog, MaterialPriceEquivalence, BlankMaterialPrice, MaterialFormatLimit, MaterialWaste, PaperFormatRule, SupportFaceRule, ThickPaperRule, PrintTechnologyRule…</p>
+  <p><strong>Options :</strong> ProductOptionGroup, ProductOptionValue, OptionDependency, GoodiesOptionDependency, DirectSaleAddon, GoodiesAddon</p>
+  <p><strong>Stock :</strong> StockRule, StockItem, StockMovement, StockReservation, StockDirectSale, Supplier, SupplierPrice, PurchaseOrder, PurchaseOrderLine</p>
+  <p><strong>VD / familles :</strong> DirectSaleArticle, DirectSalePriceTier, Textile*, FinishingPrice, GrandFormat*, GraphicDesignService, Packaging*, PaperBag*, Doypack*, PrecutLabel*, Cup*, Hangtag*, CarnetAutocopiantParam, StampFormatPrice, Photobook*, TiragePhoto*, CadrePhoto*, Event*…</p>
+</section>
+
+<section class="section-break">
+  <h2>11. Flux métier</h2>
+  <h3>11.1 Brouillon → Actif</h3>
+  <pre>Création profil/formule (draft)
+→ Validation admin
+→ FormulaVersion published / Activer
+→ Projection commerciale
+→ Sync POS
+→ Invalidation cache/index
+→ Audit + diagnostics</pre>
+
+  <h3>11.2 Stock</h3>
+  <table>
+    <tr><th>Opération</th><th>Effet</th></tr>
+    <tr><td>reserveStock</td><td>+reservedQty · mouvement reservation</td></tr>
+    <tr><td>releaseStockReservation</td><td>−reservedQty · released (idempotent)</td></tr>
+    <tr><td>consumeStockReservation</td><td>−quantity · −reservedQty · consumed · production</td></tr>
+    <tr><td>consumeReservationsForCommande</td><td>Fin production commande</td></tr>
+  </table>
+
+  <h3>11.3 Drift</h3>
+  <p><code>sync-drift-service</code> : config↔statique↔profils · orphelins · <strong>payment drift</strong> · anomalies pricing · matières sans prix · non liées stock · Admin↔POS · formules · doublons · options</p>
+</section>
+
+<section>
+  <h2>12. Pipelines Excel (24 routes)</h2>
+  <h3>Imports (17)</h3>
+  <ul>
+    <li>options/chips · pricing/variables · regles · production-flux · catalogue-pos · tiers · annexes</li>
+    <li>pricing/articles · pricing/base-material-prices · pricing/prix-matieres-stock</li>
+    <li>direct-sale : articles · tiers · grand-format · finishing · design</li>
+    <li>packaging · suppliers</li>
+  </ul>
+  <h3>Exports (7)</h3>
+  <ul>
+    <li>packaging · pricing/prix-matieres-stock</li>
+    <li>direct-sale : articles · tiers · grand-format · finishing · design</li>
+  </ul>
+  <p class="meta">Plusieurs imports gèrent aussi prepare-export sans route export séparée. Preview/import non uniformisé (P1).</p>
+</section>
+
+<section>
+  <h2>13. Tests &amp; preuves</h2>
+  <table>
+    <tr><th>Suite</th><th>Couverture</th></tr>
+    <tr><td>admin-ux-chrome</td><td>5 domaines · vocabulaire · radius 7px · sticky · a11y</td></tr>
+    <tr><td>catalogue-pos-refonte-sprint1</td><td>Alias sous Prix · redirect · OptionsChips</td></tr>
+    <tr><td>catalogue-prix-stock-ia-integration</td><td>Nav 5 · absorption · colonnes matières</td></tr>
+    <tr><td>prix-regles-sans-pos</td><td>Vocabulaire · matières read-only · modal</td></tr>
+    <tr><td>vf-qa01-behavioral</td><td>Fiscal · stock · virtualisation · catalogue pure · guards</td></tr>
+  </table>
+  <p class="meta">Limite : nombreuses assertions regex source — utiles structurellement, insuffisantes seules pour runtime E2E.</p>
+</section>
+
+<section class="section-break">
+  <h2>14. Risques P0 / P1 / P2 détaillés</h2>
+
+  <h3>P0 — Bloquants</h3>
+  <table>
+    <tr><th>ID</th><th>Description</th><th>État</th></tr>
+    <tr><td>D-01</td><td>Backup PG restaurable manquant</td><td>Ouvert — NO-GO prod</td></tr>
+    <tr><td>D-02</td><td>Drift Prisma sqlite→postgres</td><td>Ouvert — patch build only</td></tr>
+    <tr><td>D-03</td><td>Formules custom sans backup</td><td>Ouvert</td></tr>
+    <tr><td>M-02</td><td>Payment drift CMD-2024-013 (630k vs 180k)</td><td>Ouvert — repair bloqué</td></tr>
+    <tr><td>D-006…010</td><td>Décisions scoping / permissions / secret / staging</td><td>Ouvertes</td></tr>
+  </table>
+
+  <h3>P1 — Haute priorité CPS</h3>
+  <table>
+    <tr><th>ID</th><th>Description</th></tr>
+    <tr><td>S-01</td><td>Sync Admin→POS non atomique / deux orchestrations</td></tr>
+    <tr><td>S-02</td><td>Dualités Article/ProductPricingProfile</td></tr>
+    <tr><td>S-03/04</td><td>Excel multi-feuilles / preview non uniformisés</td></tr>
+    <tr><td>S-05</td><td>Scénarios contractuels Admin=POS=panier incomplets</td></tr>
+    <tr><td>S-06</td><td>Migration SF/PLV → BasePrintingPrice incomplète</td></tr>
+    <tr><td>S-07</td><td>Permissions API hétérogènes (4 styles)</td></tr>
+    <tr><td>S-08</td><td>E2E staging Admin→Commercial→POS non exécuté</td></tr>
+    <tr><td>S-09</td><td>MasterDataVirtualTable non virtualisée</td></tr>
+    <tr><td>S-10</td><td>Historique fournisseur / prix achat peu visible</td></tr>
+    <tr><td>S-11</td><td>Redirects studio=chips/variables obsolètes</td></tr>
+    <tr><td>S-12</td><td>Tab dependencies sans panneau (dead-end)</td></tr>
+    <tr><td>S-13</td><td>PDF V17 absents · build:hostinger non exécuté</td></tr>
+  </table>
+
+  <h3>P2 — Dette</h3>
+  <ul>
+    <li>Fallback prixDepart catalogue legacy</li>
+    <li>Version tarifaire peu visible dans panier</li>
+    <li>Pages familles encore dispersées</li>
+    <li>Liens /admin/pricing encore présents (volontairement)</li>
+    <li>Docs « 6 domaines » obsolètes vs code « 5 domaines »</li>
+    <li>SalePrice2026 encore fallback opérationnel</li>
+  </ul>
+</section>
+
+<section>
+  <h2>15. Incohérences documentation</h2>
+  <table>
+    <tr><th>Source</th><th>Dit</th><th>Réalité</th></tr>
+    <tr><td>Audits Ultra-Prompt 15/07</td><td>6 domaines</td><td>5 domaines visibles</td></tr>
+    <tr><td>Commentaires workspace « domaine 6 »</td><td>Données = 6</td><td>Historique = 5e domaine séparé</td></tr>
+    <tr><td>Ancien commentaire anomalies</td><td>→ Données</td><td>canonicalize → cockpit</td></tr>
+    <tr><td>MODULES_MAP menus séparés</td><td>Catalogue/Prix/Matières</td><td>Souvent hidden → hub CPS</td></tr>
+  </table>
+</section>
+
+<section class="section-break">
+  <h2>16. Checklist validation A→Z</h2>
+  <h3>A. Accès</h3>
+  <ul>
+    <li>☐ Login admin/manager/direction</li>
+    <li>☐ 5 domaines visibles uniquement</li>
+    <li>☐ Deep-links studio/tab/article/sheet</li>
+  </ul>
+  <h3>B–J. Parcours</h3>
+  <ul>
+    <li>☐ Cockpit KPI + priorités + anomalies</li>
+    <li>☐ Matières 6 sous-vues · CRUD · lien stock · export missing</li>
+    <li>☐ Prix : liste dense · fiche · sticky · OptionsChips · Activer/Archiver · dirty guard</li>
+    <li>☐ Options chips + finitions (+ note gap dependencies)</li>
+    <li>☐ Excel import/export · diagnostics · corbeille · historique</li>
+    <li>☐ Sync POS + diagnostic drift + parité 3 articles témoins</li>
+    <li>☐ Stock réservation / consommation / libération</li>
+    <li>☐ Alias legacy catalogue-pos / matieres / admin/pricing</li>
+    <li>☐ tsc · tests · next build · recette 320–1440 px</li>
+  </ul>
+</section>
+
+<section>
+  <h2>17. Plan d’action priorisé</h2>
+  <h3>Avant toute production</h3>
+  <ol>
+    <li>Fournir + tester restore dump PostgreSQL (D-01)</li>
+    <li>Autoriser puis réparer payment drift après backup (M-02 / D-012)</li>
+    <li>Valider alignement schéma PG (D-02)</li>
+  </ol>
+  <h3>Vague correctifs CPS</h3>
+  <ol>
+    <li>Unifier / atomiser sync (S-01) — une seule orchestration, pas d’erreurs silencieuses</li>
+    <li>Virtualiser MasterDataVirtualTable (S-09)</li>
+    <li>Brancher panneau dependencies ou masquer le tab (S-12)</li>
+    <li>Uniformiser Excel preview/import (S-03/04)</li>
+    <li>Matrice RBAC endpoint complète (S-07)</li>
+    <li>Nettoyer redirects obsolètes (S-11)</li>
+    <li>Documenter / fusionner dualité profils (S-02)</li>
+  </ol>
+  <h3>Stabilisation</h3>
+  <ol>
+    <li>E2E Admin→Commercial→POS isolé</li>
+    <li>Mettre à jour docs 6→5 domaines</li>
+    <li>Budgets perf p50/p95 listes matières/articles</li>
+    <li>Réduire fallback SalePrice2026 avec plan de bascule</li>
+  </ol>
+</section>
+
+<section class="section-break">
+  <h2>18. Annexes — références documentaires</h2>
+  <p><strong>Canoniques :</strong> BACKOFFICE_FLOW.md · SYNC_MATRIX.md · MODULES_MAP.md · FLOW_GLOBAL.md · USER_JOURNEYS.md</p>
+  <p><strong>Audits CPS :</strong> AUDIT_RECONSTRUCTION_ADMIN_CATALOGUE_* · AUDIT_REFONTE_CATALOGUE_POS · AUDIT_REFONTE_PRIX_REGLES · AUDIT_REFONTE_FORMULES · AUDIT_REFONTE_CATALOGUE_PRIX_STOCK_IA · AUDIT_COMPLETION_MATIERES · PRICING_CUSTOM_ARTICLES_FULL_AUDIT</p>
+  <p><strong>Options / stock / sync :</strong> OPTIONS_CHIPS_* · STOCK_MATERIALS_BACKOFFICE_SYNC · MATERIALS_POS_SYNC_MAPPING · REGISTRE_INVARIANTS_STOCK · RECETTE_SYNC_ADMIN_COMMERCIAL_POS · MATRICE_SYNCHRONISATION · MATRICE_RBAC_API · AUDIT_BUGS_ANOMALIES · RAPPORT_RELEASE_CANDIDATE · DECISIONS_EN_ATTENTE</p>
+  <p><strong>audit-10-10 :</strong> 06_POS_PRICING · 07_STOCK_ACHATS · 08_BACKOFFICE_ADMIN · 09_SYNC_DATA_FLOW</p>
+  <p><strong>Précédent MD :</strong> docs/audit/AUDIT_COMPLET_ADMINISTRATION_CATALOGUE_PRIX_STOCK_A_Z.md (v1)</p>
+
+  <div class="callout ok" style="margin-top:24px;">
+    <strong>Fin du document</strong> — Audit ultracomplet ANS ORION · Administration Catalogue / Prix &amp; Stock · 2026-07-19 · Version PDF 2.0
+  </div>
+  <p class="footer-note">ANS Design Print · Document généré depuis le code source du projet · Aucune donnée métier sensible (prix clients, salaires) incluse</p>
+</section>
+
+</body>
+</html>`;
+
+fs.mkdirSync(outDir, { recursive: true });
+fs.writeFileSync(htmlPath, html, 'utf8');
+console.log('HTML écrit:', htmlPath);
+
+const browser = await chromium.launch({ headless: true });
+const page = await browser.newPage();
+await page.goto('file:///' + htmlPath.replace(/\\/g, '/'), { waitUntil: 'networkidle' });
+await page.pdf({
+  path: pdfProject,
+  format: 'A4',
+  printBackground: true,
+  margin: { top: '14mm', right: '12mm', bottom: '16mm', left: '12mm' },
+  displayHeaderFooter: true,
+  headerTemplate: '<div></div>',
+  footerTemplate: `
+    <div style="font-size:8px;width:100%;padding:0 14mm;color:#64748b;display:flex;justify-content:space-between;">
+      <span>ANS ORION — Audit Catalogue / Prix &amp; Stock</span>
+      <span>Page <span class="pageNumber"></span> / <span class="totalPages"></span></span>
+    </div>`,
+});
+await browser.close();
+
+console.log('PDF projet:', pdfProject);
+try {
+  fs.copyFileSync(pdfProject, pdfDownloads);
+  console.log('PDF Downloads:', pdfDownloads);
+} catch (e) {
+  console.warn('Copie Downloads échouée:', e.message);
+}
+
+const st = fs.statSync(pdfProject);
+console.log('Taille:', Math.round(st.size / 1024), 'Ko');

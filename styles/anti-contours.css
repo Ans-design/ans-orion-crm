@@ -1,0 +1,289 @@
+/**
+ * ANS ORION — Anti-contours / surfaces fluides
+ * Moins de cadres · hiérarchie par fond + ombre unifiée (clair) · lisibilité conservée
+ */
+
+:root {
+  --contour-none: transparent;
+  --contour-hairline: rgba(15, 23, 42, 0.045);
+  --contour-soft: rgba(15, 23, 42, 0.07);
+
+  /* Ombres unifiées clair — card-organic */
+  --shadow-opacity: 0.08;
+  --shadow-card-unified: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+  --shadow-card: var(--shadow-card-unified);
+  --shadow-hover: 0 6px 10px -2px rgba(15, 23, 42, 0.05), 0 14px 22px -4px rgba(15, 23, 42, 0.1);
+  --orion-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.04);
+  --orion-shadow-md: var(--shadow-card-unified);
+  --orion-shadow-lg: 0 6px 10px -2px rgba(15, 23, 42, 0.05), 0 14px 22px -4px rgba(15, 23, 42, 0.1);
+  --orion-shadow-soft: var(--orion-shadow-sm);
+  --border: 220 14% 93%;
+}
+
+:root:not(.dark) {
+  --surface-lift: #ffffff;
+  --surface-sunken: #ffffff;
+  --surface-subtle: #ffffff;
+}
+
+.dark {
+  --contour-hairline: rgba(255, 255, 255, 0.04);
+  --contour-soft: rgba(255, 255, 255, 0.07);
+  --surface-lift: #071021;
+  --surface-sunken: #050A18;
+  --surface-subtle: #071021;
+  --shadow-card-unified: none;
+  --border: 214 40% 20%;
+}
+
+/* Surfaces + ombre douce unifiée (clair) */
+.orion-flat,
+.ui-flat-surface {
+  border: none !important;
+  box-shadow: var(--shadow-card-unified);
+  background: var(--surface-lift);
+  border-radius: var(--radius-ui, 10px);
+}
+
+.orion-flat-sunken {
+  border: none !important;
+  box-shadow: none;
+  background: var(--surface-sunken);
+  border-radius: var(--radius-ui, 10px);
+}
+
+.dark .orion-flat,
+.dark .ui-flat-surface {
+  box-shadow: none;
+}
+
+[data-slot='card'] {
+  border-color: transparent !important;
+  box-shadow: var(--shadow-card-unified);
+}
+
+.dark [data-slot='card'] {
+  box-shadow: none;
+}
+
+/* POS — cartes blanches + ombre unifiée en clair */
+html:not(.dark) .pos-config-main .bg-card.border,
+html:not(.dark) .pos-config-main .bg-card.border-border,
+html:not(.dark) .pos-config-layout .bg-card.border,
+html:not(.dark) .pos-config-layout .bg-card.border-border,
+html:not(.dark) .pos-config-summary .bg-card.border,
+html:not(.dark) .pos-config-summary .border.border-border,
+html:not(.dark) .pos-summary-sticky .bg-card.border,
+html:not(.dark) .pos-summary-sticky .border.border-border,
+html:not(.dark) .pos-config-main > .bg-card,
+html:not(.dark) .pos-config-main [class*='rounded-xl'].bg-card,
+html:not(.dark) .pos-config-layout .bg-card.rounded-xl,
+html:not(.dark) .pos-config-layout [class*='rounded-xl'].bg-card {
+  background: var(--surface-lift) !important;
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: var(--shadow-card-unified) !important;
+}
+
+.dark .pos-config-main .bg-card.border,
+.dark .pos-config-layout .bg-card.border,
+.dark .pos-config-main [class*='rounded-xl'].bg-card {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Sous-champs imbriqués — fond seul, pas d’ombre (évite double relief)
+   Exclure Soft UI (pos-section-card / nest / chips) — sinon maquette aplatie */
+.pos-config-main .rounded-lg.border:not(.pos-section-card):not(.pos-field-nest):not(.pos-summary-soft):not(.pos-status-card),
+.pos-config-main .rounded-xl.border.border-border:not(.pos-section-card):not(.pos-field-nest):not(.pos-summary-soft),
+.pos-config-main [class*='border-border\/']:not(.pos-section-card):not(.pos-field-nest),
+.pos-config-layout .rounded-lg.border:not(.pos-section-card):not(.pos-field-nest):not(.pos-summary-soft),
+.pos-config-layout .rounded-xl.border:not(.pos-section-card):not(.pos-field-nest):not(.pos-summary-soft) {
+  border-color: transparent !important;
+  background: var(--surface-sunken) !important;
+  box-shadow: none !important;
+}
+
+.pos-config-main .h-px.bg-border,
+.pos-config-main .h-px.bg-border\/50,
+.pos-config-layout .border-t.border-border,
+.pos-config-layout .border-t.border-border\/40 {
+  background-color: var(--contour-hairline) !important;
+  border-color: var(--contour-hairline) !important;
+  opacity: 0.7;
+}
+
+.pos-config-main button.border:not(.pos-chip):not(.pos-cta-primary):not(.pos-stepper-premium__item):not(.pos-stepper-premium__nav-btn):not(.pos-stepper-premium__all-btn):not(.pos-stepper-premium__mobile-row),
+.pos-config-layout button.border:not(.pos-chip):not(.pos-cta-primary):not(.pos-stepper-premium__item):not(.pos-stepper-premium__nav-btn):not(.pos-stepper-premium__all-btn):not(.pos-stepper-premium__mobile-row) {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.pos-config-main button.border.border-border:not(.pos-chip),
+.pos-config-layout button.border.border-border:not(.pos-chip) {
+  background: var(--surface-sunken);
+}
+
+html:not(.dark) .orion-surface-card,
+html:not(.dark) .orion-surface-card-soft,
+html:not(.dark) .orion-surface-panel,
+html:not(.dark) .orion-surface-card-elevated {
+  border: none !important;
+  box-shadow: var(--shadow-card-unified) !important;
+  background: var(--surface-lift);
+  border-radius: var(--radius-ui, 10px);
+}
+
+.dark .orion-surface-card,
+.dark .orion-surface-card-soft,
+.dark .orion-surface-panel {
+  border: none !important;
+  box-shadow: none !important;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-ui, 10px);
+}
+
+html:not(.dark) .orion-viewport .rounded-xl.border.border-border,
+html:not(.dark) .orion-viewport .rounded-lg.border.border-border,
+html:not(.dark) .orion-viewport .rounded-\[10px\].border.border-border,
+html:not(.dark) .orion-viewport .bg-card.border.border-border {
+  border-color: transparent !important;
+  box-shadow: var(--shadow-card-unified) !important;
+}
+
+.dark .orion-viewport .bg-card.border.border-border {
+  border-color: transparent !important;
+  box-shadow: none;
+}
+
+.orion-viewport table th,
+.orion-viewport table td {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.orion-viewport table tbody td {
+  border-bottom-color: var(--contour-hairline) !important;
+}
+
+.cps-theme .border-border {
+  border-color: var(--contour-hairline) !important;
+}
+
+.ab2-table-wrap {
+  border: none !important;
+  background: transparent;
+}
+
+.orion-catalogue-nav,
+.orion-catalogue-studio,
+.orion-catalogue-summary,
+.orion-catalogue-kpi-card,
+.orion-catalogue-preview-card {
+  border: none !important;
+}
+
+html:not(.dark) .orion-catalogue-nav,
+html:not(.dark) .orion-catalogue-studio,
+html:not(.dark) .orion-catalogue-summary,
+html:not(.dark) .orion-catalogue-kpi-card {
+  box-shadow: var(--shadow-card-unified);
+  background: var(--surface-lift);
+}
+
+.dark .orion-catalogue-nav,
+.dark .orion-catalogue-studio,
+.dark .orion-catalogue-summary,
+.dark .orion-catalogue-kpi-card {
+  box-shadow: none !important;
+}
+
+.orion-catalogue-layout--two-col .orion-catalogue-nav {
+  border-right: 1px solid var(--contour-hairline) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+input:not([type='checkbox']):not([type='radio']):not([type='range']),
+select,
+textarea {
+  border-color: var(--contour-soft) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--border-focus-field, var(--border-focus, rgba(100, 116, 139, 0.45))) !important;
+}
+
+/* Utilities Tailwind shadow → même opacité en clair */
+html:not(.dark) .shadow-sm,
+html:not(.dark) .shadow,
+html:not(.dark) .shadow-md {
+  --tw-shadow: var(--shadow-card-unified) !important;
+  --tw-shadow-colored: var(--shadow-card-unified) !important;
+  box-shadow: var(--shadow-card-unified) !important;
+}
+
+html:not(.dark) .shadow-lg,
+html:not(.dark) .shadow-xl {
+  --tw-shadow: var(--orion-shadow-lg) !important;
+  box-shadow: var(--orion-shadow-lg) !important;
+}
+
+/* ── Mode clair — tables : zéro bande sombre / texte lisible ── */
+html:not(.dark) .ab2-chips-table tr td,
+html:not(.dark) .ab2-chips-table tr:nth-child(even) td,
+html:not(.dark) .mp-table tbody tr td,
+html:not(.dark) .mp-table tbody tr:nth-child(even) td,
+html:not(.dark) .ab2-dt-table tbody tr,
+html:not(.dark) .ab2-dt-table tbody tr:nth-child(even),
+html:not(.dark) .ab2-table tbody tr td,
+html:not(.dark) table tbody tr:nth-child(even) td {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .ab2-chips-table tr:hover td,
+html:not(.dark) .mp-table tbody tr:hover td,
+html:not(.dark) .ab2-table tr:hover td {
+  background: rgba(255, 23, 77, 0.04) !important;
+}
+
+html:not(.dark) .ab2-chips-table .col-champ,
+html:not(.dark) .ab2-chips-table td,
+html:not(.dark) .ab2-cell-label,
+html:not(.dark) .ab2-options-article-name {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .ab2-muted,
+html:not(.dark) .ab2-options-article-code,
+html:not(.dark) .ab2-chips-table th {
+  color: #475569 !important;
+}
+
+html:not(.dark) .ab2-block-accordion-head {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .ab2-block-accordion-head:hover {
+  background: #f1f5f9 !important;
+}
+
+html:not(.dark) .cps-theme,
+html:not(.dark) .ab2-shell,
+html:not(.dark) .orion-viewport {
+  background: var(--bg-app, #f4f7fb) !important;
+}
+
+html:not(.dark) .cps-theme .cps-kpi button,
+html:not(.dark) .KpiCards button,
+html:not(.dark) [class*='KpiCards'] button {
+  color: #0f172a;
+}
+
+html:not(.dark) .text-muted-foreground {
+  color: #64748b !important;
+}

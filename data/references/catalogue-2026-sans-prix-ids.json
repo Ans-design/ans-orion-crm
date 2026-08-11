@@ -1,0 +1,464 @@
+{
+  "generatedAt": "2026-07-30T20:02:04.604Z",
+  "source": "C:\\Users\\ans\\Desktop\\2em-export-complet-UNIQUE\\docs\\references\\catalogue-2026-prix-exacts.xlsx",
+  "count": 65,
+  "excelRowIds": [
+    "003",
+    "009",
+    "010",
+    "011",
+    "024",
+    "028",
+    "029",
+    "030",
+    "031",
+    "034",
+    "035",
+    "040",
+    "041",
+    "042",
+    "044",
+    "053",
+    "054",
+    "055",
+    "056",
+    "057",
+    "058",
+    "059",
+    "060",
+    "061",
+    "069",
+    "076",
+    "077",
+    "078",
+    "079",
+    "080",
+    "081",
+    "082",
+    "083",
+    "084",
+    "085",
+    "086",
+    "087",
+    "088",
+    "089",
+    "090",
+    "091",
+    "093",
+    "106",
+    "107",
+    "108",
+    "109",
+    "110",
+    "111",
+    "119",
+    "120",
+    "121",
+    "122",
+    "135",
+    "136",
+    "137",
+    "146",
+    "147",
+    "148",
+    "149",
+    "150",
+    "151",
+    "152",
+    "153",
+    "157",
+    "159"
+  ],
+  "rows": [
+    {
+      "excelRowId": "053",
+      "name": "Autocopiant CB blanc 57g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "054",
+      "name": "Autocopiant CF couleur 57g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "055",
+      "name": "Autocopiant CFB couleur 57g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "028",
+      "name": "Bâche dos noir 440g",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "029",
+      "name": "Bâche microperforée / mesh 270g",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "024",
+      "name": "Backlit 200g",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "056",
+      "name": "Bristol 180g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "057",
+      "name": "Bristol 200g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "058",
+      "name": "Bristol 220g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "059",
+      "name": "Bristol 250g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "060",
+      "name": "Bristol 300g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "061",
+      "name": "Bristol 350g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "030",
+      "name": "Canvas / toile 280g",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "003",
+      "name": "Carton rigide 750g",
+      "family": "Carte",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "069",
+      "name": "Couché mat 350g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "031",
+      "name": "Dibond 3mm",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "034",
+      "name": "Forex 3mm",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "035",
+      "name": "Forex 5mm",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "076",
+      "name": "Glossy 600g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "077",
+      "name": "Glossy 900g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "078",
+      "name": "Kraft 120g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "079",
+      "name": "Kraft 170g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "080",
+      "name": "Kraft 200g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "009",
+      "name": "Kraft 230g",
+      "family": "Carte",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "081",
+      "name": "Kraft 230g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "010",
+      "name": "Kraft 250g",
+      "family": "Carte",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "082",
+      "name": "Kraft 250g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "011",
+      "name": "Kraft 300g",
+      "family": "Carte",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "083",
+      "name": "Kraft 300g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "084",
+      "name": "Matière personnalisée",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "085",
+      "name": "NCR 2 plis 57g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "086",
+      "name": "NCR 3 plis 57g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "087",
+      "name": "NCR 4 plis 57g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "088",
+      "name": "Offset 100g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "089",
+      "name": "Offset 120g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "090",
+      "name": "Offset 160g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "091",
+      "name": "Offset 70g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "093",
+      "name": "Offset 90g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "135",
+      "name": "Papier journal 45g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "136",
+      "name": "Papier journal 52g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "137",
+      "name": "Papier journal 55g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "146",
+      "name": "Papier recyclé 115g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "147",
+      "name": "Papier recyclé 135g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "148",
+      "name": "Papier satiné mat 130g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "149",
+      "name": "Papier satiné mat 150g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "150",
+      "name": "Papier satiné mat 170g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "151",
+      "name": "Papier satiné mat 200g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "152",
+      "name": "Papier satiné mat 250g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "153",
+      "name": "Papier satiné mat 300g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "106",
+      "name": "PCB pelliculé 170g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "107",
+      "name": "PCB pelliculé 250g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "108",
+      "name": "PCB pelliculé 300g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "109",
+      "name": "PCB pelliculé 350g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "110",
+      "name": "PCB pelliculé 600g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "111",
+      "name": "PCB pelliculé 700g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "119",
+      "name": "PCM 350g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "120",
+      "name": "PCM 600g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "121",
+      "name": "PCM 700g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "122",
+      "name": "PCM 900g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "040",
+      "name": "PVC 5mm",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "041",
+      "name": "PVC rigide 1mm",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "042",
+      "name": "PVC rigide 2mm",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "044",
+      "name": "PVC rigide 5mm",
+      "family": "Grand format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "157",
+      "name": "Standard / Offset 70g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    },
+    {
+      "excelRowId": "159",
+      "name": "Standard / Offset 90g",
+      "family": "Petit format",
+      "reason": "Aucun tarif 2026 strictement identique au format et à la caractéristique"
+    }
+  ]
+}

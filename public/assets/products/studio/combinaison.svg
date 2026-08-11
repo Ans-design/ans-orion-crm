@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+<defs>
+  <linearGradient id="fab" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="55%" stop-color="#f4f4f0"/>
+    <stop offset="100%" stop-color="#e4e4de"/>
+  </linearGradient>
+  <linearGradient id="fabD" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#d8d8d2"/>
+    <stop offset="100%" stop-color="#f8f8f6"/>
+  </linearGradient>
+  <linearGradient id="brim" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#f0f0ec"/>
+    <stop offset="100%" stop-color="#d0d0c8"/>
+  </linearGradient>
+  <linearGradient id="cer" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="100%" stop-color="#e8ecf0"/>
+  </linearGradient>
+  <linearGradient id="paper" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="100%" stop-color="#f0f2f5"/>
+  </linearGradient>
+  <linearGradient id="kraft" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#dcc9a8"/>
+    <stop offset="100%" stop-color="#a08050"/>
+  </linearGradient>
+  <linearGradient id="metal" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#e8ecf0"/>
+    <stop offset="100%" stop-color="#8898a8"/>
+  </linearGradient>
+  <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/>
+  </filter>
+</defs>
+<rect width="400" height="400" fill="none"/>
+<ellipse cx="200" cy="360" rx="120" ry="14" fill="#000" opacity="0.12"/>
+<g filter="url(#sh)">
+    <!-- Combinaison / salopette travail -->
+    <path d="M138 82 Q138 58 200 54 Q262 58 262 82 L295 105 L312 148 L278 162 L262 118 L262 310 L138 310 L138 118 L122 162 L88 148 L105 105 Z" fill="url(#fab)" stroke="#bbb" stroke-width="0.8"/>
+    <path d="M138 118 L122 162 L122 195 L138 195 L155 162 L155 118 M262 118 L278 162 L278 195 L262 195 L245 162 L245 118" fill="url(#fabD)" stroke="#bbb" stroke-width="0.6"/>
+    <rect x="155" y="145" width="90" height="75" rx="4" fill="#fff" stroke="#bbb" stroke-width="0.8"/>
+    <rect x="165" y="155" width="28" height="22" rx="2" fill="#eee" stroke="#ccc"/>
+    <rect x="207" y="155" width="28" height="22" rx="2" fill="#eee" stroke="#ccc"/>
+    <line x1="138" y1="220" x2="262" y2="220" stroke="#ccc" stroke-width="0.8"/>
+    <path d="M155 220 L155 310 M245 220 L245 310" fill="none" stroke="#ccc" stroke-width="0.6"/>
+    <rect x="168" y="165" width="64" height="40" rx="3" fill="#000" opacity="0.04" stroke="#ccc" stroke-dasharray="4 3"/>
+  </g>
+</svg>

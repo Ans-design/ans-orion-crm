@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORION - Catalogue, Prix & Stock (Refonte)</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons - Modern and clean) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48', // Orion primary red/rose
+                            700: '#be123c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for a premium look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Utility classes for animations */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast notification system */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: #1e293b;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm relative z-20">
+        <!-- Logo & Title -->
+        <div class="p-6 border-b border-slate-100">
+            <h1 class="font-bold text-xl text-slate-900 tracking-tight flex items-center gap-2">
+                <i class="ph-fill ph-planet text-brand-600 text-2xl"></i>
+                ORION
+            </h1>
+            <p class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Catalogue & Stock</p>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <div class="text-xs font-semibold text-slate-400 mb-3 px-3 uppercase tracking-wider">Domaines</div>
+            
+            <button onclick="switchView('view-dashboard')" id="nav-dashboard" class="w-full flex flex-col text-left px-3 py-2.5 rounded-lg transition-colors bg-brand-50 text-brand-700 relative group">
+                <div class="flex items-center gap-3 font-medium">
+                    <i class="ph ph-squares-four text-lg"></i>
+                    Tableau de bord
+                </div>
+                <span class="text-[10px] pl-8 text-brand-600/70 mt-0.5">Santé & Priorités</span>
+            </button>
+
+            <button onclick="switchView('view-materials')" id="nav-materials" class="w-full flex flex-col text-left px-3 py-2.5 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 group">
+                <div class="flex items-center gap-3 font-medium">
+                    <i class="ph ph-stack text-lg group-hover:text-slate-900"></i>
+                    Matières & formats
+                </div>
+                <span class="text-[10px] pl-8 text-slate-400 mt-0.5 group-hover:text-slate-500">Unifiée : Achats, Prix, Stock</span>
+            </button>
+
+            <button onclick="switchView('view-pricing')" id="nav-pricing" class="w-full flex flex-col text-left px-3 py-2.5 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 group">
+                <div class="flex items-center gap-3 font-medium">
+                    <i class="ph ph-calculator text-lg group-hover:text-slate-900"></i>
+                    Prix & règles
+                </div>
+                <span class="text-[10px] pl-8 text-slate-400 mt-0.5 group-hover:text-slate-500">Articles, formules, finitions</span>
+            </button>
+
+            <button onclick="switchView('view-import')" id="nav-import" class="w-full flex flex-col text-left px-3 py-2.5 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 group">
+                <div class="flex items-center gap-3 font-medium">
+                    <i class="ph ph-arrows-left-right text-lg group-hover:text-slate-900"></i>
+                    Import / Export
+                </div>
+                <span class="text-[10px] pl-8 text-slate-400 mt-0.5 group-hover:text-slate-500">Modèles & mises à jour</span>
+            </button>
+
+            <button onclick="switchView('view-history')" id="nav-history" class="w-full flex flex-col text-left px-3 py-2.5 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 group">
+                <div class="flex items-center gap-3 font-medium">
+                    <i class="ph ph-clock-counter-clockwise text-lg group-hover:text-slate-900"></i>
+                    Historique
+                </div>
+                <span class="text-[10px] pl-8 text-slate-400 mt-0.5 group-hover:text-slate-500">Journal & corbeille</span>
+            </button>
+        </nav>
+
+        <!-- User / Settings -->
+        <div class="p-4 border-t border-slate-100">
+            <div class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 cursor-pointer">
+                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold">A</div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-slate-900">Admin Système</p>
+                    <p class="text-xs text-slate-500">Super Admin</p>
+                </div>
+                <i class="ph ph-caret-up text-slate-400"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 bg-slate-50">
+        
+        <!-- HEADER GLOBAL -->
+        <header class="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
+            <div>
+                <h2 class="text-2xl font-semibold text-slate-900" id="header-title">Tableau de bord</h2>
+                <div class="flex items-center gap-2 text-sm text-slate-500 mt-1">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> Source unique active</span>
+                    <span>•</span>
+                    <span>Dernière synchro POS : il y a 5 min</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="showToast('Synchronisation du catalogue vers le POS en cours...', 'info')" class="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm">
+                    <i class="ph ph-arrows-clockwise text-lg"></i>
+                    Synchroniser le POS
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
+                    <i class="ph ph-dots-three text-xl"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTENT VIEWS CONTAINER -->
+        <div class="flex-1 overflow-y-auto p-8 relative">
+
+            <!-- VIEW : DASHBOARD -->
+            <div id="view-dashboard" class="view-section fade-in max-w-6xl mx-auto">
+                <p class="text-slate-500 mb-6">Suivez la santé de votre catalogue et gérez les anomalies bloquantes avant synchronisation.</p>
+                
+                <!-- KPI Bandeau (Remplaçant les énormes cartes redondantes) -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-slate-500 text-sm font-medium">Articles actifs</span>
+                            <div class="p-1.5 bg-green-50 rounded text-green-600"><i class="ph ph-check-circle"></i></div>
+                        </div>
+                        <span class="text-3xl font-bold text-slate-900">142</span>
+                        <span class="text-xs text-slate-400 mt-2">100% tarifés</span>
+                    </div>
+                    
+                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-slate-500 text-sm font-medium">Matières actives</span>
+                            <div class="p-1.5 bg-blue-50 rounded text-blue-600"><i class="ph ph-stack"></i></div>
+                        </div>
+                        <span class="text-3xl font-bold text-slate-900">185</span>
+                        <span class="text-xs text-slate-400 mt-2">Référentiel unifié</span>
+                    </div>
+
+                    <div class="bg-white border border-red-200 rounded-xl p-5 shadow-sm flex flex-col ring-1 ring-red-50 cursor-pointer hover:bg-red-50/30 transition-colors" onclick="switchView('view-materials')">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-red-700 text-sm font-medium">Ruptures de stock</span>
+                            <div class="p-1.5 bg-red-100 rounded text-red-700"><i class="ph ph-warning-octagon"></i></div>
+                        </div>
+                        <span class="text-3xl font-bold text-red-700">6</span>
+                        <span class="text-xs text-red-500/80 mt-2 flex items-center gap-1">Action requise <i class="ph ph-arrow-right"></i></span>
+                    </div>
+
+                    <div class="bg-white border border-amber-200 rounded-xl p-5 shadow-sm flex flex-col cursor-pointer hover:bg-amber-50/30 transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-amber-700 text-sm font-medium">Prix vierge manquant</span>
+                            <div class="p-1.5 bg-amber-100 rounded text-amber-700"><i class="ph ph-currency-circle-dollar"></i></div>
+                        </div>
+                        <span class="text-3xl font-bold text-amber-700">31</span>
+                        <span class="text-xs text-amber-600 mt-2 flex items-center gap-1">Impact sur le simulateur <i class="ph ph-arrow-right"></i></span>
+                    </div>
+                </div>
+
+                <!-- File des priorités -->
+                <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                        <h3 class="font-semibold text-slate-800 flex items-center gap-2">
+                            <i class="ph ph-list-dashes text-brand-600"></i> File des priorités
+                        </h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                    <th class="py-3 px-6 font-medium">Niveau</th>
+                                    <th class="py-3 px-6 font-medium">Objet</th>
+                                    <th class="py-3 px-6 font-medium">Anomalie détectée</th>
+                                    <th class="py-3 px-6 font-medium text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-700 divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="py-3 px-6"><span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-red-100 text-red-700 text-xs font-semibold"><i class="ph-fill ph-x-circle"></i> Bloquant</span></td>
+                                    <td class="py-3 px-6 font-medium">Bâche 180cm (MAT-B180)</td>
+                                    <td class="py-3 px-6 text-slate-500">Stock physique à 0, utilisé par 3 commandes en cours.</td>
+                                    <td class="py-3 px-6 text-right">
+                                        <button class="text-brand-600 font-medium hover:underline text-xs" onclick="switchView('view-materials')">Corriger le stock</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="py-3 px-6"><span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-amber-100 text-amber-700 text-xs font-semibold"><i class="ph-fill ph-warning"></i> Majeur</span></td>
+                                    <td class="py-3 px-6 font-medium">Papier Couché 170g (PCM-170)</td>
+                                    <td class="py-3 px-6 text-slate-500">Prix d'achat non renseigné. Calcul des marges impossible.</td>
+                                    <td class="py-3 px-6 text-right">
+                                        <button class="text-brand-600 font-medium hover:underline text-xs">Saisir le prix</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="py-3 px-6"><span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-100 text-blue-700 text-xs font-semibold"><i class="ph-fill ph-info"></i> Mineur</span></td>
+                                    <td class="py-3 px-6 font-medium">Flyer A5 (ART-F-A5)</td>
+                                    <td class="py-3 px-6 text-slate-500">Formule valide mais marge projetée inférieure à la marge cible (15% < 20%).</td>
+                                    <td class="py-3 px-6 text-right">
+                                        <button class="text-brand-600 font-medium hover:underline text-xs">Ajuster la règle</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW : MATIÈRES UNIFIÉES (Fusion de Identité, Prix Contexte, Stock & Achats) -->
+            <div id="view-materials" class="view-section hidden fade-in max-w-full mx-auto">
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <p class="text-slate-500">Une seule source de vérité pour le référentiel physique, les achats, la tarification standard et l'état des stocks.</p>
+                    </div>
+                    <button class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 shadow-sm transition-colors" onclick="showToast('Ouverture du tiroir de création...', 'success')">
+                        <i class="ph ph-plus-circle text-lg"></i>
+                        Nouvelle matière
+                    </button>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col">
+                    <!-- Toolbar -->
+                    <div class="p-4 border-b border-slate-100 flex gap-4 items-center bg-slate-50/50 rounded-t-xl">
+                        <div class="relative flex-1 max-w-md">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" placeholder="Rechercher nom, référence, variante..." class="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <select class="border border-slate-200 text-slate-600 text-sm rounded-lg px-3 py-2 bg-white focus:outline-none">
+                            <option>Toutes les familles</option>
+                            <option>Papier</option>
+                            <option>Grand Format</option>
+                            <option>Rigide</option>
+                        </select>
+                        <select class="border border-slate-200 text-slate-600 text-sm rounded-lg px-3 py-2 bg-white focus:outline-none">
+                            <option>Tous les états</option>
+                            <option>Actifs</option>
+                            <option>Sous le seuil d'alerte</option>
+                            <option>Archivés</option>
+                        </select>
+                        <div class="flex-1"></div>
+                        <button class="text-slate-500 hover:text-slate-800 flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-md hover:bg-slate-100 transition-colors">
+                            <i class="ph ph-export text-lg"></i> Exporter
+                        </button>
+                    </div>
+
+                    <!-- Grille unifiée (SANS BORDURES ROUGES, SANS STATUT BROUILLON/PUBLIÉ) -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm whitespace-nowrap">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
+                                    <th class="py-3 px-4">Identité & Variante</th>
+                                    <th class="py-3 px-4">Réf. Principale</th>
+                                    <th class="py-3 px-4 text-right">Coût Achat</th>
+                                    <th class="py-3 px-4 text-right bg-slate-100/50">Prix Vierge</th>
+                                    <th class="py-3 px-4 text-right bg-slate-100/50">Prix Imprimé</th>
+                                    <th class="py-3 px-4 text-right border-l border-slate-200/50">Stock Dispo</th>
+                                    <th class="py-3 px-4">État</th>
+                                    <th class="py-3 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-700 divide-y divide-slate-100">
+                                <!-- Ligne 1 -->
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="py-3 px-4">
+                                        <div class="font-medium text-slate-900">Papier Couché Mat (PCM)</div>
+                                        <div class="text-xs text-slate-500">170g • A4</div>
+                                    </td>
+                                    <td class="py-3 px-4 font-mono text-xs text-slate-500">PCM-170-A4</td>
+                                    <td class="py-3 px-4 text-right font-medium">100 Ar</td>
+                                    <td class="py-3 px-4 text-right bg-slate-50/30">150 Ar</td>
+                                    <td class="py-3 px-4 text-right bg-slate-50/30">500 Ar</td>
+                                    <td class="py-3 px-4 text-right border-l border-slate-100">
+                                        <span class="font-medium text-slate-900">4 500</span> <span class="text-slate-400 text-xs">flles</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Actif</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-right space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <!-- Actions sans "capsules" visuelles lourdes -->
+                                        <button class="p-1.5 text-slate-400 hover:text-brand-600 rounded hover:bg-brand-50 transition-colors tooltip" title="Modifier">
+                                            <i class="ph ph-pencil-simple text-lg"></i>
+                                        </button>
+                                        <button class="p-1.5 text-slate-400 hover:text-red-600 rounded hover:bg-red-50 transition-colors tooltip" title="Corbeille">
+                                            <i class="ph ph-trash text-lg"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Ligne 2 (Alerte Stock) -->
+                                <tr class="hover:bg-slate-50 transition-colors group bg-red-50/20">
+                                    <td class="py-3 px-4">
+                                        <div class="font-medium text-slate-900 flex items-center gap-1">Bâche Frontlit <i class="ph-fill ph-warning-circle text-red-500" title="Rupture"></i></div>
+                                        <div class="text-xs text-slate-500">180cm (Laize)</div>
+                                    </td>
+                                    <td class="py-3 px-4 font-mono text-xs text-slate-500">BACH-F-180</td>
+                                    <td class="py-3 px-4 text-right font-medium">4 000 Ar <span class="text-slate-400 text-xs">/m²</span></td>
+                                    <td class="py-3 px-4 text-right bg-slate-50/30">7 000 Ar</td>
+                                    <td class="py-3 px-4 text-right bg-slate-50/30">17 000 Ar</td>
+                                    <td class="py-3 px-4 text-right border-l border-slate-100 text-red-600 font-bold">
+                                        0 <span class="text-slate-400 font-normal text-xs">m</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Actif</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-right space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button class="p-1.5 text-slate-400 hover:text-brand-600 rounded hover:bg-brand-50 transition-colors">
+                                            <i class="ph ph-pencil-simple text-lg"></i>
+                                        </button>
+                                        <button class="p-1.5 text-slate-400 hover:text-red-600 rounded hover:bg-red-50 transition-colors">
+                                            <i class="ph ph-trash text-lg"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Ligne 3 (Prix manquant) -->
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="py-3 px-4">
+                                        <div class="font-medium text-slate-900">Acrylic (Plexiglass)</div>
+                                        <div class="text-xs text-slate-500">3mm</div>
+                                    </td>
+                                    <td class="py-3 px-4 font-mono text-xs text-slate-500">ACRYL-3MM</td>
+                                    <td class="py-3 px-4 text-right font-medium text-amber-600 border border-amber-200 border-dashed rounded bg-amber-50 px-2 cursor-pointer hover:bg-amber-100">Saisir coût</td>
+                                    <td class="py-3 px-4 text-right bg-slate-50/30 text-slate-400">—</td>
+                                    <td class="py-3 px-4 text-right bg-slate-50/30 font-medium">45 000 Ar</td>
+                                    <td class="py-3 px-4 text-right border-l border-slate-100">
+                                        <span class="font-medium text-slate-900">12</span> <span class="text-slate-400 text-xs">plq</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Actif</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-right space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button class="p-1.5 text-slate-400 hover:text-brand-600 rounded hover:bg-brand-50 transition-colors">
+                                            <i class="ph ph-pencil-simple text-lg"></i>
+                                        </button>
+                                        <button class="p-1.5 text-slate-400 hover:text-red-600 rounded hover:bg-red-50 transition-colors">
+                                            <i class="ph ph-trash text-lg"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Ligne 4 (Archivé) -->
+                                <tr class="hover:bg-slate-50 transition-colors group bg-slate-50 text-slate-400">
+                                    <td class="py-3 px-4">
+                                        <div class="font-medium">Autocopiant CF Couleur</div>
+                                        <div class="text-xs">57g</div>
+                                    </td>
+                                    <td class="py-3 px-4 font-mono text-xs">AUTOC-CF-57G</td>
+                                    <td class="py-3 px-4 text-right font-medium">25 Ar</td>
+                                    <td class="py-3 px-4 text-right bg-slate-100/30">35 Ar</td>
+                                    <td class="py-3 px-4 text-right bg-slate-100/30">100 Ar</td>
+                                    <td class="py-3 px-4 text-right border-l border-slate-200/50">
+                                        <span class="font-medium">0</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border border-slate-200 text-slate-500 bg-white">Archivé</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-right space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button class="p-1.5 text-slate-400 hover:text-brand-600 rounded hover:bg-brand-50 transition-colors" title="Restaurer">
+                                            <i class="ph ph-arrow-counter-clockwise text-lg"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination simple -->
+                    <div class="p-4 border-t border-slate-100 flex items-center justify-between text-sm text-slate-500 bg-slate-50/50 rounded-b-xl">
+                        <span>Affichage de 1 à 4 sur 185 matières</span>
+                        <div class="flex gap-1">
+                            <button class="px-2 py-1 rounded border border-slate-200 disabled:opacity-50" disabled><i class="ph ph-caret-left"></i></button>
+                            <button class="px-2 py-1 rounded border border-slate-200 hover:bg-slate-100"><i class="ph ph-caret-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW : PRIX & RÈGLES -->
+            <div id="view-pricing" class="view-section hidden fade-in max-w-full mx-auto">
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <p class="text-slate-500">Catalogue des articles finis, formules de calcul, options et finitions.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <!-- Simulateur au lieu de Sync POS local -->
+                        <button class="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 shadow-sm transition-colors" onclick="showToast('Ouverture du simulateur tarifaire...', 'info')">
+                            <i class="ph ph-magic-wand text-lg"></i>
+                            Simulateur
+                        </button>
+                        <button class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 shadow-sm transition-colors">
+                            <i class="ph ph-plus-circle text-lg"></i>
+                            Nouvel article
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Navigation interne simplifiée (fini les grosses cartes) -->
+                <div class="flex gap-6 border-b border-slate-200 mb-6">
+                    <button class="pb-3 border-b-2 border-brand-600 text-brand-600 font-medium text-sm">Articles & Tarifs</button>
+                    <button class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-medium text-sm transition-colors">Options & Finitions (Unifiées)</button>
+                    <button class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-medium text-sm transition-colors">Paliers & Marges</button>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                    <!-- Grille Articles (Sans badge brouillon, sans toggles POS) -->
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
+                                <th class="py-3 px-6">Article</th>
+                                <th class="py-3 px-4">Catégorie</th>
+                                <th class="py-3 px-4">Mode de calcul</th>
+                                <th class="py-3 px-4 text-right">Prix de base / Formule</th>
+                                <th class="py-3 px-4 text-center">Matières liées</th>
+                                <th class="py-3 px-4">État</th>
+                                <th class="py-3 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-700 divide-y divide-slate-100">
+                            <!-- Article avec Formule -->
+                            <tr class="hover:bg-slate-50 transition-colors group">
+                                <td class="py-3 px-6 font-medium text-slate-900 flex items-center gap-2">
+                                    <i class="ph-duotone ph-book-open text-xl text-brand-600"></i>
+                                    Catalogue Dos Carré Collé
+                                </td>
+                                <td class="py-3 px-4">Publications</td>
+                                <td class="py-3 px-4"><span class="px-2 py-1 bg-slate-100 rounded text-xs text-slate-600 font-mono">Formule v2</span></td>
+                                <td class="py-3 px-4 text-right text-slate-500 italic">Calculé selon pages</td>
+                                <td class="py-3 px-4 text-center"><span class="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold">3 id</span></td>
+                                <td class="py-3 px-4">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Actif</span>
+                                </td>
+                                <td class="py-3 px-6 text-right space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button class="p-1.5 text-slate-400 hover:text-brand-600 rounded hover:bg-brand-50 transition-colors tooltip" title="Éditer la formule">
+                                        <i class="ph ph-faders text-lg"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Article à Prix Fixe -->
+                            <tr class="hover:bg-slate-50 transition-colors group">
+                                <td class="py-3 px-6 font-medium text-slate-900 flex items-center gap-2">
+                                    <i class="ph-duotone ph-presentation-chart text-xl text-brand-600"></i>
+                                    Roll-up Standard 85x200
+                                </td>
+                                <td class="py-3 px-4">PLV & Chevalets</td>
+                                <td class="py-3 px-4"><span class="px-2 py-1 bg-slate-100 rounded text-xs text-slate-600">Prix fixe</span></td>
+                                <td class="py-3 px-4 text-right font-medium">150 000 Ar</td>
+                                <td class="py-3 px-4 text-center"><span class="inline-block px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full text-xs font-semibold">0</span></td>
+                                <td class="py-3 px-4">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Actif</span>
+                                </td>
+                                <td class="py-3 px-6 text-right space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button class="p-1.5 text-slate-400 hover:text-brand-600 rounded hover:bg-brand-50 transition-colors tooltip">
+                                        <i class="ph ph-pencil-simple text-lg"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- Remplacement du "Brouillon" par Incomplet/Inactif -->
+                            <tr class="hover:bg-slate-50 transition-colors group bg-red-50/20">
+                                <td class="py-3 px-6 font-medium text-slate-900 flex items-center gap-2">
+                                    <i class="ph-duotone ph-notebook text-xl text-slate-400"></i>
+                                    Bloc-notes A4
+                                </td>
+                                <td class="py-3 px-4">Papeterie</td>
+                                <td class="py-3 px-4"><span class="px-2 py-1 bg-slate-100 rounded text-xs text-slate-600 font-mono">Formule v1</span></td>
+                                <td class="py-3 px-4 text-right text-red-500 text-xs">Lien matière brisé</td>
+                                <td class="py-3 px-4 text-center">—</td>
+                                <td class="py-3 px-4">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border border-red-200 text-red-700 bg-red-50">Invalide</span>
+                                </td>
+                                <td class="py-3 px-6 text-right space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button class="p-1.5 text-slate-400 hover:text-brand-600 rounded hover:bg-brand-50 transition-colors tooltip">
+                                        <i class="ph ph-pencil-simple text-lg"></i>
+                                    </button>
+                                    <button class="p-1.5 text-slate-400 hover:text-red-600 rounded hover:bg-red-50 transition-colors tooltip">
+                                        <i class="ph ph-trash text-lg"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- View Placeholders pour les autres sections (Démonstration du routage) -->
+            <div id="view-import" class="view-section hidden fade-in max-w-4xl mx-auto text-center py-20">
+                <i class="ph-duotone ph-arrows-left-right text-6xl text-slate-300 mb-4"></i>
+                <h3 class="text-xl font-medium text-slate-800">Espace Import / Export unifié</h3>
+                <p class="text-slate-500 mt-2">Zone de contrôle sans création de doublons. En cours d'intégration (Tranche 9).</p>
+            </div>
+
+            <div id="view-history" class="view-section hidden fade-in max-w-4xl mx-auto text-center py-20">
+                <i class="ph-duotone ph-trash text-6xl text-slate-300 mb-4"></i>
+                <h3 class="text-xl font-medium text-slate-800">Corbeille et Journal Unifiés</h3>
+                <p class="text-slate-500 mt-2">Moteur de soft-delete global. En cours d'intégration (Tranche 7).</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Système de Toasts custom (Remplace alert() et confirm()) -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Gestion de la navigation inter-vues
+        const views = ['view-dashboard', 'view-materials', 'view-pricing', 'view-import', 'view-history'];
+        const navItems = ['nav-dashboard', 'nav-materials', 'nav-pricing', 'nav-import', 'nav-history'];
+
+        const titles = {
+            'view-dashboard': 'Tableau de bord',
+            'view-materials': 'Matières, Formats & Stock',
+            'view-pricing': 'Prix, Formules & Règles',
+            'view-import': 'Import / Export',
+            'view-history': 'Historique & Corbeille'
+        };
+
+        function switchView(targetViewId) {
+            // Masquer toutes les vues
+            views.forEach(view => {
+                document.getElementById(view).classList.add('hidden');
+            });
+            // Afficher la cible
+            document.getElementById(targetViewId).classList.remove('hidden');
+
+            // Mettre à jour le titre
+            document.getElementById('header-title').innerText = titles[targetViewId];
+
+            // Mettre à jour l'état visuel du menu latéral
+            navItems.forEach(nav => {
+                const el = document.getElementById(nav);
+                // Reset styles
+                el.classList.remove('bg-brand-50', 'text-brand-700');
+                el.classList.add('text-slate-600');
+                
+                const icon = el.querySelector('i');
+                icon.classList.remove('text-brand-600', 'ph-fill');
+                
+                const subtext = el.querySelector('span');
+                subtext.classList.remove('text-brand-600/70');
+                subtext.classList.add('text-slate-400');
+            });
+
+            // Activer le menu cliqué
+            const activeNavId = targetViewId.replace('view-', 'nav-');
+            const activeEl = document.getElementById(activeNavId);
+            if(activeEl) {
+                activeEl.classList.remove('text-slate-600');
+                activeEl.classList.add('bg-brand-50', 'text-brand-700');
+                
+                const activeIcon = activeEl.querySelector('i');
+                // Change icon weight to fill for active state if supported by Phosphor, or just color
+                activeIcon.classList.add('text-brand-600');
+                
+                const activeSub = activeEl.querySelector('span');
+                activeSub.classList.remove('text-slate-400');
+                activeSub.classList.add('text-brand-600/70');
+            }
+        }
+
+        // Système de notification (remplaçant alert)
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            let iconHtml = '';
+            if(type === 'success') {
+                iconHtml = '<i class="ph-fill ph-check-circle text-green-400 text-xl"></i>';
+            } else if (type === 'error') {
+                iconHtml = '<i class="ph-fill ph-x-circle text-red-400 text-xl"></i>';
+            } else {
+                iconHtml = '<i class="ph-fill ph-info text-blue-400 text-xl"></i>';
+            }
+
+            toast.innerHTML = `
+                ${iconHtml}
+                <span class="text-sm font-medium">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // Remove after 3s
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // S'assurer que le dashboard est la vue par défaut
+            switchView('view-dashboard');
+        });
+    </script>
+</body>
+</html>

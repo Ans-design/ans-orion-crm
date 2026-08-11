@@ -1,0 +1,90 @@
+/**
+ * Slide panel latéral droit — HTML v29 `.sp` / `.sp-bg` (440px).
+ * Radius ORION 7px sur coins/boutons ; panneau full-height.
+ */
+
+@keyframes orionSpSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.orion-sp-overlay {
+  background: rgba(5, 12, 24, 0.45) !important;
+  backdrop-filter: blur(3px) !important;
+  -webkit-backdrop-filter: blur(3px) !important;
+  animation: orionSpOverlayIn 0.2s ease both;
+}
+
+html.dark .orion-sp-overlay {
+  background: rgba(0, 0, 0, 0.62) !important;
+}
+
+@keyframes orionSpOverlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.orion-sp {
+  width: 100%;
+  background: var(--cockpit-surface, var(--card, #fff));
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.18);
+  animation: orionSpSlideIn 0.25s ease both;
+  border-left: 1px solid var(--border-soft, var(--border, #e2e8f0));
+}
+
+html.dark .orion-sp {
+  background: #1a1d27;
+  border-left-color: #2a2d3e;
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.45);
+}
+
+.orion-sp-header {
+  padding: 18px 22px 14px !important;
+}
+
+.orion-sp-body {
+  padding: 18px 22px !important;
+}
+
+.orion-sp-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.orion-sp-body::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.45);
+  border-radius: 7px;
+}
+
+.orion-sp-footer {
+  padding: 14px 22px !important;
+  background: color-mix(in srgb, var(--cockpit-surface, #fff) 92%, #f1f5f9);
+}
+
+html.dark .orion-sp-footer {
+  background: #161922;
+  border-top-color: #2a2d3e;
+}
+
+/* Radix Sheet — largeur v29 côté droit */
+[data-radix-dialog-content].orion-sheet-sp,
+.orion-sheet-sp {
+  width: min(100vw, 440px) !important;
+  max-width: 440px !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orion-sp,
+  .orion-sp-overlay {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,683 @@
+/* Fiche matière unifiée — modale centrée, multi-colonnes (moins de scroll) */
+
+.orion-mat-sheet-root {
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.orion-mat-sheet-overlay {
+  background: rgba(15, 23, 42, 0.48) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.orion-mat-sheet {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 7px !important;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22) !important;
+  color: #0f172a;
+  width: min(1120px, calc(100vw - 2rem));
+  max-width: min(1120px, calc(100vw - 2rem));
+  /* Hauteur contenu : rester dans le viewport sans scroll interne si possible */
+  max-height: min(94vh, 820px);
+  overflow: hidden;
+}
+
+/* Fiche article / panneau compact — pas de bande vide à droite */
+.orion-mat-sheet.orion-mat-sheet--compact {
+  width: min(560px, calc(100vw - 2rem)) !important;
+  max-width: min(560px, calc(100vw - 2rem)) !important;
+}
+
+.orion-mat-sheet.orion-mat-sheet--compact .orion-mat-sheet-body {
+  display: block;
+}
+
+.orion-mat-sheet.orion-mat-sheet--compact .orion-mat-sheet-grid {
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+
+.orion-mat-sheet.orion-mat-sheet--compact .entity-drawer-sheet,
+.orion-mat-sheet.orion-mat-sheet--compact .orion-mat-sheet-section {
+  width: 100%;
+  max-width: none;
+}
+
+@media (max-width: 720px) {
+  .orion-mat-sheet {
+    width: 100%;
+    max-width: 100%;
+    max-height: 96vh;
+    border-radius: 7px 7px 0 0 !important;
+    align-self: flex-end;
+  }
+
+  .orion-mat-sheet-root {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+}
+
+.orion-mat-sheet-header {
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+  gap: 8px;
+}
+
+.orion-mat-sheet-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.orion-mat-sheet-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  flex: none;
+}
+
+.orion-mat-sheet-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.orion-mat-sheet-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.orion-mat-sheet-subtitle {
+  margin: 1px 0 0;
+  font-size: 0.7rem;
+  color: #64748b;
+  line-height: 1.3;
+}
+
+.orion-mat-sheet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.orion-mat-sheet-chip,
+.orion-mat-sheet-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  max-width: 100%;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.35;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.orion-mat-sheet-chip.is-anomaly {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orion-mat-sheet-chip.is-ok,
+.orion-mat-sheet-badge.is-ok {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.orion-mat-sheet-chip.is-low {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.orion-mat-sheet-chip.is-out {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.orion-mat-sheet-chip.is-info {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.orion-mat-sheet-chip.is-muted,
+.orion-mat-sheet-badge.is-muted {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.orion-mat-sheet-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+}
+
+.orion-mat-sheet-close:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.orion-mat-sheet-close:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/* Corps : 2 colonnes densifiées — viser zéro scroll sur écran ≥900px */
+.orion-mat-sheet-body {
+  padding: 8px 12px 10px;
+  background: #f8fafc;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 10px;
+  align-content: start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
+
+.orion-mat-sheet-body > .orion-mat-sheet-warn,
+.orion-mat-sheet-body > .orion-mat-sheet-section.is-danger {
+  grid-column: 1 / -1;
+}
+
+.orion-mat-sheet-section {
+  margin: 0;
+  padding: 7px 9px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #ffffff;
+  min-width: 0;
+}
+
+.orion-mat-sheet-section.is-danger {
+  border-color: #fecaca;
+  background: #fffafa;
+  padding: 5px 8px;
+}
+
+.orion-mat-sheet-section.is-danger .orion-mat-sheet-section-title {
+  margin: 0 0 3px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #b91c1c;
+}
+
+.orion-mat-sheet-section-title {
+  margin: 0 0 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.orion-mat-sheet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 8px;
+}
+
+@media (max-width: 900px) {
+  .orion-mat-sheet-body {
+    grid-template-columns: 1fr;
+  }
+
+  .orion-mat-sheet-toggles {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .orion-mat-sheet-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.orion-mat-sheet-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.orion-mat-sheet-field.is-span-2 {
+  grid-column: 1 / -1;
+}
+
+.orion-mat-sheet-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.orion-mat-sheet-input {
+  height: 28px;
+  width: 100%;
+  padding: 0 8px;
+  border: 1px solid #d0d7e2;
+  border-radius: 7px;
+  background: #fff;
+  color: #0f172a;
+  font-size: 11.5px;
+  box-shadow: none;
+  pointer-events: auto;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.orion-mat-sheet-input:not(:disabled) {
+  cursor: text;
+}
+
+select.orion-mat-sheet-input:not(:disabled) {
+  cursor: pointer;
+}
+
+.orion-mat-sheet-input:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+
+.orion-mat-sheet-input.is-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+}
+
+.orion-mat-sheet-input:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.16);
+}
+
+.orion-mat-sheet-field.has-error .orion-mat-sheet-input {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.orion-mat-sheet-read {
+  display: block;
+  min-height: 28px;
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: #f8fafc;
+  border: 1px solid #eef2f7;
+  color: #0f172a;
+  font-size: 11.5px;
+  line-height: 1.3;
+}
+
+.orion-mat-sheet-read.is-empty {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.orion-mat-sheet-hint,
+.orion-mat-sheet-error {
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.orion-mat-sheet-hint {
+  color: #64748b;
+}
+
+.orion-mat-sheet-error {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.orion-mat-sheet-conv,
+.orion-mat-sheet-margin {
+  margin: 5px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+.orion-mat-sheet-margin.is-alert {
+  color: #c2410c;
+}
+
+.orion-mat-sheet-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  padding: 7px 8px;
+  border-radius: 7px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  color: #64748b;
+  font-size: 11px;
+}
+
+.orion-mat-sheet-stock-card {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 7px 8px;
+  border-radius: 7px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.orion-mat-sheet-stock-card strong {
+  display: block;
+  font-size: 11.5px;
+}
+
+.orion-mat-sheet-stock-card p {
+  margin: 1px 0 0;
+  font-size: 10.5px;
+  opacity: 0.9;
+}
+
+.orion-mat-sheet-usage-list {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  display: grid;
+  gap: 3px;
+  max-height: 64px;
+  overflow-y: auto;
+}
+
+.orion-mat-sheet-usage-list a {
+  display: block;
+  padding: 4px 7px;
+  border-radius: 7px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.orion-mat-sheet-usage-list a:hover {
+  background: #eff6ff;
+}
+
+.orion-mat-sheet-pos-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  border: 1px solid #dbeafe;
+  background: #f8fbff;
+}
+
+.orion-mat-sheet-pos-row strong {
+  display: block;
+  font-size: 11px;
+  color: #0f172a;
+}
+
+.orion-mat-sheet-pos-row p {
+  margin: 1px 0 0;
+  font-size: 10px;
+  color: #64748b;
+}
+
+.orion-mat-sheet-toggles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px 8px;
+  margin-top: 6px;
+}
+
+.orion-mat-sheet-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 11px;
+  color: #334155;
+  padding: 4px 6px;
+  border-radius: 7px;
+  background: #f8fafc;
+  border: 1px solid #eef2f7;
+}
+
+.orion-mat-sheet-anomaly-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.orion-mat-sheet-anomaly-list li {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  max-width: 100%;
+  padding: 2px 7px;
+  border-radius: 7px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.orion-mat-sheet-anomaly-list li svg {
+  width: 11px !important;
+  height: 11px !important;
+  flex-shrink: 0;
+}
+
+.orion-mat-sheet-anomaly-list li span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.orion-mat-sheet-warn {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  font-size: 12.5px;
+}
+
+.orion-mat-sheet-footer {
+  padding: 8px 12px;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+  gap: 6px;
+}
+
+.orion-mat-sheet-footer-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.orion-mat-sheet-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.orion-mat-sheet-btn.is-ghost {
+  background: #fff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.orion-mat-sheet-btn.is-ghost:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.orion-mat-sheet-btn.is-secondary {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.orion-mat-sheet-btn.is-secondary:hover:not(:disabled) {
+  background: #dbeafe;
+}
+
+.orion-mat-sheet-btn.is-primary {
+  background: #1d4ed8;
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(29, 78, 216, 0.2);
+}
+
+.orion-mat-sheet-btn.is-primary:hover:not(:disabled) {
+  background: #1e40af;
+}
+
+.orion-mat-sheet-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.orion-mat-sheet-btn:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+.orion-mat-sheet-edit-btn {
+  flex: none;
+}
+
+@media (max-width: 720px) {
+  .orion-mat-sheet-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .orion-mat-sheet-footer-right {
+    margin-left: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .orion-mat-sheet-pos-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Mode sombre — pas de blanc */
+html.dark .orion-mat-sheet,
+.dark .orion-mat-sheet {
+  background: #071021 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55) !important;
+}
+
+html.dark .orion-mat-sheet-header,
+html.dark .orion-mat-sheet-footer,
+html.dark .orion-mat-sheet-section,
+.dark .orion-mat-sheet-header,
+.dark .orion-mat-sheet-footer,
+.dark .orion-mat-sheet-section {
+  background: #071021 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .orion-mat-sheet-body,
+.dark .orion-mat-sheet-body {
+  background: #050a18 !important;
+}
+
+html.dark .orion-mat-sheet-title,
+html.dark .orion-mat-sheet-section-title,
+html.dark .orion-mat-sheet-label,
+html.dark .orion-mat-sheet-pos-row strong,
+.dark .orion-mat-sheet-title,
+.dark .orion-mat-sheet-section-title,
+.dark .orion-mat-sheet-label,
+.dark .orion-mat-sheet-pos-row strong {
+  color: #f1f5f9 !important;
+}
+
+html.dark .orion-mat-sheet-input,
+html.dark .orion-mat-sheet-read,
+.dark .orion-mat-sheet-input,
+.dark .orion-mat-sheet-read {
+  background: #091428 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .orion-mat-sheet-empty,
+html.dark .orion-mat-sheet-pos-row,
+html.dark .orion-mat-sheet-usage-list a,
+.dark .orion-mat-sheet-empty,
+.dark .orion-mat-sheet-pos-row,
+.dark .orion-mat-sheet-usage-list a {
+  background: #091428 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark .orion-mat-sheet-btn.is-ghost,
+.dark .orion-mat-sheet-btn.is-ghost {
+  background: #091428 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .orion-mat-sheet-close,
+.dark .orion-mat-sheet-close {
+  background: #091428 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #cbd5e1 !important;
+}

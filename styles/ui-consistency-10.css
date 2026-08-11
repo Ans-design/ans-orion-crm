@@ -1,0 +1,342 @@
+/**
+ * ANS ORION — Cohérence UI 10/10
+ * Gouttières ≥ 10px · chips/boutons hauteur 32px · accents bleus → rouge ANS
+ */
+
+:root {
+  --gutter-min: 10px;
+  --stack-gap-xs: 10px;
+  --grid-gap: 10px;
+  --control-gap: 10px;
+  --chip-gap-row: 10px; /* entre chips / boutons (pas icône interne) */
+  --chip-h: 32px;
+  --control-h: 32px;
+  --chip-pad-x: 16px;
+  --chip-radius: 10px;
+  --rect-pad-x: 16px;
+
+  /* Accents UI : bleu/cyan → rouge ANS (chips, liens, pastilles) */
+  --ans-blue: var(--primary, #FF174D);
+  --ans-cyan: var(--primary, #FF174D);
+  --ans-blue-soft: color-mix(in srgb, var(--primary, #FF174D) 14%, transparent);
+  --info: var(--primary, #FF174D);
+}
+
+/* ── Gouttières min 10px : toolbars, filtres, groupes d’actions ── */
+.orion-viewport :is(
+  .orion-surface-toolbar,
+  .orion-align-toolbar,
+  .orion-toolbar,
+  .cps-header-actions,
+  .orion-admin-table-toolbar,
+  .orion-catalogue-chips-toolbar,
+  .app-module-toolbar,
+  .orion-module-toolbar,
+  [data-toolbar],
+  .flex.flex-wrap.items-center,
+  .flex.flex-wrap.gap-1,
+  .flex.flex-wrap.gap-1\.5,
+  .flex.flex-wrap.gap-2,
+  .flex.items-center.gap-1,
+  .flex.items-center.gap-1\.5,
+  .flex.items-center.gap-2
+) {
+  gap: max(var(--gutter-min), 0.625rem) !important;
+}
+
+.orion-viewport :is(.space-y-1, .space-y-1\.5, .space-y-2) > :not([hidden]) ~ :not([hidden]) {
+  margin-top: max(var(--gutter-min), 0.625rem) !important;
+}
+
+.orion-viewport :is(
+  .dashboard-chart-card,
+  .orion-card,
+  .orion-kpi-saas,
+  .cockpit-quick-card,
+  .cps-kpi-card
+) {
+  padding-left: max(var(--rect-pad-x), var(--gutter-min)) !important;
+  padding-right: max(var(--rect-pad-x), var(--gutter-min)) !important;
+}
+
+.orion-viewport .grid {
+  gap: max(var(--grid-gap), var(--gutter-min));
+}
+
+/* ── Hauteur unique chips + boutons + inputs toolbar : 32px ──
+   (exclure .pos-category-tile — tuiles catégories POS > 36px) */
+.orion-viewport :is(
+  .orion-surface-chip,
+  .orion-surface-chip--active,
+  .orion-chip,
+  .cps-pill,
+  .ans-btn-primary:not(.pos-category-tile),
+  .btn,
+  .btn-sm,
+  .btn-b,
+  .btn-g,
+  button.ui-button,
+  [data-slot='button'],
+  .orion-select-field,
+  select.orion-select-field,
+  .cockpit-search,
+  .app-filter-chip,
+  button[class*='rounded-lg'].text-xs:not(.pos-category-tile),
+  button[class*='rounded-full'].text-xs,
+  a.btn,
+  .cmd-guided__primary-cta,
+  .cmd-finalize__cta,
+  .cmd-finalize__force,
+  .cmd-finalize__prio-chip,
+  .ops-prog__btn,
+  .cmd-talk-banner__cta
+),
+.orion-viewport .orion-surface-toolbar > button,
+.orion-viewport .orion-align-toolbar > button,
+.orion-viewport .cps-header-actions > button,
+.orion-viewport [class*='ModuleToolbar'] button,
+.orion-viewport .flex.flex-wrap > button.border:not(.pos-category-tile):not(.pos-chip),
+.orion-viewport .flex.flex-wrap > button.rounded-lg:not(.pos-category-tile):not(.pos-chip) {
+  box-sizing: border-box !important;
+  height: var(--btn-h, var(--chip-h)) !important;
+  min-height: var(--btn-h, var(--chip-h)) !important;
+  max-height: var(--btn-h, var(--chip-h)) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: var(--chip-pad-x) !important;
+  padding-right: var(--chip-pad-x) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+  border-radius: var(--chip-radius) !important;
+  gap: 6px !important;
+}
+
+/* Boutons icône seuls (carrés 32×32) */
+.orion-viewport :is(button.h-8.w-8, button.w-8.h-8, [data-size='icon'], button[aria-label].p-2.rounded-lg) {
+  width: var(--chip-h) !important;
+  height: var(--chip-h) !important;
+  min-width: var(--chip-h) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Inputs recherche / filtres alignés 32px */
+.orion-viewport :is(
+  .orion-module-toolbar input,
+  .app-module-toolbar input,
+  .orion-align-toolbar input,
+  .orion-surface-toolbar + * input,
+  input[placeholder*='Rechercher'],
+  input[type='search']
+),
+.orion-viewport .flex.flex-wrap select,
+.orion-viewport .orion-select-field {
+  box-sizing: border-box !important;
+  height: var(--chip-h) !important;
+  min-height: var(--chip-h) !important;
+  max-height: var(--chip-h) !important;
+  border-radius: var(--chip-radius) !important;
+}
+
+/* Pastilles statut dans listes — même hauteur */
+.orion-viewport :is(
+  .badge,
+  span.rounded-full.px-2,
+  span.rounded-full.text-\[9px\],
+  span.rounded-full.text-\[10px\],
+  [class*='status-badge'],
+  .orion-status-chip
+) {
+  box-sizing: border-box !important;
+  height: var(--chip-h) !important;
+  min-height: var(--chip-h) !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 11px !important;
+  border-radius: var(--chip-radius) !important;
+  line-height: 1 !important;
+}
+
+/* ── Remap bleu / cyan / sky / indigo → rouge ANS ── */
+.orion-viewport :is(
+  .bg-blue-500,
+  .bg-blue-600,
+  .bg-sky-500,
+  .bg-cyan-500,
+  .bg-indigo-500,
+  .bg-blue-500\/10,
+  .bg-sky-500\/10,
+  .bg-cyan-500\/10,
+  .bg-indigo-500\/10,
+  .bg-sky-500\/15,
+  .bg-cyan-500\/15,
+  .bg-blue-500\/15
+) {
+  background-color: color-mix(in srgb, var(--primary, #FF174D) 14%, transparent) !important;
+}
+
+.orion-viewport :is(
+  .text-blue-400,
+  .text-blue-500,
+  .text-blue-600,
+  .text-sky-400,
+  .text-sky-500,
+  .text-sky-600,
+  .text-cyan-400,
+  .text-cyan-500,
+  .text-cyan-600,
+  .text-indigo-400,
+  .text-indigo-500,
+  .text-indigo-600
+) {
+  color: var(--primary, #FF174D) !important;
+}
+
+.orion-viewport :is(
+  .border-blue-500\/30,
+  .border-sky-500\/30,
+  .border-cyan-500\/30,
+  .border-indigo-500\/30,
+  .border-sky-500\/35,
+  .border-cyan-500\/40
+) {
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 40%, transparent) !important;
+}
+
+.orion-viewport a.text-\[var\(--ans-cyan\)\],
+.orion-viewport [class*='text-[var(--ans-cyan)]'],
+.orion-viewport a[href^='/clients'] {
+  color: var(--primary, #FF174D);
+}
+
+.orion-viewport a[href^='/clients']:hover {
+  color: var(--primary-hover, #C91443);
+  text-decoration: underline;
+}
+
+/* Chip actif générique */
+.orion-viewport .orion-surface-chip--active,
+.orion-viewport button.bg-\[var\(--ans-blue\)\],
+.orion-viewport [class*='bg-[var(--ans-blue)]'] {
+  background-color: var(--primary, #FF174D) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* KPI icônes : info / blue → rouge ANS */
+.orion-viewport .orion-kpi-icon--info,
+html:not(.dark) .orion-kpi-icon--info,
+html.dark .orion-kpi-icon--info {
+  background: color-mix(in srgb, var(--primary, #FF174D) 16%, transparent) !important;
+  color: var(--primary, #FF174D) !important;
+}
+
+/* Success / gold KPI icons → rouge soft (cohérence marque) */
+html:not(.dark) .orion-viewport .orion-kpi-icon--success,
+html:not(.dark) .orion-viewport .orion-kpi-icon--gold {
+  background: color-mix(in srgb, var(--primary, #FF174D) 12%, transparent) !important;
+  color: var(--primary-hover, #C91443) !important;
+}
+
+html.dark .orion-viewport .orion-kpi-icon--success,
+html.dark .orion-viewport .orion-kpi-icon--gold {
+  background: color-mix(in srgb, var(--primary, #FF174D) 18%, transparent) !important;
+  color: #ff6b8a !important;
+}
+
+/* ── Zéro barre verticale à gauche (chips / KPI / cadres) ── */
+.orion-viewport :is(
+  .cps-kpi-card,
+  .orion-kpi-card,
+  .orion-kpi-saas,
+  .orion-ds-metric,
+  .orion-card,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .orion-surface-chip,
+  .orion-chip,
+  .cps-pill,
+  .orion-badge-chip,
+  .orion-status-chip,
+  .badge
+),
+.cps-theme :is(.cps-kpi-card, .orion-card, .orion-surface-chip) {
+  border-left: none !important;
+  border-left-width: 0 !important;
+}
+
+.orion-viewport :is(.cps-kpi-card, .orion-kpi-card, .orion-kpi-saas, .orion-card, .dashboard-chart-card)
+  > span.absolute.left-0,
+.orion-viewport :is(.cps-kpi-card, .orion-kpi-card) [class*='inset-y'][class*='left-0'][class*='w-0'],
+.orion-viewport .cps-kpi-card::before,
+.orion-viewport .orion-kpi-saas::before,
+.orion-viewport .orion-card::before {
+  display: none !important;
+  content: none !important;
+  width: 0 !important;
+  background: transparent !important;
+}
+
+/* ── POS catégories — tuiles ≠ chips · hauteur > 36px ── */
+.orion-viewport .pos-category-tile,
+.orion-viewport button.pos-category-tile {
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  min-height: 40px !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 12px 14px !important;
+  border-radius: var(--orion-radius, 7px) !important;
+  border-left: none !important;
+  font-size: var(--text-body, 0.6875rem) !important;
+  line-height: 1.35 !important;
+  text-align: left !important;
+}
+
+.orion-viewport .pos-category-tile:not(.pos-category-tile--active) {
+  background: var(--bg-card, #071021) !important;
+  border: 1px solid var(--border-soft, transparent) !important;
+  color: var(--text-main, #e2e8f0) !important;
+}
+
+.orion-viewport .pos-category-tile--active,
+.orion-viewport button.pos-category-tile.pos-category-tile--active {
+  background: var(--primary, #FF174D) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(255, 23, 77, 0.28) !important;
+}
+
+.orion-viewport .pos-category-tile .pos-category-tile__label {
+  font-size: 0.8125rem !important; /* 13 */
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+}
+
+.orion-viewport .pos-category-tile .pos-category-tile__count {
+  font-size: var(--text-body, 0.6875rem) !important; /* 11 */
+  font-weight: 700 !important;
+}
+
+@media (min-width: 640px) {
+  .orion-viewport .pos-category-tile,
+  .orion-viewport button.pos-category-tile {
+    min-height: 56px !important;
+    padding: 14px 16px !important;
+  }
+}
+
+.orion-viewport .pos-category-tile.pos-category-tile--touch {
+  min-height: 72px !important;
+  padding: 16px !important;
+}
+

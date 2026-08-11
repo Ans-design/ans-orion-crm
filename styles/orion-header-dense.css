@@ -1,0 +1,565 @@
+/**
+ * ANS ORION — En-tête shell compact
+ * Une seule rangée dense · pas de double barre · outils groupés
+ * Header fixed viewport (ne scrolle jamais)
+ */
+
+:root {
+  --orion-app-header-h: 52px;
+}
+
+/* ── Shell fixed ── */
+.orion-app-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.orion-app-header--fixed {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 50;
+  /* Fond opaque pour passer au-dessus du contenu scroll */
+  background: var(--bg-app, #f4f7fb);
+  padding-top: env(safe-area-inset-top, 0px);
+  box-sizing: border-box;
+}
+
+html.dark .orion-app-header--fixed {
+  background: var(--bg-app, #050a14);
+}
+
+@media (min-width: 768px) {
+  .orion-app-header--fixed {
+    left: var(--orion-tablet-rail-width, 72px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .orion-app-header--fixed {
+    left: var(--orion-sidebar-offset, var(--orion-sidebar-width, 248px));
+  }
+}
+
+/* Réserve d’espace dans le flux (= hauteur header sans safe-area pour mobile,
+ * le safe-area est déjà dans le fixed via padding-top) */
+.orion-app-header-spacer {
+  /* Mesure live (filtre header + wrap) sinon hauteur fixe + safe-area */
+  height: var(
+    --orion-app-header-offset,
+    calc(var(--orion-app-header-h) + env(safe-area-inset-top, 0px))
+  );
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.orion-cockpit-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.5rem !important;
+  height: auto !important;
+  min-height: 2.75rem !important;
+  max-height: none !important;
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+  box-sizing: border-box;
+  /* Coin bas-gauche arrondi (jonction fond app / en-tête) — radius ORION 7px */
+  border-bottom-left-radius: 7px !important;
+  border-bottom-right-radius: 7px !important;
+  /* pas d’overflow:hidden — le panneau notifs se place en absolute sous la barre */
+}
+
+.orion-cockpit-header__left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* Burger apps — cliquable au-dessus du filtre période */
+.orion-cockpit-header__left > .orion-header-icon-btn {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+  flex-shrink: 0;
+}
+
+.orion-cockpit-header__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.orion-header-tool-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border-soft, #e2e8f0);
+  border-radius: 7px;
+  background: var(--bg-card, #fff);
+  overflow: hidden;
+}
+
+html.dark .orion-header-tool-cluster {
+  background: color-mix(in srgb, var(--bg-card, #071021) 92%, transparent);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Icônes compactes (téléphone inclus — min 40px touch) */
+.orion-header-icon-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  min-width: 2.25rem !important;
+  min-height: 2.25rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: var(--text-muted, #64748b) !important;
+  transition: background 0.14s ease, color 0.14s ease !important;
+}
+
+.orion-header-tool-cluster .orion-header-icon-btn {
+  border-radius: 0 !important;
+  width: 2.125rem !important;
+  height: 2.125rem !important;
+  min-width: 2.125rem !important;
+  min-height: 2.125rem !important;
+  background: transparent !important;
+}
+
+html:not(.dark) .orion-header-tool-cluster .orion-header-icon-btn,
+html.dark .orion-header-tool-cluster .orion-header-icon-btn {
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+html:not(.dark) .orion-header-tool-cluster .orion-header-icon-btn:hover {
+  background: #f1f5f9 !important;
+}
+
+html.dark .orion-header-tool-cluster .orion-header-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.orion-header-tool-cluster .orion-header-icon-btn + .orion-header-icon-btn,
+.orion-header-tool-cluster .relative + .orion-header-icon-btn {
+  border-left: 1px solid var(--border-soft, #e2e8f0) !important;
+}
+
+html.dark .orion-header-tool-cluster .orion-header-icon-btn + .orion-header-icon-btn,
+html.dark .orion-header-tool-cluster .relative + .orion-header-icon-btn {
+  border-left-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.orion-header-icon-btn:hover {
+  background: var(--bg-hover, rgba(15, 23, 42, 0.05)) !important;
+  color: var(--text-main, #0f172a) !important;
+  transform: none !important;
+}
+
+.orion-header-notif-dot {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--brand-primary, #ff174d);
+}
+
+.orion-header-cart-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: var(--brand-primary, #ff174d);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 14px;
+  text-align: center;
+}
+
+/* Identité page */
+.orion-shell-page-solo {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-main, #0f172a);
+  line-height: 1.2;
+}
+
+.orion-shell-crumb {
+  font-size: 0.6875rem !important; /* 11px — lisible */
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  line-height: 1.2 !important;
+  color: var(--text-muted, #64748b) !important;
+}
+
+.orion-shell-crumb__section {
+  color: var(--text-muted, #64748b);
+  max-width: 12rem;
+}
+
+.orion-shell-crumb__sep {
+  color: var(--text-dim, #94a3b8);
+  opacity: 0.85;
+}
+
+.orion-shell-crumb__page {
+  color: var(--brand-primary, #ff174d) !important;
+  font-weight: 700 !important;
+  max-width: 14rem;
+}
+
+/* Recherche dense — bouton palette ou champ filtre module */
+.orion-cockpit-search {
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.125rem;
+  width: 11rem;
+  max-width: 28vw;
+  padding: 0 0.65rem;
+  border-radius: 7px;
+  border: 1px solid var(--border-soft, #e2e8f0);
+  background: var(--bg-app, #f4f7fb);
+  color: var(--text-muted, #64748b);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: left;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.orion-cockpit-search--field {
+  width: min(22rem, 46vw);
+  max-width: none;
+  cursor: text;
+}
+
+@media (max-width: 767px) {
+  .orion-cockpit-search--field {
+    width: min(12.5rem, 42vw);
+  }
+}
+
+@media (min-width: 1280px) {
+  .orion-cockpit-search {
+    width: 14rem;
+    max-width: none;
+  }
+
+  .orion-cockpit-search--field {
+    width: 18rem;
+  }
+}
+
+.orion-cockpit-search:hover {
+  border-color: color-mix(in srgb, var(--brand-primary, #ff174d) 30%, #e2e8f0);
+}
+
+.orion-cockpit-search:focus-visible,
+.orion-cockpit-search--field:focus-within {
+  outline: none;
+  border-color: color-mix(in srgb, var(--brand-primary, #ff174d) 55%, #e2e8f0);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary, #ff174d) 12%, transparent);
+}
+
+.orion-cockpit-search__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text-main, #0f172a);
+  font: inherit;
+  font-weight: 500;
+  padding: 0;
+}
+
+.orion-cockpit-search__input::placeholder {
+  color: var(--text-muted, #64748b);
+}
+
+.orion-cockpit-search__input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.orion-cockpit-search__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-dim, #94a3b8);
+  cursor: pointer;
+  padding: 0;
+}
+
+.orion-cockpit-search__clear:hover {
+  color: var(--text-main, #0f172a);
+  background: color-mix(in srgb, var(--text-main, #0f172a) 6%, transparent);
+}
+
+.orion-cockpit-search__kbd {
+  margin-left: auto;
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: var(--orion-radius, 7px);
+  border: 1px solid var(--border-soft);
+  background: var(--bg-card, #fff);
+  color: var(--text-dim, #94a3b8);
+  font-family: ui-monospace, monospace;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+/* Live chip compact — pas un gros badge */
+.orion-live-chip {
+  align-items: center;
+  gap: 0.3rem;
+  height: 1.75rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft, #e2e8f0);
+  background: var(--bg-card, #fff);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #475569);
+}
+
+.orion-live-chip__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--brand-primary, #ff174d);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-primary, #ff174d) 22%, transparent);
+}
+
+/* Legacy aliases — densifié */
+.cockpit-search {
+  height: 2.125rem !important;
+  padding: 0 0.65rem !important;
+}
+
+.cockpit-badge {
+  height: 1.75rem !important;
+  padding: 0 0.5rem !important;
+  font-size: 0.625rem !important;
+}
+
+/* ── Module headers densifiés (source design-system + module-header) ── */
+.orion-ds-page-header {
+  padding-bottom: 0.35rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.orion-ds-page-header__row {
+  gap: 0.3rem !important;
+}
+
+.orion-ds-page-title {
+  font-size: 0.9375rem !important; /* 15 */
+  line-height: 1.2 !important;
+  font-weight: 750 !important;
+}
+
+.orion-ds-page-desc {
+  margin-top: 0.1rem !important;
+  font-size: 0.6875rem !important;
+  line-height: 1.3 !important;
+}
+
+@media (min-width: 640px) {
+  .orion-ds-page-header__row {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+  }
+
+  .orion-ds-page-title {
+    font-size: 0.9375rem !important; /* 15 — pas de rebond vers 17 */
+  }
+
+  .orion-ds-page-header__actions {
+    width: auto !important;
+  }
+}
+
+/* Auto-breadcrumb moins haut */
+.orion-viewport > nav[aria-label='breadcrumb'],
+.orion-viewport .orion-hide-on-phone.mb-3,
+.orion-viewport nav.mb-3 {
+  margin-bottom: 0.4rem !important;
+}
+
+/* ── Catalogue POS hero densifié ── */
+html body .pos-soft-shell .pos-catalog-hero-bar,
+html body .pos-catalog-editorial .pos-catalog-hero-bar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.5rem 0.75rem !important;
+  margin-bottom: 0.35rem !important;
+  padding: 0 !important;
+}
+
+html body .pos-soft-shell .pos-catalog-hero,
+html body .pos-catalog-editorial .pos-catalog-hero {
+  gap: 0.15rem !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+html body .pos-soft-shell .pos-catalog-hero__title-row,
+html body .pos-catalog-editorial .pos-catalog-hero__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.55rem;
+  min-width: 0;
+}
+
+html body .pos-soft-shell .pos-catalog-hero__eyebrow,
+html body .pos-catalog-editorial .pos-catalog-hero__eyebrow {
+  font-size: 0.625rem !important;
+  letter-spacing: 0.1em !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+}
+
+html body .pos-soft-shell .pos-catalog-hero h1,
+html body .pos-catalog-editorial .pos-catalog-hero h1,
+html body .pos-soft-shell.pos-catalog-editorial .pos-catalog-hero h1 {
+  font-size: 1.125rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.15 !important;
+  margin: 0 !important;
+}
+
+@media (min-width: 768px) {
+  html body .pos-soft-shell .pos-catalog-hero h1,
+  html body .pos-catalog-editorial .pos-catalog-hero h1 {
+    font-size: 1.25rem !important;
+  }
+}
+
+html body .pos-soft-shell .pos-catalog-hero__lead,
+html body .pos-catalog-editorial .pos-catalog-hero__lead,
+html body .pos-soft-shell .pos-catalog-hero > p:not(.pos-catalog-hero__eyebrow) {
+  font-size: 0.75rem !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  color: var(--text-muted, #64748b) !important;
+  max-width: 28rem;
+}
+
+/* Sous-titre marketing : masqué sur phone (gain hauteur) */
+@media (max-width: 639px) {
+  html body .pos-soft-shell .pos-catalog-hero__lead {
+    display: none !important;
+  }
+}
+
+html body .pos-ed-count--inline {
+  font-size: 0.6875rem !important;
+  font-weight: 600 !important;
+  color: var(--text-muted, #64748b) !important;
+  white-space: nowrap;
+}
+
+html body .pos-ed-count--inline b {
+  color: var(--text-main, #0f172a);
+  font-weight: 800;
+}
+
+html body .pos-soft-shell .pos-catalog-hero__aside,
+html body .pos-catalog-editorial .pos-catalog-hero__aside {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  margin: 0 !important;
+}
+
+html body .pos-soft-shell .pos-catalog-cart-btn,
+html body .pos-catalog-editorial .pos-catalog-cart-btn {
+  min-height: 2.125rem !important;
+  height: 2.125rem !important;
+  padding: 0 0.7rem !important;
+  border-radius: 7px !important;
+  font-size: 0.75rem !important;
+  gap: 0.35rem !important;
+  box-shadow: 0 4px 12px -6px rgba(230, 0, 60, 0.45) !important;
+}
+
+html body .pos-soft-shell .pos-client-pill {
+  min-height: 2.125rem;
+  height: 2.125rem;
+  padding: 0 0.25rem 0 0.15rem;
+  border-radius: 7px;
+}
+
+html body .pos-soft-shell .pos-client-pill__avatar {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  font-size: 0.625rem !important;
+}
+
+html body .pos-soft-shell .pos-client-pill__btn {
+  height: 1.75rem !important;
+  padding: 0 0.55rem !important;
+  font-size: 0.6875rem !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+/* Phone : shell encore plus serré */
+@media (max-width: 767px) {
+  .orion-cockpit-header {
+    min-height: 2.5rem !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  .orion-header-icon-btn {
+    width: 2.375rem !important;
+    height: 2.375rem !important;
+    min-width: 2.375rem !important;
+    min-height: 2.375rem !important;
+  }
+
+  .orion-header-tool-cluster .orion-header-icon-btn {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    min-width: 2.25rem !important;
+    min-height: 2.25rem !important;
+  }
+
+  main.orion-viewport.orion-shell-pad:has(.pos-soft-shell),
+  .orion-viewport.orion-shell-pad:has(.pos-soft-shell) {
+    padding-top: 0.35rem !important;
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "version": "v10",
+  "updatedAt": "2026-08-02T21:40:00.000Z",
+  "noteMaxCap": 5,
+  "note": 5.0,
+  "verdict": "BLOCKED",
+  "hundredPercentOk": false,
+  "blocked": [
+    "SEC-004_external_secret_rotation",
+    "C005",
+    "E2E_A_G",
+    "npm_audit_registry_tls",
+    "C100_ten_over_ten_claim"
+  ],
+  "commands": [
+    { "cmd": "npx prisma validate", "exit": 0, "status": "PASS" },
+    { "cmd": "npx prisma generate", "exit": 0, "status": "PASS" },
+    { "cmd": "npx vitest run", "exit": 0, "status": "PASS", "note": "2098 passed / 0 failed" },
+    { "cmd": "npm audit --omit=dev", "exit": 1, "status": "NOT_RUN", "note": "registry TLS/HTTP" }
+  ],
+  "criteriaSample": {
+    "C001": "PASS",
+    "C002": "PASS",
+    "C003": "PASS",
+    "C004": "PASS",
+    "C005": "BLOCKED",
+    "C006": "PASS",
+    "C007": "PASS",
+    "C008": "PASS",
+    "C009": "PASS",
+    "C012": "PASS",
+    "C013": "PASS",
+    "C018": "PASS",
+    "C021": "PASS",
+    "C040": "PASS",
+    "C081": "PASS",
+    "C086": "NOT_RUN",
+    "C100": "FAIL"
+  }
+}

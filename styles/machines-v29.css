@@ -1,0 +1,423 @@
+﻿/**
+ * Parc machines — cartes densifiées · pastels statut · zéro cadre
+ */
+
+.machines-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.mach-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.9rem;
+  border: none !important;
+  border-radius: var(--radius-card, 7px);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #b45309;
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, #f59e0b 16%, transparent), transparent 55%),
+    linear-gradient(165deg, #fffbeb 0%, #fff7ed 100%);
+}
+
+html.dark .mach-alert-banner {
+  color: #fbbf24;
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, #f59e0b 18%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 88%, #f59e0b 6%);
+}
+
+.mach-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+}
+
+@media (min-width: 768px) {
+  .mach-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .mach-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+.mach-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 100%;
+  padding: 0.85rem 0.95rem;
+  text-align: left;
+  border: none !important;
+  border-radius: var(--radius-card, 12px);
+  background: var(--bg-card, #fff);
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    transform 0.18s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+html:not(.dark) .mach-card {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.03),
+    0 8px 20px -14px rgba(15, 23, 42, 0.16);
+}
+
+html:not(.dark) .mach-card:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 2px 4px rgba(15, 23, 42, 0.04),
+    0 14px 28px -14px rgba(15, 23, 42, 0.2);
+}
+
+html.dark .mach-card {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 94%, #fff 2.5%);
+  box-shadow: none;
+}
+
+html.dark .mach-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 88%, #fff 4%);
+}
+
+/* Pastels par statut */
+html:not(.dark) .mach-card--ok {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #10b981 12%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #f0fdf6 60%, #e8faf0 100%);
+}
+html:not(.dark) .mach-card--running {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #ff1e56 12%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #fff5f8 60%, #ffeef3 100%);
+}
+html:not(.dark) .mach-card--waiting {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #eab308 14%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #fffbeb 60%, #fef9c3 100%);
+}
+html:not(.dark) .mach-card--maintenance {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #f59e0b 14%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #fff7ed 60%, #ffedd5 100%);
+}
+html:not(.dark) .mach-card--down {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #ef4444 12%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #fff1f2 60%, #ffe4e6 100%);
+}
+
+html.dark .mach-card--ok {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #10b981 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #10b981 4%);
+}
+html.dark .mach-card--running {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #ff1e56 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #ff1e56 4%);
+}
+html.dark .mach-card--waiting {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #eab308 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #eab308 4%);
+}
+html.dark .mach-card--maintenance {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #f59e0b 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #f59e0b 4%);
+}
+html.dark .mach-card--down {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #ef4444 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #ef4444 4%);
+}
+
+.mach-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.mach-card__icon {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-card, 7px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 10%, transparent);
+}
+
+.mach-card__icon--ok {
+  background: color-mix(in srgb, #10b981 14%, transparent);
+}
+.mach-card__icon--running {
+  background: color-mix(in srgb, #ff1e56 12%, transparent);
+}
+.mach-card__icon--waiting {
+  background: color-mix(in srgb, #eab308 16%, transparent);
+}
+.mach-card__icon--maintenance {
+  background: color-mix(in srgb, #f59e0b 16%, transparent);
+}
+.mach-card__icon--down {
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+}
+
+.mach-card__titles {
+  min-width: 0;
+  flex: 1;
+}
+
+.mach-card__name {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .mach-card__name {
+  color: #f1f5f9;
+}
+
+.mach-card__code {
+  margin: 0.12rem 0 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.65rem;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  color: var(--text-muted, #64748b);
+}
+
+.mach-status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.5rem;
+  border-radius: 9999px;
+  border: none;
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.mach-status--ok {
+  background: color-mix(in srgb, #10b981 14%, transparent);
+  color: #059669;
+}
+.mach-status--running {
+  background: color-mix(in srgb, #ff1e56 12%, transparent);
+  color: #be123c;
+}
+.mach-status--waiting {
+  background: color-mix(in srgb, #eab308 18%, transparent);
+  color: #a16207;
+}
+.mach-status--maintenance {
+  background: color-mix(in srgb, #f59e0b 16%, transparent);
+  color: #c2410c;
+}
+.mach-status--down {
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+  color: #dc2626;
+}
+
+html.dark .mach-status--ok { color: #34d399; }
+html.dark .mach-status--running { color: #fb7185; }
+html.dark .mach-status--waiting { color: #facc15; }
+html.dark .mach-status--maintenance { color: #fdba74; }
+html.dark .mach-status--down { color: #f87171; }
+
+.mach-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mach-card__meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.mach-card__cat {
+  font-size: 0.7rem;
+  font-weight: 650;
+  color: var(--text-muted, #64748b);
+}
+
+.mach-card__pct {
+  font-size: 0.7rem;
+  font-weight: 750;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .mach-card__pct {
+  color: #e2e8f0;
+}
+
+.mach-util-label {
+  margin: 0;
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted, #64748b);
+}
+
+.mach-consum {
+  margin-top: 0.15rem;
+}
+
+.mach-consum__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.625rem;
+  color: var(--text-muted, #64748b);
+}
+
+.mach-consum__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.mach-consum__pct {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.mach-card__maint {
+  margin: 0.2rem 0 0;
+  font-size: 0.6875rem;
+  color: var(--text-muted, #64748b);
+}
+
+.mach-card__note {
+  margin: 0.15rem 0 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: #c2410c;
+}
+
+html.dark .mach-card__note {
+  color: #fdba74;
+}
+
+/* Onglets drawer */
+.mach-tab-nav {
+  display: flex;
+  gap: 2px;
+  background: color-mix(in srgb, var(--bg-card-soft, #f1f5f9) 90%, transparent);
+  border-radius: var(--radius-card, 7px);
+  padding: 3px;
+  margin-bottom: 0.25rem;
+  flex-wrap: wrap;
+  border: none;
+}
+
+html.dark .mach-tab-nav {
+  background: color-mix(in srgb, #fff 6%, transparent);
+}
+
+.mach-tab-btn {
+  flex: 1 1 auto;
+  min-width: 4.5rem;
+  padding: 0.45rem 0.55rem;
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  color: var(--text-muted, #64748b);
+}
+
+.mach-tab-btn:hover {
+  color: var(--text-main, #0f172a);
+}
+
+.mach-tab-btn.on {
+  background: var(--bg-card, #fff);
+  color: var(--brand-primary, #cc0033);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+html.dark .mach-tab-btn.on {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 92%, #fff 4%);
+  color: #fb7185;
+  box-shadow: none;
+}
+
+/* Barres de charge — pastels */
+.consum-bar {
+  height: 6px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--text-muted, #64748b) 12%, transparent);
+  overflow: hidden;
+  margin: 2px 0 0;
+  border: none;
+}
+
+html.dark .consum-bar {
+  background: color-mix(in srgb, #fff 10%, transparent);
+}
+
+.consum-bar--lg {
+  height: 8px;
+}
+
+.consum-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.45s ease;
+}
+
+.consum-fill--ok {
+  background: linear-gradient(90deg, #34d399, #10b981);
+}
+
+.consum-fill--warn {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+.consum-fill--crit {
+  background: linear-gradient(90deg, #fb7185, #ef4444);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mach-card,
+  .consum-fill {
+    transition: none !important;
+  }
+  .mach-card:hover {
+    transform: none !important;
+  }
+}

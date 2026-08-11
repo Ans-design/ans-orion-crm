@@ -1,0 +1,236 @@
+PROMPT GLOBAL — POS : RÉCAPITULATIF MATIÈRE, SURFACE BRUTE ET PRIX AUTOMATIQUE — ANS ORION
+
+Objectif unique :
+Tous les articles du POS doivent avoir un récapitulatif matière complet, une surface brute calculée automatiquement et un prix automatique.
+
+IMPORTANT :
+Cette demande doit être appliquée à tous les articles du POS, sans exception, sauf cas explicitement non concerné par une matière ou une surface imprimable.
+Ne pas corriger seulement l’interface.
+La correction doit être synchronisée avec le POS, la base de données, l’admin, les prix, les règles métier, le stock, le panier, les devis, les commandes, les factures, la production, le cockpit, les seeds et les tests.
+
+============================================================
+1. RÉCAPITULATIF MATIÈRE OBLIGATOIRE SUR TOUS LES ARTICLES POS
+============================================================
+
+Chaque article du POS doit afficher un récapitulatif matière clair avant l’ajout au panier.
+
+Le récapitulatif doit afficher selon l’article :
+- article ;
+- catégorie ;
+- format ;
+- dimensions en mm ou cm selon la règle du projet ;
+- matière ;
+- grammage / épaisseur si applicable ;
+- quantité ;
+- surface réelle unitaire ;
+- surface réelle totale ;
+- marge de chute matière si applicable ;
+- dimensions brutes finales ;
+- surface brute unitaire ;
+- surface brute totale ;
+- finition ;
+- impression ;
+- façonnage ;
+- stock consommé ;
+- prix matière ;
+- prix impression ;
+- prix finition / façonnage ;
+- prix unitaire ;
+- total.
+
+============================================================
+2. SURFACE BRUTE AUTOMATIQUE
+============================================================
+
+Tous les articles qui utilisent une surface, un format ou des dimensions personnalisées doivent calculer automatiquement :
+
+surface_reelle = longueur × largeur
+
+Si l’article utilise des dimensions en mm :
+surface_reelle_m2 = longueur_mm × largeur_mm / 1 000 000
+
+Si l’article utilise des dimensions en cm :
+surface_reelle_m2 = longueur_cm × largeur_cm / 10 000
+
+La surface brute doit aussi être calculée automatiquement.
+
+Pour les articles avec dimensions personnalisées à plat :
+- ajouter une marge de chute matière de +50 mm sur les 4 côtés ;
+- donc +100 mm en longueur et +100 mm en largeur ;
+- calculer la surface brute avec ces dimensions finales.
+
+Formule en mm :
+longueur_brute_mm = longueur_mm + 100
+largeur_brute_mm = largeur_mm + 100
+surface_brute_m2 = longueur_brute_mm × largeur_brute_mm / 1 000 000
+
+surface_brute_totale_m2 = surface_brute_m2 × quantité
+
+La marge de chute matière est différente :
+- du fond perdu ;
+- de la marge de sécurité design ;
+- de la marge de coupe ;
+- de la tolérance machine.
+
+============================================================
+3. CAS DES ARTICLES AVEC DÉVELOPPÉ OU MATRICE
+============================================================
+
+Pour les articles qui ne sont pas de simples rectangles, comme boîte, sac papier, chevalet, cube, pyramide, cylindre, packaging ou forme spéciale, la surface doit être calculée à partir du développé à plat ou de la matrice.
+
+Règle :
+- ne jamais calculer seulement la face visible ;
+- calculer le développé réel ;
+- ajouter les marges nécessaires ;
+- ajouter la marge de chute matière ;
+- afficher la surface brute dans le récapitulatif ;
+- utiliser cette surface pour le stock et le prix.
+
+============================================================
+4. PRIX AUTOMATIQUE OBLIGATOIRE
+============================================================
+
+Tous les articles POS doivent avoir un prix automatique.
+
+Le prix ne doit pas rester en “prix à définir” comme fonctionnement normal.
+Le prix forcé manuel doit rester uniquement une exception admin.
+
+Le prix doit être calculé automatiquement selon les paramètres disponibles :
+- matière ;
+- surface brute ;
+- quantité ;
+- format ;
+- impression ;
+- finition ;
+- découpe ;
+- façonnage ;
+- reliure ;
+- collage ;
+- pose ;
+- accessoires ;
+- minimum de production ;
+- marge commerciale ;
+- règles métier propres à chaque article.
+
+Formule générale :
+prix_total =
+prix_matiere
++ prix_impression
++ prix_finition
++ prix_faconnage
++ prix_accessoires
++ prix_calage
++ minimum_production
++ marge_commerciale
+
+prix_matiere = surface_brute_totale × prix_m2_matiere
+
+============================================================
+5. ADMIN / BACK-OFFICE
+============================================================
+
+Dans l’admin, chaque article POS doit pouvoir être configuré avec :
+- matière ;
+- grammage ;
+- prix au m² ;
+- prix par format si applicable ;
+- prix impression ;
+- prix finition ;
+- prix façonnage ;
+- minimum de production ;
+- marge commerciale ;
+- règles de calcul ;
+- activation ou désactivation du prix forcé ;
+- activation ou désactivation de la marge de chute si nécessaire.
+
+Aucun prix essentiel ne doit être hardcodé uniquement dans le frontend.
+
+============================================================
+6. BASE DE DONNÉES ET SNAPSHOT
+============================================================
+
+Chaque ligne de panier, devis, commande et facture doit enregistrer un snapshot complet du calcul.
+
+Le snapshot doit contenir :
+- article ;
+- options choisies ;
+- dimensions ;
+- matière ;
+- quantité ;
+- surface réelle ;
+- surface brute ;
+- marge de chute ;
+- prix matière ;
+- prix impression ;
+- prix finition ;
+- prix total ;
+- version de formule ;
+- date du calcul.
+
+Un changement futur de prix ou de formule ne doit jamais modifier les anciens devis ou anciennes factures.
+
+============================================================
+7. STOCK
+============================================================
+
+Le stock doit être calculé avec la surface brute ou la consommation réelle de matière selon l’article.
+
+Avant ajout panier, afficher une alerte si :
+- matière indisponible ;
+- stock insuffisant ;
+- prix matière manquant ;
+- règle de calcul manquante ;
+- format incompatible ;
+- surface impossible à calculer.
+
+============================================================
+8. COCKPIT
+============================================================
+
+Le cockpit doit utiliser les vraies données issues du POS, des devis, des commandes et des factures.
+
+KPI à alimenter :
+- consommation matière réelle ;
+- consommation matière brute ;
+- taux de chute ;
+- marge par article ;
+- CA par article ;
+- articles sans prix automatique ;
+- commandes avec prix forcé exceptionnel ;
+- alertes stock ;
+- incohérences de calcul.
+
+============================================================
+9. TESTS OBLIGATOIRES
+============================================================
+
+Créer ou corriger les tests suivants :
+- chaque article POS affiche un récapitulatif matière ;
+- chaque article avec dimensions calcule une surface réelle ;
+- chaque article avec dimensions calcule une surface brute ;
+- la marge de chute est appliquée quand nécessaire ;
+- le prix automatique fonctionne ;
+- le prix forcé n’est pas obligatoire ;
+- le stock est calculé correctement ;
+- le panier sauvegarde le calcul ;
+- le devis sauvegarde le snapshot ;
+- la facture reprend le snapshot ;
+- la production reçoit les données matière ;
+- le cockpit reçoit les données réelles.
+
+Exécuter :
+- npm run lint
+- npm run build
+- tests disponibles
+
+============================================================
+10. RÉSULTAT ATTENDU
+============================================================
+
+Après correction :
+- tous les articles POS affichent un récapitulatif matière complet ;
+- toutes les surfaces réelles sont calculées automatiquement ;
+- toutes les surfaces brutes sont calculées automatiquement ;
+- tous les prix sont calculés automatiquement ;
+- le prix forcé manuel n’est plus le comportement normal ;
+- la base, l’admin, le stock, les devis, les factures, la production et le cockpit sont synchronisés.

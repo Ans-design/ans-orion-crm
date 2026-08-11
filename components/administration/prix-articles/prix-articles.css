@@ -1,0 +1,119 @@
+/* Prix articles — aligné sur Matières & tarifs */
+
+.pa-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+.pa-page__meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--cps-muted, #6e7892);
+}
+
+.pa-table-wrap {
+  overflow: auto;
+  border: 1px solid var(--mt-line, #e4e9f2);
+  border-radius: 7px;
+  background: var(--mt-table-bg, #fff);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.pa-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  color: var(--mt-table-cell-fg, #334155);
+}
+
+.pa-table th,
+.pa-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--mt-line, #eef2f6);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.pa-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--mt-table-header-bg, #fff);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mt-table-header-fg, #475569);
+  white-space: nowrap;
+}
+
+.pa-table tbody tr:hover td {
+  background: var(--mt-table-hover, #f8fafc);
+}
+
+.pa-table .pa-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pa-table .pa-num .pa-num-cell,
+.pa-table .pa-num button.pa-num-cell {
+  display: block;
+  width: 100%;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.pa-table .pa-num .inline-edit-input {
+  width: 100%;
+  text-align: right;
+}
+
+.pa-table tr.is-draft td {
+  opacity: 0.72;
+}
+
+.pa-empty {
+  text-align: center;
+  color: #94a3b8;
+  padding: 28px 12px !important;
+}
+
+.pa-page .orion-admin-actions-th {
+  text-align: center;
+}
+
+/* Actions ligne — zone cliquable stable (28×28) */
+.pa-page .mp-row-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: 28px;
+}
+
+.pa-page .mp-row-action-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  padding: 0 !important;
+  cursor: pointer;
+  pointer-events: auto;
+  flex-shrink: 0;
+}
+
+.pa-page .mp-row-action-btn:disabled,
+.pa-page .mp-row-action-btn.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}

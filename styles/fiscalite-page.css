@@ -1,0 +1,401 @@
+/* Fiscalité & échéances — densifié + snapshot taux / montants */
+
+.fiscal-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+}
+
+.fiscal-kpi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+@media (min-width: 720px) {
+  .fiscal-kpi {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.fiscal-snapshot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.fiscal-rates {
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 92%, transparent);
+}
+
+.fiscal-rates__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.fiscal-rates__head svg {
+  color: var(--primary, #cc0033);
+}
+
+.fiscal-rates__link {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #0284c7;
+  text-decoration: none;
+}
+
+.fiscal-rates__link:hover {
+  text-decoration: underline;
+}
+
+.fiscal-rates__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+@media (min-width: 640px) {
+  .fiscal-rates__grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.fiscal-rate {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 65%, transparent);
+  min-width: 0;
+}
+
+.fiscal-rate .lbl {
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fiscal-rate .val {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.fiscal-estims {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+@media (min-width: 720px) {
+  .fiscal-estims {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.fiscal-estim {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  text-align: left;
+  padding: 0.7rem 0.8rem;
+  border: none;
+  border-radius: var(--radius-card, 12px);
+  cursor: pointer;
+  background: color-mix(in srgb, #2563eb 8%, var(--bg-card-soft, #f8fafc));
+  color: var(--text-main);
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.fiscal-estim:hover {
+  transform: translateY(-1px);
+}
+
+.fiscal-estim[data-tone='tva'] {
+  background: color-mix(in srgb, #2563eb 10%, var(--bg-card-soft, #f0f9ff));
+}
+
+.fiscal-estim[data-tone='paie'] {
+  background: color-mix(in srgb, #eab308 12%, var(--bg-card-soft, #fffbeb));
+}
+
+.fiscal-estim[data-tone='cnaps'] {
+  background: color-mix(in srgb, #22c55e 10%, var(--bg-card-soft, #f0fdf4));
+}
+
+.fiscal-estim svg {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  opacity: 0.85;
+}
+
+.fiscal-estim .lbl {
+  display: block;
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.fiscal-estim .val {
+  display: block;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.85rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 0.1rem;
+}
+
+.fiscal-estim .meta {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fiscal-composer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 92%, transparent);
+}
+
+@media (min-width: 720px) {
+  .fiscal-composer {
+    grid-template-columns: minmax(90px, 0.7fr) minmax(100px, 0.8fr) minmax(0, 1.6fr) minmax(120px, 0.9fr) minmax(100px, 0.8fr) auto;
+    align-items: center;
+  }
+
+  .fiscal-composer__wide {
+    grid-column: auto;
+  }
+}
+
+.fiscal-composer input,
+.fiscal-composer select {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 70%, transparent);
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  outline: none;
+}
+
+.fiscal-composer input:focus,
+.fiscal-composer select:focus {
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 28%, transparent));
+}
+
+.fiscal-toolbar h2 {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.fiscal-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+@media (min-width: 640px) {
+  .fiscal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.fiscal-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  min-width: 0;
+}
+
+.fiscal-card[data-late='1'] {
+  background: color-mix(in srgb, #ef4444 10%, var(--bg-card-soft, #fef2f2));
+}
+
+.fiscal-card[data-statut='depose'] {
+  background: color-mix(in srgb, #22c55e 8%, var(--bg-card-soft, #f0fdf4));
+}
+
+.fiscal-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.45rem;
+}
+
+.fiscal-card__type {
+  display: inline-block;
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #0284c7;
+}
+
+.fiscal-card__label {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text-main);
+}
+
+.fiscal-card__meta {
+  margin: 0.2rem 0 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.fiscal-late {
+  color: #dc2626;
+  font-weight: 800;
+}
+
+.fiscal-pill {
+  flex-shrink: 0;
+  padding: 0.15rem 0.45rem;
+  border-radius: 9999px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  background: color-mix(in srgb, var(--text-muted) 14%, transparent);
+  color: var(--text-muted);
+}
+
+.fiscal-pill--a_preparer {
+  background: color-mix(in srgb, #cc0033 14%, transparent);
+  color: #be123c;
+}
+
+.fiscal-pill--en_cours {
+  background: color-mix(in srgb, #2563eb 16%, transparent);
+  color: #1d4ed8;
+}
+
+.fiscal-pill--depose {
+  background: color-mix(in srgb, #22c55e 18%, transparent);
+  color: #15803d;
+}
+
+.fiscal-card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.fiscal-card__amount {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.fiscal-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+/* Dark */
+html.dark .fiscal-rates,
+.dark .fiscal-rates,
+html.dark .fiscal-composer,
+.dark .fiscal-composer,
+html.dark .fiscal-card,
+.dark .fiscal-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .fiscal-rate,
+.dark .fiscal-rate {
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 70%, transparent);
+}
+
+html.dark .fiscal-estim[data-tone='tva'],
+.dark .fiscal-estim[data-tone='tva'] {
+  background: color-mix(in srgb, #2563eb 18%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .fiscal-estim[data-tone='paie'],
+.dark .fiscal-estim[data-tone='paie'] {
+  background: color-mix(in srgb, #eab308 16%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .fiscal-estim[data-tone='cnaps'],
+.dark .fiscal-estim[data-tone='cnaps'] {
+  background: color-mix(in srgb, #22c55e 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .fiscal-card[data-late='1'],
+.dark .fiscal-card[data-late='1'] {
+  background: color-mix(in srgb, #ef4444 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .fiscal-card[data-statut='depose'],
+.dark .fiscal-card[data-statut='depose'] {
+  background: color-mix(in srgb, #22c55e 12%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .fiscal-rates__link,
+.dark .fiscal-rates__link,
+html.dark .fiscal-card__type,
+.dark .fiscal-card__type {
+  color: #38bdf8;
+}
+
+html.dark .fiscal-late,
+.dark .fiscal-late {
+  color: #fca5a5;
+}
+
+html.dark .fiscal-pill--a_preparer,
+.dark .fiscal-pill--a_preparer {
+  color: #fda4af;
+}
+
+html.dark .fiscal-pill--en_cours,
+.dark .fiscal-pill--en_cours {
+  color: #93c5fd;
+}
+
+html.dark .fiscal-pill--depose,
+.dark .fiscal-pill--depose {
+  color: #86efac;
+}

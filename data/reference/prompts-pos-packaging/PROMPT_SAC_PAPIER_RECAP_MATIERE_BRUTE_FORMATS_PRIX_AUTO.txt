@@ -1,0 +1,689 @@
+PROMPT — SAC PAPIER PERSONNALISÉ + RÉCAPITULATIF MATIÈRE BRUTE + FORMATS INTERNATIONAUX — ANS ORION
+
+Contexte :
+On travaille sur le POS ANS ORION, article “Sac papier”.
+Le fonctionnement doit être proche de “Boîte personnalisée” : calcul matière brute, développé à plat, marge de chute +50 mm sur les 4 côtés, conversion vers formats internationaux A1/A2/A0, calcul automatique du prix, stock, devis, production, facture et cockpit.
+
+Objectif :
+Le Sac papier ne doit pas être calculé comme un simple rectangle visible.
+Il doit être calculé selon son développé à plat, avec soufflets, fond, rabats, poignées/anses si nécessaire, marge de collage, marge de chute matière et surface brute.
+
+IMPORTANT :
+Ne pas corriger seulement le frontend.
+Toute correction doit être synchronisée avec :
+- POS
+- Base de données
+- Admin / Back-office
+- Prix
+- Formules
+- Règles métier
+- Stock
+- Panier
+- Devis
+- Commande
+- Facture
+- Fiche production
+- Cockpit
+- Seeds
+- Tests
+
+============================================================
+1. ARTICLE : SAC PAPIER
+============================================================
+
+Créer ou corriger le configurateur POS “Sac papier”.
+
+Champs POS obligatoires :
+- Type de sac papier
+- Longueur / largeur façade L en mm
+- Profondeur / soufflet P en mm
+- Hauteur H en mm
+- Matière
+- Grammage
+- Couleur papier
+- Type d’impression
+- Impression recto / recto-verso / 1 face / 2 faces
+- Impression partielle ou impression totale
+- Finition
+- Type de poignées / anses
+- Renfort poignées si applicable
+- Quantité
+- Développé net calculé automatiquement
+- Marge de chute matière
+- Dimensions brutes finales
+- Surface brute unitaire
+- Format international compatible
+- Poses par feuille
+- Surface facturée
+- Prix automatique
+- Récapitulatif matière brute
+
+Types de sac papier à proposer :
+- Sac papier sans soufflet
+- Sac papier avec soufflets latéraux
+- Sac papier fond plat
+- Sac papier kraft
+- Sac papier luxe
+- Sac papier avec poignées torsadées
+- Sac papier avec poignées plates
+- Sac papier avec cordon
+- Autres, avec champ détail uniquement si “Autres” est sélectionné
+
+============================================================
+2. MATIÈRES À PROPOSER
+============================================================
+
+Ajouter les matières adaptées au sac papier :
+
+- Kraft blanc 120g, 150g, 170g, 200g, 250g
+- Kraft brun 120g, 150g, 170g, 200g, 250g
+- Papier couché / glossy 170g, 200g, 250g, 300g
+- Papier mat 170g, 200g, 250g, 300g
+- Carte ivoire / SBS 250g, 300g, 350g
+- Papier spécial luxe 250g, 300g, 350g
+- Papier recyclé 150g, 170g, 200g, 250g
+
+Règle :
+- Sac papier simple : minimum conseillé 120g.
+- Sac papier boutique / luxe : minimum conseillé 170g.
+- Sac papier grand format ou lourd : conseiller 200g à 350g.
+- L’admin doit pouvoir activer/désactiver chaque matière et grammage.
+- Le prix doit venir du back-office, jamais être hardcodé dans le frontend.
+
+============================================================
+3. RÈGLE GLOBALE DE CALCUL MATIÈRE BRUTE
+============================================================
+
+Le Sac papier doit être calculé avec son développé à plat.
+
+Variables :
+- L = largeur façade du sac en mm
+- P = profondeur / soufflet en mm
+- H = hauteur du sac en mm
+- G = patte de collage latérale, défaut 15 mm
+- F = fond du sac, dépend de la profondeur
+- R = rabat haut / retour haut, défaut 30 mm si nécessaire
+- bleed = fond perdu, défaut 3 mm
+- marge_chute = 50 mm sur chaque côté
+
+Règle de marge :
+- +50 mm à gauche
+- +50 mm à droite
+- +50 mm en haut
+- +50 mm en bas
+
+Donc :
+- +100 mm en largeur
+- +100 mm en hauteur
+
+Important :
+La marge +50 mm est une marge matière / chute / calage / déchet.
+Elle ne remplace pas :
+- la marge de sécurité design
+- le fond perdu / bleed
+- la marge de pliage
+- la patte de collage
+- les tolérances machine
+
+============================================================
+4. FORMULE — SAC PAPIER AVEC SOUFFLETS LATÉRAUX
+============================================================
+
+Structure la plus fréquente pour sac boutique.
+
+Variables :
+- L = largeur façade
+- P = profondeur / soufflet
+- H = hauteur
+- G = patte de colle
+- R = rabat haut / retour haut
+- F = fond
+
+Valeurs par défaut :
+G = 15 mm
+R = 30 mm
+F = P + 20 mm
+
+Formule développé :
+developpe_net_largeur = 2L + 2P + G
+developpe_net_hauteur = H + F + R
+
+Avec fond perdu :
+largeur_imprimable = developpe_net_largeur + 2 × bleed
+hauteur_imprimable = developpe_net_hauteur + 2 × bleed
+
+Avec marge de chute :
+largeur_brute_finale = largeur_imprimable + 100 mm
+hauteur_brute_finale = hauteur_imprimable + 100 mm
+
+Surface :
+surface_reelle_developpe_m2 = developpe_net_largeur × developpe_net_hauteur / 1 000 000
+surface_brute_m2 = largeur_brute_finale × hauteur_brute_finale / 1 000 000
+surface_brute_totale_m2 = surface_brute_m2 × quantité
+
+Poids matière :
+poids_matiere_unitaire_g = surface_brute_m2 × grammage
+poids_matiere_total_g = poids_matiere_unitaire_g × quantité
+
+============================================================
+5. FORMULE — SAC PAPIER SANS SOUFFLET
+============================================================
+
+Pour sac plat sans profondeur.
+
+Variables :
+- L = largeur
+- H = hauteur
+- G = patte de colle
+- R = rabat haut si nécessaire
+- F = fond ou fermeture basse si nécessaire
+
+Valeurs par défaut :
+G = 15 mm
+R = 20 mm
+F = 20 mm
+
+Formule :
+developpe_net_largeur = 2L + G
+developpe_net_hauteur = H + F + R
+
+largeur_imprimable = developpe_net_largeur + 2 × bleed
+hauteur_imprimable = developpe_net_hauteur + 2 × bleed
+
+largeur_brute_finale = largeur_imprimable + 100 mm
+hauteur_brute_finale = hauteur_imprimable + 100 mm
+
+surface_brute_m2 = largeur_brute_finale × hauteur_brute_finale / 1 000 000
+surface_brute_totale_m2 = surface_brute_m2 × quantité
+
+============================================================
+6. FORMULE — SAC PAPIER FOND PLAT
+============================================================
+
+Pour sac avec fond plus stable.
+
+Variables :
+- L = largeur façade
+- P = profondeur / fond
+- H = hauteur
+- G = patte de colle
+- R = rabat haut
+- F = fond renforcé
+
+Valeurs par défaut :
+G = 15 mm
+R = 30 mm
+F = P + 30 mm
+
+Formule :
+developpe_net_largeur = 2L + 2P + G
+developpe_net_hauteur = H + F + R
+
+largeur_imprimable = developpe_net_largeur + 2 × bleed
+hauteur_imprimable = developpe_net_hauteur + 2 × bleed
+
+largeur_brute_finale = largeur_imprimable + 100 mm
+hauteur_brute_finale = hauteur_imprimable + 100 mm
+
+surface_brute_m2 = largeur_brute_finale × hauteur_brute_finale / 1 000 000
+surface_brute_totale_m2 = surface_brute_m2 × quantité
+
+Règle :
+Fond plat = coût façonnage supérieur.
+Afficher un supplément façonnage paramétrable dans l’admin.
+
+============================================================
+7. POIGNÉES / ANSES
+============================================================
+
+Ajouter les choix :
+- Sans poignée
+- Poignées torsadées
+- Poignées plates
+- Cordon
+- Découpe poignée
+- Autres
+
+Règles :
+- Si “Sans poignée” : pas de supplément poignée.
+- Si “Poignées torsadées” : ajouter prix poignée + perçage + collage/pose.
+- Si “Poignées plates” : ajouter prix poignée + collage/pose.
+- Si “Cordon” : ajouter prix cordon + œillets si applicable + pose.
+- Si “Découpe poignée” : ajouter coût découpe.
+- Si “Autres” : afficher champ détail obligatoire.
+
+Admin doit permettre :
+- prix unitaire poignée
+- prix pose poignée
+- prix œillet
+- prix cordon
+- prix découpe poignée
+- activation/désactivation par type de sac
+
+============================================================
+8. IMPRESSION PARTIELLE
+============================================================
+
+Si impression partielle est sélectionnée, afficher :
+- Longueur zone impression en mm
+- Largeur / hauteur zone impression en mm
+
+Formule :
+surface_impression_partielle_m2 = longueur_zone_mm × largeur_zone_mm / 1 000 000
+
+Avec marge de chute si support imprimé séparé :
+longueur_brute_zone_mm = longueur_zone_mm + 100
+largeur_brute_zone_mm = largeur_zone_mm + 100
+surface_brute_impression_m2 = longueur_brute_zone_mm × largeur_brute_zone_mm / 1 000 000
+
+Afficher dans le récapitulatif :
+- surface impression réelle
+- surface impression brute
+- marge +50 mm sur 4 côtés
+- prix impression automatique
+
+Règle :
+Si la technique imprime directement sur le développé complet, utiliser la surface du développé.
+Si la technique utilise un transfert/film/DTF/adhésif, utiliser la surface brute de la zone.
+
+============================================================
+9. IMPRESSION TOTALE
+============================================================
+
+Si impression totale est sélectionnée :
+Utiliser la surface développée du sac.
+
+surface_impression_totale_m2 = surface_reelle_developpe_m2
+surface_impression_totale_commande_m2 = surface_reelle_developpe_m2 × quantité
+
+Pour le prix matière et stock, utiliser la surface brute avec marge :
+surface_brute_totale_m2 = surface_brute_m2 × quantité
+
+============================================================
+10. CONVERSION FORMAT INTERNATIONAL
+============================================================
+
+Après calcul de largeur_brute_finale et hauteur_brute_finale, déterminer le plus petit format international compatible.
+
+Formats à intégrer :
+- A4 = 210 × 297 mm
+- A3 = 297 × 420 mm
+- A2 = 420 × 594 mm
+- A1 = 594 × 841 mm
+- A0 = 841 × 1189 mm
+- 2A0 = 1189 × 1682 mm
+- 4A0 = 1682 × 2378 mm
+- Format personnalisé / grand format
+
+Algorithme :
+Pour chaque format :
+- tester portrait
+- tester paysage
+- choisir le plus petit format compatible
+
+Si aucun format ne convient :
+Afficher “Format personnalisé / grand format”.
+
+============================================================
+11. POSES PAR FEUILLE
+============================================================
+
+Calcul :
+poses_orientation_1 = floor(format_largeur / largeur_brute_finale) × floor(format_hauteur / hauteur_brute_finale)
+poses_orientation_2 = floor(format_largeur / hauteur_brute_finale) × floor(format_hauteur / largeur_brute_finale)
+poses_par_feuille = max(poses_orientation_1, poses_orientation_2)
+
+Si poses_par_feuille = 0 :
+- afficher format insuffisant
+- proposer format supérieur ou format personnalisé
+
+Surface feuille :
+surface_feuille_m2 = format_largeur × format_hauteur / 1 000 000
+
+Surface facturée :
+surface_facturee_unitaire_m2 = surface_feuille_m2 / poses_par_feuille
+
+Taux de chute :
+taux_chute = 1 - ((poses_par_feuille × surface_brute_m2) / surface_feuille_m2)
+
+Afficher :
+- format compatible
+- orientation optimale
+- nombre de poses
+- surface facturée
+- taux de chute
+
+============================================================
+12. PRIX AUTOMATIQUE
+============================================================
+
+Le prix du Sac papier doit être automatique.
+Ne pas afficher “prix à définir” comme fonctionnement normal.
+
+Formule globale :
+prix_total =
+prix_matiere
++ prix_impression
++ prix_finition
++ prix_poignees
++ prix_collage
++ prix_decoupe
++ prix_rainage
++ prix_faconnage
++ prix_calage
++ minimum_production
++ marge_commerciale
+
+Prix matière :
+prix_matiere = surface_brute_totale_m2 × prix_m2_matiere
+
+Prix impression :
+- impression totale : surface_reelle_developpe_m2 × quantité × prix_m2_impression
+- impression partielle : surface_brute_impression_m2 × quantité × prix_m2_impression
+
+Prix poignées :
+prix_poignees = quantité × prix_unitaire_poignee + prix_pose_poignee
+
+Prix façonnage :
+Selon type de sac :
+- sac sans soufflet : coefficient simple
+- sac avec soufflets : coefficient moyen
+- sac fond plat : coefficient plus élevé
+- sac luxe : coefficient élevé
+
+Le prix forcé manuel doit rester seulement une option admin exceptionnelle.
+
+============================================================
+13. RÉCAPITULATIF MATIÈRE BRUTE
+============================================================
+
+Dans le POS, panier, devis, commande, facture et fiche production, afficher :
+
+- Article : Sac papier personnalisé
+- Type de sac
+- Dimensions client : L × P × H mm
+- Matière
+- Grammage
+- Couleur papier
+- Type d’impression
+- Poignées / anses
+- Patte de colle
+- Rabat haut / retour haut
+- Fond calculé
+- Développé net : largeur × hauteur mm
+- Surface développée réelle
+- Fond perdu / bleed
+- Marge de chute : +50 mm sur les 4 côtés
+- Dimensions brutes finales
+- Surface brute unitaire
+- Quantité
+- Surface brute totale
+- Poids matière estimé
+- Format international compatible : A1 / A2 / A0 / personnalisé
+- Poses par feuille
+- Orientation optimale
+- Surface facturée unitaire
+- Taux de chute
+- Prix matière
+- Prix impression
+- Prix poignées
+- Prix façonnage
+- Prix unitaire
+- Total
+
+Exemple :
+Dimensions client : 250 × 100 × 320 mm
+Développé net : 615 × 450 mm
+Marge de chute : +50 mm sur les 4 côtés
+Dimensions brutes : 721 × 556 mm si bleed 3 mm inclus
+Format compatible : A1
+Poses par feuille : 1
+Surface brute unitaire : x m²
+Surface facturée : x m²
+Taux de chute : x %
+
+============================================================
+14. BASE DE DONNÉES
+============================================================
+
+Créer ou corriger les modèles/champs :
+
+PaperBagProduct :
+- bag_type
+- width_mm
+- depth_mm
+- height_mm
+- material
+- grammage
+- color
+- handle_type
+- print_mode
+- print_technique
+- quantity
+- is_active
+
+PaperBagFormula :
+- bag_type
+- glue_flap_mm
+- top_return_mm
+- bottom_formula
+- bleed_mm
+- waste_margin_mm
+- finishing_coefficient
+- handle_rule
+- formula_version
+- is_active
+
+PaperBagCalculationSnapshot :
+- bag_type
+- width_mm
+- depth_mm
+- height_mm
+- glue_flap_mm
+- top_return_mm
+- bottom_mm
+- developpe_width_mm
+- developpe_height_mm
+- real_developpe_surface_m2
+- bleed_mm
+- waste_margin_mm
+- gross_width_mm
+- gross_height_mm
+- gross_surface_m2
+- quantity
+- total_gross_surface_m2
+- compatible_format
+- orientation
+- poses_per_sheet
+- charged_surface_m2
+- waste_rate
+- material_price
+- print_price
+- handle_price
+- finishing_price
+- unit_price
+- total_price
+- formula_version
+- created_at
+
+Synchroniser avec :
+- QuoteLine
+- OrderLine
+- InvoiceLine
+- ProductionTask
+- StockMovement
+
+Chaque devis doit enregistrer le snapshot complet.
+Un changement futur de formule ne doit jamais modifier les anciens devis.
+
+============================================================
+15. ADMIN / BACK-OFFICE
+============================================================
+
+Créer ou corriger les écrans admin :
+
+Admin > Sac papier > Types :
+- types de sacs
+- activation/désactivation
+- coefficients de façonnage
+- règles de fond
+- règles de poignées
+
+Admin > Sac papier > Matières :
+- matière
+- grammage
+- prix au m²
+- stock
+- fournisseur
+- seuil alerte
+- actif/inactif
+
+Admin > Sac papier > Prix :
+- prix matière
+- prix impression au m²
+- prix finition
+- prix poignée
+- prix pose poignée
+- prix collage
+- prix découpe
+- prix rainage
+- minimum production
+- marge commerciale
+- coefficient quantité
+
+Admin > Sac papier > Formats :
+- formats disponibles
+- A4, A3, A2, A1, A0, 2A0, 4A0
+- format personnalisé
+- prix par format si nécessaire
+
+Admin > Règles métier :
+- marge de chute par défaut 50 mm
+- bleed par défaut 3 mm
+- patte de colle par défaut 15 mm
+- retour haut par défaut 30 mm
+- alerte dimensions incohérentes
+- alerte stock insuffisant
+- alerte prix manquant
+
+============================================================
+16. STOCK
+============================================================
+
+Le stock doit être calculé avec la surface brute, pas uniquement la surface réelle.
+
+Stock consommé :
+stock_matiere_consomme = surface_brute_totale_m2
+
+Stock poignées :
+stock_poignees_consomme = quantité × nombre_poignees_par_sac
+
+Avant ajout panier, afficher les alertes :
+- matière indisponible
+- grammage indisponible
+- stock insuffisant
+- poignées indisponibles
+- prix matière manquant
+- format incompatible
+- dimensions trop grandes
+- technique impression non configurée
+
+============================================================
+17. PRODUCTION
+============================================================
+
+La fiche production Sac papier doit afficher :
+- type de sac
+- dimensions L × P × H
+- développé net
+- dimensions brutes
+- format compatible
+- poses par feuille
+- matière
+- grammage
+- quantité
+- impression
+- finition
+- poignées
+- collage
+- rainage
+- découpe
+- surface brute
+- stock à consommer
+- instructions production
+
+Créer les tâches :
+- impression
+- découpe
+- rainage
+- collage
+- pose poignées
+- contrôle qualité
+- emballage / livraison
+
+============================================================
+18. COCKPIT
+============================================================
+
+Mettre à jour les KPI :
+- nombre de sacs papier vendus
+- CA sac papier
+- marge sac papier
+- consommation papier en m²
+- consommation poignées
+- taux de chute moyen
+- top types de sacs
+- top matières
+- alertes stock papier
+- alertes stock poignées
+- commandes sac papier en production
+- commandes avec prix forcé exceptionnel
+- commandes avec formule manquante
+
+Le cockpit doit utiliser les vraies données, pas des données mockées.
+
+============================================================
+19. TESTS OBLIGATOIRES
+============================================================
+
+Créer ou mettre à jour les tests :
+
+Sac papier :
+- calcul développé sac sans soufflet
+- calcul développé sac avec soufflets
+- calcul développé sac fond plat
+- marge +50 mm sur les 4 côtés
+- bleed séparé
+- conversion A4/A3/A2/A1/A0
+- poses par feuille
+- surface brute
+- surface facturée
+- taux de chute
+- prix automatique
+- prix poignée
+- stock matière
+- stock poignées
+- snapshot devis
+- facture
+- production
+- cockpit
+
+Commandes :
+- npm run lint
+- npm run build
+- tests disponibles
+
+============================================================
+20. RÉSULTAT ATTENDU
+============================================================
+
+Après correction :
+- Sac papier calcule automatiquement son développé à plat.
+- La marge +50 mm sur les 4 côtés est appliquée.
+- Le récapitulatif matière brute est complet.
+- Le format international compatible A1/A2/A0/etc. est affiché.
+- Les poses par feuille sont calculées.
+- Le prix est automatique via back-office.
+- Le stock est calculé avec la surface brute.
+- Les devis, commandes, factures, production et cockpit sont synchronisés.
+- Le prix forcé n’est plus le comportement normal.

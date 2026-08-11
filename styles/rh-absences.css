@@ -1,0 +1,380 @@
+/* Congés & absences — densifié, max-width, grille 2 cols */
+
+.rh-abs-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+}
+
+.rh-abs-link {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.28rem 0.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+}
+
+.rh-abs-link:hover {
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+}
+
+.rh-abs-kpi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+@media (min-width: 720px) {
+  .rh-abs-kpi {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.rh-abs-composer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  padding: 0.85rem 0.9rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 92%, transparent);
+  border: none;
+}
+
+@media (min-width: 720px) {
+  .rh-abs-composer {
+    grid-template-columns: minmax(120px, 0.9fr) minmax(140px, 1fr) minmax(140px, 1fr) auto;
+    align-items: start;
+  }
+
+  .rh-abs-composer__head {
+    grid-column: 1 / -1;
+  }
+
+  .rh-abs-composer__motif {
+    grid-column: 1 / 4;
+  }
+
+  .rh-abs-preview {
+    grid-column: 1 / 4;
+  }
+
+  .rh-abs-composer__submit {
+    grid-column: 4;
+    grid-row: 2;
+    align-self: stretch;
+  }
+}
+
+.rh-abs-composer__head {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.rh-abs-composer select,
+.rh-abs-composer input[type='date'],
+.rh-abs-composer textarea {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 70%, transparent);
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  outline: none;
+  resize: none;
+}
+
+.rh-abs-composer select:focus,
+.rh-abs-composer input[type='date']:focus,
+.rh-abs-composer textarea:focus {
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 28%, transparent));
+}
+
+.rh-abs-date {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.rh-abs-half {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.rh-abs-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.85rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--primary, #cc0033) 6%, transparent);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.rh-abs-preview strong {
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.rh-abs-preview .is-ok strong {
+  color: #15803d;
+}
+
+.rh-abs-preview .is-low strong {
+  color: #dc2626;
+}
+
+.rh-abs-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.rh-abs-chip {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--bg-app, #e2e8f0) 55%, transparent);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.rh-abs-chip:hover {
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+}
+
+.rh-abs-chip.is-active {
+  background: var(--primary, #cc0033);
+  color: #fff;
+}
+
+.rh-abs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+@media (min-width: 700px) {
+  .rh-abs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.rh-abs-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  min-width: 0;
+}
+
+.rh-abs-card[data-statut='wait'] {
+  background: color-mix(in srgb, #eab308 10%, var(--bg-card-soft, #fffbeb));
+}
+
+.rh-abs-card[data-statut='ok'] {
+  background: color-mix(in srgb, #22c55e 8%, var(--bg-card-soft, #f0fdf4));
+}
+
+.rh-abs-card[data-statut='ko'] {
+  background: color-mix(in srgb, #ef4444 8%, var(--bg-card-soft, #fef2f2));
+}
+
+.rh-abs-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.rh-abs-card__meta .mat {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.rh-abs-pill {
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.12rem 0.4rem;
+  border-radius: 9999px;
+}
+
+.rh-abs-pill--wait {
+  background: color-mix(in srgb, #eab308 18%, transparent);
+  color: #a16207;
+}
+
+.rh-abs-pill--ok {
+  background: color-mix(in srgb, #22c55e 18%, transparent);
+  color: #15803d;
+}
+
+.rh-abs-pill--ko {
+  background: color-mix(in srgb, #ef4444 16%, transparent);
+  color: #b91c1c;
+}
+
+.rh-abs-card__name {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text-main);
+}
+
+.rh-abs-card__type {
+  margin: 0.1rem 0 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.rh-abs-card__dates {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.rh-abs-card__dates .days {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.rh-abs-card__motif {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rh-abs-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.rh-abs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.rh-abs-btn--ok {
+  background: color-mix(in srgb, #22c55e 16%, transparent);
+  color: #15803d;
+}
+
+.rh-abs-btn--ko {
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+  color: #b91c1c;
+}
+
+.rh-abs-btn:hover {
+  filter: brightness(0.97);
+}
+
+/* Dark */
+html.dark .rh-abs-composer,
+.dark .rh-abs-composer,
+html.dark .rh-abs-link,
+.dark .rh-abs-link,
+html.dark .rh-abs-card,
+.dark .rh-abs-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .rh-abs-composer select,
+.dark .rh-abs-composer select,
+html.dark .rh-abs-composer input[type='date'],
+.dark .rh-abs-composer input[type='date'],
+html.dark .rh-abs-composer textarea,
+.dark .rh-abs-composer textarea {
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 70%, transparent);
+}
+
+html.dark .rh-abs-card[data-statut='wait'],
+.dark .rh-abs-card[data-statut='wait'] {
+  background: color-mix(in srgb, #eab308 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .rh-abs-card[data-statut='ok'],
+.dark .rh-abs-card[data-statut='ok'] {
+  background: color-mix(in srgb, #22c55e 12%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .rh-abs-card[data-statut='ko'],
+.dark .rh-abs-card[data-statut='ko'] {
+  background: color-mix(in srgb, #ef4444 12%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .rh-abs-pill--wait,
+.dark .rh-abs-pill--wait {
+  color: #fde68a;
+}
+
+html.dark .rh-abs-pill--ok,
+.dark .rh-abs-pill--ok {
+  color: #86efac;
+}
+
+html.dark .rh-abs-pill--ko,
+.dark .rh-abs-pill--ko,
+html.dark .rh-abs-preview .is-low strong,
+.dark .rh-abs-preview .is-low strong {
+  color: #fca5a5;
+}
+
+html.dark .rh-abs-preview .is-ok strong,
+.dark .rh-abs-preview .is-ok strong {
+  color: #86efac;
+}
+
+html.dark .rh-abs-btn--ok,
+.dark .rh-abs-btn--ok {
+  color: #86efac;
+}
+
+html.dark .rh-abs-btn--ko,
+.dark .rh-abs-btn--ko {
+  color: #fca5a5;
+}

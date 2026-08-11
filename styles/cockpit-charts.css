@@ -1,0 +1,506 @@
+/**
+ * Cockpit global — graphiques Soft UI modernes
+ * Tokens dark via html.dark / .dark
+ */
+
+.ck-charts {
+  --ck-ink: #17213a;
+  --ck-muted: #7c879c;
+  --ck-line: #e5e9f1;
+  --ck-soft: #f4f6fa;
+  --ck-paper: var(--bg-card, #fff);
+  --ck-accent: #ff174d;
+  --ck-radius: 7px;
+  --ck-radius-card: 12px;
+  --ck-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --ck-shadow: 0 8px 22px rgba(31, 42, 71, 0.06);
+}
+
+html.dark .ck-charts,
+.dark .ck-charts {
+  --ck-ink: #e8eef8;
+  --ck-muted: #94a3b8;
+  --ck-line: rgba(148, 163, 184, 0.18);
+  --ck-soft: rgba(148, 163, 184, 0.08);
+  --ck-paper: var(--bg-card, #071021);
+  --ck-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
+/* Cartes analytics */
+.dashboard-grid.ck-charts .dashboard-chart-card,
+.ck-charts .dashboard-chart-card {
+  border: 1px solid var(--ck-line);
+  border-radius: var(--ck-radius-card);
+  background: var(--ck-paper);
+  box-shadow: var(--ck-shadow);
+  padding: 14px 14px 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dashboard-grid.ck-charts .dashboard-chart-card:hover,
+.ck-charts .dashboard-chart-card:hover {
+  border-color: color-mix(in srgb, var(--ck-accent) 28%, var(--ck-line));
+  box-shadow: 0 10px 26px rgba(31, 42, 71, 0.09);
+}
+
+html.dark .dashboard-grid.ck-charts .dashboard-chart-card:hover,
+html.dark .ck-charts .dashboard-chart-card:hover,
+.dark .dashboard-grid.ck-charts .dashboard-chart-card:hover,
+.dark .ck-charts .dashboard-chart-card:hover {
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.ck-charts .dashboard-chart-card-header {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--ck-line);
+}
+
+.ck-charts .dashboard-chart-card-title {
+  font-size: 0.8125rem;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  color: var(--ck-ink);
+}
+
+.ck-charts .dashboard-chart-card-subtitle {
+  font-size: 10px;
+  color: var(--ck-muted);
+  margin-top: 2px;
+}
+
+.ck-charts .dashboard-chart-card-body {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rang CRM / géo / canaux : hauteur mini homogène en grille 3×2 */
+.dashboard-grid.ck-charts .dashboard-chart-card.card-span-4 {
+  display: flex;
+  flex-direction: column;
+  min-height: 168px;
+}
+
+/* Donut + légende */
+.ck-donut {
+  display: grid;
+  grid-template-columns: minmax(140px, 160px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.ck-donut__chart {
+  position: relative;
+  width: 100%;
+  max-width: 160px;
+  margin-inline: auto;
+}
+
+.ck-donut__center {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.ck-donut__center strong {
+  font: 750 1.15rem/1 var(--ck-mono);
+  letter-spacing: -0.03em;
+  color: var(--ck-ink);
+}
+
+.ck-donut__center span {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ck-muted);
+}
+
+.ck-donut__legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ck-donut__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 5px 7px;
+  border-radius: var(--ck-radius);
+  border: 1px solid transparent;
+}
+
+.ck-donut__item:hover {
+  background: var(--ck-soft);
+  border-color: var(--ck-line);
+}
+
+.ck-donut__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.ck-donut__label {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ck-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ck-donut__val {
+  flex-shrink: 0;
+  font: 750 11px/1 var(--ck-mono);
+  color: var(--ck-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Rank bars Soft UI */
+.ck-rank {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.ck-rank__row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.ck-rank__idx {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  font: 750 9px/1 var(--ck-mono);
+  background: var(--ck-soft);
+  color: var(--ck-muted);
+  border: 1px solid var(--ck-line);
+}
+
+.ck-rank__idx.is-1 {
+  background: color-mix(in srgb, #facc15 22%, transparent);
+  border-color: color-mix(in srgb, #facc15 45%, transparent);
+  color: #a16207;
+}
+
+.ck-rank__idx.is-2 {
+  background: color-mix(in srgb, #94a3b8 18%, transparent);
+  border-color: color-mix(in srgb, #94a3b8 40%, transparent);
+  color: #475569;
+}
+
+.ck-rank__idx.is-3 {
+  background: color-mix(in srgb, #fb7185 16%, transparent);
+  border-color: color-mix(in srgb, #ff174d 30%, transparent);
+  color: #be123c;
+}
+
+html.dark .ck-rank__idx.is-1,
+.dark .ck-rank__idx.is-1 {
+  color: #fde68a;
+}
+
+html.dark .ck-rank__idx.is-2,
+.dark .ck-rank__idx.is-2 {
+  color: #cbd5e1;
+}
+
+html.dark .ck-rank__idx.is-3,
+.dark .ck-rank__idx.is-3 {
+  color: #fda4af;
+}
+
+.ck-rank__main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ck-rank__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ck-rank__name {
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--ck-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ck-rank__value {
+  font: 750 11px/1.2 var(--ck-mono);
+  color: var(--ck-muted);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ck-rank__track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ck-soft);
+  border: 1px solid var(--ck-line);
+  overflow: hidden;
+}
+
+.ck-rank__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  min-width: 4px;
+  transition: width 0.28s ease;
+}
+
+/* CA 7 jours — barres CSS */
+.ck-ca {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  height: 200px;
+  width: 100%;
+  min-width: 0;
+  padding-top: 4px;
+}
+
+.ck-ca__col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+
+.ck-ca__plot {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 0;
+  position: relative;
+}
+
+.ck-ca__bar {
+  width: 100%;
+  max-width: 36px;
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(180deg, #ff667f 0%, #ff174d 55%, #c91443 100%);
+  box-shadow: 0 6px 14px rgba(255, 23, 77, 0.22);
+  transition: transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
+  position: relative;
+  min-height: 4px;
+}
+
+.ck-ca__col:hover .ck-ca__bar {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+}
+
+.ck-ca__bar.is-empty {
+  background: var(--ck-soft);
+  box-shadow: none;
+  border: 1px solid var(--ck-line);
+}
+
+.ck-ca__tip {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: var(--ck-ink);
+  color: #fff;
+  font: 750 9px/1.2 var(--ck-mono);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+  z-index: 2;
+}
+
+html.dark .ck-ca__tip,
+.dark .ck-ca__tip {
+  background: #e8eef8;
+  color: #0b1220;
+}
+
+.ck-ca__col:hover .ck-ca__tip {
+  opacity: 1;
+}
+
+.ck-ca__label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ck-muted);
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Machines legend Soft UI */
+.ck-machine-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ck-machine-legend button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--ck-radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ck-machine-legend button:hover,
+.ck-machine-legend button.is-active {
+  background: var(--ck-soft);
+  border-color: var(--ck-line);
+}
+
+/* Détail au survol — occupe l’espace bas (pas de tooltip flottant) */
+.ck-machine-detail {
+  margin-top: 10px;
+  min-height: 72px;
+  padding: 10px 12px;
+  border-radius: var(--ck-radius);
+  border: 1px dashed var(--ck-line);
+  background: var(--ck-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ck-machine-detail.is-filled {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--ck-accent, #ff174d) 22%, var(--ck-line));
+  background: var(--ck-paper);
+}
+
+.ck-machine-detail__hint,
+.ck-machine-detail__empty {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ck-muted);
+  text-align: center;
+}
+
+.ck-machine-detail__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  min-width: 0;
+}
+
+.ck-machine-detail__head strong {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ck-ink);
+}
+
+.ck-machine-detail__meta {
+  font-size: 11px;
+  color: var(--ck-muted);
+  margin-left: auto;
+}
+
+.ck-machine-detail__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.ck-machine-detail__list li {
+  font-size: 11px;
+  color: var(--ck-ink);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--ck-soft);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ck-machine-detail__more {
+  color: var(--ck-muted) !important;
+  background: transparent !important;
+  padding-inline: 0 !important;
+}
+
+html.dark .ck-machine-detail,
+.dark .ck-machine-detail {
+  background: rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+html.dark .ck-machine-detail.is-filled,
+.dark .ck-machine-detail.is-filled {
+  background: var(--ck-paper);
+  border-color: color-mix(in srgb, var(--ck-accent, #ff174d) 28%, transparent);
+}
+
+@media (max-width: 560px) {
+  .ck-donut {
+    grid-template-columns: 1fr;
+  }
+
+  .ck-donut__chart {
+    max-width: 180px;
+  }
+}

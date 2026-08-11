@@ -1,0 +1,339 @@
+/**
+ * ANS ORION — Modern polish 2026 (couche finale)
+ * Inspiration SaaS premium (Dribbble / Behance / Pinterest) :
+ * ombres douces multicouches, dégradés subtils, micro-interactions,
+ * profondeur légère — sans changer la structure ni les données.
+ * Radius maître : 7px (règle ANS).
+ */
+
+:root {
+  /* Ombres multicouches douces (élévation progressive) */
+  --shadow-card:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 12px rgba(15, 23, 42, 0.06),
+    0 12px 32px -12px rgba(15, 23, 42, 0.08);
+  --shadow-hover:
+    0 2px 4px rgba(15, 23, 42, 0.05),
+    0 8px 20px rgba(15, 23, 42, 0.08),
+    0 20px 44px -16px rgba(15, 23, 42, 0.12);
+  --shadow-brand:
+    0 2px 6px rgba(255, 23, 77, 0.18),
+    0 8px 22px -6px rgba(255, 23, 77, 0.28);
+  --shadow-brand-hover:
+    0 4px 10px rgba(255, 23, 77, 0.22),
+    0 14px 32px -8px rgba(255, 23, 77, 0.38);
+
+  /* Dégradés marque raffinés */
+  --gradient-brand: linear-gradient(135deg, #FF174D 0%, #C91443 100%);
+  --gradient-brand-shine: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0) 45%
+  );
+  --gradient-gold: linear-gradient(135deg, #FACC15 0%, #F59E0B 100%);
+  /* Clair uniquement — sombre redéfinit ci-dessous */
+  --gradient-surface-soft: linear-gradient(180deg, #FFFFFF 0%, #FAFBFE 100%);
+
+  /* Ring focus neutre sur champs saisie (pas de contour rouge) */
+  --focus-ring-brand: 0 0 0 2px color-mix(in srgb, #64748b 28%, transparent);
+  --focus-ring-cta: 0 0 0 3px color-mix(in srgb, var(--primary, #FF174D) 22%, transparent);
+}
+
+html.dark,
+.dark {
+  --shadow-card:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 8px 24px -12px rgba(0, 0, 0, 0.45);
+  --shadow-hover:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 12px 28px -12px rgba(0, 0, 0, 0.55);
+  /* Jamais de dégradé blanc en dark */
+  --gradient-surface-soft: none;
+}
+
+/* ══════════ Boutons primaires — dégradé + ombre marque ══════════ */
+.orion-viewport button.bg-primary:not(:disabled),
+.orion-viewport a.bg-primary,
+.orion-viewport [class*='bg-primary'].text-primary-foreground:not(:disabled):not([class*='bg-primary/']) {
+  background-image: none;
+  background-color: var(--primary, #FF174D);
+  box-shadow: var(--shadow-brand);
+  border: none;
+}
+
+.orion-viewport button.bg-primary:not(:disabled):hover,
+.orion-viewport a.bg-primary:hover {
+  background-image: none;
+  background-color: var(--primary-hover, #FF3366);
+  box-shadow: var(--shadow-brand-hover);
+  transform: translateY(-1px);
+}
+
+.orion-viewport button.bg-primary:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-brand);
+}
+
+/* ══════════ Cartes — élévation douce, sans contour noir ══════════ */
+html:not(.dark) .orion-viewport :is(
+  .orion-card,
+  .orion-card-interactive,
+  .orion-kpi-saas,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .cps-kpi-card,
+  .orion-ds-metric,
+  .ans-card-premium,
+  [data-slot='card']
+) {
+  box-shadow: var(--shadow-card);
+  background-image: var(--gradient-surface-soft);
+  border: none;
+  outline: none;
+  transition:
+    box-shadow 0.22s ease,
+    transform 0.22s ease,
+    background 0.18s ease;
+}
+
+/* Dark : fond token opaque — jamais blanc / crème */
+html.dark .orion-viewport :is(
+  .orion-card,
+  .orion-card-interactive,
+  .orion-kpi-saas,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .cps-kpi-card,
+  .orion-ds-metric,
+  .ans-card-premium,
+  [data-slot='card']
+) {
+  box-shadow: var(--shadow-card);
+  background-image: none !important;
+  background-color: var(--bg-card, #071021) !important;
+  border: none;
+  outline: none;
+  transition:
+    box-shadow 0.22s ease,
+    transform 0.22s ease,
+    background 0.18s ease;
+}
+
+.orion-viewport :is(
+  .orion-card,
+  .orion-card-interactive,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .orion-kpi-saas,
+  .ans-card-premium,
+  [data-slot='card']
+):hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  border-color: transparent;
+}
+
+html.dark .orion-viewport :is(
+  .orion-card,
+  .orion-card-interactive,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .orion-kpi-saas,
+  .ans-card-premium,
+  [data-slot='card']
+):hover {
+  background-color: var(--bg-card-soft, #0b1830) !important;
+  background-image: none !important;
+}
+
+/* KPI : liseré marque uni en haut au survol (pas de dégradé) */
+.orion-viewport :is(.orion-kpi-saas, .cps-kpi-card, .orion-ds-metric) {
+  position: relative;
+  overflow: hidden;
+}
+
+.orion-viewport :is(.orion-kpi-saas, .cps-kpi-card, .orion-ds-metric)::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--brand-primary, #cc0033);
+  background-image: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 7px 7px 0 0;
+}
+
+.orion-viewport :is(.orion-kpi-saas, .cps-kpi-card, .orion-ds-metric):hover::before {
+  opacity: 1;
+}
+
+/* ══════════ Tables — en-têtes premium + zebra subtil ══════════ */
+.orion-viewport thead th {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted, #64748B);
+  background: color-mix(in srgb, var(--bg-soft, #F8FAFC) 80%, transparent);
+}
+
+.orion-viewport tbody tr:hover {
+  background: color-mix(in srgb, var(--primary, #FF174D) 4%, var(--bg-card, #fff));
+}
+
+/* ══════════ Inputs — focus neutre (hors ANS Talk) ; erreurs = texte, pas contour rouge ══════════ */
+.orion-viewport :is(input, select, textarea):not(.talk-input):focus-visible {
+  box-shadow: var(--focus-ring-field, var(--focus-ring-brand));
+  border-color: var(--border-focus-field, color-mix(in srgb, #64748b 45%, var(--border-standard, #C0CAD8)));
+  outline: none;
+}
+
+/* ══════════ Badges statut — pastel raffiné ══════════ */
+.orion-viewport :is(.badge, .orion-status-chip, .app-filter-chip) {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  backdrop-filter: saturate(1.1);
+}
+
+/* ══════════ Modales / popovers — profondeur + blur ══════════ */
+.orion-viewport :is(
+  [role='dialog'],
+  [data-radix-popper-content-wrapper] > *
+) {
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.06),
+    0 24px 64px -16px rgba(15, 23, 42, 0.22);
+}
+
+.orion-viewport [data-state='open'][class*='overlay'],
+.orion-viewport [class*='DialogOverlay'] {
+  backdrop-filter: blur(4px) saturate(0.9);
+}
+
+/* ══════════ Sidebar — item actif avec accent dégradé ══════════ */
+.orion-sidebar-v2 [data-active='true'],
+.orion-sidebar-v2 .orion-sb-item-active {
+  position: relative;
+}
+
+.orion-sidebar-v2 :is([data-active='true'], .orion-sb-item-active)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--gradient-brand);
+}
+
+/* ══════════ Scrollbars fines élégantes ══════════ */
+.orion-viewport ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.orion-viewport ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.orion-viewport ::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text-muted, #64748B) 28%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.orion-viewport ::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--primary, #FF174D) 40%, transparent);
+  background-clip: content-box;
+}
+
+/* ══════════ Skeleton shimmer moderne ══════════ */
+@keyframes orion-shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.orion-viewport :is(.skeleton, .pta-skeleton, [data-skeleton]) {
+  position: relative;
+  overflow: hidden;
+}
+
+.orion-viewport :is(.skeleton, .pta-skeleton, [data-skeleton])::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  animation: orion-shimmer 1.6s ease-in-out infinite;
+}
+
+/* ══════════ Chiffres tabulaires — colonnes montants alignées ══════════ */
+.orion-viewport :is(
+  td.text-right,
+  th.text-right,
+  .orion-kpi-saas,
+  .cps-kpi-card,
+  .orion-ds-metric,
+  [class*='font-mono']
+) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ══════════ Apparition contenu — légère, sans translate (évite lag nav) ══════════ */
+@keyframes orion-content-enter {
+  from { opacity: 0.92; }
+  to { opacity: 1; }
+}
+
+.orion-viewport main > * {
+  animation: orion-content-enter 0.1s ease-out both;
+}
+
+/* ══════════ Liens & actions — soulignement animé ══════════ */
+.orion-viewport a.text-primary:not(.no-underline-anim) {
+  background-image: linear-gradient(var(--primary), var(--primary));
+  background-size: 0% 1.5px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.22s ease;
+}
+
+.orion-viewport a.text-primary:not(.no-underline-anim):hover {
+  background-size: 100% 1.5px;
+}
+
+/* ══════════ Empty states — plus accueillants ══════════ */
+.orion-viewport [class*='empty-state'],
+.orion-viewport .orion-empty {
+  border: 1.5px dashed color-mix(in srgb, var(--border-standard, #C0CAD8) 70%, transparent);
+  border-radius: var(--radius, 7px);
+  background: color-mix(in srgb, var(--bg-soft, #F8FAFC) 60%, transparent);
+}
+
+/* ══════════ Accessibilité mouvement ══════════ */
+@media (prefers-reduced-motion: reduce) {
+  .orion-viewport :is(
+    button.bg-primary,
+    .orion-card,
+    .dashboard-chart-card,
+    .cockpit-quick-card,
+    .orion-kpi-saas,
+    [data-slot='card'],
+    a.text-primary
+  ),
+  .orion-viewport :is(.orion-kpi-saas, .cps-kpi-card, .orion-ds-metric)::before {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .orion-viewport main > *,
+  .orion-viewport :is(.skeleton, .pta-skeleton, [data-skeleton])::after {
+    animation: none !important;
+  }
+}

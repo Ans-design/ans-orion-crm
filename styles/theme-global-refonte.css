@@ -1,0 +1,169 @@
+/**
+ * ANS ORION — Refonte globale UI (largeur, contraste, unification)
+ * Tokens métier inchangés — couche visuelle uniquement.
+ */
+
+/* ── Conteneurs wide : plus de max-width centré artificiel ── */
+.orion-viewport,
+main.orion-viewport {
+  width: 100%;
+  max-width: none;
+}
+
+.ab2-shell {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Pages admin souvent capped à 1600px — plein largeur utile */
+.ab2-shell.max-w-\[1600px\],
+.ab2-shell.max-w-\[1200px\],
+div.ab2-shell[class*='max-w-'] {
+  max-width: none !important;
+  width: 100%;
+  padding-left: clamp(0.75rem, 1.2vw, 1.25rem);
+  padding-right: clamp(0.75rem, 1.2vw, 1.25rem);
+}
+
+/* Contenu métier : paddings latéraux réduits, densifiés */
+main.orion-viewport {
+  padding-left: clamp(0.75rem, 1.5vw, 1.5rem) !important;
+  padding-right: clamp(0.75rem, 1.5vw, 1.5rem) !important;
+}
+
+@media (min-width: 1280px) {
+  main.orion-viewport {
+    padding-left: clamp(1rem, 1.25vw, 1.75rem) !important;
+    padding-right: clamp(1rem, 1.25vw, 1.75rem) !important;
+  }
+}
+
+/* ── Typographie lisibilité ── */
+.orion-viewport h1,
+.ab2-shell h1 {
+  letter-spacing: -0.02em;
+  font-weight: 750;
+  color: var(--text-main);
+}
+
+.orion-viewport .text-muted-foreground,
+.ab2-shell .text-muted-foreground {
+  color: var(--text-muted) !important;
+}
+
+/* ── Tables premium ── */
+.orion-viewport table thead th,
+.ab2-shell table thead th,
+.cps-theme table thead th,
+.cps-light table thead th {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--bg-card-elevated) 88%, var(--bg-hover));
+  border-bottom: 1px solid var(--border-standard);
+}
+
+.orion-viewport table tbody tr:hover,
+.ab2-shell table tbody tr:hover {
+  background: var(--bg-row-hover);
+}
+
+/* ── Cards / KPI densifiés ── */
+.orion-kpi-grid {
+  gap: 0.75rem !important;
+}
+
+.dashboard-chart-card,
+.ans-card-premium,
+.orion-card {
+  border-radius: var(--orion-radius);
+}
+
+/* ── Sidebar active — rouge premium ── */
+.orion-nav-item-active,
+.orion-nav-tile-active {
+  color: var(--primary) !important;
+  background: var(--bg-active-soft) !important;
+  border-color: color-mix(in srgb, var(--primary) 28%, transparent);
+}
+
+.orion-nav-item:hover {
+  background: var(--bg-hover);
+}
+
+/* ── Focus visible accessibilité ── */
+.orion-viewport a:focus-visible,
+.orion-viewport button:focus-visible,
+.ab2-shell a:focus-visible,
+.ab2-shell button:focus-visible,
+.cps-theme button:focus-visible,
+.cps-light button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--primary) 70%, var(--ans-gold-500));
+  outline-offset: 2px;
+}
+
+/* ── Badges / pills ── */
+.orion-viewport [data-badge='success'],
+.ab2-shell .badge-success {
+  color: var(--success-text);
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+}
+
+.orion-viewport [data-badge='warning'],
+.ab2-shell .badge-warning {
+  color: var(--warning-text);
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+}
+
+/* ── Topbar / cards — famille violet unifiée ── */
+.orion-cockpit-header {
+  border-bottom: 1px solid var(--border-standard);
+  backdrop-filter: blur(12px);
+}
+
+.dark .orion-cockpit-header {
+  background: color-mix(in srgb, var(--ans-bg-topbar, #040814) 92%, transparent);
+  border-bottom-color: var(--ans-border-soft, #12213D);
+}
+
+:root:not(.dark) .orion-cockpit-header {
+  background: color-mix(in srgb, var(--bg-page) 92%, transparent);
+}
+
+.dark .dashboard-chart-card,
+.dark .ans-card-premium,
+.dark .orion-card,
+.dark .cps-theme .cps-panel-surface,
+.dark .cps-theme .cps-card {
+  border-color: var(--ans-border-soft, #12213D);
+  box-shadow: var(--orion-shadow-md);
+  background: var(--ans-bg-card, #071021);
+}
+
+/* ── Harmonisation globale accents (clair + sombre) ── */
+button:not(:disabled).bg-blue-600,
+button:not(:disabled).bg-blue-500,
+button:not(:disabled).bg-indigo-600,
+a.bg-blue-600 {
+  background-color: var(--ans-primary, #FF174D) !important;
+  border-color: var(--ans-primary, #FF174D) !important;
+  color: #fff !important;
+}
+
+.dark .text-cyan-400,
+.dark .text-sky-400,
+.dark .text-blue-400 {
+  color: var(--ans-text-muted, #94A3B8) !important;
+}
+
+:root:not(.dark) .text-cyan-600,
+:root:not(.dark) .text-sky-600,
+:root:not(.dark) .text-blue-600 {
+  color: var(--ans-primary, #FF174D) !important;
+}

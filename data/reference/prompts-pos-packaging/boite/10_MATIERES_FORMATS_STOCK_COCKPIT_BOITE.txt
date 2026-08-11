@@ -1,0 +1,173 @@
+PROMPT COMPLÉMENTAIRE — MATIÈRES, FORMATS, STOCK, ADMIN ET COCKPIT — BOÎTE PERSONNALISÉE — ANS ORION
+
+Travaille sur les dépendances globales du module POS “Boîte personnalisée”.
+Ce prompt complète tous les prompts d’articles/structures de boîte.
+
+OBJECTIF :
+Garantir que les matières, les formats, le stock, l’admin, les prix, les devis, la production et le cockpit sont synchronisés avec le module Boîte personnalisée.
+
+1. MATIÈRES AUTORISÉES
+Dans Boîte personnalisée, proposer uniquement des matières supérieures à 250g.
+
+Ajouter :
+- PCB 300g, 350g, 400g
+- PCM 300g, 350g, 400g
+- Glossy / papier brillant 300g, 350g, 400g
+- Papier spécial invitation 300g, 350g, 400g
+- Carte ivoire / SBS 300g, 350g, 400g
+- FBB / carton couché packaging 300g, 350g, 400g
+- Kraft épais 300g, 350g, 400g
+
+Ne pas afficher :
+- 130g
+- 170g
+- 200g
+- 250g
+- toute matière trop fine pour boîte
+
+2. TABLE ÉPAISSEUR
+Créer une table configurable :
+- matière
+- grammage
+- épaisseur_min_mm
+- épaisseur_max_mm
+- épaisseur_defaut_mm
+- prix_m2
+- stock_disponible
+- unité_stock
+
+Valeurs par défaut :
+- 300g : 0,38 à 0,42 mm
+- 350g : 0,45 à 0,50 mm
+- 400g : 0,50 à 0,56 mm
+
+Ces valeurs doivent être modifiables dans l’admin.
+
+3. FORMATS INTERNATIONAUX
+Créer une table :
+- A4 = 210 × 297 mm
+- A3 = 297 × 420 mm
+- A2 = 420 × 594 mm
+- A1 = 594 × 841 mm
+- A0 = 841 × 1189 mm
+- 2A0 = 1189 × 1682 mm
+- 4A0 = 1682 × 2378 mm
+- personnalisé
+
+4. ALGORITHME DE CONVERSION
+Après calcul de largeur_brute_finale et hauteur_brute_finale :
+- tester tous les formats en portrait
+- tester tous les formats en paysage
+- choisir le plus petit format compatible
+- si aucun format ne convient : “Format personnalisé / grand format”
+
+5. POSES PAR FEUILLE
+Calcul :
+poses_orientation_1 = floor(format_largeur / brute_largeur) × floor(format_hauteur / brute_hauteur)
+poses_orientation_2 = floor(format_largeur / brute_hauteur) × floor(format_hauteur / brute_largeur)
+poses_par_feuille = max(poses_orientation_1, poses_orientation_2)
+
+Si poses_par_feuille = 0 :
+- afficher alerte format insuffisant
+- proposer format supérieur ou personnalisé
+
+6. SURFACE FACTURÉE
+surface_feuille = format_largeur × format_hauteur / 1 000 000
+surface_facturee_unitaire = surface_feuille / poses_par_feuille
+
+surface_brute_unitaire = brute_largeur × brute_hauteur / 1 000 000
+taux_chute = 1 - ((poses_par_feuille × surface_brute_unitaire) / surface_feuille)
+
+7. STOCK
+Le stock doit être impacté par :
+- matière
+- grammage
+- format feuille
+- surface consommée
+- quantité
+- taux de chute
+- structure de boîte
+
+Alerte avant ajout panier :
+- matière indisponible
+- grammage indisponible
+- format insuffisant
+- quantité insuffisante
+- boîte trop grande pour les formats disponibles
+
+8. PRIX
+Le prix doit prendre en compte :
+- matière
+- grammage
+- surface facturée
+- quantité
+- impression recto / recto-verso
+- finition
+- découpe
+- rainage
+- collage
+- complexité structure
+- taux de chute
+- minimum de production
+
+Ne pas hardcoder les prix dans le frontend.
+Les prix doivent venir de l’admin ou de la base.
+
+9. ADMIN
+Créer ou corriger les écrans admin :
+- matières packaging
+- grammages
+- épaisseurs
+- formats feuilles
+- prix m2
+- coefficients structure
+- marge de chute par défaut
+- bleed par défaut
+- patte de colle par défaut
+- activation/désactivation des structures
+- alertes stock
+
+10. COCKPIT
+Ajouter ou corriger les KPI :
+- consommation matière packaging
+- chute/déchet estimé
+- top structures de boîte
+- marge par type de boîte
+- alertes stock carton
+- commandes boîte en production
+- quantité produite par matière
+- quantité produite par grammage
+- commandes nécessitant validation gabarit
+
+11. DEVIS / COMMANDE / FACTURE
+Chaque ligne doit contenir un snapshot :
+- structure
+- dimensions
+- matière
+- grammage
+- épaisseur
+- formule utilisée
+- développé net
+- marge chute
+- format compatible
+- poses
+- surface facturée
+- taux chute
+- prix
+- date du calcul
+- version de formule
+
+12. TESTS
+Créer des tests pour :
+- interdiction matière ≤250g
+- conversion format
+- poses par feuille
+- surface facturée
+- stock
+- prix
+- cockpit
+- snapshot devis
+- build final
+
+RÉSULTAT ATTENDU :
+Le module Boîte personnalisée doit être fiable, synchronisé et exploitable depuis la vente jusqu’à la production et l’évaluation cockpit.

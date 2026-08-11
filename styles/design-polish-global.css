@@ -1,0 +1,205 @@
+/**
+ * ANS ORION — Design polish global
+ * Info sémantique = bleu (≠ brand rouge) · fluidité · anti-doublons titres
+ * Les alias marque → primary sont finalisés dans color-harmony.css
+ */
+
+:root,
+:root:not(.dark) {
+  --info: #2563EB;
+  --orion-info: #2563EB;
+  --ans-info: #2563EB;
+  --info-text: #1D4ED8;
+  --info-bg: color-mix(in srgb, #2563EB 12%, transparent);
+  --status-info: #2563EB;
+  --ab2-info: #2563EB;
+}
+
+.dark {
+  --info: #3B82F6;
+  --orion-info: #3B82F6;
+  --ans-info: #3B82F6;
+  --info-text: #93C5FD;
+  --info-bg: color-mix(in srgb, #3B82F6 14%, transparent);
+  --status-info: #3B82F6;
+  --ab2-info: #3B82F6;
+}
+
+/* Shell : crumb seul — le h1 page porte le titre (anti-redondance) */
+.orion-cockpit-header .orion-shell-title {
+  display: none !important;
+}
+
+/* Crumb densifié : styles dans orion-header-dense.css (11px, pas 8px tronqué) */
+
+/* Surfaces fluides */
+.orion-viewport :is(
+  .orion-card,
+  .orion-card-interactive,
+  .orion-kpi-saas,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .cps-kpi-card,
+  .orion-ds-metric,
+  [data-slot='card']
+) {
+  border-radius: var(--radius, 7px) !important;
+  transition: box-shadow 0.16s ease, background 0.16s ease, transform 0.16s ease;
+}
+
+.orion-viewport :is(
+  .orion-card,
+  .orion-card-interactive,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  [data-slot='card']
+):hover {
+  border-color: transparent;
+}
+
+/* Chips / badges : jamais pill full sauf dots avatars switches */
+.orion-viewport :is(
+  .badge,
+  .orion-status-chip,
+  .orion-surface-chip,
+  .cps-pill,
+  .app-filter-chip,
+  button.rounded-full:not([data-slot='switch']):not([role='switch']),
+  span.rounded-full.px-2,
+  span.rounded-full.px-2\.5,
+  span.rounded-full.px-3,
+  a.rounded-full.px-2
+):not(.rounded-full.w-2):not(.rounded-full.w-2\.5):not(.rounded-full.h-2):not(.w-8.h-8):not(.w-9.h-9):not(.w-10.h-10) {
+  border-radius: 7px !important;
+}
+
+/* Remap étendu soft blues (50 / 5 / 8 / 20) */
+.orion-viewport :is(
+  .bg-blue-50,
+  .bg-sky-50,
+  .bg-cyan-50,
+  .bg-indigo-50,
+  .bg-blue-500\/5,
+  .bg-sky-500\/5,
+  .bg-cyan-500\/5,
+  .bg-indigo-500\/5,
+  .bg-blue-500\/8,
+  .bg-blue-500\/20,
+  .bg-cyan-500\/20,
+  .bg-indigo-500\/20,
+  .dark\:bg-cyan-500\/10,
+  .dark\:bg-blue-500\/10,
+  .dark\:bg-cyan-950\/40,
+  .dark\:bg-indigo-950\/40
+) {
+  background-color: color-mix(in srgb, var(--primary, #FF174D) 10%, transparent) !important;
+}
+
+.orion-viewport :is(
+  .hover\:bg-blue-50:hover,
+  .hover\:bg-cyan-100:hover,
+  .hover\:ring-blue-200:hover,
+  .group-hover\:bg-cyan-100:hover,
+  .group-hover\:bg-cyan-100
+) {
+  background-color: color-mix(in srgb, var(--primary, #FF174D) 12%, transparent) !important;
+}
+
+.orion-viewport :is(
+  .text-blue-200,
+  .text-cyan-200,
+  .text-blue-700,
+  .text-cyan-700,
+  .text-indigo-700,
+  .dark\:text-cyan-300,
+  .dark\:text-cyan-400,
+  .dark\:text-blue-400,
+  .dark\:text-indigo-400
+) {
+  color: var(--primary, #FF174D) !important;
+}
+
+.orion-viewport :is(
+  .border-blue-500\/30,
+  .border-cyan-500\/30,
+  .border-indigo-500\/30,
+  .ring-blue-200,
+  .ring-cyan-500\/25,
+  .border-cyan-500\/40,
+  .border-cyan-500\/80
+) {
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 35%, transparent) !important;
+  --tw-ring-color: color-mix(in srgb, var(--primary, #FF174D) 30%, transparent) !important;
+}
+
+/* Hex bleus inline → primary */
+.orion-viewport :is(
+  [class*='bg-[#2563eb]'],
+  [class*='bg-[#3b82f6]'],
+  [class*='text-[#2563eb]'],
+  [class*='text-[#3b82f6]']
+) {
+  --tw-bg-opacity: 1;
+}
+
+.orion-viewport a[class*='bg-[#2563eb]'],
+.orion-viewport button[class*='bg-[#2563eb]'],
+.orion-viewport [class*='bg-[#2563eb]/10'],
+.orion-viewport [class*='text-[#2563eb]'] {
+  background-color: color-mix(in srgb, var(--primary, #FF174D) 12%, transparent) !important;
+  color: var(--primary, #FF174D) !important;
+}
+
+.orion-viewport button.bg-\[\#2563eb\],
+.orion-viewport [class*='bg-[#2563eb]'].text-white {
+  background-color: var(--primary, #FF174D) !important;
+  color: #fff !important;
+}
+
+/* Backoffice : brand pour CTA, info sémantique reste bleu */
+.ab2-theme,
+[data-ab2],
+.admin-backoffice,
+.cps-theme {
+  --ab2-brand: var(--primary, #FF174D);
+  --ab2-info: var(--info, #2563EB);
+  /* ne pas écraser --info avec le rouge marque */
+}
+
+/* Pricing : pas de barre gauche */
+.pta-panel,
+.pta-card,
+[class*='pta-'][class*='accent'] {
+  border-left-width: 0 !important;
+}
+
+/* Focus ring brand */
+.orion-viewport :focus-visible {
+  outline-color: var(--primary, #FF174D);
+}
+
+/* Page headers — rythme dense (pas de billboard) */
+.orion-viewport .orion-page-header,
+.orion-viewport [class*='OrionPageHeader'],
+.orion-viewport .orion-ds-page-header {
+  margin-bottom: 6px;
+  gap: 6px;
+}
+
+/* Tables — hover doux */
+.orion-viewport tbody tr {
+  transition: background 0.14s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orion-viewport :is(.orion-card, .dashboard-chart-card, .cockpit-quick-card, tbody tr) {
+    transition: none !important;
+  }
+}
+
+/* Fluidit� rendu � listes hors viewport */
+.orion-viewport .content-visibility-auto,
+.orion-viewport .bg-card.border.rounded-xl.p-4 {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 88px;
+}

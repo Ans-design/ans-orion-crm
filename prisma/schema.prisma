@@ -1,0 +1,3769 @@
+generator client {
+    provider      = "prisma-client-js"
+    output        = "../node_modules/.prisma/client"
+    binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+/// Migration progressive — Paiement.type (vague 1)
+enum PaiementType {
+  Acompte
+  Solde
+  Remboursement
+}
+
+/// Statuts ledger — FIN-02 / paiements transactionnels
+enum PaiementStatut {
+  Initie
+  En_attente
+  Valide
+  Rejete             @map("Rejeté")
+  Annule             @map("Annulé")
+  Rembourse_partiel  @map("Remboursé partiel")
+  Rembourse_total    @map("Remboursé total")
+}
+
+enum DevisStatut {
+  Brouillon
+  Envoye         @map("Envoyé")
+  En_attente     @map("En attente")
+  Accepte        @map("Accepté")
+  Refuse         @map("Refusé")
+  Expire         @map("Expiré")
+}
+
+enum FactureStatut {
+  Brouillon
+  Emise              @map("Émise")
+  Payee              @map("Payée")
+  Partiellement_payee @map("Partiellement payée")
+  Annulee            @map("Annulée")
+}
+
+enum LivraisonStatut {
+  Preparation  @map("Préparation")
+  Pret         @map("Prêt")
+  En_livraison @map("En livraison")
+  Livre        @map("Livré")
+  Retour
+}
+
+enum CommandeStatut {
+  A_planifier      @map("À planifier")
+  En_attente_stock @map("En attente stock")
+  En_production    @map("En production")
+  En_finition      @map("En finition")
+  Prete            @map("Prête")
+  Livre            @map("Livré")
+  Suspendu
+  Annulee          @map("Annulée")
+  Livree           @map("Livrée")
+  Terminee         @map("Terminée")
+  En_retard        @map("En retard")
+}
+
+enum ClientStatut {
+  Actif
+  Premium
+  VIP
+  Inactif
+  Archive          @map("Archivé")
+  Prospect
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("user")
+  /** SEC-01 — forcer changement MDP après bootstrap / reset admin. */
+  mustChangePassword Boolean @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  preferences      UserPreference[]
+  moduleOverrides  UserModuleOverride[]
+  talkMemberships  TalkConversationMember[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+model Client {
+  id          String     @id @default(cuid())
+  code        String     @unique
+  name        String
+  tel         String?
+  whatsapp    String?
+  email       String?
+  type        String?    // Entreprise, Particulier, Institution, H?tellerie, etc.
+  adresse     String?
+  ville       String?
+  canalVente      String?   // Bouche ? oreille, R?seaux sociaux, Salon?
+  canalDecouverte String?
+  canalCommande   String?   // POS, Email, WhatsApp, T?l?phone?
+  ca          String?
+  cmds        Int        @default(0)
+  statut      ClientStatut @default(Actif)
+  nif         String?
+  statNumber  String?
+  commercialName String?
+  commercialId   String?
+  categorie   String     @default("Client") // Prospect, Client, VIP
+  relanceAt   DateTime?
+  notes       String?
+  charte      String?
+  tags        String?    // JSON array string
+  archived    Boolean    @default(false)
+  archivedAt  DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  devis       Devis[]
+  commandes   Commande[]
+  factures    Facture[]
+  paiements   Paiement[]
+  livraisons  Livraison[]
+  files         FileAsset[]
+  proofs        Proof[]
+  reclamations  ClientReclamation[]
+  stockDirectSales StockDirectSale[]
+  studioBriefs     StudioBrief[]
+  cmCampaigns      CmCampaign[]
+  cmRelances       CmRelance[]
+  notificationLogs ClientNotificationLog[]
+
+  @@index([statut])
+  @@index([archived])
+  @@index([email])
+  @@index([name])
+  @@index([tel])
+  @@index([nif])
+  @@index([archived, updatedAt])
+}
+
+/** R?clamations SAV / qualit? ? CRM direction */
+model ClientReclamation {
+  id          String    @id @default(cuid())
+  clientId    String
+  client      Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  /** Lien optionnel vers une commande du client (SAV) ? nullable pour legacy. */
+  commandeId  String?
+  commande    Commande? @relation(fields: [commandeId], references: [id], onDelete: SetNull)
+  /** Employé concerné (retour client ciblé) — sinon tous les intervenants commande. */
+  employeeId  String?
+  employee    Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  subject     String
+  description String?
+  statut      String    @default("Ouverte") // Ouverte, En cours, Résolue, Clôturée
+  priorite    String    @default("Normale")  // Basse, Normale, Haute, Urgente
+  archived    Boolean   @default(false)
+  archivedAt  DateTime?
+  archivedBy  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([clientId])
+  @@index([statut])
+  @@index([commandeId])
+  @@index([employeeId])
+  @@index([archived])
+}
+
+/** Parc machines GPAO ? maintenance & charge */
+model Machine {
+  id              String    @id @default(cuid())
+  code            String    @unique
+  name            String
+  category        String    @default("impression") // impression, finition, decoupe
+  status          String    @default("ok")        // ok, running, waiting, maintenance, down
+  utilization     Int       @default(0)             // 0-100
+  nextMaintenance DateTime?
+  notes           String?
+  site            String    @default("AX0")
+  archived        Boolean   @default(false)
+  archivedAt      DateTime?
+  archivedBy      String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  maintenanceTickets MaintenanceTicket[]
+
+  @@index([status])
+  @@index([category])
+  @@index([site])
+  @@index([archived])
+}
+
+model Devis {
+  id          String       @id @default(cuid())
+  numero      String       @unique
+  clientId    String?
+  client      Client?      @relation(fields: [clientId], references: [id])
+  items       Json?        // Legacy compat
+  lignes      DevisLigne[]
+  /** Montants MGA — ariary entiers (FIN-01). */
+  sousTotal   Int          @default(0)
+  remise      Int          @default(0)
+  totalHT     Int          @default(0)
+  totalTTC    Int          @default(0)
+  statut      DevisStatut  @default(Brouillon)
+  notes       String?
+  validUntil  DateTime?
+  acceptedAt  DateTime?
+  logisticsSnapshot Json?  // Figé à l'acceptation (adresse, axe, expédition)
+  commandes   Commande[]
+  talkConversation TalkConversation?
+  archived    Boolean      @default(false)
+  archivedAt  DateTime?
+  archivedBy  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([statut])
+  @@index([clientId])
+  @@index([createdAt])
+  @@index([statut, createdAt])
+  @@index([validUntil])
+  @@index([archived])
+}
+
+model DevisLigne {
+  id                String   @id @default(cuid())
+  devisId           String
+  devis             Devis    @relation(fields: [devisId], references: [id], onDelete: Cascade)
+  articleId         String
+  articleLabel      String
+  category          String
+  configSnapshot    Json     // Full config snapshot at quote time
+  quantity          Int      @default(1)
+  unite             String   @default("ex.")
+  /** Prix / totaux MGA — ariary entiers (FIN-01). */
+  prixUnitaireAuto  Int      @default(0)
+  prixUnitaireForce Int?
+  totalForce        Int?
+  totalLigne        Int      @default(0)
+  pricingMode       String   @default("auto") // auto, force_pu, force_total
+  priceReason       String?
+  remarks           String?
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
+
+  @@index([devisId])
+}
+
+model Commande {
+  id              String     @id @default(cuid())
+  numero          String     @unique
+  clientId        String?
+  client          Client?    @relation(fields: [clientId], references: [id])
+  devisId         String?
+  devis           Devis?     @relation(fields: [devisId], references: [id])
+  article         String
+  configSnapshot  Json?      // Snapshot of configuration
+  paymentSnapshot Json?      // Figé / resynchronisé à chaque encaissement
+  qty             Int        @default(1)
+  /** Montants MGA — ariary entiers (FIN-01). */
+  total           Int        @default(0)
+  acompte         Int        @default(0)
+  reste           Int        @default(0)
+  statut          CommandeStatut @default(A_planifier)
+  avancement      Int        @default(0)
+  operateur       String?
+  dateCmd         DateTime   @default(now())
+  dateLiv         DateTime?
+  priorite        String     @default("Normal")
+  machine         String?
+  note            String?
+  site            String     @default("AX0")
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  productions     Production[]
+  factures        Facture[]
+  paiements       Paiement[]
+  livraisons      Livraison[]
+  proofs          Proof[]
+  lignes          CommandeLigne[]
+  metierTasks     MetierTask[]
+  productionDossiers ProductionDossier[]
+  studioBriefs    StudioBrief[]
+  materialWastes  MaterialWaste[]
+  talkConversations TalkConversation[]
+  blocages        CommandeBlocage[]
+  qualiteControle QualiteControle?
+  reclamations    ClientReclamation[]
+  archived        Boolean   @default(false)
+  archivedAt      DateTime?
+  archivedBy      String?
+
+  @@index([statut])
+  @@index([clientId])
+  @@index([devisId])
+  @@index([site])
+  @@index([createdAt])
+  @@index([statut, createdAt])
+  @@index([archived])
+}
+
+model CommandeBlocage {
+  id              String    @id @default(cuid())
+  commandeId      String
+  commande        Commande  @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  raison          String
+  causeDetail     String?
+  responsable     String?
+  actionAttendue  String?
+  statut          String    @default("actif") // actif | resolu
+  resolvedAt      DateTime?
+  resolvedBy      String?
+  resolveNote     String?
+  createdBy       String?
+  createdByName   String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([commandeId])
+  @@index([statut])
+}
+
+model CommandeLigne {
+  id             String    @id @default(cuid())
+  commandeId     String
+  commande       Commande  @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  articleId      String?
+  articleLabel   String
+  configSnapshot Json?
+  quantity       Int       @default(1)
+  totalLigne     Int       @default(0)
+  sortOrder      Int       @default(0)
+  createdAt      DateTime  @default(now())
+
+  @@index([commandeId])
+}
+
+// === Phase 2C: Modules M?tier ===
+
+model Production {
+  id            String            @id @default(cuid())
+  commandeId    String
+  commande      Commande          @relation(fields: [commandeId], references: [id])
+  statut        String            @default("En attente") // En attente, En cours, Termin?, Bloqu?
+  priorite      String            @default("Normal")     // Urgent, Haute, Normal, Basse
+  operateur     String?
+  machine       String?
+  dateDebut     DateTime?
+  dateFin       DateTime?
+  avancement    Int               @default(0) // 0-100
+  notes         String?
+  proofPhotoUrl String?
+  proofNote     String?
+  proofAt       DateTime?
+  proofBy       String?
+  site          String            @default("AX0")
+  etapes        ProductionEtape[]
+  metierTasks   MetierTask[]
+  dossier       ProductionDossier?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([commandeId])
+  @@index([statut])
+  @@index([site])
+}
+
+model ProductionEtape {
+  id            String      @id @default(cuid())
+  productionId  String
+  production    Production  @relation(fields: [productionId], references: [id], onDelete: Cascade)
+  nom           String      // PAO, Impression, Finition, D?coupe, Contr?le qualit?, Emballage
+  ordre         Int         @default(0)
+  statut        String      @default("? faire") // ? faire, En cours, Termin?, Saut?
+  operateur     String?
+  machine       String?
+  dateDebut     DateTime?
+  dateFin       DateTime?
+  dureeMin      Int?        // Dur?e estim?e en minutes
+  notes         String?
+  createdAt     DateTime    @default(now())
+
+  @@index([productionId])
+}
+
+model Facture {
+  id            String      @id @default(cuid())
+  numero        String      @unique
+  commandeId    String?
+  commande      Commande?   @relation(fields: [commandeId], references: [id])
+  clientId      String?
+  client        Client?     @relation(fields: [clientId], references: [id])
+  lignes        Json?       // [{description, qty, pu, total}]
+  /** Montants MGA — ariary entiers (FIN-01). */
+  sousTotal     Int         @default(0)
+  remise        Int         @default(0)
+  tva           Float       @default(0)     // Taux TVA en % (pas un montant)
+  totalHT       Int         @default(0)
+  totalTTC      Int         @default(0)
+  statut        FactureStatut @default(Brouillon)
+  dateEmission  DateTime?
+  dateEcheance  DateTime?
+  notes         String?
+  /** Format d’impression : ticket (simplifié) | facture (complète) — mêmes données. */
+  printFormat   String      @default("facture")
+  paiements     Paiement[]
+  archived      Boolean     @default(false)
+  archivedAt    DateTime?
+  archivedBy    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([statut])
+  @@index([clientId])
+  @@index([commandeId])
+  @@index([createdAt])
+  @@index([dateEmission])
+  @@index([archived])
+}
+
+model Paiement {
+  id            String      @id @default(cuid())
+  numero        String      @unique
+  factureId     String?
+  facture       Facture?    @relation(fields: [factureId], references: [id])
+  commandeId    String?
+  commande      Commande?   @relation(fields: [commandeId], references: [id])
+  clientId      String?
+  client        Client?     @relation(fields: [clientId], references: [id])
+  /** Montant MGA — ariary entier (FIN-01). */
+  montant       Int         @default(0)
+  mode          String      @default("Espèces") // Espèces, Virement, Mobile Money, Chèque, Carte
+  reference     String?     // Référence du paiement (n° chèque, réf virement, etc.)
+  /** DATA-006 — clé idempotente (provider + référence + portée). Unique si renseignée. */
+  idempotencyKey String?    @unique
+  type          PaiementType @default(Acompte)
+  /** Ledger — seul Valide (et rembourse_partiel) compte dans l’acompte. */
+  statut        PaiementStatut @default(Valide)
+  datePaiement  DateTime    @default(now())
+  notes         String?
+  createdBy     String?
+  createdByName String?
+  /** Lien vers paiement d’origine (remboursement / annulation). */
+  refundOfId    String?
+  refundOf      Paiement?   @relation("PaiementRefunds", fields: [refundOfId], references: [id], onDelete: SetNull)
+  refunds       Paiement[]  @relation("PaiementRefunds")
+  cancelledAt   DateTime?
+  cancelledBy   String?
+  archived      Boolean     @default(false)
+  archivedAt    DateTime?
+  archivedBy    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([factureId])
+  @@index([commandeId])
+  @@index([clientId])
+  @@index([datePaiement])
+  @@index([reference])
+  @@index([statut])
+  @@index([refundOfId])
+  @@index([archived])
+}
+
+model Livraison {
+  id            String      @id @default(cuid())
+  numero        String      @unique
+  commandeId    String
+  commande      Commande    @relation(fields: [commandeId], references: [id])
+  clientId      String?
+  client        Client?     @relation(fields: [clientId], references: [id])
+  statut        LivraisonStatut @default(Preparation)
+  adresseLiv    String?
+  contactLiv    String?
+  telLiv        String?
+  livreur       String?
+  datePrevue    DateTime?
+  dateLivree    DateTime?
+  colisCount    Int         @default(1)
+  poidsKg       Float?
+  notes         String?
+  proofPhotoUrl String?
+  proofNote     String?
+  proofAt       DateTime?
+  archived      Boolean     @default(false)
+  archivedAt    DateTime?
+  archivedBy    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([commandeId])
+  @@index([clientId])
+  @@index([statut])
+  @@index([archived])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  userName    String?
+  action      String   // CREATE, UPDATE, DELETE, STATUS_CHANGE, ACCEPT, LOGIN
+  entity      String   // Client, Devis, Commande, Production, Facture, Paiement, Livraison
+  entityId    String?
+  entityLabel String?  // Lisible: "CMD-00012", "Client Telma"
+  details     String?  // JSON details of changes
+  oldValue    Json?    // Snapshot champs modifi?s (avant)
+  newValue    Json?    // Snapshot champs modifi?s (apr?s)
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  @@index([entity])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([entity, entityId])
+  @@index([action, createdAt])
+}
+
+/** Session caisse journali?re ? ouverture / cl?ture par caissier */
+model CashSession {
+  id            String    @id @default(cuid())
+  userId        String
+  userName      String?
+  status        String    @default("open") // open | closed
+  openingFloat  Int       @default(0)
+  closingCash   Int?
+  expectedCash  Int?
+  variance      Int?
+  totalsJson    String?   // JSON { especes, mvola, orange, airtel, virement, cheque, carte }
+  notes         String?
+  openedAt      DateTime  @default(now())
+  closedAt      DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([openedAt])
+}
+
+model Tarif {
+  id          String   @id @default(cuid())
+  articleId   String   // ID from catalogue (e.g. "fly-flyer")
+  articleLabel String
+  palier      Int      @default(1)    // Quantity tier
+  /** Prix MGA — ariary entiers (FIN-01). */
+  prixUnitaire Int     @default(0)
+  prixBase    Int?                  // Original base price for reference
+  devise      String   @default("Ar")
+  actif       Boolean  @default(true)
+  notes       String?
+  modifiePar  String?                 // Who changed it
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([articleId, palier])
+  @@index([articleId])
+  @@index([actif])
+}
+
+model UserPreference {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  String   // appearance | notifications
+  data      Json
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, category])
+}
+
+model BusinessRule {
+  id          String   @id @default(cuid())
+  family      String
+  articleId   String?
+  ruleKey     String   @unique
+  ruleName    String
+  ruleType    String   // compatibility, force_price, filter, validation, qty
+  condition   Json
+  action      Json
+  message     String?
+  priority    Int      @default(100)
+  active      Boolean  @default(true)
+  connected   Boolean  @default(true)
+  source      String?
+  version     Int      @default(1)
+  createdBy   String?
+  updatedBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([family])
+  @@index([articleId])
+  @@index([ruleType])
+  @@index([active])
+}
+
+model PriceFormula {
+  id          String   @id @default(cuid())
+  family      String
+  articleId   String
+  formulaKey  String   @unique
+  label       String
+  expression  String
+  variables   Json
+  examples    Json?
+  active      Boolean  @default(true)
+  version     Int      @default(1)
+  source      String?
+  createdBy   String?
+  updatedBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([family])
+  @@index([articleId])
+  @@index([active])
+}
+
+// === Moteur tarification dynamique (Phase 1) ? options POS, formules, paliers ===
+
+/** Mod?le d'article backoffice ? h?ritage config par d?faut */
+model ArticleTemplate {
+  id                String   @id
+  label             String
+  family            String
+  calculationType   String   @default("piece")
+  saleUnit          String   @default("pi?ce")
+  description       String   @default("")
+  defaultVariables  String   @default("[]")
+  exampleArticleIds String   @default("[]")
+  active            Boolean  @default(true)
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([family])
+  @@index([active])
+}
+
+/** Transitions workflow configurables (commande, cha?ne CRM) ? Lot 4 */
+model WorkflowTransitionRule {
+  id         String   @id @default(cuid())
+  entity     String   // commande | chain
+  fromStatut String
+  toStatut   String
+  enabled    Boolean  @default(true)
+  actionKey  String?
+  module     String?
+  label      String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([entity, fromStatut, toStatut])
+  @@index([entity, fromStatut])
+  @@index([entity, enabled])
+}
+
+/** Profil tarifaire par article catalogue ? m?tadonn?es moteur dynamique */
+model ArticlePricingProfile {
+  id              String   @id @default(cuid())
+  articleId       String   @unique
+  articleLabel    String
+  family          String
+  calculationType String   @default("piece") // piece | m2 | cm2 | formula | laize | developpe
+  saleUnit        String   @default("pi?ce")
+  status          String   @default("draft") // draft | published | archived
+  /** Prix MGA — ariary entiers (FIN-01). */
+  prixBase        Int?
+  prixM2          Int?
+  prixCm2         Int?
+  qtyMin          Float?
+  active          Boolean  @default(true)
+  source          String?  @default("config-types-seed")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  optionGroups    ProductOptionGroup[]
+  discountTiers   DiscountTier[]
+  urgencyRules    UrgencyRule[]
+  materialPrices  MaterialPrice[]
+  formulaVersions FormulaVersion[]
+  stockRules      StockRule[]
+
+  @@index([family])
+  @@index([status])
+  @@index([active])
+}
+
+/** Groupe d'options POS (= ConfigField) ? flags admin tarification dynamique */
+model ProductOptionGroup {
+  id                       String   @id @default(cuid())
+  articleId                String
+  profile                  ArticlePricingProfile @relation(fields: [articleId], references: [articleId], onDelete: Cascade)
+  fieldKey                 String
+  label                    String
+  sectionTitle             String
+  sectionIcon              String?
+  fieldType                String
+  sortOrder                Int      @default(0)
+  visiblePos               Boolean  @default(true)
+  active                   Boolean  @default(true)
+  required                 Boolean  @default(false)
+  impactsPrice             Boolean  @default(false)
+  impactsStock             Boolean  @default(false)
+  impactsProduction        Boolean  @default(true)
+  isInformational          Boolean  @default(false)
+  requiresAdminValidation  Boolean  @default(false)
+  metadata                 Json?
+  source                   String?  @default("config-types-seed")
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  values ProductOptionValue[]
+
+  @@unique([articleId, fieldKey])
+  @@index([articleId])
+  @@index([visiblePos, active])
+}
+
+/** Valeur d'option (= chip / palette entry) */
+model ProductOptionValue {
+  id             String   @id @default(cuid())
+  groupId        String
+  group          ProductOptionGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  valueKey       String
+  label          String
+  sortOrder      Int      @default(0)
+  /** LEGACY hybride — dual-read/write jusqu'au retrait différé (voir docs/MONEY_MIGRATION_RUNBOOK.md). */
+  priceModifier  Float    @default(0)
+  /** Supplément MGA (fixed | piece | m2). 0 si modifierType=multiplier. */
+  priceAddonAr   Int      @default(0)
+  /** Ratio additif multiplicateur (ex. 0.1 = +10 %). 0 si type montant. */
+  priceMultiplier Float   @default(0)
+  modifierType   String   @default("fixed") // fixed | multiplier | m2 | piece
+  forcePrice     Boolean  @default(false)
+  active         Boolean  @default(true)
+  metadata       Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([groupId, valueKey])
+  @@index([groupId])
+}
+
+/** Paliers quantit? ? d?gressifs (px unitaire ou remise %) */
+model DiscountTier {
+  id              String   @id @default(cuid())
+  articleId       String
+  profile         ArticlePricingProfile @relation(fields: [articleId], references: [articleId], onDelete: Cascade)
+  /** Clé variante (format/matière/support) — "" = grille produit par défaut */
+  variantKey      String   @default("")
+  variantLabel    String?
+  minQty          Float    @default(1)
+  maxQty          Float?
+  unitPrice       Int?
+  discountPercent Float    @default(0)
+  active          Boolean  @default(true)
+  source          String?  @default("config-types-seed")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([articleId, variantKey, minQty])
+  @@index([articleId])
+  @@index([articleId, variantKey])
+}
+
+/** R?gles urgence / d?lai production */
+model UrgencyRule {
+  id                  String   @id @default(cuid())
+  articleId           String?
+  profile             ArticlePricingProfile? @relation(fields: [articleId], references: [articleId], onDelete: Cascade)
+  label               String
+  surchargePercent    Float    @default(0)
+  requiresValidation  Boolean  @default(false)
+  sortOrder           Int      @default(0)
+  active              Boolean  @default(true)
+  source              String?  @default("config-types-seed")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([articleId])
+}
+
+/** Prix mati?re / surface ? par article ou mati?re catalogue */
+model MaterialPrice {
+  id          String   @id @default(cuid())
+  articleId   String?
+  profile     ArticlePricingProfile? @relation(fields: [articleId], references: [articleId], onDelete: Cascade)
+  materialKey String?
+  grammage    String?
+  prixM2      Int?
+  prixCm2     Int?
+  scope       String   @default("article") // article | material
+  label       String?
+  active      Boolean  @default(true)
+  source      String?  @default("config-types-seed")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([materialKey])
+}
+
+/** Mati?re de base ? source de v?rit? tarification (remplace PRIX 2026). */
+model BaseMaterial {
+  id                String   @id @default(cuid())
+  /** ID simple Excel : 001, 002, 003 */
+  excelRowId        String?  @unique
+  materialKey       String   @unique
+  label             String
+  normalizedName    String?
+  displayName       String?
+  aliases           String?  @default("[]") // JSON string[]
+  family            String   @default("Petit format")
+  grammage          String?
+  thickness         String?
+  formatStandard    String?
+  widthMm           Float?
+  heightMm          Float?
+  dimensionUnit     String   @default("mm") // mm | cm | m
+  saleUnit          String   @default("pcs") // pcs | feuille | m | cm | m2 | lot | forfait
+  unitDisplay       String?  // rame | rouleau | paquet | plaque
+  unitStandard      String?  // feuille | m2 | m | pcs
+  conversionFactor  Float?   // unit?s standard par unit? affich?e
+  conversionFormula String?
+  basePrintType     String?
+  /** Prix MGA — ariary entiers (FIN-01). */
+  purchasePrice     Int?
+  /** Prix de vente du support sans impression (Ar / unit?). */
+  blankSellPrice    Int?
+  basePrintPrice    Int?
+  maxPrice          Int?
+  targetMargin      Float?
+  minMargin         Float?
+  stockItemId       String?
+  stockThreshold    Float?
+  stockLocation     String?
+  active            Boolean  @default(true)
+  visiblePos        Boolean  @default(true)
+  impactsPrice      Boolean  @default(true)
+  impactsStock      Boolean  @default(true)
+  archived          Boolean  @default(false)
+  archivedAt        DateTime?
+  /** Auteur soft-delete (corbeille). */
+  archivedBy        String?
+  source            String?
+  anomalyNotes      String?
+  /** Legacy ? migr? vers active/archived ; ne plus exposer en UI mati?res. */
+  publicationStatus String   @default("published") // draft | published
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([family, active])
+  @@index([publicationStatus])
+  @@index([archived])
+  @@index([stockItemId])
+
+  contextPrices MaterialContextPrice[]
+}
+
+/**
+ * Prix mati?re par contexte ? source unique (pas de copie ISF/GF ind?pendante).
+ * BaseMaterial = mati?re ; MaterialContextPrice = prix selon usage.
+ */
+model MaterialContextPrice {
+  id             String   @id @default(cuid())
+  excelId        String?  @unique
+  baseMaterialId String
+  material       BaseMaterial @relation(fields: [baseMaterialId], references: [id], onDelete: Cascade)
+  /** Cl? d?normalis?e pour lookup rapide POS. */
+  materialKey    String
+  /** RAW_STOCK | PRINT_SMALL_FORMAT | PRINT_GRAND_FORMAT | BLANK_MATERIAL | PHOTO_PRINT | PVC_RIGID | DIRECT_COMPONENT */
+  priceContext   String
+  /** piece | sheet | m2 | ml | a4 | kg | roll */
+  priceUnit      String   @default("a4")
+  baseFormat     String?
+  baseWidthMm    Float?
+  baseHeightMm   Float?
+  /** Prix MGA — ariary entiers (FIN-01). */
+  priceHT        Int
+  costHT         Int?
+  currency       String   @default("Ar")
+  /** Table legacy d?origine (sync bidirectionnelle). */
+  sourceTable    String?
+  sourceRowId    String?
+  active         Boolean  @default(true)
+  details        String?
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([baseMaterialId, priceContext, priceUnit, baseFormat])
+  @@index([materialKey, priceContext, active])
+  @@index([priceContext, active])
+  @@index([sourceTable, sourceRowId])
+}
+
+/**
+ * Profil de tarification article ? mode + liens mati?re/r?gle (pas de prix mati?re dupliqu?).
+ */
+model ProductPricingProfile {
+  id                     String   @id @default(cuid())
+  articleId              String   @unique
+  articleLabel           String?
+  /** DIRECT_FIXED_PRICE | MATERIAL_BASED | GRAND_FORMAT_SURFACE | A4_DIVISION | HYBRID_COMPONENTS | CUSTOM_QUOTE */
+  pricingMode            String   @default("MATERIAL_BASED")
+  baseMaterialId         String?
+  materialContextPriceId String?
+  formulaRuleCode        String?
+  directPrice            Int?
+  active                 Boolean  @default(true)
+  visiblePOS             Boolean  @default(true)
+  details                String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@index([pricingMode, active])
+  @@index([baseMaterialId])
+}
+
+/** Prix base impression sans finition ? par article / mati?re / format. */
+model BasePrintingPrice {
+  id                String   @id @default(cuid())
+  articleId         String
+  materialKey       String   @default("")
+  /** Lien optionnel vers BaseMaterial (vue ISF ? source Stock & Mati?res). */
+  baseMaterialId    String?
+  grammage          String   @default("")
+  formatLabel       String   @default("")
+  face              String   @default("recto") // recto | recto_verso
+  /** nb | quadri | null (= agnostique type, hors offset). */
+  colorMode         String   @default("")
+  /** jet | laser | offset | photocopie | null. */
+  printTechnology   String   @default("")
+  saleUnit          String   @default("pcs")
+  referenceQty      Int      @default(100)
+  basePrice         Int
+  maxSafetyPrice    Int?
+  materialCost      Int?
+  printCost         Int?
+  marginPct         Float?
+  active            Boolean  @default(true)
+  publicationStatus String   @default("draft") // draft | published
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([articleId, materialKey, grammage, formatLabel, face, colorMode, printTechnology])
+  @@index([articleId])
+  @@index([articleId, publicationStatus])
+  @@index([baseMaterialId])
+  @@index([colorMode, printTechnology])
+}
+
+/** Variables globales ou par article (TVA, marge, g?che?) */
+model PricingVariable {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  label         String
+  value         String
+  unit          String?
+  valueType     String    @default("number") // number | string | boolean
+  scope         String    @default("global") // global | article
+  articleId     String?
+  version       Int       @default(1)
+  effectiveFrom DateTime?
+  active        Boolean   @default(true)
+  source        String?   @default("config-types-seed")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([scope, articleId])
+}
+
+/** Version de formule tarifaire ? brouillon ? publi? */
+model FormulaVersion {
+  id          String   @id @default(cuid())
+  articleId   String
+  profile     ArticlePricingProfile @relation(fields: [articleId], references: [articleId], onDelete: Cascade)
+  version     Int      @default(1)
+  status      String   @default("draft") // draft | published | archived
+  label       String?
+  expression  String
+  variables   Json
+  pipeline    Json?
+  publishedAt DateTime?
+  publishedBy String?
+  source      String?  @default("config-types-seed")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([articleId, version])
+  @@index([articleId, status])
+}
+
+/** R?gles stock li?es aux options (Phase ult?rieure ? sch?ma Phase 1) */
+model StockRule {
+  id           String   @id @default(cuid())
+  articleId    String
+  profile      ArticlePricingProfile @relation(fields: [articleId], references: [articleId], onDelete: Cascade)
+  optionFieldKey String?
+  ruleType     String   @default("consumption")
+  condition    Json
+  action       Json
+  active       Boolean  @default(true)
+  source       String?  @default("config-types-seed")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([articleId])
+}
+
+model RuleVersion {
+  id          String   @id @default(cuid())
+  entityType  String
+  entityId    String
+  oldValue    Json?
+  newValue    Json
+  reason      String?
+  userId      String?
+  createdAt   DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+model SystemConfig {
+  id        String   @id @default(cuid())
+  configKey String   @unique
+  data      Json
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+}
+
+/** Snapshots versionn?s de la configuration POS/ERP (brouillon ? publi? ? rollback) */
+model ConfigVersion {
+  id            String   @id @default(cuid())
+  version       Int      @unique
+  status        String   @default("published") // published | archived
+  label         String?
+  snapshot      Json
+  changeSummary Json?
+  publishedBy   String?
+  publishedAt   DateTime @default(now())
+  createdAt     DateTime @default(now())
+
+  @@index([status])
+  @@index([publishedAt])
+}
+
+/** Compteurs atomiques pour num?rotation DEV/CMD/FAC/PAY/LIV/CLI */
+model SequenceCounter {
+  key   String @id
+  value Int    @default(0)
+}
+
+// === Phase 2: Stock, Fichiers, BAT ===
+
+model StockItem {
+  id                  String          @id @default(cuid())
+  sku                 String          @unique
+  label               String
+  category            String          @default("Papier") // Papier, Encre, Carton, Textile, Consommable, GrandFormat
+  /** vente_directe | hybride | matiere_interne | maintenance_piece */
+  stockCategory       String          @default("matiere_interne")
+  family              String?
+  subFamily           String?
+  brand               String?
+  supplierRef         String?
+  additionalCost      Int?
+  vatRate             Float?
+  machineCompatible   String?
+  sizeLabel           String?
+  capacity            String?
+  vendableDirectement Boolean         @default(false)
+  paperType           String?
+  grammage            String?
+  thickness           String?
+  color               String?
+  formatLabel         String?
+  characteristic      String?
+  unit                String          @default("feuille")
+  unitDisplay         String?
+  unitStandard        String?
+  conversionFactor    Float?
+  quantity            Float           @default(0)
+  reservedQty         Float           @default(0)
+  minQty              Float           @default(50)
+  maxQty              Float?
+  unitCost            Int?
+  salePrice           Int?
+  marginPct           Float?
+  discountPct         Float?
+  supplier            String?
+  supplierId          String?
+  supplierRecord      Supplier?       @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  actif               Boolean         @default(true)
+  archived            Boolean         @default(false)
+  skuAutoGenerated    Boolean         @default(true)
+  /** Lien Mati?res DB (BaseMaterial.id) */
+  baseMaterialId      String?
+  materialKey         String?
+  stockKind           String?         // feuille, rouleau, plaque
+  lengthM             Float?
+  widthM              Float?
+  yieldM2             Float?
+  yieldUnit           String?         // m2, A4
+  pricingMode         String          @default("auto") // auto, manual, admin_required
+  site                String          @default("AX0")
+  movements           StockMovement[]
+  reservations        StockReservation[]
+  supplierPrices      SupplierPrice[]
+  directSales         StockDirectSale[]
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  @@index([category])
+  @@index([stockCategory])
+  @@index([label])
+  @@index([paperType, grammage])
+  @@index([materialKey])
+  @@index([baseMaterialId])
+  @@index([supplierId])
+  @@index([actif])
+  @@index([archived])
+  @@index([vendableDirectement])
+  @@index([site])
+}
+
+model StockMovement {
+  id           String    @id @default(cuid())
+  stockItemId  String
+  stockItem    StockItem @relation(fields: [stockItemId], references: [id], onDelete: Cascade)
+  type         String    // entree, sortie, ajustement, reservation, retour, perte, vente_directe, production, transfert, annulation_reservation
+  quantity     Float
+  balanceAfter Float
+  reference    String?
+  commandeId   String?
+  userId       String?
+  userName     String?
+  notes        String?
+  createdAt    DateTime  @default(now())
+
+  @@index([stockItemId])
+  @@index([createdAt])
+}
+
+model FileAsset {
+  id          String   @id @default(cuid())
+  clientId    String?
+  client      Client?  @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  commandeId  String?
+  studioBriefId String?
+  studioBrief StudioBrief? @relation(fields: [studioBriefId], references: [id], onDelete: SetNull)
+  metierTaskId String?
+  metierTask   MetierTask? @relation(fields: [metierTaskId], references: [id], onDelete: SetNull)
+  name        String
+  mimeType    String
+  sizeBytes   Int
+  category    String   @default("autre") // logo, bat, source, print_ready, autre
+  versionLabel String?  // V1, V2, V3
+  statut      String   @default("Re?u") // Re?u, En v?rification, Valid? BAT, Pr?t impression?
+  proofId     String?
+  storageKey  String?  // cl? S3/R2 ? null = base64 local (demo)
+  content     String   @default("") // base64 si storageKey null
+  previewKey       String?
+  previewStatus    String   @default("none") // none, pending, ready, failed, native
+  previewMimeType  String?
+  previewContent   String   @default("") // base64 aper?u local (demo)
+  uploadedBy  String?
+  createdAt   DateTime @default(now())
+
+  @@index([clientId])
+  @@index([commandeId])
+  @@index([studioBriefId])
+  @@index([metierTaskId])
+  @@index([category])
+}
+
+/** Bon ? tirer (BAT) */
+model Proof {
+  id          String    @id @default(cuid())
+  numero      String    @unique
+  commandeId  String?
+  commande    Commande? @relation(fields: [commandeId], references: [id], onDelete: SetNull)
+  clientId    String?
+  client      Client?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  statut      String    @default("En attente") // En attente, Envoy?, Valid?, Refus?, Correction demand?e, Verrouill??
+  locked      Boolean   @default(false)
+  commentaireClient  String?
+  commentaireInterne String?
+  fileAssetId String?
+  notes       String?
+  validatedAt DateTime?
+  validatedBy String?
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  versions    ProofVersion[]
+
+  @@index([statut])
+  @@index([commandeId])
+  @@index([clientId])
+}
+
+// === Phase 3: Fournisseurs, Achats, Planning, Rapports ===
+
+model Supplier {
+  id          String          @id @default(cuid())
+  code        String          @unique
+  name        String
+  tel         String?
+  email       String?
+  adresse     String?
+  ville       String?
+  contact     String?
+  categorie   String          @default("Papier") // Papier, Encre, Textile, Consommable
+  paymentTerms String?
+  notes       String?
+  statut      String          @default("Actif") // Actif, Inactif
+  archived    Boolean         @default(false)
+  archivedAt  DateTime?
+  archivedBy  String?
+  purchaseOrders PurchaseOrder[]
+  stockItems  StockItem[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([statut])
+  @@index([categorie])
+  @@index([email])
+  @@index([tel])
+  @@index([archived])
+}
+
+model PurchaseOrder {
+  id          String              @id @default(cuid())
+  numero      String              @unique
+  supplierId  String
+  supplier    Supplier            @relation(fields: [supplierId], references: [id])
+  statut      String              @default("Brouillon") // Brouillon, Commandé, Reçu partiel, Reçu, Annulé
+  totalHT     Int                 @default(0)
+  notes       String?
+  expectedAt  DateTime?
+  receivedAt  DateTime?
+  archived    Boolean             @default(false)
+  archivedAt  DateTime?
+  archivedBy  String?
+  lignes      PurchaseOrderLine[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([supplierId])
+  @@index([statut])
+  @@index([archived])
+}
+
+model PurchaseOrderLine {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  stockItemId     String?
+  label           String
+  qty             Float         @default(1)
+  purchaseUnit    String?
+  conversionFactor Float?
+  unitCost        Int           @default(0)
+  total           Int           @default(0)
+  receivedQty     Float         @default(0)
+  sortOrder       Int           @default(0)
+
+  @@index([purchaseOrderId])
+}
+
+/** Créneaux planning atelier */
+model ProductionSlot {
+  id            String    @id @default(cuid())
+  title         String
+  productionId  String?
+  commandeId    String?
+  machine       String?
+  operateur     String?
+  startAt       DateTime
+  endAt         DateTime
+  statut        String    @default("Planifié") // Planifié, En cours, Terminé, Annulé
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([startAt])
+  @@index([statut])
+}
+
+/** Notifications in-app persist?es */
+model Notification {
+  id            String   @id @default(cuid())
+  userId        String?
+  title         String
+  message       String
+  link          String?
+  type          String   @default("info") // info, warning, success, error
+  /** Legacy global read — préférer NotificationReceipt.readAt (V14). */
+  read          Boolean  @default(false)
+  category      String?
+  sourceEventId String?
+  dedupKey      String?  @unique
+  sensitivity   String   @default("normal") // normal | sensitive | restricted
+  resourceType  String?
+  resourceId    String?
+  createdAt     DateTime @default(now())
+  receipts      NotificationReceipt[]
+
+  @@index([userId, read])
+  @@index([createdAt])
+  @@index([category])
+  @@index([resourceType, resourceId])
+}
+
+/** Lecture / accusés par destinataire — P0-01/02 V14 */
+model NotificationReceipt {
+  id             String       @id @default(cuid())
+  notificationId String
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  userId         String
+  seenAt         DateTime?
+  readAt         DateTime?
+  ackedAt        DateTime?
+  archivedAt     DateTime?
+  snoozedUntil   DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@unique([notificationId, userId])
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+}
+
+// === Fusion m?tier POS / Stock / Prix (consignes 2026-06-21) ? additif, sans supprimer l'existant ===
+
+/** Mati?res/supports normalis?s ? source Admin + import Excel */
+model MaterialCatalog {
+  id        String            @id @default(cuid())
+  key       String            @unique
+  label     String
+  family    String            @default("Petit format")
+  unit      String            @default("g/m?")
+  actif     Boolean           @default(true)
+  source    String?
+  grammages GrammageCatalog[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@index([family, actif])
+}
+
+/** Grammages compatibles par mati?re ? jamais m?lang?s avec mati?re dans les chips POS */
+model GrammageCatalog {
+  id         String          @id @default(cuid())
+  materialId String
+  material   MaterialCatalog @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  value      String
+  actif      Boolean         @default(true)
+  createdAt  DateTime        @default(now())
+
+  @@unique([materialId, value])
+  @@index([materialId])
+}
+
+/** Prix d'achat fournisseur ? s?par? des prix de vente PRIX 2026 */
+model SupplierPrice {
+  id                String     @id @default(cuid())
+  supplierName      String
+  articleRaw        String?
+  articleNormalized String
+  specification     String?
+  /** Prix MGA — ariary entiers (FIN-01). */
+  purchasePrice     Int
+  currency          String     @default("Ar")
+  yieldLinked       Float?
+  yieldUnit         String?
+  pricePerYield     Int?
+  unitPurchase      String?
+  validFrom         DateTime?
+  validUntil        DateTime?
+  moq               Float?
+  leadTimeDays      Int?
+  observation       String?
+  actif             Boolean    @default(true)
+  version           Int        @default(1)
+  stockItemId       String?
+  stockItem         StockItem? @relation(fields: [stockItemId], references: [id], onDelete: SetNull)
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  @@index([articleNormalized])
+  @@index([supplierName])
+  @@index([actif])
+}
+
+/** Prix de vente POS ? import PRIX 2026 (1140 lignes), ?ditable via ANS_PRICE_STORE */
+model SalePrice2026 {
+  id                String   @id @default(cuid())
+  sourceId          String?  @unique
+  familyPos         String?
+  productNormalized String
+  section           String?
+  format            String?
+  dimensions        String?
+  material          String?
+  grammage          String?
+  technology        String?
+  face              String?
+  qtyTier           String?
+  /** Valeur PRIX 2026 d'origine (r?f?rence import) */
+  sourcePriceAr     Int?
+  /** Valeur active ?dit?e admin ? lue par le POS */
+  salePriceAr       Int?
+  adminModified     Boolean  @default(false)
+  modifiedBy        String?
+  editComment       String?
+  priceType         String   @default("auto")
+  comment           String?
+  posStatus         String   @default("active")
+  articleId         String?
+  actif             Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([productNormalized])
+  @@index([articleId])
+  @@index([actif, priceType])
+  @@index([adminModified])
+}
+
+/** Historique modifications tarifaires ANS_PRICE_STORE */
+model PriceHistory {
+  id         String   @id @default(cuid())
+  entityType String
+  entityId   String
+  field      String
+  oldValue   String?
+  newValue   String?
+  changedBy  String?
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+/** R?servation stock ? disponible = quantity - reservedQty */
+model StockReservation {
+  id          String    @id @default(cuid())
+  stockItemId String
+  stockItem   StockItem @relation(fields: [stockItemId], references: [id], onDelete: Cascade)
+  commandeId  String?
+  devisId     String?
+  quantity    Float
+  unit        String?
+  status      String    @default("active")
+  createdAt   DateTime  @default(now())
+  releasedAt  DateTime?
+
+  @@index([stockItemId, status])
+  @@index([commandeId])
+}
+
+/** Anomalies import Excel ? tra?ables dans Admin Control */
+model ImportAnomaly {
+  id        String   @id @default(cuid())
+  sheet     String
+  ref       String?
+  severity  String   @default("warning")
+  message   String
+  decision  String?
+  resolved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([sheet, resolved])
+}
+
+/** Messages internes ?quipe ? fil d'actualit? ANS Orion */
+model TeamMessage {
+  id         String   @id @default(cuid())
+  authorId   String?
+  authorName String
+  authorRole String?
+  content    String
+  pinned     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  replies    TeamMessageReply[]
+
+  @@index([createdAt])
+  @@index([pinned])
+}
+
+model TeamMessageReply {
+  id         String      @id @default(cuid())
+  messageId  String
+  message    TeamMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  authorId   String?
+  authorName String
+  content    String
+  createdAt  DateTime    @default(now())
+
+  @@index([messageId])
+}
+
+/** Suggestions & id?es d'am?lioration ? ?quipe */
+model TeamSuggestion {
+  id         String   @id @default(cuid())
+  authorId   String?
+  authorName String
+  title      String
+  content    String
+  status     String   @default("En ?tude")
+  votes      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([status])
+  @@index([votes])
+}
+
+/** T?ches m?tiers GPAO ? li?es commandes/production, chronom?tre synchronis? */
+model MetierTask {
+  id             String      @id @default(cuid())
+  title          String
+  description    String?
+  type           String      @default("production")
+  status         String      @default("? faire")
+  priorite       String      @default("Normal")
+  commandeId     String?
+  commande       Commande?   @relation(fields: [commandeId], references: [id], onDelete: SetNull)
+  productionId   String?
+  production     Production? @relation(fields: [productionId], references: [id], onDelete: SetNull)
+  assigneeId     String?
+  assigneeName   String?
+  assigneeRole   String?
+  talkMessageId    String?
+  conversationId   String?
+  fileAssetId      String?
+  createdById    String?
+  createdByName  String?
+  estimatedMin   Int?
+  elapsedSec     Int         @default(0)
+  timerStartedAt DateTime?
+  timerStatus    String      @default("idle")
+  problemNote    String?
+  dueDate        DateTime?
+  completedAt    DateTime?
+  checklist      Json?
+  comments       Json?
+  evaluation     Json?
+  attachments    FileAsset[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@index([status])
+  @@index([type])
+  @@index([assigneeId])
+  @@index([commandeId])
+  @@index([dueDate])
+}
+
+/** Fiche employ? ANS Orion ? li?e optionnellement au compte User */
+model Employee {
+  id              String             @id @default(cuid())
+  userId          String?            @unique
+  matricule       String             @unique
+  firstName       String
+  lastName        String
+  poste           String
+  departement     String             @default("Production")
+  authRole        String             @default("production")
+  email           String?
+  tel             String?
+  site            String             @default("AX0")
+  statut          String             @default("Actif")
+  presenceStatut  String             @default("Absent")
+  horaireDebut    String?
+  horaireFin      String?
+  dateEmbauche    DateTime?
+  notes           String?
+  avatarColor     String?
+  bio             String?
+  station         String?
+  cantineHeure    String?            @default("12:00")
+  /** Montants MGA — ariary entiers (FIN-01). */
+  salaireBaseMGA  Int                @default(0)
+  notesFraisMGA   Int                @default(0)
+  heuresSup       Int                @default(0)
+  primeMGA        Int                @default(0)
+  congeSolde      Float              @default(12.5)
+  archived        Boolean            @default(false)
+  archivedAt      DateTime?
+  archivedBy      String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  presences       EmployeePresence[]
+  absences        EmployeeAbsence[]
+  evaluations     EmployeeEvaluation[]
+  payslips        Payslip[]
+  advances        EmployeeAdvance[]
+  equipments      Equipment[]
+  maintenanceTickets MaintenanceTicket[]
+  reclamations    ClientReclamation[]
+  materialWastes  MaterialWaste[]
+
+  @@index([departement])
+  @@index([statut])
+  @@index([presenceStatut])
+  @@index([archived])
+}
+
+/** Pointage journalier ? pr?sence / retards */
+model EmployeePresence {
+  id         String    @id @default(cuid())
+  employeeId String
+  employee   Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  date       DateTime
+  checkIn    DateTime?
+  checkOut   DateTime?
+  statut     String    @default("Pr?sent")
+  retardMin  Int       @default(0)
+  cause      String?
+  remarque   String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([employeeId, date])
+  @@index([date])
+  @@index([statut])
+}
+
+/** Demandes cong?s & absences */
+model EmployeeAbsence {
+  id         String    @id @default(cuid())
+  employeeId String
+  employee   Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  type       String    @default("Cong? pay?")
+  dateDebut  DateTime
+  dateFin    DateTime
+  statut     String    @default("En attente")
+  motif      String?
+  reviewedBy String?
+  reviewedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([employeeId])
+  @@index([statut])
+  @@index([dateDebut])
+}
+
+/** Annonces RH internes ? direction / responsables */
+model RhAnnouncement {
+  id         String    @id @default(cuid())
+  title      String
+  content    String
+  priority   String    @default("Normal")
+  authorName String
+  authorId   String?
+  pinned     Boolean   @default(false)
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([createdAt])
+  @@index([pinned])
+}
+
+/** Charges & d?penses ? finance avanc?e */
+model FinanceCharge {
+  id            String   @id @default(cuid())
+  label         String
+  category      String   @default("Exploitation")
+  amount        Int
+  dateCharge    DateTime @default(now())
+  supplierRef   String?
+  notes         String?
+  createdById   String?
+  createdByName String?
+  createdAt     DateTime @default(now())
+
+  @@index([category])
+  @@index([dateCharge])
+}
+
+/** Obligations fiscales ? ?ch?ances, d?clarations, archivage */
+model FiscalObligation {
+  id           String    @id @default(cuid())
+  type         String    @default("autre") // TVA, IRSA, CNAPS, IS, autre
+  label        String
+  periode      String
+  dateEcheance DateTime
+  montant      Int     @default(0)
+  statut       String    @default("a_preparer") // a_preparer, en_cours, depose, archive
+  notes        String?
+  documentKey  String?
+  createdBy    String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([dateEcheance])
+  @@index([statut])
+  @@index([type])
+}
+
+model StockDirectSale {
+  id          String     @id @default(cuid())
+  stockItemId String?
+  stockItem   StockItem? @relation(fields: [stockItemId], references: [id], onDelete: SetNull)
+  label       String
+  quantity    Float      @default(1)
+  /** Prix MGA — ariary entiers (FIN-01). */
+  unitPrice   Int      @default(0)
+  total       Int      @default(0)
+  clientId    String?
+  client      Client?    @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  mode        String     @default("Espèces")
+  notes       String?
+  soldByName  String?
+  soldAt      DateTime   @default(now())
+  createdAt   DateTime   @default(now())
+
+  @@index([soldAt])
+  @@index([stockItemId])
+}
+
+model ProductionDossier {
+  id             String                   @id @default(cuid())
+  commandeId     String
+  commande       Commande                 @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  productionId   String?                  @unique
+  production     Production?              @relation(fields: [productionId], references: [id], onDelete: SetNull)
+  statutGlobal   String                   @default("Nouveau")
+  priorite       String                   @default("Normal")
+  avancement     Int                      @default(0)
+  tempsEstimeMin Int                      @default(480)
+  tempsReelMin   Int                      @default(0)
+  delai          DateTime?
+  notes          String?
+  etapes         ProductionDossierEtape[]
+  incidents      ProductionIncident[]
+  talkConversation TalkConversation?
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+
+  @@unique([commandeId])
+  @@index([statutGlobal])
+}
+
+model ProductionDossierEtape {
+  id          String            @id @default(cuid())
+  dossierId   String
+  dossier     ProductionDossier @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  ordre       Int
+  nom         String
+  statut      String            @default("? faire")
+  responsable String?
+  machine     String?
+  dateDebut   DateTime?
+  dateFin     DateTime?
+  dureeMin    Int?
+  commentaire String?
+  bloque      Boolean           @default(false)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([dossierId, ordre])
+  @@index([dossierId])
+}
+
+model ProductionIncident {
+  id          String            @id @default(cuid())
+  dossierId   String
+  dossier     ProductionDossier @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  title       String
+  severity    String            @default("Moyenne")
+  statut      String            @default("Ouvert")
+  description String?
+  reportedBy  String?
+  resolvedAt  DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([dossierId])
+  @@index([statut])
+}
+
+/** Brief studio graphique ? li? commande */
+model StudioBrief {
+  id                String                  @id @default(cuid())
+  commandeId        String?
+  commande          Commande?               @relation(fields: [commandeId], references: [id], onDelete: SetNull)
+  clientId          String?
+  client            Client?                 @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  titre             String
+  briefText         String?
+  exigences         String?
+  statut            String                  @default("Nouveau")
+  assignedTo        String?
+  assignedToName    String?
+  fichiersManquants Boolean                 @default(false)
+  tempsPasseMin     Int                     @default(0)
+  notesInternes     String?
+  versions          StudioCreativeVersion[]
+  checklist         StudioPrepressCheck[]
+  fichiers          FileAsset[]
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+
+  @@unique([commandeId])
+  @@index([clientId])
+  @@index([statut])
+}
+
+model StudioCreativeVersion {
+  id          String      @id @default(cuid())
+  briefId     String
+  brief       StudioBrief @relation(fields: [briefId], references: [id], onDelete: Cascade)
+  version     String      @default("V1")
+  statut      String      @default("Brouillon")
+  commentaire String?
+  fileAssetId String?
+  sentAt      DateTime?
+  validatedAt DateTime?
+  createdBy   String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([briefId, version])
+  @@index([briefId])
+}
+
+model StudioPrepressCheck {
+  id        String      @id @default(cuid())
+  briefId   String
+  brief     StudioBrief @relation(fields: [briefId], references: [id], onDelete: Cascade)
+  ordre     Int
+  label     String
+  checked   Boolean     @default(false)
+  checkedBy String?
+  checkedAt DateTime?
+
+  @@unique([briefId, ordre])
+  @@index([briefId])
+}
+
+/** Campagnes marketing / CM */
+model CmCampaign {
+  id        String           @id @default(cuid())
+  name      String
+  platform  String           @default("Multi")
+  statut    String           @default("Brouillon")
+  dateDebut DateTime?
+  dateFin   DateTime?
+  objectif  String?
+  budget    Int?
+  clientId  String?
+  client    Client?          @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  notes     String?
+  posts     CmCampaignPost[]
+  createdBy String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([statut])
+  @@index([clientId])
+}
+
+model CmCampaignPost {
+  id          String     @id @default(cuid())
+  campaignId  String
+  campaign    CmCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  titre       String
+  contenu     String?
+  platform    String     @default("Facebook")
+  statut      String     @default("Id?e")
+  scheduledAt DateTime?
+  publishedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([campaignId])
+  @@index([statut])
+}
+
+model CmMessageTemplate {
+  id        String      @id @default(cuid())
+  name      String
+  canal     String      @default("Email")
+  category  String      @default("Commercial")
+  subject   String?
+  body      String
+  relances  CmRelance[]
+  createdAt DateTime    @default(now())
+
+  @@index([category])
+}
+
+model CmRelance {
+  id         String             @id @default(cuid())
+  clientId   String?
+  client     Client?            @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  type       String             @default("Commercial")
+  canal      String             @default("Email")
+  objet      String
+  message    String?
+  statut     String             @default("Planifi?e")
+  dueDate    DateTime?
+  sentAt     DateTime?
+  templateId String?
+  template   CmMessageTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  assignedTo String?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@index([clientId])
+  @@index([statut])
+  @@index([dueDate])
+}
+
+/** Overrides permissions module par r?le (super-admin) */
+model RoleModulePermission {
+  id        String   @id @default(cuid())
+  role      String
+  moduleId  String
+  flags     Json
+  updatedAt DateTime @updatedAt
+
+  @@unique([role, moduleId])
+  @@index([role])
+}
+
+/** Overrides permissions module par utilisateur (priorit? sur r?le) */
+model UserModuleOverride {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  moduleId  String
+  flags     Json
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, moduleId])
+  @@index([userId])
+}
+
+/** Annexes / sites ANS Design ? AX0, AX1? */
+model SiteAnnexe {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  adresse   String?
+  ville     String?
+  tel       String?
+  statut    String   @default("Actif")
+  isDefault Boolean  @default(false)
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([statut])
+}
+
+/** D?chets & pertes mati?res ? plan_matiere HTML v29 */
+model MaterialWaste {
+  id          String    @id @default(cuid())
+  commandeId  String?
+  commande    Commande? @relation(fields: [commandeId], references: [id], onDelete: SetNull)
+  /** Employé concerné par la perte — sinon intervenants commande / déclarant. */
+  employeeId  String?
+  employee    Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  matiere     String
+  quantity    Float
+  unite       String    @default("feuille")
+  cause       String
+  poste       String    @default("production")
+  notes       String?
+  declaredBy  String?
+  createdAt   DateTime  @default(now())
+
+  @@index([poste])
+  @@index([createdAt])
+  @@index([employeeId])
+}
+
+/** ?valuations performance employ?s ? adm_perf HTML v29 */
+model EmployeeEvaluation {
+  id          String   @id @default(cuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  ponctualite Int      @default(0)
+  qualite     Int      @default(0)
+  consignes   Int      @default(0)
+  period      String   @default("current")
+  notes       String?
+  evaluatedBy String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([employeeId, period])
+  @@index([employeeId])
+}
+
+/** Messages bandeau alertes configurables ? dir_ticker HTML v29 */
+model TickerMessage {
+  id        String   @id @default(cuid())
+  text      String
+  active    Boolean  @default(true)
+  priority  String   @default("normal")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+}
+
+/** Historique notifications clients ? notif_clients HTML v29 */
+model ClientNotificationLog {
+  id         String    @id @default(cuid())
+  clientId   String?
+  client     Client?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  commandeId String?
+  type       String    @default("manual")
+  canal      String    @default("WhatsApp")
+  message    String
+  statut     String    @default("Envoy?")
+  sentAt     DateTime  @default(now())
+  sentBy     String?
+
+  @@index([sentAt])
+  @@index([type])
+}
+
+/** Candidats recrutement ? pipeline ATS adm_rh */
+model RecruitCandidate {
+  id            String    @id @default(cuid())
+  fullName      String
+  posteVise     String
+  stage         String    @default("Pr?s?lection")
+  progression   Int       @default(10)
+  score         Float     @default(0)
+  skills        String?
+  avatarUrl     String?
+  notes         String?
+  interviewDate DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([stage])
+  @@index([createdAt])
+}
+
+/** Bulletin de paie ? adm_pay */
+model Payslip {
+  id          String   @id @default(cuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  period      String
+  paymentDate DateTime?
+  currency    String   @default("MGA")
+  /** Montants MGA — ariary entiers (FIN-01). */
+  brutAmount  Int      @default(0)
+  netAmount   Int      @default(0)
+  lines       Json?
+  createdAt   DateTime @default(now())
+
+  @@unique([employeeId, period])
+  @@index([period])
+}
+
+/** Avance sur salaire ? RH / Paie */
+model EmployeeAdvance {
+  id          String    @id @default(cuid())
+  employeeId  String
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  /** Montant MGA — ariary entiers (FIN-01). */
+  montant     Int
+  motif       String?
+  statut      String    @default("en_cours") // en_cours | rembourse | annule
+  dateAvance  DateTime  @default(now())
+  rembourseAt DateTime?
+  createdBy   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([employeeId])
+  @@index([statut])
+}
+
+/** Version BAT ? historique V1, V2, corrections */
+model ProofVersion {
+  id           String   @id @default(cuid())
+  proofId      String
+  proof        Proof    @relation(fields: [proofId], references: [id], onDelete: Cascade)
+  versionLabel String
+  statut       String   @default("Brouillon")
+  fileAssetId  String?
+  notes        String?
+  createdBy    String?
+  createdAt    DateTime @default(now())
+
+  @@index([proofId])
+}
+
+/** Mat?riels & ?quipements affect?s (distinct des machines production) */
+model Equipment {
+  id             String    @id @default(cuid())
+  code           String    @unique
+  name           String
+  category       String    @default("ordinateur")
+  type           String?
+  marque         String?
+  modele         String?
+  serialNumber   String?
+  etat           String    @default("disponible")
+  statut         String    @default("Actif")
+  localisation   String?
+  site           String    @default("AX0")
+  poste          String?
+  employeeId     String?
+  employee       Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  prixAchat      Int?
+  dateAchat      DateTime?
+  fournisseur    String?
+  garantieFin    DateTime?
+  derniereMaint  DateTime?
+  prochaineMaint DateTime?
+  notes          String?
+  archived       Boolean   @default(false)
+  archivedAt     DateTime?
+  archivedBy     String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  tickets        MaintenanceTicket[]
+
+  @@index([category])
+  @@index([etat])
+  @@index([employeeId])
+  @@index([site])
+  @@index([archived])
+}
+
+/** Tickets maintenance — machines & matériels */
+model MaintenanceTicket {
+  id              String     @id @default(cuid())
+  numero          String     @unique
+  type            String     @default("panne")
+  priorite        String     @default("Normale")
+  statut          String     @default("Ouvert")
+  titre           String
+  description     String?
+  machineId       String?
+  machine         Machine?   @relation(fields: [machineId], references: [id], onDelete: SetNull)
+  equipmentId     String?
+  equipment       Equipment? @relation(fields: [equipmentId], references: [id], onDelete: SetNull)
+  assigneeId      String?
+  assignee        Employee?  @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+  reportedBy      String?
+  diagnostic      String?
+  costMGA         Int?
+  impactPlanning  Boolean    @default(false)
+  resolvedAt      DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@index([statut])
+  @@index([priorite])
+  @@index([machineId])
+  @@index([equipmentId])
+}
+
+// === ANS Talk ? messagerie interne ===
+
+model TalkConversation {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // private | service | order | announcement
+  serviceKey  String?
+  commandeId  String?  @unique
+  commande    Commande? @relation(fields: [commandeId], references: [id], onDelete: SetNull)
+  devisId     String?  @unique
+  devis       Devis?   @relation(fields: [devisId], references: [id], onDelete: SetNull)
+  productionDossierId String? @unique
+  productionDossier   ProductionDossier? @relation(fields: [productionDossierId], references: [id], onDelete: SetNull)
+  description String?
+  label       String?
+  pinned      Boolean  @default(false)
+  noResponse  Boolean  @default(false)
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  members     TalkConversationMember[]
+  messages    TalkMessage[]
+  attachments TalkAttachment[]
+
+  @@index([type])
+  @@index([serviceKey])
+}
+
+model TalkConversationMember {
+  id             String           @id @default(cuid())
+  conversationId String
+  conversation   TalkConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String           @default("member")
+  lastReadAt     DateTime?
+  muted          Boolean          @default(false)
+  joinedAt       DateTime         @default(now())
+  /** Révocation explicite — membership inactive si non null (V14 P0-17). */
+  revokedAt      DateTime?
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+  @@index([userId, revokedAt])
+}
+
+model TalkMessage {
+  id              String           @id @default(cuid())
+  conversationId  String
+  conversation    TalkConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId        String?
+  senderName      String
+  senderRole      String?
+  body            String
+  replyToId       String?
+  replyTo         TalkMessage?     @relation("TalkMessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  childReplies    TalkMessage[]    @relation("TalkMessageReplies")
+  pinned          Boolean          @default(false)
+  editedAt        DateTime?
+  deletedAt       DateTime?
+  deletedById     String?
+  commandeId      String?
+  proofId         String?
+  metierTaskId    String?
+  /** Idempotency client — UNIQUE avec conversation + auteur (V14 P0-13). */
+  clientMessageId String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  reads           TalkMessageRead[]
+  reactions       TalkMessageReaction[]
+  attachments     TalkAttachment[]
+  tasks           TalkMessageTask[]
+
+  @@unique([conversationId, senderId, clientMessageId])
+  @@index([conversationId, createdAt])
+}
+
+model TalkMessageRead {
+  id        String      @id @default(cuid())
+  messageId String
+  message   TalkMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId    String
+  readAt    DateTime    @default(now())
+  acked     Boolean     @default(false)
+
+  @@unique([messageId, userId])
+  @@index([userId])
+}
+
+model TalkMessageReaction {
+  id        String      @id @default(cuid())
+  messageId String
+  message   TalkMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId    String
+  emoji     String
+  createdAt DateTime    @default(now())
+
+  @@unique([messageId, userId, emoji])
+}
+
+model TalkAttachment {
+  id               String   @id @default(cuid())
+  conversationId   String
+  conversation     TalkConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  messageId        String?
+  message          TalkMessage? @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  commandeId       String?
+  fileAssetId      String?
+  fileName         String
+  originalFileName String
+  extension        String
+  mimeType         String
+  sizeBytes        Int
+  storageKey       String?
+  previewKey       String?
+  checksumSha256   String
+  version          String   @default("V1")
+  status           String   @default("re?u")
+  uploadedById     String?
+  uploadedByName   String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  versions         TalkAttachmentVersion[]
+  downloads        TalkAttachmentDownload[]
+
+  @@index([conversationId])
+  @@index([messageId])
+  @@index([commandeId])
+}
+
+model TalkAttachmentVersion {
+  id             String         @id @default(cuid())
+  attachmentId   String
+  attachment     TalkAttachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
+  version        String
+  storageKey     String
+  checksumSha256 String
+  uploadedById   String?
+  createdAt      DateTime       @default(now())
+}
+
+model TalkAttachmentDownload {
+  id           String         @id @default(cuid())
+  attachmentId String
+  attachment   TalkAttachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
+  userId       String?
+  userName     String?
+  downloadedAt DateTime       @default(now())
+
+  @@index([attachmentId])
+}
+
+model TalkMessageTask {
+  id          String      @id @default(cuid())
+  messageId   String
+  message     TalkMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  taskId      String?
+  title       String
+  status      String      @default("? faire")
+  assignedTo  String?
+  createdById String?
+  createdAt   DateTime    @default(now())
+
+  @@index([messageId])
+}
+
+/** Contr?le qualit? ? checklist par commande */
+model QualiteControle {
+  id                 String   @id @default(cuid())
+  commandeId         String   @unique
+  commande           Commande @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  statut             String   @default("En attente contr?le")
+  checklist          Json     // [{ key, label, checked, note? }]
+  commentaire        String?
+  responsable        String?
+  cause              String?
+  actionCorrective   String?
+  cout               Int?
+  proofPhotoUrl      String?
+  controlePar        String?
+  controleAt         DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([statut])
+}
+
+// ???????????????????????????????????????????????????????????????????????????
+// Articles vente directe ? prix unitaires standards synchronis?s POS
+// ???????????????????????????????????????????????????????????????????????????
+
+model DirectSaleArticle {
+  id                    String   @id @default(cuid())
+  excelId               String?  @unique
+  name                  String
+  slug                  String   @unique
+  category              String
+  subCategory           String?
+  reference             String?
+  description           String?
+  unitPrice             Int    @default(0)
+  /** Prix article vierge (sans impression) ? module Prix articles. */
+  blankUnitPrice        Int?
+  /** Marge de gain (%) ? module Prix articles. */
+  marginPercent         Float?
+  currency              String   @default("MGA")
+  unit                  String   @default("pi?ce")
+  minQuantity           Int      @default(1)
+  maxQuantity           Int?
+  materialKey           String?
+  materialName          String?
+  defaultFormat         String?
+  defaultSize           String?
+  defaultColor          String?
+  defaultPrintFace      String?
+  isCustomizable        Boolean  @default(true)
+  allowManualPrice      Boolean  @default(false)
+  requiresQuoteIfCustom Boolean  @default(true)
+  visiblePOS            Boolean  @default(true)
+  status                String   @default("draft") // draft | published | archived
+  sortOrder             Int      @default(0)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  priceTiers DirectSalePriceTier[]
+  addons     DirectSaleAddon[]
+
+  @@index([category])
+  @@index([status])
+  @@index([visiblePOS])
+  @@index([reference])
+}
+
+model DirectSalePriceTier {
+  id              String   @id @default(cuid())
+  articleId       String
+  article         DirectSaleArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  minQty          Int      @default(1)
+  maxQty          Int?
+  discountType    String   @default("percent") // percent | fixed | unit_price
+  discountValue   Int    @default(0)
+  finalUnitPrice  Int?
+  label           String?
+  active          Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([active])
+}
+
+model DirectSaleAddon {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    DirectSaleArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  name       String
+  type       String   @default("option")
+  price      Int    @default(0)
+  unit       String   @default("pi?ce")
+  required   Boolean  @default(false)
+  active     Boolean  @default(true)
+  visiblePOS Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([articleId])
+}
+
+// ???????????????????????????????????????????????????????????????????????????
+// Goodies ? mod?les / techniques / suppl?ments / d?pendances (Admin ? POS)
+// ???????????????????????????????????????????????????????????????????????????
+
+model GoodiesArticleModel {
+  id              String    @id @default(cuid())
+  excelId         String?   @unique
+  articleId       String // gd-mug, gd-stylo?
+  typeModele      String
+  matiere         String?
+  formatDimension String?
+  widthMm         Float?
+  heightMm        Float?
+  diameterMm      Float?
+  contenance      String?
+  capacite        String?
+  interfaceUsb    String?
+  panneaux        String?
+  prixVierge      Int     @default(0)
+  unit            String    @default("pi?ce")
+  visiblePOS      Boolean   @default(true)
+  active          Boolean   @default(true)
+  details         String?
+  status          String    @default("published") // draft | published | archived
+  sortOrder       Int       @default(0)
+  /** Champ POS cible pour le chip (type, format, contenance?) */
+  fieldKey        String    @default("type")
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([articleId])
+  @@index([active])
+  @@index([visiblePOS])
+  @@index([status])
+}
+
+model GoodiesPrintingTechnique {
+  id                String    @id @default(cuid())
+  excelId           String?   @unique
+  articleId         String
+  technique         String
+  matiereCompatible String?
+  typeCompatible    String?
+  prixTechnique     Int     @default(0)
+  unit              String    @default("pi?ce")
+  visiblePOS        Boolean   @default(true)
+  active            Boolean   @default(true)
+  details           String?
+  status            String    @default("published")
+  sortOrder         Int       @default(0)
+  deletedAt         DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([articleId])
+  @@index([active])
+}
+
+model GoodiesAddon {
+  id         String    @id @default(cuid())
+  excelId    String?   @unique
+  articleId  String
+  name       String
+  type       String    @default("option")
+  price      Int     @default(0)
+  unit       String    @default("pi?ce")
+  required   Boolean   @default(false)
+  visiblePOS Boolean   @default(true)
+  active     Boolean   @default(true)
+  details    String?
+  status     String    @default("published")
+  sortOrder  Int       @default(0)
+  /** Champ POS (supplements, attache, decoupe?) */
+  fieldKey   String    @default("supplements")
+  deletedAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([articleId])
+  @@index([active])
+}
+
+model GoodiesOptionDependency {
+  id            String    @id @default(cuid())
+  excelId       String?   @unique
+  articleId     String
+  sourceField   String
+  sourceValue   String
+  targetField   String
+  /** Valeurs autoris?es s?par?es par | */
+  allowedValues String
+  action        String    @default("filter") // filter | show | hide
+  active        Boolean   @default(true)
+  details       String?
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([articleId])
+  @@index([active])
+}
+
+/**
+ * D?pendances d?options POS g?n?riques (tous articles).
+ * Ex. : Housse t?l?phone ? tailles t?l?phone ; PVC translucide ? d?sactiver verso.
+ * GoodiesOptionDependency reste pour le module Goodies (sync dual possible).
+ */
+model OptionDependency {
+  id            String    @id @default(cuid())
+  excelId       String?   @unique
+  articleId     String
+  sourceField   String
+  sourceValue   String
+  targetField   String
+  /** Valeurs autoris?es s?par?es par | */
+  allowedValues String
+  action        String    @default("filter") // filter | show | hide | disable
+  active        Boolean   @default(true)
+  details       String?
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([articleId, active])
+  @@index([articleId, sourceField, targetField])
+}
+
+/**
+ * Prix support textile vierge (pi?ce) ou prix m? (Lambahoany).
+ * Variantes = mati?re / taille / couleur ? pas d?articles ? personnalis? ? s?par?s.
+ */
+model TextileBaseSupportPrice {
+  id               String    @id @default(cuid())
+  excelId          String?   @unique
+  articleId        String
+  articleRef       String?
+  family           String    @default("Textiles")
+  typeModele       String?
+  matiere          String?
+  taille           String?
+  couleur          String?
+  prixSupportVierge Int    @default(0)
+  unit             String    @default("pi?ce") // pi?ce | m?
+  visiblePOS       Boolean   @default(true)
+  active           Boolean   @default(true)
+  status           String    @default("published") // draft | published | archived
+  details          String?
+  sortOrder        Int       @default(0)
+  deletedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([articleId])
+  @@index([active, visiblePOS])
+  @@index([status])
+  @@index([matiere, taille])
+}
+
+/** Prix marquage textile (technique ? taille ? zone). */
+model TextileMarkingPrice {
+  id             String    @id @default(cuid())
+  excelId        String?   @unique
+  technique      String
+  tailleMarquage String?
+  zoneMarquage   String?
+  formatSurface  String?
+  prixMarquage   Int     @default(0)
+  unit           String    @default("pi?ce")
+  visiblePOS     Boolean   @default(true)
+  active         Boolean   @default(true)
+  status         String    @default("published")
+  details        String?
+  sortOrder      Int       @default(0)
+  deletedAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([technique])
+  @@index([active, visiblePOS])
+  @@index([status])
+}
+
+/** Main d??uvre textile (press / pose / broderie?). articleId = * pour Tous. */
+model TextileLaborPrice {
+  id           String    @id @default(cuid())
+  excelId      String?   @unique
+  typeLabor    String
+  techniqueLiee String?
+  articleId    String    @default("*")
+  prixLabor    Int     @default(0)
+  unit         String    @default("pi?ce")
+  visiblePOS   Boolean   @default(true)
+  active       Boolean   @default(true)
+  status       String    @default("published")
+  details      String?
+  sortOrder    Int       @default(0)
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([articleId])
+  @@index([techniqueLiee])
+  @@index([active, visiblePOS])
+}
+
+/** R?gle de calcul textile par article (STANDARD ou SURFACE_M2 / Lambahoany). */
+model TextilePricingRule {
+  id                   String    @id @default(cuid())
+  excelId              String?   @unique
+  articleId            String    @unique
+  formula              String?
+  typeCalcul           String    @default("STANDARD") // STANDARD | SURFACE_M2
+  utiliseSupportVierge Boolean   @default(true)
+  utiliseMarquage      Boolean   @default(true)
+  utiliseMainOeuvre    Boolean   @default(true)
+  utiliseSurfaceM2     Boolean   @default(false)
+  exceptionLambahoany  Boolean   @default(false)
+  visiblePOS           Boolean   @default(true)
+  active               Boolean   @default(true)
+  status               String    @default("published")
+  details              String?
+  sortOrder            Int       @default(0)
+  deletedAt            DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@index([active, status])
+}
+
+/** Paliers & remises textile. */
+model TextileDiscountTier {
+  id           String    @id @default(cuid())
+  excelId      String?   @unique
+  articleId    String
+  qtyMin       Int       @default(1)
+  qtyMax       Int?
+  typeRemise   String    @default("percent") // percent | fixed | unit_price
+  valeurRemise Int     @default(0)
+  active       Boolean   @default(true)
+  status       String    @default("published")
+  details      String?
+  sortOrder    Int       @default(0)
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([articleId])
+  @@index([active, status])
+}
+
+model FinishingPrice {
+  id                 String   @id @default(cuid())
+  excelId            String?  @unique
+  name               String
+  category           String
+  compatibleFamilies String?
+  unit               String   @default("pi?ce")
+  /** Prix MGA — ariary entiers (FIN-01). */
+  unitPrice          Int      @default(0)
+  minQuantity        Int      @default(1)
+  formulaType        String   @default("fixed") // fixed | per_unit | per_m2 | per_sheet
+  active             Boolean  @default(true)
+  visiblePOS         Boolean  @default(true)
+  reference          String?
+  details            String?
+  status             String   @default("draft")
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([category])
+  @@index([active])
+  @@index([reference])
+}
+
+model GrandFormatPricing {
+  id                   String   @id @default(cuid())
+  excelId              String?  @unique
+  name                 String
+  materialKey          String?
+  materialName         String?
+  /** Lien optionnel vers BaseMaterial (fusion logique). */
+  baseMaterialId       String?
+  unit                 String   @default("m?")
+  basePrice            Int?
+  pricePerM2           Int?
+  pricePerLinearMeter  Int?
+  laize                Float?
+  /** Laizes multiples en m?tres, JSON number[] ex. [1.2, 2.4]. */
+  laizesJson           String?
+  minWidth             Float?
+  maxWidth             Float?
+  minHeight            Float?
+  maxHeight            Float?
+  marginRule           String?
+  active               Boolean  @default(true)
+  visiblePOS           Boolean  @default(true)
+  reference            String?
+  details              String?
+  status               String   @default("draft")
+  sortOrder            Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  widths               GrandFormatMaterialWidth[]
+
+  @@index([materialKey])
+  @@index([baseMaterialId])
+  @@index([active])
+  @@index([reference])
+}
+
+/** Laizes disponibles par mati?re Grand Format (modifiable Admin). */
+model GrandFormatMaterialWidth {
+  id                   String   @id @default(cuid())
+  excelId              String?  @unique
+  materialKey          String?
+  materialName         String?
+  grandFormatPricingId String?
+  pricing              GrandFormatPricing? @relation(fields: [grandFormatPricingId], references: [id], onDelete: Cascade)
+  laizeM               Float
+  laizeCm              Float
+  active               Boolean  @default(true)
+  visiblePOS           Boolean  @default(true)
+  sortOrder            Int      @default(0)
+  comment              String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([materialKey])
+  @@index([grandFormatPricingId])
+  @@index([active])
+}
+
+/** Marges d?coupe / risque / chute A0?A5 (modifiable Admin). */
+model GrandFormatCuttingMargin {
+  id            String   @id @default(cuid())
+  excelId       String?  @unique
+  formatCode    String   @unique
+  surfaceRatio  Float
+  marginPercent Float    @default(0)
+  motif         String?
+  active        Boolean  @default(true)
+  comment       String?
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([active])
+}
+
+model GraphicDesignService {
+  id               String   @id @default(cuid())
+  excelId          String?  @unique
+  name             String
+  category         String
+  serviceType      String?
+  unit             String   @default("prestation")
+  unitPrice        Int    @default(0)
+  estimatedTime    String?
+  revisionIncluded Int      @default(0)
+  active           Boolean  @default(true)
+  visiblePOS       Boolean  @default(true)
+  reference        String?
+  details          String?
+  status           String   @default("draft")
+  sortOrder        Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([category])
+  @@index([active])
+  @@index([reference])
+}
+
+/** Gabarits / formules surface Packaging ? Bo?te personnalis?e */
+model PackagingBoxTemplateRule {
+  id                     String   @id @default(cuid())
+  excelId                String?  @unique
+  typeBoite              String
+  formuleKey             String   @default("straight_tuck")
+  formuleSurface         String?
+  coeffRabats            Float    @default(1)
+  coeffLanguettes        Float    @default(1)
+  coeffCollage           Float    @default(1)
+  margeDechetsPct        Float    @default(10)
+  surfaceManuelleAllowed Boolean  @default(false)
+  actif                  Boolean  @default(true)
+  visiblePos             Boolean  @default(true)
+  commentaire            String?
+  sortOrder              Int      @default(0)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@index([typeBoite])
+  @@index([actif])
+}
+
+/** Marges & b?n?fices Packaging */
+model PackagingMarginRule {
+  id              String   @id @default(cuid())
+  excelId         String?  @unique
+  scope           String   @default("global") // global | article | typeBoite
+  articleId       String?
+  typeBoite       String?
+  margeDechetsPct Float    @default(10)
+  beneficePct     Float    @default(30)
+  margeDepensePct Float    @default(10)
+  arrondiMode     String   @default("exact") // exact | ceil_a4 | ceil_iso_format
+  actif           Boolean  @default(true)
+  visiblePos      Boolean  @default(true)
+  commentaire     String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([scope])
+  @@index([articleId])
+  @@index([actif])
+}
+
+/** R?gles de calcul Packaging (source ISF / finitions) */
+model PackagingPricingRule {
+  id                   String   @id @default(cuid())
+  excelId              String?  @unique
+  articleId            String   @default("pkg-boite")
+  typeCalcul           String   @default("surface_isf_finitions")
+  formule              String?
+  sourceImpression     String   @default("impression_sf")
+  sourceFinitions      String   @default("finishing_price")
+  utiliseSurface       Boolean  @default(true)
+  utiliseBenefice      Boolean  @default(true)
+  utiliseMargeDepense  Boolean  @default(true)
+  actif                Boolean  @default(true)
+  visiblePos           Boolean  @default(true)
+  commentaire          String?
+  sortOrder            Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([actif])
+}
+
+/** Gabarits Sac en papier personnalis? */
+model PaperBagTemplateRule {
+  id              String   @id @default(cuid())
+  excelId         String?  @unique
+  typeSac         String
+  formuleSurface  String?
+  coefficientFond Float    @default(0.85)
+  rabatHautMm     Float    @default(30)
+  patteCollageMm  Float    @default(20)
+  margeDechetsPct Float    @default(10)
+  actif           Boolean  @default(true)
+  visiblePos      Boolean  @default(true)
+  commentaire     String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([typeSac])
+  @@index([actif])
+}
+
+/** Marges Sac papier */
+model PaperBagMarginRule {
+  id              String   @id @default(cuid())
+  excelId         String?  @unique
+  scope           String   @default("global")
+  articleId       String?  @default("pkg-sac")
+  typeSac         String?
+  margeDechetsPct Float    @default(10)
+  beneficePct     Float    @default(30)
+  margeDepensePct Float    @default(10)
+  arrondiMode     String   @default("exact")
+  actif           Boolean  @default(true)
+  visiblePos      Boolean  @default(true)
+  commentaire     String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([scope])
+  @@index([articleId])
+  @@index([actif])
+}
+
+/** Accessoires Sac papier */
+model PaperBagAccessoryPrice {
+  id          String   @id @default(cuid())
+  excelId     String?  @unique
+  accessoire  String
+  type        String?
+  reference   String?
+  unite       String   @default("piece")
+  prixHt      Int
+  visiblePos  Boolean  @default(true)
+  actif       Boolean  @default(true)
+  commentaire String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([accessoire])
+  @@index([actif])
+}
+
+/** R?gles calcul Sac papier */
+model PaperBagPricingRule {
+  id                   String   @id @default(cuid())
+  excelId              String?  @unique
+  articleId            String   @default("pkg-sac")
+  typeCalcul           String   @default("surface_isf_finitions_accessoires")
+  formule              String?
+  sourceImpression     String   @default("impression_sf")
+  sourceFinitions      String   @default("finishing_price")
+  utiliseSurface       Boolean  @default(true)
+  utiliseAccessoires   Boolean  @default(true)
+  utiliseBenefice      Boolean  @default(true)
+  utiliseMargeDepense  Boolean  @default(true)
+  actif                Boolean  @default(true)
+  visiblePos           Boolean  @default(true)
+  commentaire          String?
+  sortOrder            Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([actif])
+}
+
+/** Doypack vierge ? liste Admin */
+model DoypackBlankPrice {
+  id              String   @id @default(cuid())
+  excelId         String?  @unique
+  articleId       String   @default("pkg-doypack")
+  matiere         String
+  formatLabel     String
+  largeurMm       Float
+  hauteurMm       Float
+  souffletMm      Float    @default(0)
+  contenance      String?
+  couleur         String?
+  typeFermeture   String?
+  fenetre         Boolean  @default(false)
+  prixViergeHt    Int
+  unite           String   @default("piece")
+  stock           Float?
+  seuilAlerte     Float?
+  visiblePos      Boolean  @default(true)
+  actif           Boolean  @default(true)
+  statut          String   @default("actif")
+  commentaire     String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([matiere])
+  @@index([actif])
+  @@index([visiblePos])
+}
+
+/** R?gles impression vinyle Doypack */
+model DoypackPrintRule {
+  id                  String   @id @default(cuid())
+  excelId             String?  @unique
+  articleId           String   @default("pkg-doypack")
+  typeImpression      String
+  matiereImpression   String
+  sourcePrix          String   @default("grand_format")
+  uniteSource         String   @default("m2")
+  prixMinimum         Int    @default(0)
+  surfaceMinimumM2    Float    @default(0)
+  utiliseLaize        Boolean  @default(false)
+  utiliseArrondi      Boolean  @default(true)
+  visiblePos          Boolean  @default(true)
+  actif               Boolean  @default(true)
+  commentaire         String?
+  sortOrder           Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([actif])
+}
+
+/** Pose / application Doypack */
+model DoypackApplicationRule {
+  id           String   @id @default(cuid())
+  excelId      String?  @unique
+  articleId    String   @default("pkg-doypack")
+  typePose     String
+  condition    String?
+  unite        String   @default("piece")
+  prixHt       Int
+  sourceFinition String?
+  visiblePos   Boolean  @default(true)
+  actif        Boolean  @default(true)
+  commentaire  String?
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([actif])
+}
+
+/** Main d'?uvre Doypack */
+model DoypackLaborRule {
+  id          String   @id @default(cuid())
+  excelId     String?  @unique
+  typeManoeuvre String
+  condition   String?
+  prixHt      Int    @default(0)
+  unite       String   @default("piece")
+  visiblePos  Boolean  @default(true)
+  actif       Boolean  @default(true)
+  commentaire String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([actif])
+}
+
+/** ?tiquette pr?d?coup?e ? prix standard 50?50 cm */
+model PrecutLabelStandardPrice {
+  id             String   @id @default(cuid())
+  excelId        String?  @unique
+  articleId      String   @default("pkg-etiquette")
+  typeVinyle     String
+  formatStandard String   @default("50?50 cm")
+  largeurCm      Float    @default(50)
+  hauteurCm      Float    @default(50)
+  surfaceM2      Float    @default(0.25)
+  prixStandardHt Int
+  unite          String   @default("piece")
+  visiblePos     Boolean  @default(true)
+  actif          Boolean  @default(true)
+  statut         String   @default("actif")
+  commentaire    String?
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([typeVinyle])
+  @@index([actif])
+}
+
+/** Gobelets vierges */
+model CupBlankPrice {
+  id              String   @id @default(cuid())
+  excelId         String?  @unique
+  articleId       String   @default("pkg-gobelet")
+  typeGobelet     String
+  matiere         String?
+  contenance      String?
+  formatModele    String?
+  couleur         String?
+  diametreHautMm  Float?
+  diametreBasMm   Float?
+  hauteurMm       Float?
+  prixViergeHt    Int
+  unite           String   @default("piece")
+  stock           Float?
+  seuilAlerte     Float?
+  visiblePos      Boolean  @default(true)
+  actif           Boolean  @default(true)
+  statut          String   @default("actif")
+  commentaire     String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([typeGobelet])
+  @@index([actif])
+}
+
+/** Techniques impression gobelet */
+model CupPrintingRule {
+  id               String   @id @default(cuid())
+  excelId          String?  @unique
+  technique        String
+  sourcePrix       String   @default("grand_format")
+  unite            String   @default("m2")
+  prixHt           Int    @default(0)
+  prixMinimum      Int    @default(0)
+  surfaceMinimumM2 Float    @default(0)
+  visiblePos       Boolean  @default(true)
+  actif            Boolean  @default(true)
+  commentaire      String?
+  sortOrder        Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([technique])
+  @@index([actif])
+}
+
+/** Imposition Hangtag */
+model HangtagImpositionRule {
+  id                String   @id @default(cuid())
+  excelId           String?  @unique
+  articleId         String   @default("pkg-hangtag")
+  formatFini        String
+  largeurMm         Float
+  hauteurMm         Float
+  formatFeuilleBase String   @default("A4")
+  piecesParFeuille  Int?
+  rotationAutorisee Boolean  @default(true)
+  margeMm           Float    @default(3)
+  espaceMm          Float    @default(2)
+  visiblePos        Boolean  @default(true)
+  actif             Boolean  @default(true)
+  commentaire       String?
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([formatFini])
+  @@index([actif])
+}
+
+/** Accessoires Hangtag (cordelette, ?illet?) */
+model HangtagAccessoryPrice {
+  id          String   @id @default(cuid())
+  excelId     String?  @unique
+  accessoire  String
+  type        String?
+  reference   String?
+  unite       String   @default("piece")
+  prixHt      Int
+  visiblePos  Boolean  @default(true)
+  actif       Boolean  @default(true)
+  commentaire String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([accessoire])
+  @@index([actif])
+}
+
+/** Demandes d'acc?s publiques (page login) ? workflow admin */
+model AccessRequest {
+  id          String    @id @default(cuid())
+  nom         String
+  email       String
+  telephone   String?
+  matricule   String?
+  roleDemande String?
+  service     String?
+  message     String?
+  attachmentName    String?
+  attachmentContent String? // base64 d?mo locale
+  statut      String    @default("envoye") // envoye | en_attente | accepte | refuse | traitee
+  reviewedBy  String?
+  reviewedAt  DateTime?
+  reviewNote  String?
+  userId      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([statut])
+  @@index([email])
+  @@index([createdAt])
+}
+
+// ???????????????????????????????????????????????????????????????????????????
+// R?GLES M?TIER PRIX ? formats papier, faces, ?quivalences, grammage ?pais
+// ???????????????????????????????????????????????????????????????????????????
+
+/** Param?tres formats papier (A4 base, d?coupe, suppl?ments) ? Admin/Excel. */
+model PaperFormatRule {
+  id          String   @id @default(cuid())
+  excelId     String?  @unique
+  formatCode  String   @unique
+  widthMm     Float
+  heightMm    Float
+  ratioA4     Float    @default(1)
+  supplementAr Int   @default(0)
+  cutAr       Int    @default(0)
+  formula     String?
+  active      Boolean  @default(true)
+  details     String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active])
+  @@index([sortOrder])
+}
+
+/** R?gles recto/verso par support / mati?re. */
+model SupportFaceRule {
+  id                String   @id @default(cuid())
+  excelId           String?  @unique
+  supportKey        String   @unique
+  supportLabel      String
+  rectoAllowed      Boolean  @default(true)
+  versoAllowed      Boolean  @default(true)
+  rectoVersoAllowed Boolean  @default(true)
+  reason            String?
+  active            Boolean  @default(true)
+  details           String?
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([active])
+}
+
+/** ?quivalences mati?res / grammages (prix d?riv? d'une r?f?rence). */
+model MaterialPriceEquivalence {
+  id                 String   @id @default(cuid())
+  excelId            String?  @unique
+  materialKey        String
+  materialLabel      String
+  grammageMin        Int      @default(0)
+  grammageMax        Int?
+  referenceMaterial  String
+  referenceGrammage  String?
+  supplementAr       Int    @default(0)
+  identicalPrice     Boolean  @default(false)
+  /** Groupe prix partag? (ex. papier_personnalise : satin?/toile/invitation). */
+  priceGroup         String?
+  active             Boolean  @default(true)
+  details            String?
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([materialKey, active])
+  @@index([priceGroup])
+  @@index([active])
+}
+
+/** R?gles papier ?pais / contre-coll?. */
+model ThickPaperRule {
+  id                   String   @id @default(cuid())
+  excelId              String?  @unique
+  supportType          String   @default("papier")
+  grammageMin          Int
+  grammageMax          Int?
+  formula              String
+  referencePriceKey    String?
+  supplementAr         Int    @default(0)
+  blankMaterialRequired Boolean @default(false)
+  blankLayers          Int      @default(0)
+  finishingRequired    String?
+  active               Boolean  @default(true)
+  details              String?
+  sortOrder            Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([grammageMin, grammageMax])
+  @@index([active])
+}
+
+/** Mati?res vierges / prix achat stock (sans impression). */
+model BlankMaterialPrice {
+  id            String   @id @default(cuid())
+  excelId       String?  @unique
+  name          String
+  grammage      String?
+  formatBase    String?  @default("A4")
+  widthMm       Float?
+  heightMm      Float?
+  /** Prix MGA — ariary entiers (FIN-01). */
+  purchasePrice Int      @default(0)
+  purchaseUnit  String   @default("feuille")
+  supplier      String?
+  stockItemId   String?
+  materialKey   String?
+  active        Boolean  @default(true)
+  details       String?
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([active])
+  @@index([materialKey])
+  @@index([grammage])
+}
+
+/** Suppl?ments techno impression (ex. Laser = Jet + 100 Ar) ? Admin/Excel. */
+model PrintTechnologyRule {
+  id              String   @id @default(cuid())
+  excelId         String?  @unique
+  ruleCode        String   @unique
+  supportScope    String   @default("offset_standard") // offset_standard | all | material_key
+  printType       String   @default("quadri") // nb | quadri | any
+  technology      String   // jet | laser | offset | photocopie
+  baseTechnology  String?  // jet ? laser
+  supplementAr    Int    @default(0)
+  active          Boolean  @default(true)
+  details         String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([active])
+  @@index([supportScope, technology])
+}
+
+/** ?quivalences services (Impression = Photocopie). */
+model ServicePriceEquivalence {
+  id                 String   @id @default(cuid())
+  excelId            String?  @unique
+  serviceKey         String
+  serviceLabel       String
+  equivalentKey      String
+  equivalentLabel    String
+  priceRule          String   @default("same_price") // same_price | supplement
+  supplementAr       Int    @default(0)
+  active             Boolean  @default(true)
+  details            String?
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([serviceKey, equivalentKey])
+  @@index([active])
+}
+
+/** Param?tres prix Carnet autocopiant / Facturier ? Admin/Excel (pas de hardcode POS). */
+model CarnetAutocopiantParam {
+  id                      String   @id @default(cuid())
+  excelId                 String?  @unique
+  code                    String   @unique @default("default")
+  label                   String   @default("Carnet autocopiant / Facturier")
+  /** Prix A4 recto papier autocopiant ? niveaux de gris / N&B */
+  prixA4Nb                Int    @default(400)
+  /** Prix A4 recto papier autocopiant ? quadri */
+  prixA4Quadri            Int    @default(600)
+  numerotationArPerPage   Int    @default(50)
+  reliureAr               Int    @default(2000)
+  perforationArPerA4      Int    @default(50)
+  /** Couverture / dos 300G recto A3 ? une fois par carnet */
+  couverture300gA3RectoAr Int    @default(0)
+  wastePct                Float    @default(5)
+  active                  Boolean  @default(true)
+  visiblePOS              Boolean  @default(true)
+  details                 String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@index([active])
+}
+
+/** Formats tampon ? prix fixe par type/dimension (vente directe). */
+model StampFormatPrice {
+  id                String   @id @default(cuid())
+  excelId           String?  @unique
+  articleLabel      String   @default("Tampon")
+  stampType         String   @default("Tampon standard")
+  formatLabel       String
+  widthMm           Float
+  heightMm          Float
+  reference         String?
+  unitPrice         Int    @default(0)
+  unit              String   @default("pi?ce")
+  allowCustomFormat Boolean  @default(true)
+  visiblePOS        Boolean  @default(true)
+  status            String   @default("published")
+  details           String?
+  sortOrder         Int      @default(0)
+  active            Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([active, status])
+  @@index([stampType])
+  @@index([widthMm, heightMm])
+}
+
+/** Param?tres Photobook (prix page A4 + couvertures). */
+model PhotobookPricingParam {
+  id                     String   @id @default(cuid())
+  excelId                String?  @unique
+  code                   String   @unique @default("default")
+  label                  String   @default("Photobook")
+  prixPageA4             Int    @default(4000)
+  softCoverSupplement    Int    @default(0)
+  rigidCoverSupplement   Int    @default(20000)
+  leatherCoverSupplement Int    @default(20000)
+  customCoverSupplement  Int    @default(20000)
+  active                 Boolean  @default(true)
+  visiblePOS             Boolean  @default(true)
+  details                String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@index([active])
+}
+
+/** Param?tres Tirage photo ? prix base A4 papier photo (formats via PaperFormatRule). */
+model TiragePhotoPricingParam {
+  id         String   @id @default(cuid())
+  excelId    String?  @unique
+  code       String   @unique @default("default")
+  label      String   @default("Tirage photo")
+  prixBaseA4 Int    @default(3000)
+  active     Boolean  @default(true)
+  visiblePOS Boolean  @default(true)
+  details    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([active])
+}
+
+/** Cadres vierges ? prix par type + format (Cadre photo = cadre + tirage). */
+model BlankFramePrice {
+  id           String   @id @default(cuid())
+  excelId      String?  @unique
+  articleLabel String   @default("Cadre vierge")
+  frameType    String
+  formatLabel  String
+  widthMm      Float
+  heightMm     Float
+  material     String?
+  color        String?
+  unitPrice    Int    @default(0)
+  unit         String   @default("pi?ce")
+  visiblePOS   Boolean  @default(true)
+  status       String   @default("published")
+  details      String?
+  sortOrder    Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([active, status])
+  @@index([frameType])
+  @@index([widthMm, heightMm])
+}
+
+/** R?gles Cadre photo (liaison tirage + suppl?ment optionnel). */
+model CadrePhotoRuleParam {
+  id                 String   @id @default(cuid())
+  excelId            String?  @unique
+  code               String   @unique @default("default")
+  label              String   @default("Cadre photo")
+  usesTiragePhoto    Boolean  @default(true)
+  optionalSupplement Int    @default(0)
+  active             Boolean  @default(true)
+  visiblePOS         Boolean  @default(true)
+  details            String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([active])
+}
+
+/** ?quivalences formats Photo (affichage POS ? format facturation). */
+model PhotoFormatEquivalence {
+  id                String   @id @default(cuid())
+  excelId           String?  @unique
+  displayLabel      String
+  widthMm           Float
+  heightMm          Float
+  billingFormat     String
+  billingWidthMm    Float
+  billingHeightMm   Float
+  category          String   @default("photo")
+  isAlias           Boolean  @default(false)
+  active            Boolean  @default(true)
+  visiblePOS        Boolean  @default(true)
+  details           String?
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([active, visiblePOS])
+  @@index([billingFormat])
+  @@index([widthMm, heightMm])
+}
+
+/** R?gles promotionnelles articles (ex. Affiche ?v?nement ?40 % ISF). */
+model ArticlePromotionalRule {
+  id              String   @id @default(cuid())
+  excelId         String?  @unique
+  articleId       String
+  articleLabel    String?
+  materialFamily  String   @default("offset_pcm_pcb")
+  formatScope     String   @default("petit_format")
+  discountType    String   @default("percent") // percent | fixed
+  discountValue   Int    @default(40)
+  priceSource     String   @default("impression_sf")
+  active          Boolean  @default(true)
+  visiblePOS      Boolean  @default(true)
+  details         String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([articleId, active])
+  @@index([active])
+}
+
+/** Limites formats par mati?re (POS chips gris?s). */
+model MaterialFormatLimit {
+  id            String   @id @default(cuid())
+  excelId       String?  @unique
+  materialKey   String
+  materialLabel String
+  formatMax     String?
+  widthMaxMm    Float?
+  heightMaxMm   Float?
+  unit          String   @default("mm")
+  messagePos    String   @default("Format non disponible pour cette mati?re")
+  active        Boolean  @default(true)
+  details       String?
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([materialKey])
+  @@index([active])
+}
+
+/** Accessoires / composants prix ?v?nementiel (bracelets, enveloppes, fanion?). */
+model EventAccessoryPrice {
+  id         String   @id @default(cuid())
+  excelId    String?  @unique
+  kind       String
+  code       String
+  label      String
+  priceAr    Int    @default(0)
+  unit       String   @default("pi?ce")
+  widthMm    Float?
+  heightMm   Float?
+  material   String?
+  active     Boolean  @default(true)
+  visiblePOS Boolean  @default(true)
+  details    String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([kind, code])
+  @@index([kind, active])
+  @@index([active, visiblePOS])
+}
+
+/** Param?tres globaux prix ?v?nementiel (marge badge, d?coupe, QR, promo %). */
+model EventPricingParam {
+  id                String   @id @default(cuid())
+  code              String   @unique @default("default")
+  label             String   @default("Param?tres ?v?nementiel")
+  badgeMarginPct    Float    @default(10)
+  badgeCutAr        Int    @default(50)
+  ticketCutAr       Int    @default(50)
+  ticketQrAr        Int    @default(50)
+  promoDiscountPct  Float    @default(40)
+  active            Boolean  @default(true)
+  details           String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([active])
+}
+
+/**
+ * OutboxEvent — file d'attente durable (BAT/GPAO/sync). FLOW-002 V10 + V12.
+ * Statuts : pending | processing | succeeded(=DONE) | failed | dead
+ */
+model OutboxEvent {
+  id               String    @id @default(cuid())
+  type             String
+  aggregateType    String
+  aggregateId      String
+  aggregateVersion Int       @default(0)
+  payload          String
+  correlationId    String?
+  causationId      String?
+  /** Cle idempotente consommateur ? unique si renseignee. */
+  idempotencyKey   String?   @unique
+  status           String    @default("pending") // pending | processing | succeeded | failed | dead
+  attempts         Int       @default(0)
+  availableAt      DateTime  @default(now())
+  lockedAt         DateTime?
+  lockedBy         String?
+  lastError        String?
+  lastErrorCode    String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  processedAt      DateTime?
+
+  @@index([status, availableAt])
+  @@index([status, createdAt])
+  @@index([aggregateType, aggregateId])
+  @@index([type, status])
+}
+
+/**
+ * SyncRun ? execution durable d'une sync multi-etapes (Admin->POS, drift repair).
+ */
+model SyncRun {
+  id              String    @id @default(cuid())
+  type            String
+  scope           String?
+  requestedBy     String?
+  dryRun          Boolean   @default(false)
+  status          String    @default("pending") // pending | running | succeeded | partial | failed
+  sourceVersion   String?
+  targetVersion   String?
+  total           Int       @default(0)
+  succeeded       Int       @default(0)
+  failed          Int       @default(0)
+  skipped         Int       @default(0)
+  errorSummary    String?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  steps           SyncRunStep[]
+
+  @@index([type, status])
+  @@index([createdAt])
+}
+
+model SyncRunStep {
+  id          String    @id @default(cuid())
+  runId       String
+  run         SyncRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  stepKey     String
+  entityType  String?
+  entityId    String?
+  status      String    @default("pending") // pending | running | succeeded | failed | skipped
+  attempts    Int       @default(0)
+  beforeHash  String?
+  afterHash   String?
+  errorCode   String?
+  errorMsg    String?
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([runId, stepKey])
+  @@index([runId, status])
+}
+
+/**
+ * Version monotone des permissions (V12 Lot 7).
+ */
+model PermissionPolicyMeta {
+  id        String   @id @default("singleton")
+  version   Int      @default(1)
+  updatedBy String?
+  note      String?
+  updatedAt DateTime @updatedAt
+}
+
+/**
+ * PricingRelease ? snapshot tarifaire immuable publie (V12 Lot 2).
+ * Le POS lit uniquement status=active via PricingActivePointer.
+ */
+model PricingRelease {
+  id                  String    @id @default(cuid())
+  version             Int       @unique
+  hash                String
+  status              String    @default("draft") // draft | active | archived
+  publishedAt         DateTime?
+  createdBy           String?
+  approvedBy          String?
+  restoredFromVersion Int?
+  /** Snapshot JSON freeze (profils, matieres, variables, formules?). */
+  snapshotJson        String    @default("{}")
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  activePointer       PricingActivePointer?
+
+  @@index([status, publishedAt])
+}
+
+/** Pointeur singleton vers la release active (1 ligne id=singleton). */
+model PricingActivePointer {
+  id         String         @id @default("singleton")
+  releaseId  String         @unique
+  release    PricingRelease @relation(fields: [releaseId], references: [id], onDelete: Restrict)
+  updatedAt  DateTime       @updatedAt
+}

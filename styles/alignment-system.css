@@ -1,0 +1,824 @@
+/**
+ * ANS ORION — Système d’alignement global A→Z
+ * Grilles · gouttières · hauteurs contrôles · stacks · responsive
+ * Scope : shell + viewport + modules (CPS, admin, POS, listes)
+ * Ne modifie pas la logique métier.
+ */
+
+:root {
+  /* Gouttières shell = même axe header / contenu */
+  --shell-pad-x: clamp(1rem, 2vw, 1.75rem);
+  --shell-pad-y: clamp(0.75rem, 1.15vw, 1.25rem);
+  --shell-pad-x-sm: clamp(0.75rem, 2vw, 1rem);
+
+  /* Rythme vertical unifié */
+  --stack-gap-xs: 0.625rem; /* 10 — minimum gouttière */
+  --stack-gap-sm: 0.75rem;  /* 12 */
+  --stack-gap: 1rem;        /* 16 */
+  --stack-gap-lg: 1.25rem;  /* 20 */
+  --stack-gap-xl: 1.5rem;   /* 24 */
+
+  /* Grille */
+  --grid-gap: 0.625rem;     /* 10 — min */
+  --grid-gap-lg: 1rem;      /* 16 */
+
+  /* Contrôles / chips / boutons — 32px · pad X min 16px · radius 10px */
+  --control-h-sm: 32px;
+  --control-h: 32px;
+  --control-h-md: 32px;
+  --control-h-lg: 32px;
+  --chip-h: 32px;
+  --chip-pad-x: 16px;
+  --chip-pad-y: 0;
+  --chip-gap: 6px; /* icône ↔ label dans le chip */
+  --chip-font: 11px;
+  --chip-radius: 10px;
+  --chip-icon: 14px;
+  /* Padding horizontal min sur rectangles arrondis (cartes, panels, dashboard) */
+  --rect-pad-x: 16px;
+
+  /* Colonnes tables standard */
+  --col-check: 2.5rem;
+  --col-id: 7.5rem;
+  --col-ref: 7rem;
+  --col-price: 6.5rem;
+  --col-status: 6.25rem;
+  --col-actions: 7.5rem;
+  --col-qty: 5.5rem;
+
+  /* Alignement texte */
+  --align-label-size: 0.6875rem; /* 11 */
+  --align-body-size: 0.6875rem;  /* 11 */
+  --align-title-size: 1.5rem;    /* 24 */
+}
+
+/* ── Shell : header + main sur le même axe X ── */
+.orion-cockpit-header {
+  padding-left: var(--shell-pad-x) !important;
+  padding-right: var(--shell-pad-x) !important;
+}
+
+main.orion-viewport,
+.orion-viewport.orion-shell-pad {
+  padding-left: var(--shell-pad-x) !important;
+  padding-right: var(--shell-pad-x) !important;
+  padding-top: var(--shell-pad-y) !important;
+  /* Inset stack + filet 5mm — jamais +2.5rem (bande grise) */
+  padding-bottom: calc(
+    var(--orion-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + var(--orion-content-ticker-gap, 5mm)
+  ) !important;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --shell-pad-x: var(--shell-pad-x-sm);
+    --grid-gap: 0.625rem;
+  }
+}
+
+/* Modules full-bleed (CPS) : compensent exactement le pad shell */
+.orion-viewport .cps-theme,
+.orion-viewport .ab2-shell.orion-bleed,
+.orion-viewport .orion-bleed {
+  margin-left: calc(-1 * var(--shell-pad-x));
+  margin-right: calc(-1 * var(--shell-pad-x));
+  width: calc(100% + 2 * var(--shell-pad-x));
+  max-width: none;
+  padding-left: var(--shell-pad-x);
+  padding-right: var(--shell-pad-x);
+}
+
+/* ── Stacks pages ── */
+.orion-page,
+.orion-page-stack,
+.orion-section-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.orion-page > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0; /* gap gère le rythme — évite double marge */
+}
+
+.orion-page-stack--tight,
+.orion-align-stack-tight {
+  gap: var(--stack-gap-sm);
+}
+
+.orion-page-stack--relaxed,
+.orion-align-stack-relaxed {
+  gap: var(--stack-gap-xl);
+}
+
+/* ── Headers module : full width, pas de squash ── */
+.orion-page-header,
+.orion-ds-page-header,
+.orion-align-header,
+.cps-admin-header {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.orion-align-header-actions,
+.cps-header-actions,
+.orion-toolbar,
+.ui-toolbar,
+.ab2-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stack-gap-xs);
+  min-width: 0;
+}
+
+/* ── Toolbars / filtres : même ligne optique ── */
+.orion-align-toolbar,
+.orion-toolbar,
+.orion-admin-table-toolbar,
+.orion-catalogue-chips-toolbar,
+.cps-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stack-gap-xs) var(--stack-gap-sm);
+  width: 100%;
+  min-width: 0;
+}
+
+.orion-align-toolbar > *,
+.orion-toolbar > *,
+.orion-admin-table-toolbar > * {
+  flex-shrink: 0;
+}
+
+.orion-align-toolbar input[type='search'],
+.orion-align-toolbar input[type='text'],
+.orion-toolbar input[type='search'],
+.orion-admin-table-toolbar input[type='search'],
+.orion-admin-table-toolbar input[type='text'] {
+  flex: 1 1 12rem;
+  min-width: 10rem;
+  max-width: 100%;
+}
+
+/* ── Contrôles / chips / boutons : 32px · pad X 12px · radius 12px ── */
+.orion-viewport :is(
+  .cps-pill,
+  .orion-surface-chip,
+  .orion-surface-chip--pill,
+  .orion-badge-chip,
+  .ui-button,
+  .cps-header-actions > button,
+  .orion-align-toolbar > button,
+  .orion-toolbar > button,
+  .orion-admin-table-toolbar > button,
+  .orion-catalogue-chips-toolbar > button,
+  .orion-admin-hub-tabs button,
+  .orion-material-nav-tabs button,
+  .orion-catalogue-studio-tabs button
+),
+.cps-theme :is(
+  .cps-pill,
+  .orion-surface-chip,
+  button.rounded-full,
+  .orion-admin-hub-tabs button,
+  .orion-material-nav-tabs button,
+  .orion-catalogue-studio-tabs button
+) {
+  box-sizing: border-box !important;
+  height: var(--chip-h, 32px) !important;
+  min-height: var(--chip-h, 32px) !important;
+  max-height: var(--chip-h, 32px) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: var(--chip-pad-x, 16px) !important;
+  padding-right: var(--chip-pad-x, 16px) !important;
+  gap: var(--chip-gap, 4px) !important;
+  font-size: var(--chip-font, 12px) !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border-radius: var(--chip-radius, 10px) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+}
+
+/* Icônes dans chips / boutons compacts */
+.orion-viewport :is(.cps-pill, .orion-surface-chip) svg,
+.cps-theme :is(.cps-pill, .orion-surface-chip) svg,
+.cps-header-actions button svg,
+.orion-admin-hub-tabs button svg {
+  width: var(--chip-icon, 14px) !important;
+  height: var(--chip-icon, 14px) !important;
+  flex-shrink: 0;
+}
+
+/* Chips métier (ex. Dimensions, blocs) — pastilles dans tableaux */
+.orion-viewport :is(
+  .orion-chip,
+  .mp-chip,
+  .ab2-chip,
+  .bloc-chip,
+  [data-chip],
+  span.rounded-full.px-2,
+  span.rounded-md.bg-\[\#0F172A\],
+  .bg-slate-900.text-white.rounded-full,
+  .bg-\[\#0F172A\].rounded-full,
+  .bg-\[\#0f172a\].rounded-md
+),
+.cps-theme td span.rounded-full,
+.cps-theme td span.rounded-md.font-semibold,
+.cps-theme .orion-master-data-cell span.rounded-full,
+.cps-theme .orion-master-data-cell span.rounded-md {
+  box-sizing: border-box !important;
+  height: var(--chip-h, 32px) !important;
+  min-height: var(--chip-h, 32px) !important;
+  max-height: var(--chip-h, 32px) !important;
+  padding-left: var(--chip-pad-x, 16px) !important;
+  padding-right: var(--chip-pad-x, 16px) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: var(--chip-font, 12px) !important;
+  line-height: 1 !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+/* Inputs toolbars restent 32px aussi (alignés aux boutons) */
+.orion-viewport :is(
+  .orion-align-toolbar,
+  .orion-toolbar,
+  .cps-header-actions,
+  .orion-admin-table-toolbar,
+  .orion-catalogue-chips-toolbar
+) :is(input, select, .cps-input) {
+  box-sizing: border-box !important;
+  height: var(--chip-h, 32px) !important;
+  min-height: var(--chip-h, 32px) !important;
+  max-height: var(--chip-h, 32px) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: var(--chip-pad-x, 16px) !important;
+  padding-right: var(--chip-pad-x, 16px) !important;
+  font-size: var(--chip-font, 12px) !important;
+  line-height: 1 !important;
+  border-radius: var(--chip-radius, 10px) !important;
+}
+
+/* Exceptions : FAB, boutons icône carrés actions ligne, switches (hors capsules acat-switch) */
+.orion-viewport :is(
+  .ans-btn-primary.w-14,
+  button.w-14.h-14,
+  .mp-row-action-btn,
+  button[aria-label*='Ouvrir le panier'],
+  [role='switch']:not(.acat-switch),
+  .orion-kpi-card,
+  .cps-kpi-card
+) {
+  height: unset !important;
+  min-height: unset !important;
+  max-height: unset !important;
+  padding-left: unset;
+  padding-right: unset;
+}
+
+.orion-viewport .mp-row-action-btn,
+.cps-theme .mp-row-action-btn,
+.cps-theme td button.h-8,
+.cps-theme td button.w-8 {
+  width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  padding: 0 !important;
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+/* Ancienne règle toolbars — remplacée par bloc chips 32px ci-dessus */
+.orion-viewport .orion-align-toolbar > *,
+.orion-toolbar > *,
+.orion-admin-table-toolbar > * {
+  flex-shrink: 0;
+}
+
+/* ── Grilles KPI / cartes ── */
+.orion-align-kpi,
+.orion-kpi-grid,
+.cps-kpi-grid,
+.dashboard-kpi-grid,
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gap);
+  width: 100%;
+  align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .orion-align-kpi,
+  .orion-kpi-grid,
+  .cps-kpi-grid,
+  .dashboard-kpi-grid,
+  .kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .orion-align-kpi,
+  .orion-kpi-grid,
+  .cps-kpi-grid,
+  .dashboard-kpi-grid,
+  .kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .orion-align-kpi,
+  .orion-kpi-grid,
+  .cps-kpi-grid,
+  .dashboard-kpi-grid,
+  .kpi-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.orion-align-cards,
+.orion-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--grid-gap);
+  width: 100%;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .orion-align-cards,
+  .orion-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .orion-align-cards,
+  .orion-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Split liste + détail (POS, matières, articles) */
+.orion-align-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--grid-gap-lg);
+  width: 100%;
+  align-items: start;
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .orion-align-split {
+    grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .orion-align-split {
+    grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+  }
+}
+
+.orion-align-split > * {
+  min-width: 0;
+}
+
+/* POS config : déjà .pos-config-layout — renforcer alignement */
+.pos-config-layout {
+  gap: var(--grid-gap-lg) !important;
+  align-items: start;
+}
+
+.pos-config-main,
+.pos-config-summary {
+  min-width: 0;
+  width: 100%;
+}
+
+/* ── Tables : largeur / colonnes / alignement ── */
+.orion-align-table,
+.orion-viewport table,
+.cps-theme table,
+.orion-admin-table,
+.ab2-table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.orion-viewport thead th,
+.cps-theme thead th,
+.orion-admin-table th {
+  text-align: left;
+  vertical-align: middle;
+}
+
+.orion-viewport td.is-numeric,
+.orion-viewport th.is-numeric,
+.orion-admin-table td.is-numeric,
+.orion-admin-table th.is-numeric,
+.orion-viewport td.font-mono,
+.cps-theme td.font-mono {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.orion-viewport th.is-center,
+.orion-viewport td.is-center,
+.orion-admin-table th.is-center,
+.orion-admin-table td.is-center {
+  text-align: center;
+}
+
+/* Colonnes actions toujours à droite, largeur fixe */
+.orion-viewport th:last-child:is([data-col='actions'], .col-actions, .is-actions),
+.orion-viewport td:last-child:is([data-col='actions'], .col-actions, .is-actions),
+.orion-admin-table th.is-actions,
+.orion-admin-table td.is-actions {
+  width: var(--col-actions);
+  text-align: right;
+}
+
+.orion-align-table-wrap,
+.orion-table-wrap,
+.orion-admin-table-wrap,
+.ui-table-wrap {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Formulaires : grille 2 cols alignée ── */
+.orion-align-form,
+.orion-form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--stack-gap-sm) var(--grid-gap-lg);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .orion-align-form,
+  .orion-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.orion-align-form .orion-field-full,
+.orion-form-grid .orion-field-full {
+  grid-column: 1 / -1;
+}
+
+.orion-align-form label,
+.orion-form-grid label {
+  display: block;
+  font-size: var(--align-label-size);
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 0.35rem;
+  color: var(--text-muted, var(--cps-muted, #64748b));
+}
+
+/* ── Sections ── */
+.orion-section-block-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--stack-gap-sm);
+  margin-bottom: var(--stack-gap-sm);
+}
+
+.orion-section-title {
+  margin: 0;
+  font-size: var(--align-title-size);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.orion-section-desc {
+  margin: 0.25rem 0 0;
+  font-size: var(--align-body-size);
+  line-height: 1.5;
+  color: var(--text-muted, #64748b);
+}
+
+/* ── Metric / status grids ── */
+.orion-metric-grid,
+.orion-status-grid {
+  display: grid;
+  gap: var(--grid-gap);
+  width: 100%;
+  align-items: stretch;
+}
+
+/* ── Listes : lignes alignées ── */
+.orion-align-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.orion-align-list-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--stack-gap-sm);
+  min-height: 32px;
+  padding: 0.35rem 0.5rem;
+  width: 100%;
+}
+
+/* ── Typo page — délégué à typography-scale.css (24–30 / 18–20 / 14 / 12) ── */
+.orion-viewport h1 {
+  /* voir .typography-scale — titre page 24–30px */
+}
+
+.orion-viewport h2 {
+  /* voir typography-scale — section 18–20px */
+}
+
+.orion-viewport h3 {
+  /* voir typography-scale — 18px */
+}
+
+/* ── Dashboard 12 cols — gaps unifiés ── */
+.dashboard-grid {
+  gap: var(--grid-gap-lg);
+}
+
+.dashboard-module-grid {
+  gap: var(--grid-gap-lg);
+}
+
+/* ── Responsive : éviter débordements (sans casser sticky/fixed/dropdowns) ── */
+.orion-viewport {
+  overflow-x: clip;
+}
+
+.orion-viewport img,
+.orion-viewport video,
+.orion-viewport canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.orion-viewport pre,
+.orion-viewport code {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Conteneurs max-width parasites → pleine largeur ERP
+   (ne pas forcer max-w-4xl / max-w-3xl : utilisés par modales / drawers) */
+.orion-viewport .max-w-7xl,
+.orion-viewport .max-w-6xl,
+.orion-viewport .max-w-5xl,
+.orion-viewport .container {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Coquilles Soft UI densifiées — jamais de bande vide à droite */
+.orion-viewport :is(
+  .livraisons-page,
+  .cm-notif-page,
+  .cm-campagnes-page,
+  .cm-relances-page,
+  .metier-taches-page,
+  .ws-accueil,
+  .ws-commercial,
+  .ws-studio,
+  .factures-page,
+  .paiements-page,
+  .caisse-page,
+  .charges-page,
+  .fiscalite-page,
+  .couts-page,
+  .suggestions-page,
+  .rh-emp-page,
+  .rh-paie-page,
+  .rh-abs-page,
+  .rh-ann-page,
+  .rh-perf-page,
+  .acc-page,
+  .et-page,
+  .pf-shell,
+  .fm-refonte,
+  .ab2-shell,
+  .dashboard-full,
+  .orion-module-page
+) {
+  max-width: none !important;
+  width: 100% !important;
+  margin-inline: 0 !important;
+}
+
+/* Pages métier : space-y-* → stack gap unifié (sans toucher chaque page) */
+.orion-viewport > .space-y-6,
+.orion-viewport > .space-y-5,
+.orion-viewport > .dashboard-full.space-y-6,
+.orion-viewport > .orion-module-page.space-y-6,
+.orion-viewport > .orion-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap-xl, 1.5rem);
+  width: 100%;
+  min-width: 0;
+}
+
+.orion-viewport > .space-y-4,
+.orion-viewport > .space-y-3 {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap, 1rem);
+  width: 100%;
+  min-width: 0;
+}
+
+.orion-viewport > .space-y-6 > :not([hidden]) ~ :not([hidden]),
+.orion-viewport > .space-y-5 > :not([hidden]) ~ :not([hidden]),
+.orion-viewport > .space-y-4 > :not([hidden]) ~ :not([hidden]),
+.orion-viewport > .space-y-3 > :not([hidden]) ~ :not([hidden]),
+.orion-viewport > .dashboard-full.space-y-6 > :not([hidden]) ~ :not([hidden]),
+.orion-viewport > .orion-module-page.space-y-6 > :not([hidden]) ~ :not([hidden]),
+.orion-viewport > .orion-page > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0 !important;
+}
+
+/* KPI rows dans pages : aligner sur grille */
+.orion-viewport .grid.grid-cols-2.sm\:grid-cols-3,
+.orion-viewport .grid.grid-cols-2.md\:grid-cols-3,
+.orion-viewport .grid.grid-cols-2.lg\:grid-cols-4 {
+  gap: var(--grid-gap, 0.75rem);
+  align-items: stretch;
+}
+
+/* ── Inset bas : tab bar phone uniquement (≤767) — pas tablette ── */
+@media (max-width: 767.98px) {
+  main.orion-viewport {
+    padding-bottom: calc(
+      var(--orion-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 0.5rem
+    ) !important;
+  }
+}
+
+/* ── Print / densités ── */
+@media (max-width: 480px) {
+  .orion-align-kpi,
+  .cps-kpi-grid,
+  .dashboard-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .orion-align-header,
+  .cps-admin-header {
+    align-items: stretch;
+  }
+
+  .cps-header-actions {
+    width: 100%;
+  }
+}
+
+/* ── Coins 10px + padding horizontal min 16px (rectangles arrondis) ── */
+:root,
+html.dark {
+  --radius-ui: 10px;
+  --radius: 7px;
+  --radius-sm: 10px;
+  --radius-md: 10px;
+  --radius-lg: 10px;
+  --radius-xl: 10px;
+  --orion-radius: 7px;
+  --orion-radius-sm: 10px;
+  --cps-radius: 10px;
+  --chip-radius: 10px;
+  --rect-pad-x: 16px;
+}
+
+.orion-viewport :is(
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .ui-card,
+  .ui-panel,
+  .ui-input,
+  .ui-button,
+  .orion-ds-card,
+  .orion-ds-panel,
+  .orion-ds-metric,
+  .cps-card,
+  .cps-pill,
+  .cps-input,
+  .ab2-badge,
+  .ab2-block-badge,
+  .orion-surface-chip,
+  .orion-badge-chip,
+  .dashboard-chart-card,
+  .orion-master-data-card,
+  .orion-admin-table-wrap,
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea
+),
+.cps-theme :is(
+  .cps-pill,
+  .cps-input,
+  .cps-card,
+  .ab2-block-badge,
+  .ab2-badge,
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea
+) {
+  border-radius: var(--orion-radius, 7px) !important;
+}
+
+/* Cartes / panels / dashboard — padding gauche-droite ≥ 16px */
+.orion-viewport :is(
+  .ui-card,
+  .ui-panel,
+  .orion-ds-card,
+  .orion-ds-panel,
+  .orion-ds-metric,
+  .cps-card,
+  .cps-panel-surface,
+  .cps-kpi-card,
+  .orion-kpi-card,
+  .orion-kpi-saas,
+  .dashboard-chart-card,
+  .orion-master-data-card,
+  .orion-admin-table-wrap,
+  .orion-surface-card-soft,
+  .orion-surface-card,
+  .orion-surface-card-elevated,
+  .ans-card-premium,
+  [data-slot='card'],
+  .orion-section-card,
+  .orion-section-card-padded
+),
+.cps-theme :is(
+  .cps-card,
+  .cps-kpi-card,
+  .orion-material-kpi-card,
+  .orion-master-data-card,
+  .orion-admin-table-wrap,
+  .orion-surface-card-soft
+) {
+  padding-left: max(16px, var(--rect-pad-x, 16px)) !important;
+  padding-right: max(16px, var(--rect-pad-x, 16px)) !important;
+}
+
+/* Boutons / chips texte — pad X 16px (pas les icônes seules) */
+.orion-viewport :is(.cps-pill, .ui-button, .ans-btn-primary):not(.w-14):not(.w-8):not(.h-14):not([class*='icon']),
+.cps-theme :is(.cps-pill):not(.w-8) {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+/* Pastilles purement circulaires (avatar, dot, FAB) — ne pas forcer */
+.orion-viewport :is(
+  .rounded-full.size-2,
+  .rounded-full.size-3,
+  .rounded-full.w-2,
+  .rounded-full.h-2,
+  .rounded-full.w-1\.5,
+  .rounded-full.h-1\.5,
+  .ans-btn-primary.w-14,
+  button.w-14.h-14
+) {
+  border-radius: 9999px !important;
+}
+
+/* Icon buttons carrés — pas de pad horizontal forcé */
+.orion-viewport :is(button.w-8.h-8, .mp-row-action-btn, button[class*='icon']) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}

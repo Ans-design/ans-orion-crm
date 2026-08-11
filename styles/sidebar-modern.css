@@ -1,0 +1,1044 @@
+/**
+ * ANS ORION — Sidebar (source de vérité)
+ * Marque hors carte · carte flottante desktop · pas à fleur
+ */
+
+:root {
+  --sb-radius: 7px;
+  --sb-shell-radius: 7px;
+  --sb-item-h: 40px;
+  --sb-sub-h: 36px;
+  --sb-ease: 0.16s ease;
+  --sb-width: var(--sidebar-width, 264px);
+}
+
+/* ── Shell ── */
+.orion-sidebar-v2,
+.orion-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * Desktop PC : shell transparent flottant (marges).
+ * La marque est HORS carte ; seuls .orion-sidebar-card a le fond blanc.
+ */
+@media (min-width: 1280px) {
+  html body aside.orion-sidebar.orion-sidebar-desktop,
+  html body aside.orion-sidebar-v2.orion-sidebar-desktop {
+    top: var(--orion-sidebar-inset-y, 14px) !important;
+    left: var(--orion-sidebar-inset-x, 14px) !important;
+    bottom: var(--orion-sidebar-inset-y, 14px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - (2 * var(--orion-sidebar-inset-y, 14px))) !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    /* Au-dessus du header (z-50) : collapse / marque ne passent plus sous la barre */
+    z-index: 51 !important;
+  }
+
+  /* Marque hors carte : monogramme + filet (styles/orion-logo.css) */
+  html body .orion-sb-brand-outside .orion-logo {
+    max-width: 100%;
+  }
+
+  html body .orion-sb-brand-outside .orion-ans-monogram {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  /* Carte navigation seule */
+  html body aside.orion-sidebar-desktop .orion-sidebar-card {
+    flex: 1 1 auto;
+    min-height: 0;
+    border-radius: var(--sb-shell-radius, 7px) !important;
+    border: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 100%, transparent) !important;
+    overflow: hidden;
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 12px 32px -12px rgba(15, 23, 42, 0.14) !important;
+  }
+
+  html:not(.dark) body aside.orion-sidebar-desktop .orion-sidebar-card {
+    background: #ffffff !important;
+  }
+
+  html.dark body aside.orion-sidebar-desktop .orion-sidebar-card {
+    background: #050a14 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.35),
+      0 16px 40px -12px rgba(0, 0, 0, 0.55) !important;
+  }
+}
+
+/* Drawer / fallback (non-desktop fixed) */
+.dark .orion-sidebar-v2:not(.orion-sidebar-desktop),
+.dark .orion-sidebar:not(.orion-sidebar-desktop) {
+  background: #050a14 !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+html:not(.dark) .orion-sidebar-v2:not(.orion-sidebar-desktop),
+html:not(.dark) .orion-sidebar:not(.orion-sidebar-desktop) {
+  background: #fff !important;
+  border-right: 1px solid #eef2f7 !important;
+}
+
+/* Drawer : carte pleine hauteur, marque dedans (panneau slide) */
+.orion-sidebar-drawer .orion-sidebar-card {
+  flex: 1 1 auto;
+  min-height: 0;
+  border-radius: var(--sb-shell-radius, 7px);
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border-soft);
+  overflow: hidden;
+}
+
+/* ── Brand HORS carte (même ligne : logo + LOCAL + reduce) ── */
+html body .orion-sb-brand.orion-sb-brand-outside,
+html.dark body .orion-sb-brand.orion-sb-brand-outside {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  padding: 2px 2px 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.orion-sb-brand-link {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+.orion-sb-brand-link-mini {
+  justify-content: center;
+  max-width: none;
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* LOCAL + collapse à droite du logo (pas en dessous) */
+.orion-sb-brand-actions {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  margin-left: 0;
+  padding-left: 0;
+  flex-shrink: 0;
+}
+
+.orion-sidebar-mini .orion-sb-brand-actions,
+.orion-sb-brand-mini .orion-sb-brand-actions {
+  margin-left: 0;
+  width: auto;
+  justify-content: center;
+}
+
+.orion-sb-brand-mini {
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
+}
+
+html body .orion-sidebar-mini .orion-sidebar-card--mini > .orion-sb-mini-expand {
+  margin: 2px auto 2px !important;
+  flex-shrink: 0;
+  order: 0;
+  align-self: center !important;
+}
+
+html body .orion-sidebar-mini .orion-sidebar-card--mini > .orion-sb-mini-search {
+  order: 1;
+  align-self: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Monogramme ans.com — wordmark transparent (pas de cadre / fond rouge) */
+.orion-ans-monogram,
+html body .orion-sb-brand-outside .orion-ans-monogram {
+  display: block !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  object-fit: contain !important;
+  flex-shrink: 0;
+}
+
+html body .orion-sb-brand-outside .orion-sb-collapse-btn {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: var(--sb-radius) !important;
+  border: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 80%, transparent) !important;
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: background var(--sb-ease), color var(--sb-ease), border-color var(--sb-ease) !important;
+}
+
+html body .orion-sb-brand-outside .orion-sb-collapse-btn:hover {
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 30%, transparent) !important;
+  color: var(--text-main) !important;
+  background: color-mix(in srgb, var(--primary, #FF174D) 6%, transparent) !important;
+}
+
+html body .orion-sb-brand-outside .orion-sb-env-badge {
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  padding: 3px 6px !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: var(--text-muted, #64748b) !important;
+  border: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 80%, transparent) !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+
+html.dark body .orion-sb-brand-outside .orion-sb-env-badge,
+html.dark body .orion-sb-brand-outside .orion-sb-collapse-btn {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  color: var(--text-muted) !important;
+}
+
+/* ── Recherche ── */
+.orion-sidebar-v2 .orion-sb-widget {
+  margin: 4px 4px 0 !important;
+  padding: 10px !important;
+  border-radius: var(--sb-radius) !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.orion-sidebar-v2 .orion-sb-search-panel {
+  padding-top: 4px !important;
+  padding-bottom: 2px !important;
+}
+
+.orion-sb-search-trigger {
+  height: 36px !important;
+  padding: 0 12px !important;
+  gap: 10px !important;
+  border-radius: var(--sb-radius) !important;
+  font-size: 11px !important;
+  border: 1px solid var(--border-soft, #e8eef5) !important;
+  background: var(--bg-app, #f4f7fb) !important;
+  transition: border-color var(--sb-ease), color var(--sb-ease), background var(--sb-ease) !important;
+}
+
+html:not(.dark) .orion-sb-search-trigger {
+  background: #f4f7fb !important;
+  color: var(--text-muted);
+}
+
+html.dark .orion-sb-search-trigger,
+.dark .orion-sb-search-trigger {
+  background: color-mix(in srgb, var(--bg-app, #030810) 70%, var(--bg-card, #0b1220)) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+  color: var(--text-muted, #94a3b8) !important;
+}
+
+html.dark .orion-sb-search-trigger:hover,
+.dark .orion-sb-search-trigger:hover {
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 40%, transparent) !important;
+  color: var(--text-main, #e2e8f0) !important;
+}
+
+.orion-sb-search-trigger:hover {
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 35%, transparent) !important;
+  color: var(--text-main) !important;
+}
+
+.orion-sb-kbd {
+  font-size: 8px !important;
+  padding: 2px 6px !important;
+  border-radius: 7px !important;
+}
+
+/* ── Nav ── */
+.orion-sidebar-v2 .orion-sb-nav {
+  padding: 4px 8px 12px !important;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--primary) 25%, transparent) transparent;
+}
+
+.orion-sidebar-v2 nav.orion-sb-nav {
+  gap: 0 !important;
+  padding: 4px 8px 12px !important;
+}
+
+.orion-sb-div {
+  height: 1px !important;
+  margin: 10px 4px !important;
+  background: var(--border-soft) !important;
+}
+
+/* ── Rôle (Direction…) ── */
+.orion-sb-role-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin-bottom: 2px;
+}
+
+.orion-sb-role-line .orion-sb-role-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Collapse dans la carte (ligne DIRECTION) — plus de débordement vers le header */
+.orion-sidebar-card .orion-sb-collapse-btn,
+.orion-sb-collapse-btn--in-card {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: var(--sb-radius) !important;
+  border: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 80%, transparent) !important;
+  background: var(--bg-app, #f4f7fb) !important;
+  color: var(--text-secondary) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: background var(--sb-ease), color var(--sb-ease), border-color var(--sb-ease) !important;
+}
+
+.orion-sidebar-card .orion-sb-collapse-btn:hover,
+.orion-sb-collapse-btn--in-card:hover {
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 30%, transparent) !important;
+  color: var(--text-main) !important;
+  background: color-mix(in srgb, var(--primary, #FF174D) 6%, transparent) !important;
+}
+
+html.dark .orion-sidebar-card .orion-sb-collapse-btn,
+html.dark .orion-sb-collapse-btn--in-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #0b1830) 100%, transparent) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-muted, #94a3b8) !important;
+}
+
+.orion-sb-role-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--primary, #FF174D);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary, #FF174D) 22%, transparent);
+  flex-shrink: 0;
+}
+
+.orion-sb-role-label {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted, #94a3b8) !important;
+}
+
+/* ── Favoris / Récents — segment control réf. mock ── */
+.orion-sb-quick-tabs {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0 !important;
+  padding: 3px !important;
+  margin-bottom: 8px !important;
+  border-radius: var(--sb-radius) !important;
+  background: var(--bg-app, #f1f5f9) !important;
+  border: 1px solid var(--border-soft, #e8eef5) !important;
+}
+
+html:not(.dark) .orion-sb-quick-tabs {
+  background: #f1f5f9 !important;
+}
+
+.orion-sb-quick-tab {
+  height: 30px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  border-radius: 7px !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--text-muted, #64748b) !important;
+  cursor: pointer;
+  transition: background var(--sb-ease), color var(--sb-ease), box-shadow var(--sb-ease) !important;
+}
+
+.orion-sb-quick-tab:hover {
+  color: var(--text-main) !important;
+  background: color-mix(in srgb, #fff 70%, transparent) !important;
+}
+
+.orion-sb-quick-tab-active {
+  color: #fff !important;
+  background: var(--primary, #FF174D) !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(255, 23, 77, 0.28) !important;
+}
+
+.orion-sb-quick-tab-count {
+  font-size: 9px;
+  font-weight: 800;
+  opacity: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.orion-sb-quick-tab-active .orion-sb-quick-tab-count {
+  color: #fff;
+}
+
+.orion-sb-quick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.orion-sb-quick-empty {
+  margin: 0;
+  padding: 8px 6px;
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+.orion-sb-quick-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--sb-ease), color var(--sb-ease);
+}
+
+.orion-sb-quick-link:hover {
+  background: color-mix(in srgb, var(--primary, #FF174D) 8%, transparent);
+  color: var(--text-main);
+}
+
+.orion-sb-quick-link.orion-sb-item-active {
+  background: color-mix(in srgb, var(--primary, #FF174D) 14%, transparent);
+  color: var(--primary, #FF174D);
+  font-weight: 700;
+}
+
+.orion-sb-section-label {
+  font-size: 8px !important;
+  letter-spacing: 0.08em !important;
+}
+
+.orion-sidebar-v2 .orion-nav-strip-compact {
+  min-height: var(--sb-sub-h) !important;
+  height: var(--sb-sub-h) !important;
+  padding: 0 10px !important;
+  font-size: var(--fs-sidebar-sub, 12px) !important;
+  border: none !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  transition: background var(--sb-ease), color var(--sb-ease) !important;
+}
+
+.orion-sidebar-v2 .orion-nav-strip-compact:hover {
+  background: color-mix(in srgb, var(--primary) 8%, transparent) !important;
+  border: none !important;
+}
+
+.orion-sidebar-v2 .orion-nav-strip-leaf-active,
+.orion-sidebar-v2 .orion-nav-strip-compact.orion-nav-strip-leaf-active {
+  color: var(--primary, #FF174D) !important;
+  background: color-mix(in srgb, var(--primary) 12%, transparent) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.orion-sb-quick-more {
+  margin-top: 6px !important;
+  font-size: 8px !important;
+}
+
+/* ── Univers parents ── */
+.orion-sb-universe-group {
+  margin-bottom: 4px !important;
+}
+
+.orion-sb-universe-btn {
+  min-height: var(--sb-item-h) !important;
+  height: var(--sb-item-h) !important;
+  padding: 0 10px !important;
+  gap: 10px !important;
+  border: none !important;
+  border-radius: var(--sb-radius) !important;
+  font-size: var(--fs-sidebar, 13px) !important;
+  font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+  background: transparent !important;
+  transition: background var(--sb-ease), color var(--sb-ease), box-shadow var(--sb-ease) !important;
+}
+
+.orion-sb-universe-btn:hover:not(.orion-sb-universe-btn-open):not(.orion-sb-universe-btn-active) {
+  background: var(--bg-hover, rgba(255, 255, 255, 0.05)) !important;
+  color: var(--text-main) !important;
+}
+
+.orion-sb-universe-icon {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 7px !important;
+  background: var(--bg-chip, rgba(255, 255, 255, 0.06)) !important;
+  transition: background var(--sb-ease), color var(--sb-ease) !important;
+}
+
+.orion-sb-universe-chevron {
+  transition: transform var(--sb-ease) !important;
+}
+
+/* Ouvert / actif = rouge plein (réf. Pilotage) */
+.orion-sidebar-v2 .orion-sb-universe-btn-open,
+.orion-sidebar-v2 .orion-sb-universe-btn-active,
+.orion-sidebar .orion-sb-universe-btn-open,
+.orion-sidebar .orion-sb-universe-btn-active {
+  color: var(--on-primary, #fff) !important;
+  background: var(--primary, #FF174D) !important;
+  box-shadow: 0 4px 14px var(--ans-primary-glow, rgba(255, 23, 77, 0.28)) !important;
+}
+
+.orion-sidebar-v2 .orion-sb-universe-btn-open .orion-sb-universe-icon,
+.orion-sidebar-v2 .orion-sb-universe-btn-active .orion-sb-universe-icon,
+.orion-sidebar .orion-sb-universe-btn-open .orion-sb-universe-icon,
+.orion-sidebar .orion-sb-universe-btn-active .orion-sb-universe-icon {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+
+.orion-sidebar-v2 .orion-sb-universe-btn-open .orion-sb-universe-chevron,
+.orion-sidebar-v2 .orion-sb-universe-btn-active .orion-sb-universe-chevron {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.orion-sb-universe-btn-has-active:not(.orion-sb-universe-btn-active) {
+  color: var(--primary, #FF174D) !important;
+}
+
+.orion-sb-universe-active-dot {
+  width: 6px !important;
+  height: 6px !important;
+  background: var(--primary, #FF174D) !important;
+}
+
+/* ── Sous-liste ── */
+@keyframes orion-sb-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.orion-sb-sublist {
+  margin: 4px 0 8px 6px !important;
+  padding: 6px !important;
+  border: none !important;
+  border-left: none !important;
+  border-radius: var(--sb-radius) !important;
+  background: color-mix(in srgb, var(--bg-chip, #071021) 70%, transparent) !important;
+  animation: orion-sb-fade-in 0.18s ease;
+}
+
+html:not(.dark) .orion-sb-sublist {
+  background: #f4f7fb !important;
+}
+
+.orion-sb-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--sb-sub-h);
+  padding: 2px 4px 2px 6px;
+  margin: 1px 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  transition: background var(--sb-ease);
+}
+
+.orion-sb-sub-row:hover {
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+.orion-sb-sub-row.is-active {
+  background: color-mix(in srgb, var(--primary, #FF174D) 16%, #fff);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary, #FF174D) 18%, transparent);
+}
+
+html.dark .orion-sb-sub-row.is-active {
+  background: color-mix(in srgb, var(--primary, #FF174D) 22%, transparent);
+  box-shadow: none;
+}
+
+.orion-sb-sub-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.orion-sb-sub-icon {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: color var(--sb-ease);
+}
+
+.orion-sb-sub-row:hover .orion-sb-sub-icon,
+.orion-sb-sub-row.is-active .orion-sb-sub-icon {
+  color: var(--primary, #FF174D);
+}
+
+.orion-sb-sub-icon-placeholder {
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--bg-chip);
+  flex-shrink: 0;
+}
+
+.orion-sb-sub-label {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-sidebar-sub, 12px);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+.orion-sb-sub-row:hover .orion-sb-sub-label { color: var(--text-main); }
+.orion-sb-sub-row.is-active .orion-sb-sub-label {
+  color: var(--primary, #FF174D);
+  font-weight: 600;
+}
+
+.orion-sb-fav-btn {
+  flex-shrink: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--sb-ease), color var(--sb-ease);
+}
+
+.orion-sb-sub-row:hover .orion-sb-fav-btn,
+.orion-sb-fav-btn:focus-visible,
+.orion-sb-fav-btn.is-fav { opacity: 1; }
+
+.orion-sb-fav-btn.is-fav,
+.orion-sb-fav-btn:hover { color: var(--orion-yellow, #FACC15); }
+
+/* Neutralise anciens strips dans sublist (redondance) */
+.orion-sb-sublist .orion-nav-strip,
+.orion-sb-sublist .orion-nav-strip-sub {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.orion-sb-flow-label {
+  font-size: 8px !important;
+  padding: 4px 8px 6px !important;
+  color: var(--text-muted) !important;
+}
+
+.orion-sb-flow-list { border-left: none !important; }
+
+/* Étape flow ≠ badge live (carré borduré vs pilule compteur) */
+.orion-sb-flow-step {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 8px !important;
+  border-radius: 7px !important;
+  border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent) !important;
+  background: transparent !important;
+  color: var(--text-muted, #64748b) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700 !important;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Admin macro */
+.orion-admin-macro-nav {
+  margin: 4px 0 8px 6px !important;
+  padding: 6px !important;
+  border-left: none !important;
+  border-radius: var(--sb-radius) !important;
+  background: color-mix(in srgb, var(--bg-chip, #071021) 70%, transparent) !important;
+  animation: orion-sb-fade-in 0.18s ease;
+}
+
+html:not(.dark) .orion-admin-macro-nav { background: #f4f7fb !important; }
+
+.orion-admin-macro-nav-item {
+  min-height: 32px !important;
+  border: none !important;
+  border-radius: 7px !important;
+  font-size: 11px !important;
+  transition: background var(--sb-ease), color var(--sb-ease) !important;
+}
+
+.orion-admin-macro-nav-item.is-active {
+  color: var(--primary, #FF174D) !important;
+  background: color-mix(in srgb, var(--primary) 14%, transparent) !important;
+  border: none !important;
+}
+
+/* Footer compte — bas de carte */
+.orion-sidebar-card > .orion-sb-user-panel,
+.orion-sidebar-v2 .orion-sidebar-card > .orion-sb-widget:last-child {
+  margin: 4px 6px 6px !important;
+  border-radius: var(--sb-radius) !important;
+  border: 1px solid var(--border-soft) !important;
+  background: var(--bg-app, rgba(244, 247, 251, 0.85)) !important;
+}
+
+html:not(.dark) .orion-sidebar-card > .orion-sb-user-panel {
+  background: #f8fafc !important;
+}
+
+.orion-sb-user-name {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, var(--text-main)) !important;
+  line-height: 1.25 !important;
+}
+
+.orion-sb-user-role {
+  font-size: 9px !important;
+  color: var(--text-muted) !important;
+  line-height: 1.2 !important;
+}
+
+/* Mini */
+.orion-sb-universe-mini {
+  width: 44px !important;
+  height: 44px !important;
+  border: none !important;
+  border-radius: var(--radius-rect, 7px) !important;
+  color: #475569;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background var(--sb-ease), color var(--sb-ease), box-shadow var(--sb-ease), transform var(--sb-ease);
+}
+
+.orion-sb-universe-mini:hover {
+  background: color-mix(in srgb, #64748b 8%, transparent) !important;
+  color: #0f172a !important;
+}
+
+.orion-sidebar-v2 .orion-sb-universe-mini-active {
+  color: #fff !important;
+  background: var(--primary, #FF174D) !important;
+  box-shadow: 0 8px 20px -6px rgba(255, 23, 77, 0.55) !important;
+}
+
+.orion-sb-universe-mini-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--primary, #FF174D);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 16px;
+  text-align: center;
+  box-shadow: 0 0 0 2px var(--bg-card, #fff);
+  z-index: 2;
+}
+
+.orion-sb-universe-mini-active .orion-sb-universe-mini-badge {
+  background: #fff;
+  color: var(--primary, #FF174D);
+  box-shadow: 0 0 0 2px var(--primary, #FF174D);
+}
+
+/* ── Mode réduit (rail icônes type maquette) ── */
+html body aside.orion-sidebar.orion-sidebar-mini,
+html body aside.orion-sidebar-v2.orion-sidebar-mini {
+  width: 72px !important;
+  padding: 10px 8px 12px !important;
+  gap: 10px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.orion-sidebar-mini .orion-sb-brand-mini {
+  gap: 0 !important;
+  padding: 0 !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.orion-sidebar-mini .orion-sb-brand-link-mini {
+  padding: 2px 0 0 !important;
+}
+
+.orion-sidebar-mini .orion-sb-mini-logo,
+.orion-sidebar-mini .orion-ans-monogram.orion-sb-mini-logo {
+  width: 52px !important;
+  height: 52px !important;
+  max-width: 56px !important;
+}
+
+/* Étendre — compact, sans fond gris, centré comme les icônes nav */
+.orion-sidebar-mini .orion-sb-mini-expand {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  margin: 2px auto !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: var(--radius-rect, 7px) !important;
+  background: transparent !important;
+  color: #94a3b8 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  flex-shrink: 0 !important;
+  box-shadow: none !important;
+  transition: color 0.15s ease, background 0.15s ease !important;
+}
+
+.orion-sidebar-mini .orion-sb-mini-expand:hover {
+  color: var(--primary, #FF174D) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none;
+}
+
+.orion-sidebar-mini .orion-sb-mini-expand:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--primary, #FF174D) 45%, transparent);
+  outline-offset: 2px;
+}
+
+.orion-sidebar-mini .orion-sidebar-card--mini {
+  padding: 8px 6px !important;
+  gap: 2px !important;
+  align-items: center !important;
+  border-radius: var(--radius-rect, 7px) !important;
+  background: var(--bg-card, #fff) !important;
+  border: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 70%, transparent) !important;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 28px -14px rgba(15, 23, 42, 0.16) !important;
+  overflow: hidden;
+}
+
+.orion-sidebar-mini .orion-sb-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 2px !important;
+  padding: 2px 0 !important;
+  overflow-x: hidden !important;
+}
+
+.orion-sidebar-mini .orion-sb-nav > .space-y-1 {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 2px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.orion-sidebar-mini .orion-sb-nav .space-y-1 > * + * {
+  margin-top: 0 !important;
+}
+
+.orion-sidebar-mini .orion-sb-mini-search {
+  margin: 0 auto 4px !important;
+}
+
+.orion-sidebar-mini .orion-sb-user-panel--mini {
+  padding: 6px 0 2px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.orion-sidebar-mini .orion-sb-mini-avatar {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, #64748b 12%, #fff) !important;
+  color: #475569 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.orion-sidebar-mini .orion-sb-mini-profile:hover .orion-sb-mini-avatar {
+  background: color-mix(in srgb, var(--primary, #FF174D) 12%, #fff) !important;
+  color: var(--primary, #FF174D) !important;
+}
+
+html.dark aside.orion-sidebar-mini,
+html.dark aside.orion-sidebar-v2.orion-sidebar-mini {
+  background: transparent !important;
+}
+
+html.dark .orion-sidebar-mini .orion-sb-mini-expand {
+  background: transparent !important;
+  color: #64748b !important;
+  box-shadow: none !important;
+}
+
+html.dark .orion-sidebar-mini .orion-sb-mini-expand:hover {
+  color: var(--primary, #FF174D) !important;
+  background: transparent !important;
+}
+
+html.dark .orion-sidebar-mini .orion-sidebar-card--mini {
+  background: var(--bg-card, #0b1220) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+}
+
+html.dark .orion-sidebar-mini .orion-sb-universe-mini {
+  color: #94a3b8;
+}
+
+html.dark .orion-sidebar-mini .orion-sb-universe-mini:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #f8fafc !important;
+}
+
+html.dark .orion-sidebar-mini .orion-sb-mini-avatar {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .orion-sb-universe-mini-badge {
+  box-shadow: 0 0 0 2px var(--bg-card, #0b1220);
+}
+
+.orion-sidebar-v2 .orion-sb-universe-btn > span.truncate {
+  font-size: var(--fs-sidebar, 13px) !important;
+}
+
+/* Badges */
+.orion-sidebar-v2 .orion-sb-badge {
+  font-size: 8px !important;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
+  color: var(--primary, #FF174D);
+}
+
+.orion-sb-universe-btn-active .orion-sb-badge {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orion-sb-sublist,
+  .orion-admin-macro-nav { animation: none; }
+  .orion-sb-universe-btn,
+  .orion-sb-sub-row,
+  .orion-sb-universe-chevron,
+  .orion-sb-search-trigger,
+  .orion-sb-universe-mini { transition: none !important; }
+}
+
+/* Repère typo sidebar — menu 13 / sous-menu 12 (source de vérité vs POS) */
+html body .orion-sidebar-v2 .orion-sb-universe-btn,
+html body .orion-sidebar .orion-sb-universe-btn,
+html body .orion-sidebar-v2 .orion-sb-universe-btn > span.truncate {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+html body .orion-sidebar-v2 .orion-sb-sub-label,
+html body .orion-sidebar .orion-sb-sub-label,
+html body .orion-sidebar-v2 .orion-nav-strip-compact {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}

@@ -1,0 +1,2772 @@
+@import '../styles/design-tokens.css';
+@import '../styles/palette-orion-violet.css';
+@import '../styles/light-theme.css';
+@import '../styles/contrast-theme.css';
+@import '../styles/surface-enrichment.css';
+@import '../styles/late-arrival-modal.css';
+@import '../styles/login-role-pills.css';
+@import '../styles/layout-grid.css';
+@import '../styles/design-system.css';
+@import '../styles/ux-interactions.css';
+@import '../styles/theme-global-refonte.css';
+@import '../styles/ui-structure.css';
+@import '../styles/dropdown-theme.css';
+@import '../styles/anti-contours.css';
+@import '../styles/orion-ui-ux-complete.css';
+@import '../styles/light-white-only.css';
+@import '../styles/light-saas-premium.css';
+@import '../styles/alignment-system.css';
+@import '../styles/typography-scale.css';
+@import '../styles/phone-density.css';
+@import '../styles/module-date-filter.css';
+@import '../styles/ui-consistency-10.css';
+@import '../styles/sidebar-modern.css';
+@import '../styles/design-polish-global.css';
+@import '../styles/design-modern-2026.css';
+@import '../styles/v29-chrome-polish.css';
+@import '../styles/orion-header-dense.css';
+/* En-têtes modules densifiés partout (après dense + typo) */
+@import '../styles/page-header-compact-global.css';
+@import '../styles/mobile-h-rail.css';
+@import '../styles/mobile-nav-launcher.css';
+/* Correctifs responsive phone (après density / rails / tab bar) */
+@import '../styles/mobile-responsive-fixes.css';
+/* Tables : densite + scroll X + anti-chevauchement (tous modules) */
+@import '../styles/orion-tables-responsive.css';
+@import '../styles/alert-ticker.css';
+@import '../styles/orion-logo.css';
+@import '../styles/task-chrono-overlay.css';
+@import '../styles/machines-v29.css';
+@import '../styles/orion-toast.css';
+@import '../styles/rh-recruitment-v29.css';
+@import '../styles/v29-dark-polish.css';
+@import '../styles/orion-slide-panel.css';
+/* Dernière couche : alias + sémantiques (brand / info / danger unifiés) */
+@import '../styles/color-harmony.css';
+/* Couche FINALE : densite headers + shell + mobile (projet entier) */
+@import '../styles/orion-project-final.css';
+/* Perf scroll : content-visibility hors écran */
+@import '../styles/orion-perf-runtime.css';
+/* Recherche + selects filtres unifiés (après couches projet) */
+@import '../styles/orion-search-filter.css';
+/* Mode sombre : supprimer filets/contours blancs (après toutes les couches) */
+@import '../styles/dark-mode-no-white-borders.css';
+/* Couche finale clair+sombre : zéro cadre carte / table (sauf contrôles) */
+@import '../styles/orion-no-frames.css';
+/* Surfaces unies — zéro dégradé chromatique (après toutes couches UI) */
+@import '../styles/solid-surfaces.css';
+@import '../styles/devis-page.css';
+@import '../styles/commandes-page.css';
+@import '../styles/commercial-journey.css';
+@import '../styles/achats-modal.css';
+@import '../styles/fournisseurs-page.css';
+@import '../styles/materiels-page.css';
+@import '../styles/maintenance-tickets.css';
+@import '../styles/mes-equipements.css';
+@import '../styles/stock-inventaire.css';
+@import '../styles/studio-briefs.css';
+@import '../styles/studio-fichiers.css';
+@import '../styles/gpao-dossiers.css';
+@import '../styles/metier-taches.css';
+@import '../styles/qualite-checklist.css';
+@import '../styles/plan-matiere.css';
+@import '../styles/suggestions-page.css';
+@import '../styles/cm-campagnes.css';
+@import '../styles/cm-relances.css';
+@import '../styles/cm-notifications.css';
+@import '../styles/livraisons-page.css';
+@import '../styles/factures-page.css';
+@import '../styles/paiements-page.css';
+@import '../styles/caisse-page.css';
+@import '../styles/rh-employes.css';
+@import '../styles/rh-absences.css';
+@import '../styles/rh-performance.css';
+@import '../styles/rh-paie.css';
+@import '../styles/rh-annonces.css';
+@import '../styles/charges-page.css';
+@import '../styles/fiscalite-page.css';
+@import '../styles/couts-revient.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dernière couche : champs saisie sans contour rouge (après Tailwind + pages) */
+@import '../styles/field-writable-neutral.css';
+/* Rayons rectangles unifiés 7px (sauf boutons / pills) — tout à la fin */
+@import '../styles/radius-unify.css';
+@import '../styles/button-height-unify.css';
+
+html,
+body {
+  font-family: Manrope, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+:root {
+  --font-sans: Manrope, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  --font-display: var(--font-sans);
+  --radius: 7px;
+  --radius-sm: 7px;
+  --radius-md: 7px;
+  --radius-lg: 7px;
+  --radius-xl: 7px;
+  --radius-2xl: 7px;
+  --radius-ui: 7px;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+
+  /* Accents UI — or & framboise (plus de cyan dominant) */
+  --accent-brand: var(--ans-gold-500);
+  --accent-brand-alt: var(--ans-pink-500);
+
+  /* ── Mode clair · surfaces unifiées (alias → tokens design-tokens.css) ── */
+  --bg-main: var(--bg-page);
+  --bg-soft: var(--bg-panel);
+  --background-soft: var(--bg-panel);
+  --surface-warm: var(--bg-warm-subtle);
+  --cockpit-surface: var(--bg-card);
+  --cockpit-surface-muted: var(--bg-card-elevated);
+  --border-subtle: color-mix(in srgb, var(--border-soft) 80%, transparent);
+  --border-medium: var(--border);
+  --text-primary: var(--text-main);
+  --text-secondary: var(--text-muted);
+  --subtle-foreground: var(--text-subtle);
+  --brand-primary: var(--primary, #FF174D);
+  --brand-primary-hover: var(--primary-hover, #C91443);
+  --brand-primary-soft: color-mix(in srgb, var(--primary, #FF174D) 10%, transparent);
+  --brand-primary-border: color-mix(in srgb, var(--primary, #FF174D) 28%, transparent);
+  --success-bg: color-mix(in srgb, var(--success, #16A34A) 10%, transparent);
+  --success-border: color-mix(in srgb, var(--success, #16A34A) 28%, transparent);
+  --warning-bg: color-mix(in srgb, var(--warning, #F59E0B) 12%, transparent);
+  --warning-border: color-mix(in srgb, var(--warning, #F59E0B) 32%, transparent);
+  --danger-bg: color-mix(in srgb, var(--danger, #DC2626) 10%, transparent);
+  --danger-border: color-mix(in srgb, var(--danger, #DC2626) 28%, transparent);
+  --info: #2563EB;
+  --info-bg: color-mix(in srgb, #2563EB 12%, transparent);
+  --info-border: color-mix(in srgb, #2563EB 28%, transparent);
+
+  /* Ombres mode clair — opacité unifiée 0.10 (cartes blanches vs fond) */
+  --shadow-opacity: 0.10;
+  --shadow-card: 0 2px 10px rgba(15, 23, 42, 0.10), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-hover: 0 4px 16px rgba(15, 23, 42, 0.10), 0 2px 6px rgba(15, 23, 42, 0.06);
+  --orion-shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.10);
+  --orion-shadow-md: 0 4px 14px rgba(15, 23, 42, 0.10);
+  --orion-shadow-lg: 0 10px 28px rgba(15, 23, 42, 0.10);
+
+  --orion-bg: var(--bg-app);
+  --orion-bg-2: var(--bg-page);
+  --orion-surface: var(--bg-panel);
+  --orion-surface-hover: var(--bg-hover);
+  --orion-surface-soft: var(--bg-panel);
+  --orion-surface-muted: var(--bg-card-elevated);
+  --orion-red-dark: #C91443;
+  --orion-red-vivid: var(--primary);
+  --orion-yellow: var(--warning);
+  --orion-yellow-dark: #E86F00;
+  --orion-green: var(--success);
+  --orion-text: var(--text-main);
+  --orion-text-soft: var(--text-muted);
+  --orion-muted: var(--text-subtle);
+  --orion-dim: #667085;
+  --orion-radius: 7px;
+  --orion-radius-sm: 7px;
+  --orion-transition-fast: all 180ms ease;
+  --orion-transition-card: all 180ms ease;
+  --orion-gradient-red: #FF174D;
+  --orion-gradient-yellow: #FACC15;
+  --orion-shadow: var(--shadow-hover);
+  --orion-shadow-soft: var(--shadow-card);
+
+  --ans-red: var(--primary);
+  --ans-red-vivid: var(--primary);
+  --ans-red-dark: #C91443;
+  --ans-orange: #FF8A00;
+  --ans-yellow: var(--warning);
+  --ans-yellow-soft: #FFC247;
+  --ans-cyan: var(--info, #2563EB);
+  --ans-blue: var(--info, #2563EB);
+  --ans-green: var(--success);
+  --ans-bg: var(--bg-app);
+  --ans-card: var(--bg-card);
+  --ans-text: var(--text-main);
+  --ans-muted: var(--text-muted);
+  --ans-border: var(--border-soft);
+  --ans-sidebar: var(--bg-panel);
+  --ans-text-light: var(--text-main);
+  --ans-text-muted: var(--text-muted);
+  --ans-bg-dark: var(--bg-app);
+  --ans-surface-dark: var(--bg-panel);
+  --ans-surface-dark-2: var(--bg-card);
+  --ans-gradient-main: #FF174D;
+  --ans-gradient-warm: var(--ans-gradient-main);
+  --ans-gradient-gold: #FACC15;
+
+  /* Tailwind / shadcn — HSL cool slate (harmonisé) */
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  /* Hex pour color-mix / CSS custom — HSL séparé pour Tailwind */
+  --primary: #FF174D;
+  --primary-foreground: #FFFFFF;
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground-hsl: 0 0% 100%;
+  --secondary: 48 96% 53%;
+  --secondary-foreground: 30 100% 9%;
+  --muted: 0 0% 100%;
+  --muted-foreground: 215 16% 40%;
+  --accent: 40 14% 96%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --destructive-hsl: 0 72% 51%;
+  --destructive-foreground-hsl: 0 0% 100%;
+  --border: 220 14% 93%;
+  --input: 0 0% 100%;
+  --ring: 345 100% 55%;
+  --ring-hsl: 345 100% 55%;
+}
+
+.dark {
+  /* Alias surfaces → tokens unifiés (design-tokens.css) */
+  --bg-main: var(--bg-page);
+  --bg-soft: var(--bg-panel);
+  --background-soft: var(--bg-panel);
+  --surface-warm: var(--bg-warm-subtle);
+  --cockpit-surface: var(--bg-card);
+  --cockpit-surface-muted: var(--bg-card-elevated);
+  --border-subtle: color-mix(in srgb, var(--border-soft) 85%, transparent);
+  --border-medium: var(--border);
+  --text-primary: var(--text-main);
+  --text-secondary: var(--text-muted);
+  --subtle-foreground: var(--text-subtle);
+  --brand-primary: var(--primary, #FF174D);
+  --brand-primary-hover: var(--primary-hover, #FF3366);
+  --brand-primary-soft: var(--bg-active-soft);
+  --brand-primary-border: color-mix(in srgb, var(--primary, #FF174D) 24%, transparent);
+  --success-bg: color-mix(in srgb, var(--success) 8%, transparent);
+  --success-border: color-mix(in srgb, var(--success) 20%, transparent);
+  --warning-bg: color-mix(in srgb, var(--warning) 8%, transparent);
+  --warning-border: color-mix(in srgb, var(--warning) 20%, transparent);
+  --danger-bg: color-mix(in srgb, var(--danger) 8%, transparent);
+  --danger-border: color-mix(in srgb, var(--danger) 20%, transparent);
+  --info: var(--ans-info, #3B82F6);
+  --info-bg: color-mix(in srgb, var(--ans-info, #3B82F6) 12%, transparent);
+  --info-border: color-mix(in srgb, var(--ans-info, #3B82F6) 28%, transparent);
+  --shadow-card: 0 1px 3px rgba(2, 0, 25, 0.45), 0 0 20px rgba(255, 23, 77, 0.05);
+  --shadow-hover: 0 8px 28px rgba(2, 0, 25, 0.55), 0 0 28px rgba(255, 23, 77, 0.08);
+
+  --accent-brand: var(--ans-gold, #FACC15);
+  --accent-brand-alt: var(--ans-primary, #FF174D);
+
+  --orion-bg: var(--bg-app);
+  --orion-bg-2: var(--bg-page);
+  --orion-surface: var(--bg-panel);
+  --orion-surface-hover: var(--bg-hover);
+  --orion-surface-soft: var(--bg-panel);
+  --orion-surface-muted: var(--bg-card-elevated);
+  --orion-red-vivid: var(--ans-primary, #FF174D);
+  --orion-yellow: var(--warning);
+  --orion-green: var(--success);
+  --orion-text: var(--text-main);
+  --orion-text-soft: var(--text-muted);
+  --orion-muted: var(--text-subtle);
+  --orion-dim: var(--text-subtle);
+  --orion-shadow: 0 18px 45px rgba(2, 0, 25, 0.55);
+  --orion-shadow-soft: 0 10px 28px rgba(2, 0, 25, 0.42);
+  --ans-bg: var(--bg-app);
+  --ans-card: var(--bg-card);
+  --ans-text: var(--text-main);
+  --ans-muted: var(--text-muted);
+  --ans-border: var(--border-soft);
+  --ans-sidebar: var(--ans-bg-sidebar, var(--bg-panel));
+  --ans-text-light: var(--text-main);
+  --ans-text-muted: var(--text-subtle);
+
+  /* Surfaces shadcn HSL + primary hex (Tailwind via --primary-hsl) */
+  --background: 214 55% 5%;
+  --foreground: 210 40% 98%;
+  --card: 214 48% 8%;
+  --card-foreground: 210 40% 98%;
+  --popover: 214 50% 7%;
+  --popover-foreground: 220 60% 95%;
+  --primary: #FF174D;
+  --primary-foreground: #FFFFFF;
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground-hsl: 0 0% 100%;
+  --secondary: 48 96% 53%;
+  --secondary-foreground: 30 100% 9%;
+  --muted: 214 45% 9%;
+  --muted-foreground: 215 25% 72%;
+  --accent: 214 42% 11%;
+  --accent-foreground: 220 60% 95%;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --destructive-hsl: 0 84% 60%;
+  --destructive-foreground-hsl: 0 0% 100%;
+  --border: 214 35% 14%;
+  --input: 214 45% 9%;
+  --ring: 345 100% 55%;
+  --ring-hsl: 345 100% 55%;
+}
+
+* { @apply border-border; }
+body {
+  @apply font-sans antialiased;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-placeholder);
+  opacity: 1;
+}
+
+@keyframes orionFadeUp {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.orion-fade-up {
+  animation: orionFadeUp 0.12s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orion-fade-up {
+    animation: none !important;
+  }
+}
+
+.orion-viewport {
+  background: var(--bg-page);
+  min-height: 100%;
+  position: relative;
+}
+
+/* Mode clair : pas de trame / grille — fond uni SaaS */
+html:not(.dark) .orion-viewport::before {
+  content: none;
+  display: none;
+}
+
+/* Mode sombre : halo doux uniquement (pas de grille) */
+html.dark .orion-viewport::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(231, 25, 79, 0.08), transparent 38%),
+    radial-gradient(circle at 100% 100%, rgba(255, 178, 26, 0.05), transparent 32%);
+  background-size: 100% 100%, 100% 100%;
+}
+
+/* ── Utilitaires surfaces ── */
+.bg-app { background-color: var(--bg-app); }
+.bg-page { background-color: var(--bg-page); }
+.bg-panel { background-color: var(--bg-panel); }
+.bg-card-surface { background-color: var(--bg-card); }
+.bg-card-soft { background-color: var(--bg-card-soft); }
+.bg-card-elevated { background-color: var(--bg-card-elevated); }
+.bg-chip { background-color: var(--bg-chip); }
+.bg-chip-active { background-color: var(--bg-chip-active); }
+.bg-row-alt { background-color: var(--bg-row-alt); }
+.bg-row-hover { background-color: var(--bg-row-hover); }
+.bg-selected-soft { background-color: var(--bg-selected-soft); }
+.bg-context-soft { background-color: var(--bg-context-soft); }
+.bg-hover-surface { background-color: var(--bg-hover); }
+.bg-active-soft { background-color: var(--bg-active-soft); }
+.text-main { color: var(--text-main); }
+.text-muted-surface { color: var(--text-muted); }
+.text-subtle { color: var(--text-subtle); }
+.border-soft-surface { border-color: var(--border-soft); }
+.orion-backdrop { background: var(--backdrop); }
+
+[data-hydration-error] { display: none !important; }
+
+.font-display { font-family: var(--font-sans), system-ui, sans-serif; }
+.font-mono { font-family: var(--font-mono), ui-monospace, monospace; }
+
+/* ── Tokens typographiques ANS ORION ── */
+.orion-text-page-title {
+  @apply text-sm md:text-[0.9375rem] font-semibold tracking-tight leading-tight text-foreground;
+}
+.orion-text-section-title {
+  @apply text-sm font-semibold leading-snug text-foreground;
+}
+.orion-text-section-title-md {
+  @apply text-sm font-semibold leading-snug text-foreground;
+}
+.orion-text-card-title {
+  @apply text-base font-semibold leading-normal text-foreground;
+}
+.orion-text-body {
+  @apply text-sm leading-5 text-foreground;
+}
+.orion-text-body-muted {
+  @apply text-sm leading-5 text-muted-foreground;
+}
+.orion-text-label {
+  @apply text-sm font-medium leading-5 text-foreground;
+}
+.orion-text-meta {
+  @apply text-xs leading-4 text-muted-foreground;
+}
+.orion-text-kpi-value {
+  @apply text-xl md:text-2xl font-semibold tabular-nums leading-tight text-foreground;
+}
+.orion-text-amount {
+  @apply font-mono text-sm font-semibold tabular-nums;
+}
+.orion-text-code {
+  @apply font-mono text-xs tabular-nums tracking-normal;
+}
+.orion-text-code-md {
+  @apply font-mono text-sm font-semibold tabular-nums tracking-tight;
+}
+
+/* Accent brand — remplace #00D9FF en dur */
+.text-accent-brand { color: var(--accent-brand); }
+.text-accent-brand-alt { color: var(--accent-brand-alt); }
+.bg-accent-brand { background-color: var(--accent-brand); }
+.border-accent-brand { border-color: var(--accent-brand); }
+.bg-accent-brand-muted { background: color-mix(in srgb, var(--accent-brand) 12%, transparent); }
+.ring-accent-brand { --tw-ring-color: var(--accent-brand); }
+.chip-selected-accent {
+  background: var(--accent-brand);
+  color: var(--secondary-foreground);
+  border-radius: var(--orion-radius);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-brand) 35%, transparent);
+}
+
+.orion-chip-idle {
+  border-radius: var(--orion-radius);
+}
+
+.dark .chip-selected-accent {
+  color: var(--secondary-foreground);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-brand) 25%, transparent);
+}
+.chip-accent-idle:hover {
+  background: color-mix(in srgb, var(--accent-brand) 8%, var(--orion-surface-soft));
+}
+
+.cmjn-bar,
+.ans-brand-bar {
+  height: 3px;
+  background: var(--ans-gradient-warm);
+}
+
+.ans-surface {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark .ans-surface {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:root:not(.dark) .ans-surface {
+  background: var(--bg-card);
+  border: 1px solid var(--border-standard);
+}
+
+.ans-card-premium,
+.orion-card {
+  @apply transition-all;
+  border-radius: var(--orion-radius);
+  background: var(--bg-card);
+  border: none;
+  box-shadow: var(--shadow-card, 0 4px 16px rgba(15, 23, 42, 0.06));
+  transition: background 0.15s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.ans-card-premium:hover,
+.orion-card:hover {
+  background: var(--bg-card-soft);
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover, 0 8px 24px rgba(15, 23, 42, 0.1));
+}
+
+.ans-card-premium:active,
+.orion-card:active {
+  transform: scale(0.995);
+}
+
+.primary-alert {
+  background: color-mix(in srgb, var(--ans-red-500) 12%, transparent);
+  color: var(--brand-primary);
+  border: none;
+}
+
+.dark .primary-alert {
+  background: color-mix(in srgb, var(--ans-red-500) 22%, transparent);
+  color: #FFB8CC;
+  border: none;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-app); }
+
+.ans-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  height: var(--btn-h, var(--control-h, 32px));
+  min-height: var(--btn-h, var(--control-h, 32px));
+  max-height: var(--btn-h, var(--control-h, 32px));
+  padding: 0 16px;
+  background: var(--orion-gradient-red);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  border: none;
+  border-radius: 7px;
+  transition: filter 0.15s, transform 0.15s;
+}
+
+.ans-btn-primary svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* FAB panier / boutons ronds hors norme 24px */
+.ans-btn-primary.w-14,
+button.ans-btn-primary.w-14,
+.ans-btn-primary.h-14 {
+  height: 3.5rem !important;
+  min-height: 3.5rem !important;
+  max-height: 3.5rem !important;
+  width: 3.5rem !important;
+  padding: 0 !important;
+  border-radius: var(--orion-radius, 12px) !important;
+}
+
+.ans-btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.ans-btn-primary:active {
+  transform: scale(0.95);
+}
+
+.ans-btn-gold {
+  background: var(--ans-gradient-gold);
+  color: var(--secondary-foreground);
+  font-weight: 700;
+}
+
+.ans-text-gold {
+  color: var(--ans-yellow);
+}
+
+.ans-login-bg {
+  background: var(--ans-gradient-main);
+  background-image:
+    linear-gradient(135deg, rgba(255, 74, 43, 0.95) 0%, rgba(242, 10, 58, 0.92) 40%, rgba(200, 0, 47, 0.95) 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.03) 40px,
+      rgba(255, 255, 255, 0.03) 41px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.03) 40px,
+      rgba(255, 255, 255, 0.03) 41px
+    );
+}
+
+.dashboard-full {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  background: transparent;
+}
+
+.orion-page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  background: transparent;
+}
+
+/* Hub / index densifiés — 2–3 colonnes, surfaces sans filet */
+.orion-dense-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 1080px;
+}
+
+.orion-dense-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+@media (min-width: 640px) {
+  .orion-dense-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .orion-dense-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.orion-dense-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: var(--radius-card, 7px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 92%, transparent);
+  border: none;
+  box-shadow: none;
+  min-width: 0;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.orion-dense-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--primary, #cc0033) 5%, var(--bg-card-soft, #f8fafc));
+}
+
+.orion-dense-card__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.orion-dense-card__icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  color: #fff;
+  background: linear-gradient(135deg, #64748b, #475569);
+}
+
+.orion-dense-card__icon[data-tone='brand'] {
+  background: linear-gradient(135deg, #cc0033, #ff1e56);
+}
+
+.orion-dense-card__icon[data-tone='warning'] {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.orion-dense-card__icon[data-tone='info'] {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+.orion-dense-card__icon[data-tone='success'] {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.orion-dense-card__icon[data-tone='neutral'] {
+  background: linear-gradient(135deg, #64748b, #475569);
+}
+
+.orion-dense-card__title {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.orion-dense-card__links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.orion-dense-card__links a {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary, #cc0033);
+  text-decoration: none;
+  padding: 0.25rem 0.4rem;
+  border-radius: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orion-dense-card__links a:hover {
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, transparent);
+  text-decoration: none;
+}
+
+html.dark .orion-dense-card,
+.dark .orion-dense-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .orion-dense-card:hover,
+.dark .orion-dense-card:hover {
+  background: color-mix(in srgb, var(--primary, #cc0033) 10%, var(--bg-card-soft, #1e293b));
+}
+
+.orion-page-container {
+  width: 100%;
+  max-width: none;
+}
+
+.orion-page > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.5rem;
+}
+
+/* ─── Sidebar Orion — Cockpit Premium ─── */
+.orion-sidebar {
+  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-app) 100%);
+  border-right: 1px solid var(--border-soft);
+}
+
+:root:not(.dark) .orion-sidebar:not(.orion-sidebar-desktop),
+:root:not(.dark) .orion-sidebar-v2:not(.orion-sidebar-desktop) {
+  background: var(--bg-panel);
+  border-right-color: rgba(21, 27, 38, 0.10);
+}
+
+:root:not(.dark) .orion-sidebar.orion-sidebar-desktop,
+:root:not(.dark) .orion-sidebar-v2.orion-sidebar-desktop {
+  background: transparent;
+  border-right-color: transparent;
+}
+
+.orion-sb-brand {
+  background: var(--cockpit-surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--orion-radius);
+}
+
+/* Marque hors carte : pas de fond cartonné */
+.orion-sb-brand.orion-sb-brand-outside {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.orion-sb-widget {
+  background: var(--cockpit-surface-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--orion-radius);
+}
+
+.orion-sb-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.orion-sb-div {
+  height: 1px;
+  background: var(--ans-border);
+  margin: 8px 4px;
+}
+
+.orion-nav-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: var(--orion-radius-sm);
+  color: var(--text-secondary);
+  background: var(--cockpit-surface);
+  border: 1px solid var(--border-soft);
+  font-size: 12px;
+  font-weight: 700;
+  transition: var(--orion-transition-fast);
+  text-align: left;
+  min-height: 72px;
+  cursor: pointer;
+}
+
+.orion-nav-tile:hover {
+  color: var(--text-primary);
+  background: var(--orion-surface-hover);
+  border-color: var(--border-medium);
+}
+
+.orion-nav-tile-active {
+  color: var(--brand-primary-hover) !important;
+  background: var(--brand-primary-soft) !important;
+  border-color: var(--brand-primary-border) !important;
+  box-shadow: var(--shadow-card);
+}
+
+.orion-nav-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: var(--orion-radius-sm);
+  color: var(--text-secondary);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  transition: var(--orion-transition-fast);
+  text-align: left;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.orion-nav-strip:hover {
+  color: var(--text-primary);
+  background: var(--bg-row-hover);
+  border-color: var(--border-soft);
+}
+
+.orion-nav-strip-active {
+  color: var(--brand-primary-hover) !important;
+  background: var(--bg-selected-soft) !important;
+  border-color: var(--border-active-soft) !important;
+}
+
+/* Favoris / récents — actif subtil (sous-modules = .orion-sb-sub-row) */
+.orion-nav-strip-leaf-active {
+  color: var(--primary, #FF174D) !important;
+  background: color-mix(in srgb, var(--primary, #FF174D) 12%, transparent) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Parent / mini actifs → styles/sidebar-modern.css */
+
+.orion-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px;
+  margin: 2px 0;
+  border-radius: var(--orion-radius);
+  color: var(--orion-muted);
+  font-size: 12px;
+  font-weight: 600;
+  transition: var(--orion-transition-fast);
+  text-align: left;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.orion-nav-item:hover {
+  color: var(--orion-text);
+  background: var(--bg-row-hover);
+  border-color: var(--border-soft);
+}
+
+.orion-nav-item-active {
+  color: var(--brand-primary-hover) !important;
+  background: var(--bg-selected-soft) !important;
+  border-color: var(--border-active-soft) !important;
+  box-shadow: none;
+}
+
+.dark .orion-nav-tile-active {
+  color: #fff !important;
+  background: var(--orion-gradient-red) !important;
+  border-color: transparent !important;
+}
+
+.dark .orion-nav-item-active {
+  color: var(--primary-foreground) !important;
+  background: var(--orion-gradient-red) !important;
+}
+
+.dark .orion-nav-strip-leaf-active {
+  color: var(--primary, #FF174D) !important;
+  background: color-mix(in srgb, var(--primary, #FF174D) 12%, transparent) !important;
+  border-color: transparent !important;
+}
+
+.dark .orion-sidebar {
+  background: #030810;
+  border-right-color: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+
+.dark .orion-sb-brand:not(.orion-sb-brand-outside) {
+  background: var(--bg-card);
+  border-color: var(--border-soft);
+}
+
+.dark .orion-nav-tile {
+  background: color-mix(in srgb, var(--bg-card) 60%, transparent);
+  border-color: transparent;
+}
+
+.dark .orion-nav-strip {
+  background: transparent;
+}
+
+/* ─── Sidebar V2 — navigation par univers ─── */
+:root {
+  /* Carte flottante (pas à fleur haut / gauche / bas) */
+  --orion-sidebar-inset-x: 14px;
+  --orion-sidebar-inset-y: 14px;
+  --orion-sidebar-gutter: 12px;
+  --orion-sidebar-width: 252px;
+  --orion-sidebar-width-mini: 72px;
+  /* Espace réservé à gauche du contenu principal (carte + marges) */
+  --orion-sidebar-offset: calc(
+    var(--orion-sidebar-inset-x) + var(--orion-sidebar-width) + var(--orion-sidebar-gutter)
+  );
+  --orion-tablet-rail-width: 72px;
+  --orion-topbar-height: 52px;
+  --orion-app-header-h: 52px;
+  --orion-bottom-nav-height: 72px;
+  --orion-bottom-nav: 72px;
+  --orion-touch-min: 44px;
+  --orion-page-gutter-phone: 12px;
+  --orion-page-gutter-tablet: 16px;
+  --orion-page-gutter-desktop: 20px;
+  --orion-inset-bottom: 0px;
+  --orion-content-ticker-gap: 5mm;
+  --orion-inset-top: 0px;
+}
+
+.orion-sidebar-v2 {
+  transition: width 0.2s ease;
+}
+
+.orion-sb-env-badge {
+  padding: 2px 6px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  background: var(--orion-surface-soft);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.orion-sb-collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  color: var(--text-muted);
+  background: var(--orion-surface-soft);
+  border: 1px solid var(--border-subtle);
+  transition: var(--orion-transition-fast);
+}
+
+.orion-sb-collapse-btn:hover {
+  color: var(--text-primary);
+  background: var(--orion-surface-hover);
+}
+
+.orion-sb-search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--orion-radius-sm);
+  background: var(--cockpit-surface);
+  border: 1px solid var(--border-soft);
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: var(--orion-transition-fast);
+  cursor: pointer;
+}
+
+.orion-sb-search-trigger:hover {
+  border-color: var(--border-medium);
+  color: var(--text-primary);
+}
+
+.orion-sb-kbd {
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: var(--orion-surface-soft);
+  color: var(--text-muted);
+  border: 1px solid var(--border-soft);
+  font-family: ui-monospace, monospace;
+}
+
+.orion-sb-quick {
+  padding: 2px 0;
+}
+
+.orion-sb-quick-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 3px;
+  margin-bottom: 8px;
+  border-radius: 7px;
+  background: var(--orion-surface-soft, #f1f5f9);
+  border: 1px solid var(--border-subtle);
+}
+
+.orion-sb-quick-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: var(--orion-transition-fast);
+}
+
+.orion-sb-quick-tab-active {
+  color: #fff;
+  background: var(--brand-primary, #FF174D);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(255, 23, 77, 0.28);
+}
+
+.orion-sb-universe-btn-open,
+.orion-sb-universe-btn-active {
+  color: #fff !important;
+  background: var(--primary, #FF174D) !important;
+  box-shadow: 0 4px 14px rgba(255, 23, 77, 0.28);
+}
+
+.orion-sb-universe-btn-open .orion-sb-universe-icon,
+.orion-sb-universe-btn-active .orion-sb-universe-icon {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+
+.orion-sb-quick-more {
+  width: 100%;
+  margin-top: 4px;
+  padding: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.orion-sb-quick-more:hover {
+  color: var(--brand-primary);
+}
+
+.orion-nav-strip-compact {
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+}
+
+.orion-sb-universe-group {
+  margin-bottom: 2px;
+}
+
+.orion-sb-universe-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: var(--orion-radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: var(--orion-transition-fast);
+}
+
+.orion-sb-universe-btn:hover:not(.orion-sb-universe-btn-open):not(.orion-sb-universe-btn-active) {
+  color: var(--text-primary);
+  background: var(--orion-surface-hover);
+}
+
+/* Ouvert / actif : rouge plein (souche renforcée dans sidebar-modern.css) */
+.orion-sb-universe-btn-has-active {
+  color: var(--brand-primary-hover);
+  font-weight: 700;
+}
+
+.orion-sb-universe-active-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orion-yellow);
+  flex-shrink: 0;
+}
+
+.orion-sb-universe-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--orion-radius-sm);
+  background: var(--orion-surface-soft);
+  flex-shrink: 0;
+}
+
+.orion-sb-sublist {
+  padding: 4px 0 8px 4px;
+  margin-left: 14px;
+  margin-top: 2px;
+  border-left: none;
+}
+
+/* Administration — 7 modules Macro (sidebar plate, zéro sous-menu) */
+.orion-admin-macro-nav {
+  padding: 6px 0 12px 6px;
+  margin-left: 8px;
+  margin-top: 4px;
+  border-left: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.orion-admin-macro-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  min-height: 40px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.orion-admin-macro-nav-item:hover {
+  background: var(--orion-surface-soft);
+  color: var(--text-primary);
+}
+
+.orion-admin-macro-nav-item:focus-visible {
+  outline: 2px solid var(--app-primary, #FF174D);
+  outline-offset: 2px;
+}
+
+.orion-admin-macro-nav-item.is-active {
+  background: color-mix(in srgb, var(--app-primary, #FF174D) 14%, transparent);
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--app-primary, #FF174D) 35%, transparent);
+}
+
+.orion-admin-macro-nav-item.is-active .orion-admin-macro-nav-icon {
+  color: var(--app-primary, #FF174D);
+}
+
+.orion-admin-macro-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.orion-admin-macro-nav-label {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Legacy accordéon — conservé masqué si référencé */
+.orion-admin-nav {
+  padding: 4px 0 10px 4px;
+  margin-left: 10px;
+  margin-top: 2px;
+  border-left: 2px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.orion-admin-nav-leaf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--orion-radius-sm);
+  transition: background 0.15s, color 0.15s;
+}
+
+.orion-admin-nav-leaf:hover {
+  background: var(--orion-surface-soft);
+  color: var(--text-primary);
+}
+
+.orion-admin-nav-leaf.is-active {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--primary-hover);
+}
+
+.orion-admin-nav-group-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--orion-radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+
+.orion-admin-nav-group-btn:hover {
+  background: var(--orion-surface-soft);
+  color: var(--text-primary);
+}
+
+.orion-admin-nav-group-btn.is-active {
+  color: var(--text-primary);
+}
+
+.orion-admin-nav-group-btn.is-open {
+  color: var(--primary-hover);
+}
+
+.orion-admin-nav-children {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px 0 4px 22px;
+}
+
+.orion-admin-nav-child {
+  display: block;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: var(--orion-radius-sm);
+  border-left: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.orion-admin-nav-child:hover {
+  background: var(--orion-surface-soft);
+  color: var(--text-primary);
+}
+
+.orion-admin-nav-child.is-active {
+  color: var(--primary-hover);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  border-left: none;
+  font-weight: 600;
+}
+
+.orion-sb-flow-label {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 2px 8px 6px;
+  text-transform: uppercase;
+}
+
+.orion-sb-flow-list {
+  position: relative;
+}
+
+.orion-sb-flow-step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--orion-surface-soft);
+  border: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  margin-right: -2px;
+}
+
+.orion-nav-strip-sub {
+  /* Legacy — sous-modules utilisent .orion-sb-sub-row (sidebar-modern) */
+  min-height: 32px;
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border: none !important;
+}
+
+.orion-sb-universe-mini {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
+  border-radius: var(--orion-radius-sm);
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--orion-transition-fast);
+}
+
+.orion-sb-universe-mini:hover {
+  color: var(--text-primary);
+  background: var(--orion-surface-hover);
+  border-color: var(--border-soft);
+}
+
+.orion-sidebar-v2 .orion-sb-universe-mini-active:hover {
+  filter: brightness(1.06);
+}
+
+.orion-sb-universe-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand-primary);
+}
+
+.orion-sb-flyout {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 0;
+  z-index: 50;
+  min-width: 220px;
+  max-width: 260px;
+  max-height: min(70vh, 420px);
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: var(--orion-radius);
+  background: var(--cockpit-surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-hover);
+}
+
+.orion-sb-flyout-fixed {
+  position: fixed;
+  left: auto;
+  top: auto;
+  z-index: 60;
+}
+
+.orion-sb-flyout-backdrop {
+  background: transparent;
+}
+
+.orion-sb-flyout-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.orion-sb-flyout-subtitle {
+  font-size: 9px;
+  color: var(--text-subtle);
+  margin: -4px 4px 8px;
+  line-height: 1.35;
+}
+
+.orion-sidebar-mini .orion-sb-sublist {
+  margin-left: 0;
+  border-left: none;
+  padding-left: 0;
+}
+
+.orion-sb-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-primary);
+  background: var(--orion-surface-soft);
+  border: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+
+.orion-sb-badge-universe {
+  min-width: 18px;
+  height: 18px;
+  font-size: 10px;
+}
+
+.orion-sb-badge-urgent {
+  color: #fff;
+  background: var(--brand-primary);
+  border-color: transparent;
+}
+
+.orion-sb-universe-mini-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 14px;
+  text-align: center;
+  color: #fff;
+  background: var(--brand-primary);
+}
+
+.orion-nav-ico {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--orion-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--orion-surface-muted);
+}
+
+.orion-nav-item-active .orion-nav-ico,
+.orion-nav-tile-active .orion-nav-ico {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.orion-nav-lbl {
+  flex: 1;
+  font-weight: 700;
+}
+
+.orion-sb-nav::-webkit-scrollbar {
+  width: 5px;
+}
+.orion-sb-nav::-webkit-scrollbar-thumb {
+  background: var(--orion-surface-muted);
+  border-radius: 7px;
+}
+.orion-sb-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--orion-red-vivid);
+}
+
+/* Cockpit header principal — densifié (orion-header-dense.css source) */
+.orion-cockpit-header {
+  height: auto;
+  min-height: 2.75rem;
+  background: color-mix(in srgb, var(--bg-page) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-soft);
+  box-shadow: none;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+.dark .orion-cockpit-header {
+  background: #050C18;
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.cockpit-search {
+  background: var(--bg-main);
+  border: 1px solid var(--border-soft);
+  border-radius: 7px;
+  color: var(--text-primary);
+  transition: var(--orion-transition-fast);
+}
+
+.cockpit-search:hover {
+  border-color: var(--border-medium);
+}
+
+.cockpit-search:focus-within {
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+}
+
+.cockpit-badge {
+  background: var(--brand-primary-soft);
+  border: 1px solid var(--brand-primary-border);
+  color: var(--brand-primary-hover);
+  border-radius: 7px;
+  font-weight: 600;
+}
+
+.cockpit-tabs {
+  background: var(--cockpit-surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 7px;
+  padding: 4px;
+  gap: 2px;
+}
+
+.cockpit-tab {
+  color: var(--text-secondary);
+  background: transparent;
+  border-radius: 7px;
+  transition: var(--orion-transition-fast);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 12px;
+}
+
+.cockpit-tab:hover:not(.cockpit-tab-active) {
+  color: var(--text-primary);
+  background: var(--bg-row-hover);
+}
+
+.cockpit-tab-active {
+  background: var(--brand-primary);
+  color: #FFFFFF;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.cockpit-period-btn {
+  background: var(--cockpit-surface);
+  border: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  border-radius: 7px;
+  transition: var(--orion-transition-fast);
+}
+
+.cockpit-period-btn:hover:not(.cockpit-period-btn-active) {
+  background: var(--orion-surface-hover);
+  border-color: var(--border-medium);
+  color: var(--text-primary);
+}
+
+.cockpit-period-btn-active {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+  color: #FFFFFF;
+}
+
+.cockpit-quick-card {
+  background: var(--bg-card-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--orion-radius);
+  padding: 16px;
+  box-shadow: none;
+  transition: var(--orion-transition-fast);
+  cursor: pointer;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.cockpit-quick-card:hover {
+  background: var(--bg-card);
+  border-color: var(--border-standard);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Texte des raccourcis : jamais de débord latéral */
+.cockpit-quick-card h4,
+.cockpit-quick-card p,
+.cockpit-quick-card .cockpit-quick-label,
+.cockpit-quick-card .cockpit-quick-desc {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .cockpit-quick-card {
+    padding: 10px 10px;
+  }
+}
+
+.cockpit-alert {
+  border-radius: 7px;
+  border: none;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--orion-transition-fast);
+  text-align: left;
+}
+
+.cockpit-alert:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
+}
+
+.cockpit-alert-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.cockpit-count-danger { color: var(--danger); }
+.cockpit-count-warning { color: var(--warning); }
+.cockpit-count-info { color: var(--info); }
+
+.dark .cockpit-count-danger { color: #FF8FA8; }
+.dark .cockpit-count-warning { color: var(--ans-gold-400); }
+.dark .cockpit-count-info { color: #8FC4FF; }
+
+.cockpit-alert-warning {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning);
+}
+
+.cockpit-alert-info {
+  background: var(--info-bg);
+  border-color: var(--info-border);
+  color: var(--info);
+}
+
+.cockpit-alert-success {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success);
+}
+
+.cockpit-empty-state {
+  display: flex;
+  min-height: 220px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  border: 1px dashed var(--border-soft);
+  background: color-mix(in srgb, var(--bg-main) 50%, transparent);
+  text-align: center;
+  padding: 24px;
+}
+
+.cockpit-list-item {
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid var(--border-subtle);
+  background: var(--cockpit-surface-muted);
+  transition: var(--orion-transition-fast);
+}
+
+.cockpit-list-item:hover {
+  background: var(--orion-surface-hover);
+  border-color: var(--border-soft);
+}
+
+.dashboard-header {
+  background: var(--cockpit-surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 7px;
+  box-shadow: var(--shadow-card);
+}
+
+.dark .dashboard-header {
+  background: color-mix(in srgb, var(--orion-bg-2) 95%, transparent);
+  border-color: var(--ans-border);
+}
+
+.dark .cockpit-tabs {
+  background: var(--orion-surface-soft);
+  border-color: var(--ans-border);
+}
+
+.dark .cockpit-quick-card {
+  background: var(--orion-surface);
+  border-color: var(--ans-border);
+}
+
+.dark .cockpit-quick-card:hover {
+  border-color: var(--orion-red-vivid);
+}
+
+.dark .dashboard-full {
+  background: var(--bg-main);
+}
+
+.dark .cockpit-search {
+  background: var(--orion-surface-soft);
+  color: var(--text-primary);
+}
+
+.dark .cockpit-search:focus-within {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+}
+
+.dark .cockpit-badge {
+  background: var(--brand-primary-soft);
+  border-color: var(--brand-primary-border);
+  color: var(--brand-primary-hover);
+}
+
+.dark .cockpit-period-btn {
+  background: var(--orion-surface);
+  border-color: var(--border-soft);
+  color: var(--text-secondary);
+}
+
+.dark .cockpit-period-btn:hover:not(.cockpit-period-btn-active) {
+  background: var(--orion-surface-hover);
+  color: var(--text-primary);
+}
+
+.dark .cockpit-list-item {
+  background: var(--orion-surface-soft);
+  border-color: var(--border-subtle);
+}
+
+.dark .cockpit-empty-state {
+  background: color-mix(in srgb, var(--orion-surface-soft) 80%, transparent);
+  border-color: var(--border-soft);
+}
+
+.dark .cockpit-alert-danger { color: #FF8FA8; }
+.dark .cockpit-alert-warning { color: var(--ans-gold-400); }
+.dark .cockpit-alert-info { color: #8FC4FF; }
+.dark .cockpit-alert-success { color: #6EE7B7; }
+
+.dark .orion-sb-widget {
+  background: var(--orion-surface-soft);
+  border-color: var(--border-subtle);
+}
+
+.dark .orion-sb-nav::-webkit-scrollbar-thumb {
+  background: var(--orion-surface-muted);
+}
+
+.dark .orion-card,
+.dark .dashboard-chart-card,
+.dark .orion-card-interactive {
+  background: var(--bg-card);
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.dark .orion-card:hover,
+.dark .dashboard-chart-card:hover,
+.dark .orion-card-interactive:hover {
+  background: var(--bg-card-soft);
+  border-color: transparent;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+/* Boutons & chips sémantiques — clair + sombre */
+.orion-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0.5rem;
+  border-radius: var(--orion-radius-sm);
+  color: var(--text-secondary);
+  background: transparent;
+  transition: var(--orion-transition-fast);
+}
+
+.orion-icon-btn:hover {
+  color: var(--text-primary);
+  background: var(--orion-surface-hover);
+}
+
+.orion-chip-idle {
+  background: var(--cockpit-surface);
+  border: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  transition: var(--orion-transition-fast);
+}
+
+.orion-chip-idle:hover {
+  color: var(--text-primary);
+  background: var(--orion-surface-hover);
+  border-color: var(--border-medium);
+}
+
+.orion-segmented {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--orion-radius-sm);
+  background: var(--orion-surface-soft);
+  border: 1px solid var(--border-subtle);
+}
+
+.orion-drawer-overlay {
+  background: var(--backdrop);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.dark .orion-drawer-overlay {
+  background: var(--backdrop);
+}
+
+.orion-text-title { color: var(--text-primary); }
+.orion-text-body { color: var(--text-secondary); }
+.orion-text-muted { color: var(--text-muted); }
+
+.orion-qty-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border-radius: var(--orion-radius-sm);
+  background: var(--orion-surface-soft);
+  border: 1px solid var(--border-subtle);
+}
+
+.orion-qty-stepper button {
+  padding: 0.375rem;
+  color: var(--text-secondary);
+  transition: var(--orion-transition-fast);
+}
+
+.orion-qty-stepper button:hover {
+  color: var(--text-primary);
+}
+
+[data-density='compact'] .orion-viewport {
+  font-size: 0.9375rem;
+}
+[data-density='compact'] .dashboard-full {
+  padding: clamp(12px, 1.5vw, 20px);
+}
+[data-density='compact'] .orion-card,
+[data-density='compact'] .ans-card-premium {
+  padding: 0.75rem;
+}
+
+/* Skeleton — tons chauds, pas de gris froid */
+.orion-skeleton {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--border-soft) 60%, transparent) 0%,
+    color-mix(in srgb, var(--surface-warm, var(--accent)) 80%, transparent) 50%,
+    color-mix(in srgb, var(--border-soft) 60%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: orion-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes orion-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+::-webkit-scrollbar-thumb { background: var(--orion-surface-muted); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--orion-red-vivid); }
+
+/* ─── Utilitaires HTML v29 (btn, badge, fc) ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  border-radius: var(--radius-lg);
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: filter 0.15s, background 0.15s, border-color 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn:not(:disabled):active { transform: scale(0.98); }
+
+.btn-b {
+  background: var(--ans-gradient-main);
+  color: #fff !important;
+  border: none;
+  box-shadow: 0 2px 8px rgba(242, 10, 58, 0.25);
+}
+.btn-b:not(:disabled):hover { filter: brightness(1.08); }
+
+.btn-r {
+  background: var(--ans-red);
+  color: #fff !important;
+  border: none;
+}
+.btn-r:not(:disabled):hover { filter: brightness(1.1); }
+
+.btn-out {
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+}
+.btn-out:not(:disabled):hover {
+  background: hsl(var(--accent));
+  border-color: color-mix(in srgb, var(--brand-primary) 35%, var(--border-soft));
+}
+
+.btn-sm { font-size: 0.6875rem; padding: 0.35rem 0.75rem; border-radius: var(--radius); }
+.btn-full { width: 100%; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  border-radius: 7px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+.fc,
+input.fc,
+select.fc,
+textarea.fc {
+  width: 100%;
+  border-radius: var(--orion-radius);
+  border: 1px solid var(--border-standard);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.fc::placeholder {
+  color: var(--text-placeholder);
+}
+.fc:focus {
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+}
+
+.dark .fc,
+.dark input.fc,
+.dark select.fc,
+.dark textarea.fc {
+  background: var(--background-soft);
+  border-color: var(--border-soft);
+}
+
+.modal-blocking-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--bg-main) 85%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.modal-blocking-card {
+  width: 100%;
+  max-width: 28rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--orion-radius);
+  border: none;
+  background: var(--orion-surface);
+  box-shadow: var(--orion-shadow);
+}
+
+.modal-blocking-footer {
+  position: sticky;
+  bottom: 0;
+  padding: 1rem 1.5rem 1.5rem;
+  background: linear-gradient(to top, hsl(var(--card)) 85%, transparent);
+  border-top: 1px solid hsl(var(--border));
+}
+
+/* ——— ANS Talk — styles métier dans components/ans-talk/ans-talk.css ——— */
+/* FAB badge bas-droite (hors /messagerie) — conversation jamais en panneau flottant */
+.talk-floating-bubble,
+.talk-floating-bubble-btn .talk-btn-primary {
+  border-radius: 16px;
+}
+.talk-floating-bubble {
+  animation: talk-bubble-pulse 2.5s ease-in-out infinite;
+}
+.talk-floating-bubble.has-unread {
+  animation: talk-bubble-pulse 1.2s ease-in-out infinite;
+}
+@keyframes talk-bubble-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.talk-floating-bubble-btn {
+  bottom: 1.25rem;
+  right: 1.25rem;
+}
+
+/* FAB Talk docké à droite du ticker Live (même ligne basse) */
+@media (min-width: 768px) {
+  .talk-floating-bubble-btn--docked {
+    bottom: max(12px, env(safe-area-inset-bottom, 0px)) !important;
+    right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    top: auto !important;
+  }
+
+  .talk-floating-bubble-btn--docked .talk-floating-bubble {
+    width: var(--orion-talk-fab-size, 44px);
+    height: var(--orion-talk-fab-size, 44px);
+    min-width: var(--orion-talk-fab-size, 44px);
+    min-height: var(--orion-talk-fab-size, 44px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .talk-floating-bubble-btn--docked {
+    bottom: var(--orion-sidebar-inset-y, 14px) !important;
+    right: var(--orion-sidebar-inset-x, 14px) !important;
+  }
+}
+.talk-action-btn {
+  border-radius: 12px;
+}
+.ans-talk-mini-input {
+  border-radius: 12px;
+  border: 1px solid var(--talk-line, #e8ecf4);
+  background: #fff;
+}
+.ans-talk-mini-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(49, 84, 216, 0.08);
+}
+.talk-conv-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #dce2ef transparent;
+}
+
+/* Mobile — transitions panneaux ANS Talk */
+.ans-talk-mobile-list {
+  animation: ans-talk-slide-in-left 0.22s ease-out;
+}
+.ans-talk-mobile-chat {
+  animation: ans-talk-slide-in-right 0.22s ease-out;
+}
+.ans-talk-mobile-context {
+  animation: ans-talk-slide-in-right 0.22s ease-out;
+}
+@keyframes ans-talk-slide-in-left {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes ans-talk-slide-in-right {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.talk-floating-bubble-btn {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 100;
+}
+
+/* Phone : Talk permanent dans la tab bar — pas de FAB doublon */
+@media (max-width: 767px) {
+  .talk-floating-bubble-btn {
+    display: none !important;
+  }
+  .talk-floating-toast {
+    /* au-dessus tab bar 72px */
+    bottom: calc(var(--orion-bottom-nav, 72px) + env(safe-area-inset-bottom, 0px) + 0.75rem) !important;
+  }
+}
+.talk-floating-bubble {
+  border-radius: 16px;
+  box-shadow:
+    0 10px 28px var(--ans-primary-glow, rgba(240, 44, 114, 0.32)),
+    0 2px 8px rgba(0, 0, 0, 0.12);
+}
+.talk-btn-primary.talk-floating-bubble {
+  background: linear-gradient(
+    135deg,
+    var(--primary, #f02c72),
+    color-mix(in srgb, var(--primary, #f02c72) 72%, white)
+  ) !important;
+  color: var(--on-primary, #fff) !important;
+}
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+.ans-talk-mini-input {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f4f4f5;
+  outline: none;
+}
+.ans-talk-mini-input::placeholder {
+  color: #52525b;
+}
+.ans-talk-mini-input:focus {
+  border-color: rgba(204, 0, 51, 0.45);
+}
+
+/* === Design system — micro-interactions ORION === */
+.orion-interactive {
+  transition: transform var(--duration-fast) ease, box-shadow var(--duration-normal) ease, filter var(--duration-fast) ease;
+}
+.orion-interactive:hover {
+  filter: brightness(1.02);
+}
+.orion-interactive:active {
+  transform: scale(0.98);
+}
+.orion-notif-pulse {
+  animation: orion-notif-pulse 1.5s ease-in-out infinite;
+}
+@keyframes orion-notif-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.15); }
+}
+.orion-status-pop {
+  animation: orion-status-pop 0.25s ease-out;
+}
+@keyframes orion-status-pop {
+  from { transform: scale(0.96); opacity: 0.6; }
+  to { transform: scale(1); opacity: 1; }
+}
+.btn:focus-visible,
+.ans-btn-primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--orion-bg), 0 0 0 4px rgba(204, 0, 51, 0.55);
+}
+.pos-summary-sticky,
+.pos-config-summary {
+  position: sticky;
+  top: 5rem;
+  align-self: flex-start;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+  z-index: 12;
+  scrollbar-width: thin;
+  width: 100%;
+  min-width: 240px;
+  max-width: 320px;
+}
+
+/* POS configurateur — colonne récap toujours visible (md+) */
+.pos-config-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--grid-gap-lg, 1rem);
+  align-items: start;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .pos-config-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .pos-config-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  }
+}
+
+.pos-config-main {
+  min-width: 0;
+}
+
+.pos-summary-sticky::-webkit-scrollbar,
+.pos-config-summary::-webkit-scrollbar {
+  width: 4px;
+}
+
+@media (max-width: 640px) {
+  .talk-floating-panel {
+    width: min(100vw - 1rem, 340px) !important;
+  }
+}
+
+/* Command palette (cmdk) — styles globaux valides */
+[cmdk-group-heading] {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+}
+
+[cmdk-group]:not([hidden]) ~ [cmdk-group] {
+  padding-top: 0;
+}
+
+[cmdk-group] {
+  overflow: hidden;
+  padding: 0.25rem;
+}
+
+[cmdk-input] {
+  height: 3rem;
+}
+
+[cmdk-item] {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+[cmdk-item][aria-selected='true'] {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+[cmdk-item][aria-disabled='true'] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+[cmdk-separator] {
+  height: 1px;
+  background: hsl(var(--border));
+  margin: 0.25rem 0;
+}
+
+/* ── Module pages — design system ORION · espacements ──
+ * gap-1 4px · gap-2 8px · gap-3 12px · gap-4 16px · gap-6 24px
+ * Page shell: px-4 md:px-6 xl:px-8 · sections: space-y-6
+ */
+.orion-module-page {
+  max-width: none;
+}
+
+.orion-module-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.orion-module-toolbar-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .orion-module-toolbar-main {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.orion-module-toolbar-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.orion-module-toolbar-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.orion-module-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.orion-toolbar-layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── KPI tiles homogènes ── */
+.orion-kpi-tile {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 96px;
+  padding: 0.75rem;
+  gap: 0.5rem;
+  border-radius: 7px;
+  text-align: left;
+}
+
+.orion-kpi-tile-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 7px;
+}
+
+.orion-kpi-tile-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.orion-kpi-tile-label {
+  margin-top: 0.125rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text-muted);
+}
+
+/* ── Onglets module ── */
+.orion-tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.orion-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 7px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.orion-tab-btn--active {
+  background: var(--bg-chip-active);
+  color: var(--ans-red-500);
+  font-weight: 600;
+  border: 1px solid var(--border-active-soft);
+}
+
+.orion-tab-btn--idle {
+  color: var(--text-muted);
+  border: 1px solid transparent;
+}
+
+.orion-tab-btn--idle:hover {
+  color: var(--text-primary);
+  background: var(--bg-row-hover);
+  border-color: var(--border-soft);
+}
+
+.orion-tab-panel {
+  margin-top: 0;
+}
+
+.orion-kpi-strip {
+  /* Grille KPI sans cadre parent — évite card dans card */
+  padding: 0;
+  border: none;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.orion-data-row {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-height: 3.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-card, 7px);
+  border: none;
+  background: var(--bg-card);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+html:not(.dark) .orion-data-row {
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.orion-data-row:hover {
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 4%, var(--bg-card));
+  border-color: transparent;
+  box-shadow: none;
+}
+
+html.dark .orion-data-row {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 94%, #fff 2%);
+  box-shadow: none;
+}
+
+.orion-data-row-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--orion-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--ans-pink-500) 10%, transparent);
+  color: var(--ans-pink-500);
+}
+
+.orion-data-row-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.orion-data-row-subtitle {
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--text-secondary);
+}
+
+.orion-data-row-meta {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.33;
+}
+
+.orion-data-row-trailing .font-mono {
+  color: var(--ans-gold-500);
+}
+
+.orion-row-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--orion-radius-sm);
+  color: var(--text-muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.orion-row-action-btn:hover {
+  background: var(--orion-surface-soft);
+  color: var(--text-primary);
+}
+
+.orion-row-action-btn-danger:hover {
+  background: color-mix(in srgb, var(--destructive) 12%, transparent);
+  color: var(--destructive);
+}
+
+.orion-ref-muted {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.orion-amount {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-weight: 600;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.orion-select-field {
+  background: var(--orion-surface-soft);
+  border: none;
+  border-radius: var(--orion-radius-sm);
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: background 0.15s ease;
+}
+
+.orion-select-field:focus {
+  background: var(--orion-surface-hover);
+}
+
+/* ── Anti-imbrication sections ── */
+.orion-section-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.orion-section-block {
+  padding-bottom: 0;
+}
+
+.orion-section-block:last-child {
+  padding-bottom: 0;
+}
+
+.orion-section-block-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.orion-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.375;
+  color: var(--text-primary);
+}
+
+.orion-section-desc {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  color: var(--text-muted);
+}
+
+.orion-section-card {
+  border-radius: var(--orion-radius-sm);
+  border: none;
+  background: var(--orion-surface-soft);
+}
+
+.orion-section-card-padded {
+  padding: 1rem;
+}
+
+.orion-metric-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.orion-metric-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+  padding: 0.75rem;
+  border-radius: var(--orion-radius-sm);
+  background: var(--orion-surface-soft);
+  border: none;
+  text-align: center;
+}
+
+.orion-metric-value {
+  font-family: ui-monospace, monospace;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.orion-metric-label {
+  margin-top: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.orion-metric-cell--ok .orion-metric-value { color: var(--success, #0E9F6E); }
+.orion-metric-cell--warn .orion-metric-value { color: var(--ans-orange-500); }
+.orion-metric-cell--danger .orion-metric-value { color: var(--destructive); }
+.orion-metric-cell--brand .orion-metric-value { color: var(--ans-red-500); }
+.orion-metric-cell--gold .orion-metric-value { color: var(--ans-gold-500); }
+
+.orion-alert-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--orion-radius-sm);
+  border: none;
+}
+
+.orion-alert-card--warning {
+  background: color-mix(in srgb, var(--ans-orange-500) 10%, var(--orion-surface-soft));
+}
+
+.orion-alert-card--danger {
+  background: color-mix(in srgb, var(--destructive) 10%, var(--orion-surface-soft));
+}
+
+.orion-alert-card--info {
+  background: color-mix(in srgb, var(--ans-pink-500) 8%, var(--orion-surface-soft));
+}
+
+.orion-alert-card--success {
+  background: color-mix(in srgb, var(--success, #0E9F6E) 10%, var(--orion-surface-soft));
+}
+
+.orion-alert-card-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.orion-alert-card-desc {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.orion-alert-card-icon {
+  color: var(--ans-orange-500);
+  margin-top: 0.125rem;
+}
+
+.orion-status-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.orion-status-pill {
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--orion-radius-sm);
+  background: var(--orion-surface-soft);
+}
+
+.orion-status-pill--ok {
+  background: color-mix(in srgb, var(--success, #0E9F6E) 12%, var(--orion-surface-soft));
+}
+.orion-status-pill--warn {
+  background: color-mix(in srgb, var(--ans-orange-500) 12%, var(--orion-surface-soft));
+}
+
+.orion-status-pill-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.orion-status-pill-detail {
+  margin-top: 0.125rem;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ── POS Product Preview Engine ── */
+.pos-preview-engine {
+  --pos-preview-gloss: 0.2;
+}
+
+.pos-preview-perspective {
+  transform-style: preserve-3d;
+}
+
+.pos-preview-perspective > * {
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.pos-preview-stack {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
+}
+
+.pos-preview-flat {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.finish-gloss-highlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, transparent 42%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.finish-laminate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 30%, rgba(255, 255, 255, 0.08) 100%);
+  pointer-events: none;
+}
+
+.texture-vinyl-adhesive {
+  background-image: linear-gradient(160deg, #f4f4f4 0%, #e8e8e8 50%, #fafafa 100%);
+}
+
+.texture-fabric-weave {
+  background-image: repeating-linear-gradient(45deg, #f0f0f0 0, #f0f0f0 2px, #e6e6e6 2px, #e6e6e6 4px);
+}
+

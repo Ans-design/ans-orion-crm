@@ -1,0 +1,56 @@
+PROMPT ARTICLE — DOYPACK — SUPPRESSION DU CHAMP “EMPLACEMENT” — ANS ORION
+
+Travaille uniquement sur l’article POS “Doypack”.
+
+Objectif :
+Supprimer uniquement le champ / option “emplacement” dans Doypack, sans modifier les autres options utiles de l’article.
+
+Consigne principale :
+- Supprimer “emplacement” dans le POS Doypack.
+- Ne pas supprimer les autres champs du Doypack.
+- Ne pas modifier la logique des matières, formats, dimensions, impression, finition, quantité, prix ou stock si elles sont déjà correctes.
+
+Synchronisation obligatoire :
+La suppression de “emplacement” doit être appliquée partout :
+- Interface POS
+- Base de données
+- Admin / Back-office
+- ProductOptionGroup
+- ProductOptionValue
+- Formules de prix
+- Règles métier
+- Panier
+- Devis
+- Commande
+- Facture
+- Fiche production
+- Cockpit
+- Seeds / données initiales
+- Tests
+
+Règle historique :
+Les anciens devis ou anciennes commandes peuvent conserver “emplacement” uniquement comme snapshot historique.
+Mais pour les nouvelles ventes, “emplacement” ne doit plus être sélectionnable, affiché ni utilisé dans le calcul.
+
+À vérifier :
+- Aucun prix ne dépend encore de “emplacement”.
+- Aucun stock ne dépend encore de “emplacement”.
+- Aucun champ caché “emplacement” ne reste dans le formulaire.
+- L’option ne revient pas après refresh, seed, migration ou redéploiement.
+- Le panier, le devis et la facture restent propres après suppression.
+
+Tests obligatoires :
+- Ouvrir POS > Doypack.
+- Vérifier que “emplacement” n’apparaît plus.
+- Ajouter un Doypack au panier.
+- Générer un devis.
+- Transformer en commande.
+- Vérifier la fiche production.
+- Vérifier la facture.
+- Vérifier le cockpit.
+- Exécuter npm run lint.
+- Exécuter npm run build.
+
+Résultat attendu :
+Dans Doypack, seul le champ “emplacement” est supprimé.
+Tout le reste reste intact, cohérent et synchronisé dans le POS, la base, l’admin, les prix, le stock, les devis, la production, la facture et le cockpit.

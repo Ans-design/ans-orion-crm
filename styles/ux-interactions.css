@@ -1,0 +1,132 @@
+/**
+ * Micro-interactions UX ANS ORION — 150–200 ms, sans changer le look.
+ */
+
+:root {
+  --ux-transition-fast: 160ms ease;
+  --ux-transition-panel: 200ms ease;
+}
+
+.orion-ux-press {
+  transition: transform var(--ux-transition-fast), filter var(--ux-transition-fast);
+}
+
+.orion-ux-press:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.orion-ux-fade-in {
+  animation: orionUxFadeIn 180ms ease both;
+}
+
+@keyframes orionUxFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.orion-ux-panel-enter {
+  animation: orionUxPanelEnter 200ms ease both;
+}
+
+@keyframes orionUxPanelEnter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.orion-ux-hint {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.orion-ux-next-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--orion-radius);
+  border: 1px solid color-mix(in srgb, var(--primary) 22%, var(--border-soft));
+  background: color-mix(in srgb, var(--primary) 6%, var(--bg-card));
+}
+
+.orion-ux-next-action-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+.orion-ux-next-action-desc {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.orion-ux-sync-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--orion-radius);
+  background: var(--bg-chip);
+  border: 1px solid var(--border-soft);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.orion-ux-sync-line--busy {
+  border-color: color-mix(in srgb, var(--warning) 30%, var(--border-soft));
+  color: var(--text-main);
+}
+
+.orion-ux-sync-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.orion-ux-sync-dot--ok {
+  background: var(--success);
+}
+
+.orion-ux-sync-dot--warn {
+  background: var(--warning);
+}
+
+.orion-ux-sync-dot--busy {
+  background: var(--primary);
+  animation: orionUxPulse 1.2s ease infinite;
+}
+
+@keyframes orionUxPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* Onglets / navigation secondaire */
+.orion-ux-tab {
+  transition: color var(--ux-transition-fast), background var(--ux-transition-fast),
+    border-color var(--ux-transition-fast);
+}
+
+.orion-ux-tab[aria-selected='true'],
+.orion-ux-tab--active {
+  color: var(--text-main);
+  background: var(--bg-active-soft);
+  border-color: color-mix(in srgb, var(--primary) 20%, var(--border-soft));
+}

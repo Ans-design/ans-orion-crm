@@ -1,0 +1,1776 @@
+ULTRA-PROMPT CURSOR — REFONTE TOTALE DU BACK-OFFICE ADMINISTRATION
+CATALOGUE, MATIÈRES, FORMATS, COÛTS, PRIX & RÈGLES
+SYNCHRONISATION UNIQUE AVEC LE POS COMMERCIAL — ANS CRM V3 / ORION
+
+RÔLES À CUMULER
+
+Agis simultanément comme :
+- architecte logiciel senior ;
+- expert ERP, catalogue, tarification et stock ;
+- product designer UX/UI senior ;
+- développeur full-stack Next.js / React / TypeScript / Prisma ;
+- spécialiste accessibilité WCAG ;
+- data analyst chargé de la cohérence des données ;
+- ingénieur QA et tests de non-régression ;
+- expert sécurité, performance et observabilité.
+
+MISSION
+
+Auditer puis reconstruire réellement le back-office Administration d’ANS CRM V3, avec une priorité absolue sur :
+- Catalogue et fiches articles ;
+- Matières, formats et coûts ;
+- Prix, formules et règles ;
+- options et finitions ;
+- publication commerciale ;
+- synchronisation avec Commercial > POS ;
+- cohérence Panier, Devis, Commande, Production et Stock.
+
+Le but n’est pas de produire une simple proposition visuelle ni un rapport théorique. Le but est d’implémenter une refonte utilisable, cohérente, testée, fluide et administrable sans intervention d’un développeur pour les opérations métier courantes.
+
+L’administrateur doit pouvoir, depuis des écrans simples et fiables :
+- créer et modifier un produit ;
+- organiser les catégories et familles ;
+- créer ou corriger une matière et ses déclinaisons ;
+- définir formats, grammages, épaisseurs, laizes, couleurs et unités ;
+- saisir et maintenir coûts, pertes, charges et prix ;
+- associer les matières autorisées à un produit ;
+- configurer une formule de calcul sans écrire du code ;
+- simuler exactement un prix ;
+- vérifier la marge réelle ;
+- publier une version tarifaire ;
+- contrôler ce qui apparaît dans le POS Commercial ;
+- diagnostiquer et corriger les divergences ;
+- importer et exporter les données ;
+- retrouver l’historique et restaurer une version sûre.
+
+RÉSULTAT FINAL ATTENDU
+
+Le système cible doit appliquer cette chaîne unique :
+
+Administration canonique
+→ validation métier
+→ version publiée immuable
+→ projection commerciale POS
+→ configurateur POS
+→ pricingResolver serveur
+→ panier
+→ devis
+→ commande figée
+→ production
+→ réservation et mouvements de stock
+
+Le POS Commercial ne doit pas posséder un catalogue ou un moteur de prix parallèle. Il consomme la projection publiée de l’Administration et appelle le même service de calcul que l’Administration, le panier et les devis.
+
+======================================================================
+1. RÈGLES ABSOLUES ET NON NÉGOCIABLES
+======================================================================
+
+1. Ne créer aucun prix fictif, aucune donnée mockée et aucun seed destiné à masquer des données absentes.
+2. Ne pas remplacer les données réelles par des exemples temporaires.
+3. Ne pas casser les formules, règles, identifiants, SKU, historiques, anciennes commandes ou anciens devis.
+4. Ne pas modifier silencieusement le résultat d’une formule existante.
+5. Toute modification d’une formule publiée crée une nouvelle version.
+6. Une commande et un devis validés conservent leur instantané de prix, même si le tarif courant change ensuite.
+7. Ne pas supprimer de table, colonne, API ou service avant d’avoir cartographié tous ses consommateurs.
+8. Ne supprimer une duplication qu’après migration, compatibilité, validation et test de non-régression.
+9. Ne pas mettre de logique tarifaire métier importante uniquement dans React.
+10. Tous les calculs officiels doivent être exécutés côté serveur avec des décimales fiables et une politique d’arrondi explicite.
+11. Une seule source canonique doit exister pour chaque donnée métier.
+12. L’Administration est l’espace d’édition ; le POS Commercial est un consommateur de données publiées.
+13. Le POS ne doit pas modifier directement une matière, un coût, une formule ou un prix canonique.
+14. Une matière n’est pas automatiquement un article POS.
+15. Seules les matières réellement vendues seules peuvent être exposées comme articles de vente directe.
+16. Le stock disponible ne doit pas être réécrit directement dans une cellule. Toute correction crée un StockMovement traçable.
+17. Ne pas sauvegarder une valeur critique à chaque frappe. Utiliser un mode édition, une validation, un résumé des changements et un enregistrement transactionnel.
+18. Aucune publication si une dépendance obligatoire est absente ou invalide.
+19. En cas d’échec de publication, conserver la dernière version publiée valide.
+20. En cas d’échec de synchronisation, afficher l’erreur et ne jamais prétendre que le POS est synchronisé.
+21. Toutes les mutations sensibles créent un audit log : acteur, date, ancienne valeur, nouvelle valeur, motif, objet, version et résultat.
+22. Préserver les permissions et appliquer une autorisation par ressource.
+23. Ne jamais exposer de secret, fichier .env, token, base réelle ou donnée personnelle dans les journaux ou livrables.
+24. Ajouter un test de non-régression pour chaque défaut corrigé.
+25. Ne considère pas la mission terminée tant que les validations applicables ne passent pas.
+
+======================================================================
+2. AUDIT PRÉALABLE OBLIGATOIRE
+======================================================================
+
+Avant de modifier l’interface, cartographier le projet réel.
+
+Analyser notamment :
+- arborescence Next.js ;
+- routes App Router et Pages Router ;
+- composants Administration et Commercial ;
+- pages du POS et configurateurs articles ;
+- services de catalogue, prix, stock et synchronisation ;
+- modèles, relations, index et contraintes Prisma ;
+- pricingResolver et tous les moteurs spécialisés ;
+- règles codées dans React ;
+- caches, revalidation et état client ;
+- routes API et autorisations ;
+- imports et exports Excel ;
+- tests unitaires, intégration et Playwright ;
+- données de démonstration, anciennes bases et environnements de test ;
+- pages, boutons, filtres, tableaux et formulaires dupliqués.
+
+Visiter explicitement dans le code et, si l’environnement local le permet, dans l’application :
+- Administration > Catalogue, Prix & Stock ;
+- Administration > Matières & formats ;
+- Administration > Prix & règles ;
+- Administration > Options & finitions ;
+- Administration > Import / Export ;
+- Administration > Diagnostics ;
+- Commercial > POS ;
+- Commercial > POS > Articles / Catalogue ;
+- configurateur de chaque grande famille d’articles ;
+- panier, devis et commande ;
+- Production et Stock lorsque le calcul entraîne une consommation.
+
+Produire avant refonte les matrices suivantes :
+
+A. Matrice fonctionnelle
+Fonction actuelle | Écran | Composant | API | Service | Modèle Prisma | Source réelle | Consommateurs | Doublon | Décision | Cible
+
+B. Matrice des données
+Donnée | Source canonique actuelle | Copies | Règle métier | Éditeur | Lecteurs | Risque | Source cible
+
+C. Matrice des calculs
+Famille | Entrées | Formule | Sources de coût | Arrondis | Minimum | Options | Sortie | Tests actuels | Risque
+
+D. Matrice Admin / POS
+Article Admin | Article POS | Identifiant canonique | Version publiée | Formule | Options | Prix simulé Admin | Prix POS | Écart | Cause | Correction
+
+E. Inventaire UX
+Élément | Utilité réelle | Fréquence d’usage | Doublon | Complexité | Décision : garder / fusionner / déplacer / supprimer
+
+Ne jamais déduire que la base est vide uniquement parce qu’un écran affiche zéro. Vérifier les vraies tables, relations, sources historiques, options POS et services.
+
+======================================================================
+3. ARCHITECTURE DE L’INFORMATION CIBLE
+======================================================================
+
+Supprimer la multiplication des sous-menus et des espaces qui représentent la même chose.
+
+Navigation cible dans Administration > Catalogue, Prix & Stock :
+
+1. Vue d’ensemble
+   - santé du catalogue ;
+   - éléments à corriger ;
+   - publications en attente ;
+   - divergences POS ;
+   - prix manquants ;
+   - stock critique.
+
+2. Produits & publication
+   - liste des produits ;
+   - catégories et familles ;
+   - fiche produit unifiée ;
+   - apparence commerciale ;
+   - aperçu et publication POS.
+
+3. Matières, formats & coûts
+   - matières de base ;
+   - déclinaisons ;
+   - formats et laizes ;
+   - coûts et prix matière ;
+   - liens stock et fournisseurs ;
+   - usages produits / POS.
+
+4. Studio Prix & Calculs
+   - moteurs de calcul ;
+   - formules et variables ;
+   - tarifs par article ;
+   - paliers, coefficients, charges et arrondis ;
+   - simulation ;
+   - versions et anomalies.
+
+5. Options & finitions
+   - bibliothèque unique ;
+   - affectations ;
+   - dépendances ;
+   - compatibilités ;
+   - impact prix.
+
+6. Données & contrôle
+   - import / export ;
+   - diagnostics ;
+   - historique ;
+   - corbeille et restauration.
+
+Supprimer comme concept autonome le « Catalogue POS » de l’Administration.
+
+Attention :
+- supprimer le doublon de navigation et d’interface ;
+- conserver les services ou tables encore requis jusqu’à migration complète ;
+- intégrer la configuration POS utile dans la fiche produit et la publication ;
+- fusionner l’historique, la corbeille et les imports locaux avec les outils transversaux ;
+- masquer les produits archivés par défaut ;
+- conserver anciens SKU et alias pour la recherche et la traçabilité.
+
+La navigation visible ne doit pas dépasser deux niveaux. Éviter une deuxième grande barre latérale qui concurrence la navigation principale. Utiliser une sous-navigation compacte, stable et contextuelle.
+
+======================================================================
+4. SOURCE DE VÉRITÉ ET MODÈLE MÉTIER CIBLE
+======================================================================
+
+Adapter les noms au schéma existant ; ne pas créer aveuglément des doublons de modèles.
+
+Entités conceptuelles cibles :
+- Product ;
+- ProductCategory ;
+- ProductCommercialPresentation ;
+- ProductPublication ;
+- MaterialBase ;
+- MaterialVariant ;
+- FormatDefinition ;
+- MaterialFormatCompatibility ;
+- Supplier ;
+- SupplierOffer ou PurchaseCost ;
+- StockItem ;
+- StockMovement ;
+- PricingProfile ;
+- PricingEngine ;
+- PricingFormula ;
+- FormulaVersion ;
+- PricingVariable ;
+- PriceContext ;
+- PriceTier ;
+- OptionDefinition ;
+- FinishDefinition ;
+- ProductOptionAssignment ;
+- AllowedMaterialVariant ;
+- CommercialProjection ;
+- PublicationVersion ;
+- AuditLog ;
+- DataAnomaly.
+
+Relations fondamentales :
+
+Product
+→ PricingProfile
+→ FormulaVersion publiée
+→ variables et sources
+→ AllowedMaterialVariant
+→ MaterialVariant
+→ coûts / formats / stock
+
+Product
+→ ProductCommercialPresentation
+→ ProductPublication
+→ CommercialProjection consommée par le POS
+
+OrderLine et QuoteLine doivent conserver :
+- productId canonique ;
+- publicationVersionId ;
+- formulaVersionId ;
+- entrées de calcul ;
+- détail des composants de prix ;
+- prix final ;
+- devise ;
+- règles d’arrondi ;
+- snapshot des libellés nécessaires.
+
+Ajouter ou renforcer selon le besoin :
+- identifiants stables ;
+- contraintes d’unicité normalisées ;
+- clés étrangères ;
+- index sur référence, SKU, catégorie, statut, dates et relations critiques ;
+- statut brouillon / publié / archivé ;
+- version optimiste pour prévenir l’écrasement concurrent ;
+- dates d’effet ;
+- soft delete lorsqu’un historique doit être conservé.
+
+======================================================================
+5. PRODUITS & PUBLICATION — FICHE UNIQUE
+======================================================================
+
+Créer une seule liste de produits remplaçant les listes parallèles Catalogue et Catalogue POS.
+
+Colonnes essentielles :
+- produit ;
+- référence ;
+- famille ;
+- méthode de calcul ;
+- prix ou état tarifaire ;
+- complétude ;
+- publication ;
+- disponibilité commerciale ;
+- stock pertinent ;
+- dernière modification ;
+- actions.
+
+Filtres :
+- catégorie ;
+- famille de calcul ;
+- statut ;
+- publié / non publié ;
+- prêt / incomplet ;
+- prix manquant ;
+- anomalie ;
+- vente directe ;
+- stock ;
+- archivés.
+
+Statuts unifiés :
+- Brouillon ;
+- À compléter ;
+- À vérifier ;
+- Prêt à publier ;
+- Publié ;
+- Suspendu ;
+- Archivé.
+
+Éviter plusieurs badges redondants. Afficher un statut principal et ouvrir le détail des contrôles à la demande.
+
+Fiche produit unifiée :
+
+1. Général
+   - nom ;
+   - référence ;
+   - catégorie ;
+   - famille ;
+   - unité de vente ;
+   - description ;
+   - mots-clés ;
+   - alias historiques.
+
+2. Configuration
+   - formats autorisés ;
+   - matières et variantes autorisées ;
+   - grammages, épaisseurs et couleurs ;
+   - options et finitions ;
+   - valeurs par défaut ;
+   - incompatibilités et dépendances.
+
+3. Prix
+   - profil tarifaire ;
+   - moteur ;
+   - formule publiée ;
+   - coûts sources ;
+   - minimum facturable ;
+   - paliers ;
+   - charges ;
+   - perte ;
+   - arrondi ;
+   - marge cible ;
+   - simulation.
+
+4. Présentation commerciale
+   - nom POS ;
+   - description courte ;
+   - catégorie commerciale héritée par défaut ;
+   - image et maquette ;
+   - ordre ;
+   - badge ;
+   - prix d’appel calculé ;
+   - disponibilité ;
+   - aperçu réel de la carte et du configurateur.
+
+5. Publication
+   - checklist ;
+   - différences brouillon / publié ;
+   - date d’effet ;
+   - note de version ;
+   - publier / dépublier / restaurer.
+
+6. Historique
+   - versions ;
+   - changements ;
+   - acteur ;
+   - motif ;
+   - synchronisations ;
+   - restauration contrôlée.
+
+Un produit apparaît dans le POS uniquement s’il est :
+- actif ;
+- non archivé ;
+- complet ;
+- calculable ou explicitement « sur devis » ;
+- associé à une version tarifaire valide ;
+- associé à des options valides ;
+- publié ;
+- disponible commercialement.
+
+======================================================================
+6. RECONSTRUCTION « MATIÈRES, FORMATS & COÛTS »
+======================================================================
+
+L’écran ne doit plus être une simple table incomplète ni afficher zéro alors que des données existent ailleurs.
+
+Objectif : devenir le référentiel canonique pour :
+- matières de base ;
+- déclinaisons ;
+- grammages ;
+- épaisseurs ;
+- couleurs ;
+- formats ;
+- laizes ;
+- unités ;
+- surfaces et conversions ;
+- coûts d’achat ;
+- coûts matière ;
+- coûts d’impression associés lorsque pertinent ;
+- prix de vente directe lorsque pertinent ;
+- fournisseurs ;
+- liens stock ;
+- compatibilités produits ;
+- usages commerciaux ;
+- anomalies ;
+- historique.
+
+Ne pas mélanger les concepts suivants :
+- matière physique ;
+- déclinaison ;
+- conditionnement fournisseur ;
+- unité d’achat ;
+- unité de stock ;
+- unité de consommation ;
+- unité de tarification ;
+- coût d’achat ;
+- coût matière unitaire ;
+- coût de transformation ou impression ;
+- prix de vente directe ;
+- prix final d’un produit fabriqué.
+
+6.1 STRUCTURE DE L’ÉCRAN
+
+En-tête compact :
+- titre « Matières, formats & coûts » ;
+- description courte ;
+- santé des données ;
+- dernière actualisation ;
+- Nouvelle matière ;
+- Analyser et compléter depuis le catalogue ;
+- Importer ;
+- Exporter ;
+- menu d’actions secondaires.
+
+Indicateurs utiles et cliquables :
+- matières de base ;
+- déclinaisons ;
+- formats ;
+- coûts à compléter ;
+- liens stock manquants ;
+- stock critique ;
+- usages commerciaux ;
+- anomalies bloquantes.
+
+Sous-vues :
+- Référentiel ;
+- Formats & laizes ;
+- Coûts & prix matière ;
+- Stock & fournisseurs ;
+- Usages produits ;
+- Anomalies.
+
+6.2 VUES DE TABLE RECOMMANDÉES
+
+Ne pas afficher vingt colonnes simultanément. Proposer des préréglages mémorisés par utilisateur :
+
+Vue Essentielle :
+- matière / déclinaison ;
+- famille ;
+- caractéristique ;
+- référence ;
+- coût principal ;
+- unité ;
+- usage ;
+- état ;
+- actions.
+
+Vue Coûts & prix :
+- matière / déclinaison ;
+- coût d’achat ;
+- coût matière normalisé ;
+- coût impression ou transformation ;
+- pertes ;
+- charges ;
+- coût complet ;
+- prix de vente directe ;
+- bénéfice ;
+- taux de marge ;
+- taux de marque ;
+- source ;
+- date d’effet.
+
+Vue Stock :
+- matière / déclinaison ;
+- article de stock lié ;
+- disponible ;
+- réservé ;
+- unité ;
+- seuil ;
+- fournisseur principal ;
+- dernière entrée ;
+- état.
+
+Vue Usage commercial :
+- matière / déclinaison ;
+- produits liés ;
+- moteurs liés ;
+- autorisée dans le POS ;
+- vente directe ;
+- version publiée ;
+- divergence ;
+- actions.
+
+Vue Anomalies :
+- objet ;
+- type ;
+- sévérité ;
+- impact ;
+- cause probable ;
+- action recommandée ;
+- propriétaire ;
+- statut.
+
+Vue Avancée :
+- identifiants techniques ;
+- clés de migration ;
+- source historique ;
+- formule liée ;
+- coefficient ;
+- métadonnées ;
+- version ;
+- auteur et dates.
+
+6.3 COLONNES MÉTIER DISPONIBLES
+
+Identité :
+- nom de matière ;
+- matière parente ;
+- famille ;
+- type de caractéristique ;
+- valeur ;
+- grammage ;
+- épaisseur ;
+- couleur ;
+- format ;
+- laize ;
+- référence ;
+- statut.
+
+Unités :
+- unité d’achat ;
+- quantité par conditionnement ;
+- unité de stock ;
+- unité de consommation ;
+- unité de prix ;
+- coefficient de conversion ;
+- largeur, hauteur, longueur, surface ;
+- règle de conversion.
+
+Coûts et prix :
+- fournisseur ;
+- coût d’achat ;
+- frais d’approche ;
+- coût matière normalisé ;
+- coût d’impression ;
+- coût de main-d’œuvre ;
+- pertes / gâche ;
+- charges ;
+- coût complet ;
+- objectif de bénéfice ;
+- prix recommandé ;
+- prix publié de vente directe ;
+- bénéfice réel ;
+- taux de marge ;
+- taux de marque ;
+- minimum facturable ;
+- source ;
+- date de validité.
+
+Stock :
+- stock disponible ;
+- stock réservé ;
+- seuil d’alerte ;
+- emplacement ;
+- source de stock ;
+- dernière entrée ;
+- état du lien.
+
+Usage :
+- produits liés ;
+- familles de calcul liées ;
+- option POS correspondante ;
+- autorisée pour production ;
+- vendable directement ;
+- état de publication ;
+- état de cohérence.
+
+6.4 FAMILLES DE MATIÈRES
+
+Récupérer les familles réellement présentes, puis normaliser sans supprimer la traçabilité. Exemples possibles :
+- Papier ;
+- Carton ;
+- Vinyle / autocollant ;
+- Bâche ;
+- PVC / Plexi / Acrylic ;
+- Textile ;
+- Packaging rigide ;
+- Soft packaging ;
+- Goodies ;
+- Finition ;
+- Accessoire ;
+- Consommable.
+
+Ne pas figer cette liste uniquement dans le composant. Elle doit être administrable ou dérivée d’un référentiel métier central.
+
+6.5 FORMATS ET UNITÉS
+
+Appliquer une convention claire :
+- petits formats : stockage normalisé et affichage exact en millimètres ;
+- formats ISO : libellé « A4 — 210×297 mm » ;
+- grand format libre : saisie POS en centimètres lorsque c’est la convention métier ;
+- calcul interne de surface dans une unité normalisée ;
+- mètres et mètres carrés clairement distingués ;
+- aucune double conversion ;
+- aucun alias commercial créant une option POS dupliquée.
+
+Les alias servent à la recherche ou au mapping, pas à créer plusieurs formats identiques.
+
+6.6 MODIFICATION
+
+Au clic sur « Modifier » :
+- passer la ligne ou le drawer en mode édition ;
+- valider type, unité, plage, cohérence et permissions ;
+- montrer les champs modifiés ;
+- afficher l’impact prévisionnel sur produits, formules et POS ;
+- demander un motif pour les changements sensibles ;
+- enregistrer dans une transaction ;
+- créer audit log ;
+- recalculer les projections affectées ;
+- marquer les publications concernées « mise à jour requise » ;
+- conserver les valeurs après rechargement.
+
+Ne pas enregistrer à chaque touche. Autoriser l’édition rapide de plusieurs cellules, puis « Vérifier les changements » et « Enregistrer ».
+
+Pour le stock :
+- afficher la valeur dans la table ;
+- l’action « Ajuster le stock » ouvre un formulaire dédié ;
+- exiger quantité, unité, motif et référence ;
+- créer un StockMovement ;
+- recalculer le disponible ;
+- empêcher les doubles soumissions.
+
+6.7 DRAWER « PROFIL MATIÈRE »
+
+Sections :
+1. Identité et classification ;
+2. Déclinaisons et formats ;
+3. Unités et conversions ;
+4. Achats et fournisseurs ;
+5. Coûts, charges et prix ;
+6. Stock et mouvements ;
+7. Produits, formules et options liés ;
+8. Usage commercial et publication ;
+9. Anomalies ;
+10. Historique.
+
+Afficher les dépendances et l’impact avant archivage. Interdire la suppression dure d’une matière utilisée par une formule publiée, une commande ou un mouvement de stock.
+
+======================================================================
+7. MODÈLE FINANCIER ET DÉFINITIONS NON AMBIGUËS
+======================================================================
+
+Ne pas utiliser un seul champ « marge » pour plusieurs notions.
+
+Définir et afficher explicitement :
+
+Coût d’achat : montant facturé par le fournisseur dans l’unité d’achat.
+
+Coût matière normalisé : coût ramené à l’unité de consommation après conversions.
+
+Coût de transformation : impression, découpe, pose, façonnage ou autre opération.
+
+Coût complet :
+coût matière + transformation + main-d’œuvre + pertes + charges imputées + autres coûts applicables.
+
+Bénéfice réel :
+prix de vente HT – coût complet.
+
+Taux de marge sur coût :
+bénéfice réel / coût complet × 100.
+
+Taux de marque sur vente :
+bénéfice réel / prix de vente HT × 100.
+
+Coefficient multiplicateur :
+prix de vente HT / coût complet.
+
+Prix recommandé : prix calculé selon la politique choisie, avant éventuelle validation ou surcharge manuelle.
+
+Prix publié : prix ou règle effectivement utilisée par la version commerciale publiée.
+
+Chaque pourcentage doit préciser sa base :
+- sur coût matière ;
+- sur coût complet ;
+- sur prix de vente ;
+- sur sous-total ;
+- avant ou après perte ;
+- avant ou après remise.
+
+Ne pas appliquer « 30 % + 10 % » sans définir la base et l’ordre. Le détail du calcul doit montrer chaque étape.
+
+Utiliser Decimal ou une solution équivalente pour les montants. Centraliser :
+- devise ;
+- précision ;
+- arrondi par étape ou en fin ;
+- arrondi commercial ;
+- seuil minimum ;
+- règles fiscales si présentes.
+
+======================================================================
+8. « ANALYSER ET COMPLÉTER DEPUIS LE CATALOGUE »
+======================================================================
+
+Créer une vraie procédure d’analyse idempotente, jamais un seed aveugle.
+
+Sources analysées :
+- produits Admin ;
+- articles et configurateurs du POS Commercial ;
+- options/chips historiques ;
+- formats, grammages, épaisseurs, laizes et couleurs ;
+- moteurs et formules ;
+- coûts et prix existants ;
+- stock et fournisseurs ;
+- imports historiques ;
+- alias et anciens SKU.
+
+Étapes obligatoires :
+1. scanner ;
+2. normaliser les libellés et unités ;
+3. proposer les correspondances exactes ;
+4. détecter les correspondances probables avec score ;
+5. détecter doublons et conflits ;
+6. classer chaque élément ;
+7. afficher un aperçu sans écriture ;
+8. laisser l’utilisateur accepter, rejeter ou modifier les correspondances ambiguës ;
+9. exécuter dans une transaction ;
+10. ne jamais écraser une valeur manuelle non vide sans décision explicite ;
+11. conserver alias et identifiants historiques ;
+12. générer un rapport de résultat ;
+13. pouvoir relancer sans créer de doublon.
+
+Classer chaque coût ou prix manquant :
+- obligatoire et manquant ;
+- dérivé par formule ;
+- non applicable ;
+- produit sur devis ;
+- lien matière absent ;
+- unité incompatible ;
+- source historique ambiguë.
+
+Ne jamais remplacer un prix manquant par zéro. Afficher « À compléter » et créer une anomalie actionnable.
+
+======================================================================
+9. RECONSTRUCTION DU « STUDIO PRIX & CALCULS »
+======================================================================
+
+L’écran Prix & règles actuel doit être réellement réorganisé. Ne pas conserver une grande table technique avec détail empilé dessous.
+
+9.1 STRUCTURE CIBLE
+
+En-tête :
+- titre « Studio Prix & Calculs » ;
+- résumé de santé ;
+- version publiée ;
+- changements en attente ;
+- Simuler un prix ;
+- Publier ;
+- Importer / Exporter ;
+- actions secondaires.
+
+Navigation compacte :
+- Vue d’ensemble ;
+- Moteurs ;
+- Formules & règles ;
+- Tarifs par article ;
+- Paliers & ajustements ;
+- Simulation ;
+- Versions ;
+- Anomalies.
+
+Ne pas afficher une longue rangée de catégories sous forme de chips. Utiliser un sélecteur de famille, des cartes synthétiques ou une navigation secondaire structurée.
+
+Familles à retrouver et organiser selon les moteurs réels :
+- Impression sans finition / petit format ;
+- Flyers ;
+- Carterie ;
+- Publications, livres, blocs-notes, agendas et calendriers ;
+- Grand format ;
+- Vente directe ;
+- Finitions et reliures ;
+- Packaging rigide ;
+- Sac papier ;
+- Soft packaging / Doypack ;
+- Gobelet ;
+- Hangtag ;
+- Étiquette ;
+- Textile ;
+- Goodies ;
+- Photo ;
+- autres moteurs réellement présents.
+
+9.2 TABLE PRINCIPALE SIMPLIFIÉE
+
+Colonnes essentielles :
+- article ou moteur ;
+- famille de calcul ;
+- méthode tarifaire ;
+- prix / état ;
+- formule et version ;
+- sources principales ;
+- validation ;
+- publication ;
+- dernière modification ;
+- actions.
+
+Colonnes avancées masquées :
+- identifiants ;
+- mapping ;
+- source DB ;
+- dépendances ;
+- hash de version ;
+- métadonnées ;
+- logs techniques.
+
+Supprimer :
+- lignes verticales rouges ;
+- bordure rouge permanente autour de la recherche ;
+- textes minuscules ;
+- badges trop nombreux ;
+- actions répétées sur chaque ligne ;
+- détail de fiche placé sous le tableau ;
+- grand espace vide artificiel ;
+- double défilement vertical interne inutile.
+
+Ouvrir le détail dans un drawer large ou une page dédiée.
+
+9.3 FICHE D’UN MOTEUR OU D’UN ARTICLE
+
+Sections :
+1. Résumé ;
+2. Méthode de calcul ;
+3. Entrées et unités ;
+4. Sources de coût ;
+5. Formule lisible ;
+6. Options et finitions ;
+7. Paliers, minimums et arrondis ;
+8. Simulation ;
+9. Produits consommateurs ;
+10. Publication et historique.
+
+Actions :
+- Modifier ;
+- Dupliquer en brouillon ;
+- Simuler ;
+- Comparer avec la version publiée ;
+- Publier ;
+- Voir le rendu POS ;
+- Archiver si aucune dépendance bloquante.
+
+9.4 ÉDITEUR NO-CODE DE FORMULE
+
+L’administrateur ne doit pas écrire de JavaScript.
+
+Fournir des blocs typés :
+- entrée ;
+- constante ;
+- coût matière ;
+- coût d’opération ;
+- quantité ;
+- surface ;
+- conversion ;
+- minimum ;
+- palier ;
+- condition ;
+- option ;
+- somme ;
+- multiplication ;
+- division ;
+- arrondi ;
+- perte ;
+- charge ;
+- remise ;
+- marge cible ;
+- sortie.
+
+Pour chaque bloc :
+- libellé métier ;
+- identifiant stable ;
+- type ;
+- unité ;
+- source ;
+- valeur par défaut ;
+- validation ;
+- explication ;
+- dépendances.
+
+L’éditeur doit :
+- empêcher les cycles ;
+- détecter unités incompatibles ;
+- détecter division par zéro ;
+- détecter variable orpheline ;
+- détecter source non publiée ;
+- montrer un aperçu de calcul ;
+- produire une représentation sérialisée versionnée ;
+- conserver un rendu lisible pour audit ;
+- créer une nouvelle FormulaVersion à chaque publication.
+
+Ne pas réécrire immédiatement tous les moteurs historiques. Créer des adaptateurs sûrs lorsque nécessaire, puis migrer moteur par moteur avec tests contractuels de parité.
+
+9.5 SIMULATEUR UNIQUE
+
+Le simulateur Admin doit utiliser exactement le même pricingResolver serveur que le POS.
+
+Entrées selon le produit :
+- article ;
+- quantité ;
+- format ;
+- dimensions ;
+- matière ;
+- grammage ;
+- recto / recto-verso ;
+- couleur ;
+- finitions ;
+- options ;
+- technologie ;
+- date d’effet.
+
+Résultat :
+- formule et version ;
+- détail de chaque composant ;
+- conversions ;
+- coûts ;
+- perte ;
+- charges ;
+- remises ;
+- minimum ;
+- arrondis ;
+- prix unitaire ;
+- total ;
+- bénéfice ;
+- taux de marge ;
+- taux de marque ;
+- avertissements ;
+- hash du calcul.
+
+Ajouter une comparaison :
+- brouillon ;
+- version publiée ;
+- POS Commercial ;
+- écart absolu et relatif ;
+- première étape de divergence.
+
+======================================================================
+10. CONTRAT UNIQUE DE CALCUL
+======================================================================
+
+Créer ou consolider une API/service métier unique, par exemple :
+
+pricingResolver.resolve({
+  productId,
+  publicationVersionId,
+  quantity,
+  selections,
+  dimensions,
+  customerContext,
+  requestedAt
+})
+
+La réponse doit contenir au minimum :
+- normalizedInputs ;
+- productId ;
+- pricingProfileId ;
+- formulaVersionId ;
+- publicationVersionId ;
+- components ;
+- subtotal ;
+- discounts ;
+- surcharges ;
+- minimumAdjustment ;
+- rounding ;
+- total ;
+- unitPrice ;
+- currency ;
+- warnings ;
+- calculationHash.
+
+Ce service doit être utilisé par :
+- simulation Administration ;
+- aperçu de publication ;
+- POS Commercial ;
+- panier ;
+- devis ;
+- commande ;
+- tests contractuels.
+
+Interdire les copies de formules dans les composants React. Le client peut afficher le détail mais ne doit pas être l’autorité du prix.
+
+Définir des erreurs métier explicites :
+- PRODUCT_NOT_PUBLISHED ;
+- PRICE_SOURCE_MISSING ;
+- FORMULA_INVALID ;
+- OPTION_NOT_ALLOWED ;
+- MATERIAL_NOT_ALLOWED ;
+- UNIT_INCOMPATIBLE ;
+- DIMENSION_OUT_OF_RANGE ;
+- QUANTITY_OUT_OF_RANGE ;
+- QUOTE_ONLY ;
+- PUBLICATION_STALE.
+
+======================================================================
+11. SYNCHRONISATION ADMINISTRATION ↔ POS COMMERCIAL
+======================================================================
+
+La « synchronisation » ne doit pas être une copie fragile entre deux catalogues modifiables.
+
+Architecture cible :
+- Administration édite les brouillons canoniques ;
+- une publication valide crée une version immuable ;
+- une projection commerciale optimisée est générée ;
+- le POS lit cette projection ;
+- le calcul appelle le pricingResolver avec la version publiée ;
+- le POS ne réécrit pas la source Admin.
+
+La projection commerciale contient uniquement ce qui est nécessaire :
+- productId ;
+- publicationVersionId ;
+- nom et contenu commercial ;
+- catégorie et ordre ;
+- image / maquette ;
+- options autorisées ;
+- valeurs par défaut ;
+- contraintes ;
+- matières et formats autorisés ;
+- type tarifaire ;
+- prix d’appel calculable ou état « sur devis » ;
+- disponibilité ;
+- hash de cohérence.
+
+Publication atomique :
+1. charger le brouillon ;
+2. valider les dépendances ;
+3. exécuter les scénarios de référence ;
+4. générer la version ;
+5. générer la projection POS ;
+6. calculer le hash ;
+7. écrire version et projection dans une transaction ;
+8. invalider les caches après commit ;
+9. vérifier la lecture ;
+10. marquer « Publié et synchronisé » uniquement en cas de succès complet.
+
+Si une étape échoue :
+- rollback ;
+- conserver la dernière version valide ;
+- afficher l’étape fautive ;
+- créer une anomalie ;
+- permettre de relancer sans duplication.
+
+États de synchronisation :
+- Synchronisé ;
+- Modifications non publiées ;
+- Publication requise ;
+- En cours ;
+- Erreur ;
+- Version POS obsolète ;
+- Non applicable.
+
+Ne pas ajouter un gros bouton « Synchroniser POS » partout. L’action principale est « Publier ». La synchronisation technique suit la publication. Un bouton « Relancer » n’apparaît que lors d’un échec explicite.
+
+======================================================================
+12. RELATION MATIÈRES ↔ PRODUITS ↔ POS
+======================================================================
+
+Une matière peut être :
+- utilisée en production ;
+- utilisée comme source de coût ;
+- proposée comme choix dans un configurateur ;
+- vendue directement ;
+- non commerciale.
+
+Remplacer le booléen ambigu « Visible POS » sur une matière par un champ métier ou état explicite :
+- Production uniquement ;
+- Utilisée par des produits POS ;
+- Vendue directement ;
+- Non utilisée ;
+- À vérifier.
+
+Règles :
+- une matière utilisée par un produit apparaît dans le configurateur uniquement via AllowedMaterialVariant ;
+- la sélection POS utilise l’identifiant canonique, pas seulement un libellé ;
+- un matériau archivé reste lisible sur les anciennes commandes mais n’est plus sélectionnable ;
+- le prix final du produit vient du moteur du produit ;
+- le coût de la matière est une source, pas forcément le prix POS ;
+- un article de vente directe possède son propre Product et sa publication.
+
+Dans le profil matière, afficher :
+- produits qui l’utilisent ;
+- formules qui la lisent ;
+- options POS correspondantes ;
+- versions publiées concernées ;
+- commandes historiques ;
+- impact estimé d’une modification.
+
+======================================================================
+13. DIAGNOSTICS DE COHÉRENCE ADMIN / POS
+======================================================================
+
+Créer un espace « Diagnostics commerciaux » actionnable.
+
+Table de comparaison :
+- article ;
+- identifiant Admin ;
+- identifiant POS ;
+- version Admin publiée ;
+- version POS chargée ;
+- hash ;
+- formule ;
+- matière par défaut ;
+- options ;
+- scénario test ;
+- prix Admin ;
+- prix POS ;
+- écart ;
+- statut ;
+- action.
+
+Détecter :
+- produit publié absent du POS ;
+- produit POS sans source Admin ;
+- version obsolète ;
+- option orpheline ;
+- matière orpheline ;
+- format dupliqué ;
+- unité incompatible ;
+- formule inexistante ou invalide ;
+- coût obligatoire manquant ;
+- prix d’appel impossible ;
+- article vendu alors qu’archivé ;
+- divergence Admin / POS / panier / devis ;
+- cache obsolète ;
+- doublon de SKU ;
+- alias historique non résolu.
+
+Chaque anomalie propose une action sûre :
+- Ouvrir la source ;
+- Lier ;
+- Corriger l’unité ;
+- Compléter le coût ;
+- Comparer les versions ;
+- Republier ;
+- Masquer commercialement ;
+- Marquer sur devis ;
+- Ignorer avec motif et date d’expiration.
+
+Ajouter des scénarios de référence par famille. Exemple :
+- produit ;
+- quantité ;
+- matière ;
+- format ;
+- options ;
+- résultat attendu ou intervalle ;
+- version.
+
+Exécuter ces scénarios avant publication et en CI.
+
+======================================================================
+14. OPTIONS, FINITIONS ET DÉPENDANCES
+======================================================================
+
+Créer une seule bibliothèque d’options et finitions.
+
+Une option contient :
+- identifiant stable ;
+- libellé métier ;
+- type de contrôle ;
+- valeurs ;
+- unité ;
+- statut ;
+- produits affectés ;
+- valeur par défaut ;
+- obligatoire ou facultative ;
+- ordre ;
+- impact prix ;
+- source de prix ;
+- dépendances ;
+- incompatibilités ;
+- historique.
+
+Dans une fiche produit, ne dupliquer que l’affectation :
+- activée ;
+- obligatoire ;
+- valeur par défaut ;
+- ordre ;
+- restrictions ;
+- éventuelle surcharge spécifique.
+
+Créer un constructeur lisible :
+SI [condition] ALORS [action].
+
+Détecter :
+- boucle ;
+- contradiction ;
+- dépendance orpheline ;
+- option obligatoire sans valeur ;
+- option à impact prix sans source ;
+- valeur interdite mais présélectionnée ;
+- condition impossible.
+
+======================================================================
+15. IMPORT ET EXPORT EXCEL
+======================================================================
+
+Créer un classeur documenté avec feuilles séparées :
+- README ;
+- PRODUITS ;
+- MATIERES ;
+- DECLINAISONS ;
+- FORMATS ;
+- COUTS ;
+- FOURNISSEURS ;
+- LIENS_STOCK ;
+- USAGES_PRODUITS ;
+- FORMULES ;
+- VARIABLES ;
+- PALIERS ;
+- OPTIONS ;
+- PUBLICATIONS ;
+- ANOMALIES.
+
+Chaque feuille doit contenir :
+- identifiant stable ;
+- champs métier ;
+- unités explicites ;
+- statut ;
+- dates ;
+- commentaire ;
+- instructions minimales.
+
+Import en plusieurs étapes :
+1. téléversement sécurisé ;
+2. parsing ;
+3. validation de schéma ;
+4. validation métier ;
+5. normalisation ;
+6. correspondances ;
+7. aperçu des créations / modifications / rejets ;
+8. résolution des conflits ;
+9. confirmation ;
+10. transaction ;
+11. audit ;
+12. rapport téléchargeable ;
+13. actualisation de l’interface ;
+14. marquage des publications affectées.
+
+Règles :
+- cellule vide ne doit pas effacer une valeur sans mode explicite ;
+- identifiant inconnu ne doit pas modifier une ligne arbitraire ;
+- aucune formule exécutable libre dans Excel ;
+- limiter taille et type de fichier ;
+- empêcher CSV injection ;
+- rapporter erreur par feuille, ligne et colonne ;
+- garantir l’idempotence ;
+- ne pas publier automatiquement après import sans validation.
+
+======================================================================
+16. UX/UI — DIRECTION ARTISTIQUE ET QUALITÉ D’INTERACTION
+======================================================================
+
+Créer une interface de niveau ERP SaaS premium : professionnelle, calme, hiérarchisée, dense quand nécessaire mais jamais confuse.
+
+Principes :
+- une action primaire claire par contexte ;
+- actions secondaires regroupées ;
+- progressive disclosure ;
+- libellés métier avant identifiants techniques ;
+- espacement cohérent ;
+- grille stable ;
+- contraste lisible ;
+- états prévisibles ;
+- feedback immédiat ;
+- aucune décoration gratuite ;
+- rouge/rose réservé à la marque, aux actions principales ou aux erreurs ;
+- vert réservé à un succès réel ;
+- orange pour une attention ;
+- gris pour les états neutres.
+
+Interdictions visuelles :
+- lignes verticales rouges dans les tableaux ;
+- recherche entourée en rouge sans focus ou erreur ;
+- cinq badges concurrents sur une ligne ;
+- textes sous 12 px pour les informations métier ;
+- titres coupés sans tooltip ;
+- icône seule sans nom accessible ;
+- double sidebar lourde ;
+- détail affiché sous une longue table ;
+- scroll vertical imbriqué sans nécessité ;
+- dizaines de chips sur une même ligne ;
+- animations décoratives lentes ;
+- modale pour chaque action banale.
+
+Design system :
+- tokens de couleur, typographie, espace, rayon, ombre, hauteur et mouvement ;
+- composants communs Button, IconButton, Badge, Status, Field, Table, Drawer, Tabs, EmptyState, ErrorState, Skeleton, Toast, ConfirmDialog ;
+- états hover, focus, active, disabled, loading, success, warning et error ;
+- tailles et densités documentées ;
+- icônes cohérentes issues d’une seule bibliothèque.
+
+Tableaux :
+- en-tête sticky ;
+- séparateurs horizontaux subtils ;
+- hauteur 52 à 60 px selon densité ;
+- alignement numérique à droite ;
+- unités visibles ;
+- actions principales visibles ou au survol clavier/souris ;
+- menu « … » pour le secondaire ;
+- choix de colonnes ;
+- vues enregistrées ;
+- filtres actifs visibles et réinitialisables ;
+- sélection multiple avec barre d’actions contextuelle ;
+- pagination serveur ou virtualisation ;
+- squelette de chargement ;
+- états vide, erreur et hors ligne utiles.
+
+Formulaires :
+- regroupement logique ;
+- label toujours visible ;
+- aide courte ;
+- exemple d’unité ;
+- validation proche du champ ;
+- résumé global des erreurs ;
+- avertissement de sortie avec modifications non enregistrées ;
+- prévention du double clic ;
+- conflit d’édition expliqué ;
+- comparaison avant / après pour les changements sensibles.
+
+Drawers et pages détail :
+- largeur adaptée au contenu ;
+- en-tête et actions sticky ;
+- sections repliables ;
+- URL ou état restaurable ;
+- navigation clavier ;
+- fermeture sûre ;
+- pas de perte silencieuse des modifications.
+
+Animations :
+- 120 à 220 ms pour interactions courantes ;
+- easing naturel ;
+- transitions de drawer, menu, état et réordonnancement ;
+- skeleton plutôt qu’un spinner bloquant ;
+- aucune animation empêchant une action ;
+- respecter prefers-reduced-motion ;
+- éviter les mouvements de mise en page.
+
+Responsive :
+- priorité ordinateur pour tables complexes ;
+- support tablette ;
+- sur petit écran, transformer la table en liste structurée ou masquer les colonnes secondaires ;
+- conserver actions et statut accessibles ;
+- aucune largeur figée provoquant un débordement incontrôlé.
+
+======================================================================
+17. ACCESSIBILITÉ
+======================================================================
+
+Respecter au minimum WCAG 2.2 niveau AA lorsque applicable.
+
+Vérifier :
+- HTML sémantique ;
+- un seul h1 pertinent ;
+- hiérarchie de titres ;
+- labels des champs ;
+- noms accessibles des boutons icônes ;
+- aria uniquement lorsque nécessaire et autorisé pour l’élément ;
+- aucun aria-* interdit ;
+- en-têtes de tableau non vides ;
+- scope correct ;
+- navigation clavier complète ;
+- focus visible ;
+- focus trap dans les modales ;
+- restitution du focus ;
+- annonces des erreurs et sauvegardes importantes ;
+- contraste ;
+- zoom 200 % ;
+- taille de cible ;
+- reduced motion ;
+- lecteur d’écran.
+
+Corriger notamment les catégories d’erreurs :
+- aria-prohibited-attr ;
+- empty-table-header ;
+- aria-input-field-name ;
+- boutons sans nom ;
+- champs sans label ;
+- éléments cliquables non accessibles au clavier.
+
+Ne pas masquer un problème avec une désactivation globale du linter.
+
+======================================================================
+18. PERFORMANCE ET FLUIDITÉ
+======================================================================
+
+Mesurer et corriger :
+- requêtes Prisma N+1 ;
+- chargement de catalogues complets sans pagination ;
+- appels API dupliqués ;
+- payloads trop volumineux ;
+- filtres client sur des milliers de lignes ;
+- rerenders React ;
+- dépendances de hooks incorrectes ;
+- états globaux inutiles ;
+- calcul tarifaire répété ;
+- cache non invalidé ou trop agressif ;
+- bundles Administration trop lourds ;
+- composants monolithiques ;
+- absence d’index DB.
+
+Objectifs :
+- première vue rapidement exploitable ;
+- interactions sans blocage perceptible ;
+- recherche débouncée et annulable ;
+- pagination, tri et filtres côté serveur ;
+- optimistic UI uniquement pour opérations réversibles ;
+- mutations financières confirmées par le serveur avant succès ;
+- cache versionné par publication ;
+- invalidation ciblée après commit.
+
+======================================================================
+19. SÉCURITÉ ET INTÉGRITÉ
+======================================================================
+
+Contrôler :
+- authentification de chaque route ;
+- permissions lecture / édition / publication / import / restauration ;
+- validation stricte des entrées ;
+- contrôle des ressources par organisation ;
+- protection CSRF selon architecture ;
+- limites de taille et type de fichier ;
+- rate limiting des opérations lourdes ;
+- transactions ;
+- concurrence et version optimiste ;
+- journalisation sans secrets ;
+- protection des exports ;
+- fail-closed ;
+- absence de logique d’autorisation seulement côté client.
+
+Rôles suggérés à adapter :
+- lecteur ;
+- gestionnaire catalogue ;
+- gestionnaire achats / coûts ;
+- gestionnaire prix ;
+- approbateur ;
+- publicateur ;
+- administrateur.
+
+Une personne peut préparer une modification sans forcément avoir le droit de la publier.
+
+======================================================================
+20. TESTS DE PARITÉ ET NON-RÉGRESSION
+======================================================================
+
+Avant refonte des moteurs, capturer des scénarios réels de référence.
+
+Ajouter des tests unitaires pour :
+- conversions d’unités ;
+- calcul de surface ;
+- coût matière ;
+- perte ;
+- minimum ;
+- paliers ;
+- arrondis ;
+- bénéfice ;
+- taux de marge ;
+- taux de marque ;
+- validateur de formule ;
+- projection commerciale ;
+- hash ;
+- classification des anomalies.
+
+Ajouter des tests contractuels par famille :
+- mêmes entrées ;
+- même FormulaVersion ;
+- même détail ;
+- même total entre Admin, POS, panier et devis.
+
+Familles minimales :
+- Impression sans finition ;
+- Flyers ;
+- Carterie ;
+- Publications ;
+- Bloc-notes / Agenda / Calendrier ;
+- Grand format ;
+- Finitions ;
+- Packaging ;
+- Doypack ;
+- Gobelet ;
+- Hangtag ;
+- Étiquette ;
+- Vente directe ;
+- Textile ;
+- Photo, si présent.
+
+Ajouter des parcours E2E :
+
+Scénario A — Matière
+1. créer ou modifier une matière ;
+2. ajouter déclinaison et format ;
+3. saisir un coût ;
+4. lier à un produit ;
+5. simuler ;
+6. publier ;
+7. vérifier le POS ;
+8. ajouter au panier ;
+9. vérifier devis et commande.
+
+Scénario B — Formule
+1. dupliquer une version publiée en brouillon ;
+2. modifier un coefficient ;
+3. simuler ;
+4. comparer avant / après ;
+5. publier ;
+6. vérifier la nouvelle version ;
+7. confirmer qu’une ancienne commande conserve l’ancien prix.
+
+Scénario C — Synchronisation
+1. modifier un produit sans publier ;
+2. vérifier que le POS conserve la dernière version valide ;
+3. publier ;
+4. vérifier version et hash ;
+5. simuler Admin et POS ;
+6. vérifier égalité ;
+7. provoquer un échec contrôlé ;
+8. vérifier rollback et anomalie.
+
+Scénario D — Stock
+1. passer une commande ;
+2. réserver les consommations ;
+3. confirmer ;
+4. consommer ;
+5. annuler selon les règles ;
+6. restituer une seule fois ;
+7. vérifier mouvements et unités.
+
+Scénario E — Import
+1. importer un fichier valide ;
+2. prévisualiser ;
+3. valider ;
+4. vérifier DB ;
+5. recharger ;
+6. relancer le même fichier ;
+7. vérifier absence de doublon ;
+8. tester erreurs partielles et rapport.
+
+======================================================================
+21. VALIDATIONS TECHNIQUES OBLIGATOIRES
+======================================================================
+
+Exécuter selon les scripts du projet :
+- formatage si configuré ;
+- validation Prisma ;
+- génération Prisma ;
+- audit des migrations ;
+- tests unitaires ;
+- tests d’intégration ;
+- tests contractuels de pricing ;
+- tests E2E applicables ;
+- ESLint sans erreur ;
+- TypeScript sans erreur ;
+- build de production ;
+- audit des routes API ;
+- audit des secrets ;
+- contrôle de l’archive finale.
+
+Ne pas corriger un test en modifiant arbitrairement l’attendu. Si un test contredit la règle métier cible, documenter la contradiction, mettre à jour la spécification, puis adapter le test.
+
+Ne pas ignorer :
+- erreur de build ;
+- avertissement TypeScript révélant une frontière serveur/client incorrecte ;
+- problème d’accessibilité ;
+- test intermittent ;
+- divergence Admin / POS ;
+- prix zéro masquant un manque ;
+- dépendance manquante ;
+- cache .next corrompu.
+
+======================================================================
+22. CRITÈRES D’ACCEPTATION FONCTIONNELS
+======================================================================
+
+La mission est acceptée uniquement si :
+
+1. Le « Catalogue POS » autonome a été supprimé ou fusionné sans perte de fonction utile.
+2. Le Catalogue Admin est la source unique des produits.
+3. Le POS Commercial consomme une projection publiée et versionnée.
+4. Matières, formats et coûts affichent les vraies données existantes.
+5. Les tables sont complètes mais lisibles grâce aux vues et colonnes configurables.
+6. Les coûts et prix sont clairement séparés.
+7. Taux de marge et taux de marque ne sont plus confondus.
+8. Les unités et conversions sont explicites et testées.
+9. Le stock n’est modifié que par mouvements traçables.
+10. Une matière ne devient pas automatiquement un article POS.
+11. Chaque produit publié possède les dépendances obligatoires.
+12. Les formules sont modifiables sans code via un éditeur contrôlé.
+13. Chaque modification publiée crée une version.
+14. Le simulateur Admin et le POS utilisent le même pricingResolver.
+15. À entrées et versions identiques, Admin, POS, panier et devis donnent le même prix.
+16. Les anciennes commandes gardent leur snapshot.
+17. Une publication échouée ne remplace jamais la dernière version valide.
+18. Les divergences sont visibles et actionnables.
+19. Les imports sont prévisualisés, validés, auditables et idempotents.
+20. L’interface ne contient plus de redondances, double sidebar lourde, lignes rouges ou détails empilés sous les tableaux.
+21. Le design est cohérent, accessible, responsive, fluide et sobrement animé.
+22. Les données persistent après rechargement.
+23. Les permissions sont appliquées côté serveur.
+24. Les tests, le lint, TypeScript et le build passent.
+25. Aucun secret, base réelle, cache, build ou node_modules n’est inclus dans l’archive.
+
+======================================================================
+23. LIVRABLES
+======================================================================
+
+Fournir :
+
+1. le code refactoré et fonctionnel ;
+2. les migrations Prisma sûres ;
+3. les scripts de migration et rapprochement idempotents ;
+4. les nouveaux composants et écrans ;
+5. le moteur ou contrat de calcul unifié ;
+6. les tests ajoutés ;
+7. le rapport de données rapprochées ;
+8. les résultats précis de validation ;
+9. les limites et risques restants ;
+10. les instructions de recette ;
+11. une archive ZIP propre ;
+12. un rapport technique :
+    AUDIT_RECONSTRUCTION_ADMIN_CATALOGUE_MATIERES_PRIX_SYNC_POS.md
+
+Le rapport doit contenir :
+- résumé exécutif ;
+- architecture avant / après ;
+- écrans supprimés, fusionnés, déplacés et créés ;
+- modèles et migrations ;
+- règles métier ;
+- moteurs vérifiés ;
+- données migrées ;
+- doublons traités ;
+- anomalies restantes ;
+- tests ;
+- lint ;
+- TypeScript ;
+- build ;
+- sécurité API ;
+- performance ;
+- accessibilité ;
+- procédure de rollback ;
+- captures avant / après si l’environnement le permet.
+
+Archive finale à exclure :
+- .env et variantes sensibles ;
+- bases .db, .sqlite ou données de production ;
+- node_modules ;
+- .next ;
+- caches ;
+- logs ;
+- authentifications Playwright ;
+- rapports temporaires ;
+- archives imbriquées ;
+- fichiers contenant tokens ou secrets.
+
+======================================================================
+24. MÉTHODE D’EXÉCUTION ATTENDUE DE CURSOR
+======================================================================
+
+Travaille par étapes sûres et vérifiables :
+
+Étape 1 — Cartographie
+- inspecter le projet réel ;
+- identifier les sources ;
+- produire les matrices ;
+- établir la liste des risques.
+
+Étape 2 — Contrats
+- définir source canonique ;
+- fixer les contrats de données et calcul ;
+- capturer les scénarios de référence ;
+- ajouter les premiers tests de parité.
+
+Étape 3 — Données
+- normaliser sans perte ;
+- ajouter contraintes et migrations ;
+- rapprocher Admin et POS ;
+- générer rapport dry-run ;
+- appliquer avec transaction et rollback.
+
+Étape 4 — Services
+- unifier lecture, publication, projection et calcul ;
+- centraliser validations ;
+- versionner ;
+- sécuriser ;
+- instrumenter.
+
+Étape 5 — UX/UI
+- reconstruire navigation ;
+- reconstruire Produits ;
+- reconstruire Matières, formats & coûts ;
+- reconstruire Studio Prix & Calculs ;
+- intégrer publication et diagnostics ;
+- corriger accessibilité et responsive.
+
+Étape 6 — Validation métier
+- parcourir chaque famille réelle ;
+- comparer résultats avant / après ;
+- vérifier POS, panier, devis et commande ;
+- corriger toutes les divergences.
+
+Étape 7 — Qualité finale
+- tests ;
+- lint ;
+- TypeScript ;
+- build ;
+- audit API ;
+- secrets ;
+- archive ;
+- rapport.
+
+À chaque étape :
+- expliquer brièvement les décisions ;
+- préserver le travail existant ;
+- ne pas modifier des fichiers sans rapport avec la mission ;
+- ne pas masquer les erreurs ;
+- enregistrer les preuves de validation.
+
+======================================================================
+25. INSTRUCTION FINALE
+======================================================================
+
+Commence immédiatement par l’audit du code et des données réelles.
+
+Ne t’arrête pas à une maquette, une liste de recommandations ou un renommage superficiel. Implémente la refonte dans le projet, migre les données en sécurité, unifie les sources, corrige l’UX/UI, établis la synchronisation Administration → publication → POS Commercial et vérifie la chaîne complète jusqu’au panier, devis, commande, production et stock.
+
+Lorsque plusieurs solutions sont possibles, privilégie :
+- la simplicité d’usage ;
+- la source unique de vérité ;
+- la traçabilité ;
+- la compatibilité historique ;
+- la sécurité des données ;
+- la parité des calculs ;
+- la maintenabilité ;
+- la performance mesurée ;
+- l’accessibilité ;
+- la possibilité de modifier le métier sans développeur.
+
+À la fin, restitue un résumé factuel avec :
+- nombre de fichiers modifiés ;
+- migrations appliquées ;
+- données rapprochées ;
+- doublons fusionnés ;
+- anomalies corrigées et restantes ;
+- tests réussis / total ;
+- état ESLint ;
+- état TypeScript ;
+- état build ;
+- état sécurité API ;
+- état de parité Admin / POS ;
+- liens vers l’archive et le rapport.

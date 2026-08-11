@@ -1,0 +1,304 @@
+/**
+ * ANS ORION — Palette globale unifiée (clair + sombre)
+ * Même hiérarchie · mêmes accents · variation minimale
+ * Accents uniques : rouge ANS + or/ambre (+ vert succès uniquement)
+ */
+
+:root {
+  /* ── Accents marque (IDENTIQUES clair / sombre) ── */
+  --ans-primary: #FF174D;
+  --ans-primary-hover: #C91443;
+  --ans-primary-active: #B80030;
+  --ans-primary-dark: #B80030;
+  --ans-primary-soft: rgba(255, 23, 77, 0.12);
+  --ans-primary-glow: rgba(255, 23, 77, 0.35);
+
+  --ans-gold: #FACC15;
+  --ans-amber: #F59E0B;
+  --ans-orange: #F59E0B;
+  --ans-gold-soft: rgba(250, 204, 21, 0.14);
+  --ans-gold-glow: rgba(250, 204, 21, 0.3);
+
+  /* Sémantiques distincts de la marque (jamais alias #FF174D) */
+  --ans-success: #16A34A;
+  --ans-warning: #F59E0B;
+  --ans-danger: #DC2626;
+  --ans-info: #2563EB;
+
+  /* ── Dark surfaces — profondeur sidebar (quasi noir marine) ── */
+  --ans-bg-main: #02030D;
+  --ans-bg-deep: #010208;
+  --ans-bg-sidebar: #030611;
+  --ans-bg-panel: #050A18;
+  --ans-bg-card: #071021;
+  --ans-bg-card-2: #091428;
+  --ans-bg-card-hover: #0B1830;
+  --ans-bg-active: #0E1D39;
+  --ans-bg-topbar: #040814;
+  --ans-border-soft: rgba(255, 255, 255, 0.04);
+  --ans-border-strong: rgba(255, 255, 255, 0.08);
+  --border-invisible: transparent;
+  --border-soft: rgba(255, 255, 255, 0.04);
+  --border-normal: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(255, 23, 77, 0.45);
+  --ans-border-violet: var(--ans-border-soft);
+  --ans-border-violet-soft: var(--ans-border-strong);
+
+  --ans-text-primary: #F8FAFC;
+  --ans-text-secondary: #CBD5E1;
+  --ans-text-muted: #94A3B8;
+  --ans-text-dim: #64748B;
+  --ans-text-soft: #CBD5E1;
+
+  /* ── Light surfaces — SaaS ultra (page soft · cartes blanches) ── */
+  --ans-light-bg: #F4F7FB;
+  --ans-light-sidebar: #FFFFFF;
+  --ans-light-topbar: #FFFFFF;
+  --ans-light-panel: #FFFFFF;
+  --ans-light-card: #FFFFFF;
+  --ans-light-card-2: #F8FAFC;
+  --ans-light-hover: #EEF2F7;
+  --ans-light-active: #FFE8EF;
+  --ans-light-border: #EEF2F7;
+  --ans-light-border-strong: #E2E8F0;
+  --ans-light-text: #0F172A;
+  --ans-light-text-secondary: #334155;
+  --ans-light-text-muted: #64748B;
+  --ans-light-text-dim: #94A3B8;
+
+  /* Alias sémantiques */
+  --bg-shell: var(--bg-app);
+  --bg-surface: var(--bg-panel);
+  --bg-surface-2: var(--bg-card-elevated);
+  --bg-card-hover: var(--bg-hover);
+  --border-default: var(--border-standard);
+  --text-primary: var(--text-main);
+  --text-secondary: var(--text-muted);
+  --accent-primary: var(--primary);
+  --accent-warning: var(--warning);
+  --accent-success: var(--success);
+  --accent-danger: var(--danger);
+  --accent-info: var(--info);
+  --glow-primary: var(--ans-primary-glow);
+  --glow-soft: var(--ans-gold-soft);
+}
+
+/**
+ * Mode clair — surfaces blancs (ne jamais cibler :root seul)
+ */
+:root:not(.dark) {
+  --bg-app: var(--ans-light-bg);
+  --bg-page: var(--ans-light-bg);
+  --bg-panel: var(--ans-light-panel);
+  --bg-card: var(--ans-light-card);
+  --bg-card-soft: var(--ans-light-card-2);
+  --bg-card-elevated: var(--ans-light-card-2);
+  --bg-warm-subtle: var(--ans-light-sidebar);
+  --bg-hover: var(--ans-light-hover);
+  --bg-active-soft: var(--ans-primary-soft);
+  --bg-chip: var(--ans-light-card-2);
+  --bg-chip-active: var(--ans-primary-soft);
+  --bg-row-alt: transparent;
+  --bg-row-hover: var(--ans-light-hover);
+  --bg-selected-soft: var(--ans-primary-soft);
+  --bg-context-soft: #F8FAFC;
+  --backdrop: rgba(15, 23, 42, 0.4);
+  --bg-sidebar: var(--ans-light-sidebar);
+  --bg-header: var(--ans-light-topbar);
+  --bg-active: var(--ans-light-active);
+
+  --bg-shell: var(--ans-light-bg);
+  --bg-surface: var(--ans-light-panel);
+  --bg-surface-2: var(--ans-light-card-2);
+  --bg-card-hover: var(--ans-light-hover);
+
+  --text-main: var(--ans-light-text);
+  --text-soft: var(--ans-light-text-secondary);
+  --text-muted: var(--ans-light-text-muted);
+  --text-dim: var(--ans-light-text-dim);
+  --text-subtle: var(--ans-light-text-muted);
+  --text-placeholder: var(--ans-light-text-dim);
+  --text-primary: var(--ans-light-text);
+  --text-secondary: var(--ans-light-text-secondary);
+
+  --primary: var(--ans-primary);
+  --primary-hover: #C91443;
+  --primary-soft: #FF3366;
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground: #FFFFFF;
+  --primary-foreground-hsl: 0 0% 100%;
+  --warning: #F59E0B;
+  --success: #16A34A;
+  --danger: #DC2626;
+  --destructive: #DC2626;
+  --info: #2563EB;
+
+  --app-bg: var(--ans-light-bg);
+  --app-surface: var(--ans-light-card);
+  --app-surface-soft: var(--ans-light-card-2);
+  --app-border: var(--ans-light-border);
+  --app-text: var(--ans-light-text);
+  --app-muted: var(--ans-light-text-secondary);
+  --app-primary: var(--ans-primary);
+  --app-primary-hover: #C91443;
+  --app-warning: #F59E0B;
+  --app-success: #16A34A;
+  --app-danger: #DC2626;
+  --app-disabled-bg: #F1F5F9;
+  --app-disabled-text: #64748B;
+
+  --border-soft: #EEF2F7;
+  --border-standard: #E2E8F0;
+  --border-default: #EEF2F7;
+  --border: #E2E8F0;
+  --border-invisible: transparent;
+  --border-normal: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --border-focus: rgba(255, 23, 77, 0.45);
+
+  /* Ombres clair — ultra SaaS */
+  --shadow-opacity: 0.08;
+  --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 14px 40px rgba(15, 23, 42, 0.08);
+  --shadow-hover: 0 10px 28px rgba(15, 23, 42, 0.1);
+  --orion-shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --orion-shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --orion-shadow-lg: 0 14px 40px rgba(15, 23, 42, 0.1);
+  --orion-shadow: var(--shadow-hover);
+  --orion-shadow-soft: var(--shadow-card);
+  --border-active: var(--ans-primary);
+  --border-active-soft: var(--ans-primary-soft);
+
+  --ans-red-500: var(--ans-primary);
+  --ans-red-600: var(--ans-primary-active);
+  --ans-red-700: var(--ans-primary-dark);
+  --ans-pink-400: var(--ans-primary-hover);
+  --ans-pink-500: var(--ans-primary);
+  --ans-pink-600: var(--ans-primary-active);
+  --ans-gold-400: var(--ans-gold);
+  --ans-gold-500: var(--ans-gold);
+  --ans-orange-500: var(--ans-amber);
+  --ans-orange-600: var(--ans-amber);
+
+  --chart-1: var(--ans-primary);
+  --chart-2: var(--ans-gold);
+  --chart-3: var(--ans-success);
+  --chart-4: var(--ans-amber);
+  --chart-5: var(--ans-light-text-muted);
+
+  --success-text: #15803D;
+  --warning-text: #A16207;
+  --danger-text: #C91443;
+  --info-text: #475569;
+  --neutral-badge-text: #334155;
+}
+
+/**
+ * Mode sombre — bleu marine profond (même accents)
+ */
+.dark {
+  --ans-primary-soft: rgba(255, 23, 77, 0.16);
+  --ans-primary-hover: #FF3366;
+  --ans-success: #22C55E;
+  --ans-warning: #F59E0B;
+  --ans-danger: #EF4444;
+  --ans-info: #3B82F6;
+
+  --bg-app: var(--ans-bg-main);
+  --bg-page: var(--ans-bg-main);
+  --bg-sidebar: var(--ans-bg-sidebar);
+  --bg-header: var(--ans-bg-topbar);
+  --bg-panel: var(--ans-bg-panel);
+  --bg-card: var(--ans-bg-card);
+  --bg-card-2: var(--ans-bg-card-2);
+  --bg-card-soft: #0A1326;
+  --bg-card-elevated: var(--ans-bg-card-2);
+  --bg-warm-subtle: var(--ans-bg-sidebar);
+  --bg-hover: var(--ans-bg-card-hover);
+  --bg-active: var(--ans-bg-active);
+  --bg-active-soft: var(--ans-primary-soft);
+  --bg-chip: var(--ans-bg-card-2);
+  --bg-chip-active: var(--ans-primary-soft);
+  --bg-row-alt: rgba(248, 250, 252, 0.025);
+  --bg-row-hover: var(--ans-bg-card-hover);
+  --bg-selected-soft: var(--ans-primary-soft);
+  --bg-context-soft: var(--ans-bg-panel);
+  --backdrop: rgba(4, 12, 26, 0.82);
+
+  --bg-shell: var(--ans-bg-main);
+  --bg-surface: var(--ans-bg-panel);
+  --bg-surface-2: var(--ans-bg-card-2);
+  --bg-card-hover: var(--ans-bg-card-hover);
+
+  --text-main: var(--ans-text-primary);
+  --text-muted: var(--ans-text-secondary);
+  --text-subtle: var(--ans-text-muted);
+  --text-placeholder: var(--ans-text-dim);
+  --text-primary: var(--ans-text-primary);
+  --text-secondary: var(--ans-text-secondary);
+
+  --primary: var(--ans-primary);
+  --primary-hover: var(--ans-primary-hover);
+  --primary-soft: var(--ans-primary-hover);
+  --primary-hsl: 345 100% 55%;
+  --primary-foreground: #FFFFFF;
+  --primary-foreground-hsl: 0 0% 100%;
+  --warning: var(--ans-warning);
+  --success: var(--ans-success);
+  --danger: var(--ans-danger);
+  --destructive: var(--ans-danger);
+  --info: var(--ans-info);
+
+  --app-bg: var(--ans-bg-main);
+  --app-surface: var(--ans-bg-card);
+  --app-surface-soft: var(--ans-bg-card-2);
+  --app-border: var(--ans-border-soft);
+  --app-text: var(--ans-text-primary);
+  --app-muted: var(--ans-text-secondary);
+  --app-primary: var(--ans-primary);
+  --app-primary-hover: var(--ans-primary-hover);
+  --app-warning: var(--ans-warning);
+  --app-success: var(--ans-success);
+  --app-danger: var(--ans-danger);
+  --app-disabled-bg: #1E293B;
+  --app-disabled-text: var(--ans-text-muted);
+
+  --border-soft: rgba(255, 255, 255, 0.04);
+  --border-standard: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-invisible: transparent;
+  --border-normal: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(255, 23, 77, 0.45);
+  --border-active: var(--ans-primary);
+  --border-active-soft: var(--ans-primary-soft);
+
+  --chart-1: var(--ans-primary);
+  --chart-2: var(--ans-gold);
+  --chart-3: var(--ans-success);
+  --chart-4: var(--ans-amber);
+  --chart-5: var(--ans-text-muted);
+
+  --success-text: #4ADE80;
+  --warning-text: var(--ans-gold);
+  --danger-text: #FB7185;
+  --info-text: var(--ans-text-muted);
+  --neutral-badge-text: var(--ans-text-secondary);
+
+  --orion-shadow-sm: 0 1px 2px rgba(1, 2, 8, 0.65);
+  --orion-shadow-md: 0 4px 16px rgba(1, 2, 8, 0.55), 0 0 20px rgba(255, 23, 77, 0.05);
+  --orion-shadow-lg: 0 16px 40px rgba(1, 2, 8, 0.7), 0 0 28px rgba(255, 23, 77, 0.07);
+  --orion-shadow-glow-rose: 0 0 28px var(--ans-primary-glow);
+
+  --login-navy-deep: var(--ans-bg-deep);
+  --login-navy: var(--ans-bg-main);
+  --login-navy-mid: var(--ans-bg-panel);
+  --login-navy-accent: var(--ans-bg-card);
+  --login-card-bg: var(--ans-bg-card);
+  --login-card-border: var(--ans-border-soft);
+  --login-card-shadow: 0 16px 48px rgba(1, 2, 8, 0.75), 0 2px 8px var(--ans-primary-soft);
+  --login-panel-title: var(--ans-text-primary);
+  --login-panel-muted: var(--ans-text-secondary);
+  --login-text-on-dark: var(--ans-text-primary);
+  --login-text-muted-on-dark: var(--ans-text-secondary);
+}

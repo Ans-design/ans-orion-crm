@@ -1,0 +1,881 @@
+/* ═══════════════════════════════════════════════════════════════
+   ANS ORION — Tableaux Admin unifiés (dark soft + light)
+   Aucun filet vertical jaune/orange — lignes horizontales fines
+   ═══════════════════════════════════════════════════════════════ */
+
+.orion-admin-table-root {
+  --oat-page: #f4f7fb;
+  --oat-card: #ffffff;
+  --oat-header: #f8fafc;
+  --oat-row: #ffffff;
+  --oat-row-hover: #f1f5f9;
+  --oat-border: #eef2f7;
+  --oat-border-row: #eef2f7;
+  --oat-text: var(--app-text, #0f172a);
+  --oat-text-secondary: var(--app-muted, #64748b);
+  --oat-text-cell: var(--app-text, #0f172a);
+  --oat-accent: var(--app-primary, #ff174d);
+  --oat-radius: var(--radius-ui, 12px);
+  --oat-row-h: 60px;
+}
+
+.dark .orion-admin-table-root,
+.orion-admin-table-root.is-dark {
+  --oat-page: #02030d;
+  --oat-card: #071021;
+  --oat-header: #091428;
+  --oat-row: #050a18;
+  --oat-row-hover: #0b1830;
+  --oat-border: rgba(255, 255, 255, 0.04);
+  --oat-border-row: rgba(255, 255, 255, 0.04);
+  --oat-text: var(--app-text, #f8fafc);
+  --oat-text-secondary: var(--ans-text-muted, #94a3b8);
+  --oat-text-cell: var(--app-text, #f8fafc);
+  --oat-accent: var(--app-primary, #ff174d);
+  --oat-radius: var(--radius-ui, 7px);
+}
+
+.orion-admin-table-root.is-light {
+  --oat-page: #f4f7fb;
+  --oat-card: #ffffff;
+  --oat-header: #f8fafc;
+  --oat-row: #ffffff;
+  --oat-row-hover: #f1f5f9;
+  --oat-border: #eef2f7;
+  --oat-border-row: #eef2f7;
+  --oat-text: #0f172a;
+  --oat-text-secondary: #64748b;
+  --oat-text-cell: #0f172a;
+}
+
+/* ─── Toolbar ─── */
+.orion-admin-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.orion-admin-table-toolbar-left h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--oat-text);
+}
+
+.orion-admin-table-toolbar-meta {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  color: var(--oat-text-secondary);
+}
+
+.orion-admin-table-toolbar-meta strong {
+  color: var(--oat-text);
+  font-weight: 600;
+}
+
+.orion-admin-table-toolbar-center {
+  flex: 1;
+  min-width: 12rem;
+  max-width: 22rem;
+}
+
+.orion-admin-table-search {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  border-radius: 7px;
+  border: 1px solid var(--oat-border);
+  background: var(--oat-card);
+  color: var(--oat-text);
+}
+
+.orion-admin-table-search:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--oat-accent) 40%, var(--oat-border));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--oat-accent) 15%, transparent);
+}
+
+.orion-admin-table-toolbar-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.orion-admin-table-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.orion-admin-table-chip {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 7px;
+  border: 1px solid var(--oat-border);
+  background: transparent;
+  color: var(--oat-text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.orion-admin-table-chip:hover {
+  background: var(--oat-row-hover);
+  color: var(--oat-text);
+}
+
+.orion-admin-table-chip.is-active {
+  background: color-mix(in srgb, var(--oat-accent) 10%, var(--oat-card));
+  border-color: color-mix(in srgb, var(--oat-accent) 35%, var(--oat-border));
+  color: var(--oat-text);
+}
+
+/* ─── Barre filtres Matières ─── */
+.orion-material-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+.orion-material-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.orion-material-toolbar-row-main {
+  gap: 0.5rem;
+}
+
+.orion-material-toolbar-search {
+  flex: 1 1 14rem;
+  min-width: 12rem;
+  max-width: 26rem;
+}
+
+.orion-material-toolbar-select {
+  padding: 0.48rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 7px;
+  border: 1px solid var(--oat-border);
+  background: var(--oat-card);
+  color: var(--oat-text);
+  min-width: 8.5rem;
+}
+
+.orion-material-toolbar-select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--oat-accent) 40%, var(--oat-border));
+}
+
+.orion-material-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.48rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 7px;
+  border: 1px solid var(--oat-border);
+  background: var(--oat-card);
+  color: var(--oat-text-secondary);
+  cursor: pointer;
+}
+
+.orion-material-toolbar-btn:hover {
+  color: var(--oat-text);
+  border-color: color-mix(in srgb, var(--oat-accent) 25%, var(--oat-border));
+}
+
+.orion-material-toolbar-columns {
+  position: relative;
+}
+
+.orion-material-columns-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 50;
+  min-width: 11rem;
+  padding: 0.5rem;
+  border-radius: 7px;
+  border: 1px solid var(--oat-border);
+  background: var(--oat-card);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.orion-material-columns-title {
+  margin: 0.35rem 0 0.25rem;
+  padding: 0 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--oat-text-secondary);
+}
+
+.orion-material-columns-title:first-child {
+  margin-top: 0;
+}
+
+.orion-material-columns-preset {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.75rem;
+  text-align: left;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--oat-text-secondary);
+  cursor: pointer;
+}
+
+.orion-material-columns-preset:hover,
+.orion-material-columns-preset.is-active {
+  background: color-mix(in srgb, var(--oat-accent) 8%, var(--oat-card));
+  color: var(--oat-text);
+}
+
+.orion-material-columns-check {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--oat-text-secondary);
+  cursor: pointer;
+}
+
+.orion-material-toolbar-row-chips {
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.orion-material-toolbar-count {
+  font-size: 0.7rem;
+  color: var(--oat-text-secondary);
+  white-space: nowrap;
+}
+
+.orion-material-filter-chips {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.orion-material-filter-chip {
+  padding: 0.25rem 0.55rem;
+  font-size: 0.68rem;
+}
+
+.orion-stock-filter-chip-sep {
+  color: var(--oat-text-secondary);
+  opacity: 0.45;
+  font-size: 0.75rem;
+  user-select: none;
+}
+
+.orion-material-new-btn {
+  white-space: nowrap;
+}
+
+.orion-admin-table-view-tabs {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.15rem;
+  border-radius: 7px;
+  border: 1px solid var(--oat-border);
+  background: var(--oat-card);
+}
+
+.orion-admin-table-view-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--oat-text-secondary);
+  cursor: pointer;
+}
+
+.orion-admin-table-view-tab.is-active {
+  background: var(--oat-row-hover);
+  color: var(--oat-text);
+}
+
+/* ─── Card + table ─── */
+.orion-admin-table-card {
+  border-radius: var(--oat-radius);
+  overflow: hidden;
+  border: 1px solid var(--oat-border);
+  background: var(--oat-card);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+.orion-admin-table-scroll {
+  overflow: auto;
+  max-height: calc(100vh - 14rem);
+}
+
+.orion-admin-table,
+.mp-table.orion-admin-table,
+.ab2-table.orion-admin-table,
+.ab2-chips-table.orion-admin-table,
+.ab2-dt-table.orion-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  table-layout: fixed;
+}
+
+.orion-admin-table thead,
+.mp-table.orion-admin-table thead,
+.ab2-table.orion-admin-table thead,
+.ab2-chips-table.orion-admin-table thead,
+.ab2-dt-table.orion-admin-table thead {
+  background: var(--oat-header);
+}
+
+.orion-admin-table th,
+.mp-table.orion-admin-table th,
+.ab2-table.orion-admin-table th,
+.ab2-chips-table.orion-admin-table th,
+.ab2-dt-table.orion-admin-table th {
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--oat-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-align: left;
+  border-bottom: 1px solid var(--oat-border);
+  border-left: none !important;
+  border-right: none !important;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--oat-header);
+}
+
+.orion-admin-table th.is-numeric,
+.orion-admin-table td.is-numeric {
+  text-align: right;
+}
+
+.orion-admin-table th.is-center,
+.orion-admin-table td.is-center {
+  text-align: center;
+}
+
+.orion-admin-table tbody tr,
+.mp-table.orion-admin-table tbody tr,
+.ab2-table.orion-admin-table tbody tr,
+.ab2-chips-table.orion-admin-table tbody tr,
+.ab2-dt-table.orion-admin-table tbody tr {
+  height: var(--oat-row-h);
+  transition: background 150ms ease;
+}
+
+.orion-admin-table td,
+.mp-table.orion-admin-table td,
+.ab2-table.orion-admin-table td,
+.ab2-chips-table.orion-admin-table td,
+.ab2-dt-table.orion-admin-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--oat-text-cell);
+  vertical-align: middle;
+  border-bottom: 1px solid var(--oat-border-row);
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.orion-admin-table tbody tr:hover td,
+.mp-table.orion-admin-table tbody tr:hover td,
+.ab2-table.orion-admin-table tbody tr:hover td,
+.ab2-chips-table.orion-admin-table tbody tr:hover td,
+.ab2-dt-table.orion-admin-table tbody tr:hover td {
+  background: var(--oat-row-hover);
+}
+
+.orion-admin-table tbody tr.is-clickable {
+  cursor: pointer;
+}
+
+.orion-admin-table tbody tr.is-dirty td {
+  background: color-mix(in srgb, #f59e0b 6%, var(--oat-row));
+}
+
+.orion-admin-table tbody tr.has-anomaly td {
+  box-shadow: inset 2px 0 0 rgba(248, 113, 113, 0.55);
+}
+
+/* Colonnes — largeurs */
+.orion-admin-table .col-article { width: 240px; min-width: 200px; }
+.orion-admin-table .col-family { width: 140px; }
+.orion-admin-table .col-material { width: 160px; }
+.orion-admin-table .col-price { width: 120px; }
+.orion-admin-table .col-stock { width: 120px; }
+.orion-admin-table .col-pos { width: 80px; }
+.orion-admin-table .col-status { width: 120px; }
+.orion-admin-table .col-anomalies { width: 180px; }
+.orion-admin-table .col-actions { width: 56px; }
+
+/* Vue Essentiel — masquer colonnes secondaires */
+.orion-admin-table--essential [data-col="details"],
+.orion-admin-table--essential [data-col="unit"],
+.orion-admin-table--essential [data-col="purchase"],
+.orion-admin-table--essential [data-col="max"],
+.orion-admin-table--essential [data-col="margin"],
+.orion-admin-table--essential [data-col="formula"],
+.orion-admin-table--essential [data-col="tiers"],
+.orion-admin-table--essential [data-col="prix2026"],
+.orion-admin-table--essential [data-col="calc"],
+.orion-admin-table--essential [data-col="qty"],
+.orion-admin-table--essential [data-col="ref-only"] {
+  display: none;
+}
+
+/* Cellules */
+.orion-admin-table-cell-article {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.orion-admin-table-cell-article .icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.orion-admin-table-cell-article .title {
+  display: block;
+  font-weight: 600;
+  color: var(--oat-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orion-admin-table-cell-article .sub {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.68rem;
+  color: var(--oat-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orion-admin-table-cell-stack .line1 {
+  display: block;
+  font-weight: 500;
+  color: var(--oat-text);
+}
+
+.orion-admin-table-cell-stack .line2 {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.68rem;
+  color: var(--oat-text-secondary);
+}
+
+.orion-admin-table-price {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--oat-text);
+  white-space: nowrap;
+}
+
+.orion-admin-table-muted {
+  color: var(--oat-text-secondary);
+  font-size: 0.75rem;
+}
+
+.orion-admin-table-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* Badges doux */
+.orion-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.orion-admin-badge.is-published {
+  background: rgba(34, 197, 94, 0.12);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.orion-admin-badge.is-draft {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.orion-admin-badge.is-unpublished,
+.orion-admin-badge.is-muted {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.orion-admin-badge.is-anomaly {
+  background: rgba(248, 113, 113, 0.12);
+  color: #fca5a5;
+  border-color: rgba(248, 113, 113, 0.28);
+}
+
+.orion-admin-badge.is-stock-unlinked {
+  background: color-mix(in srgb, var(--primary, #FF174D) 10%, transparent);
+  color: var(--primary, #FF174D);
+  border-color: color-mix(in srgb, var(--primary, #FF174D) 22%, transparent);
+}
+
+.orion-admin-badge.is-stock-linked {
+  background: rgba(34, 197, 94, 0.1);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.22);
+}
+
+.orion-admin-anomaly-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+}
+
+.orion-admin-anomaly-more {
+  color: var(--oat-text-secondary);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+/* POS switch compact */
+.orion-admin-pos-switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  border: 1px solid var(--oat-border);
+  background: rgba(148, 163, 184, 0.15);
+  cursor: pointer;
+  transition: background 0.15s;
+  padding: 0;
+}
+
+.orion-admin-pos-switch.is-on {
+  background: rgba(34, 197, 94, 0.35);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.orion-admin-pos-switch:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  background: var(--app-disabled-bg);
+  border-color: var(--app-border);
+}
+
+.orion-admin-pos-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.orion-admin-pos-switch.is-on .orion-admin-pos-switch-knob {
+  transform: translateX(16px);
+}
+
+/* Actions menu */
+.orion-admin-table-actions-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  border: 1px solid var(--oat-border);
+  background: transparent;
+  color: var(--oat-text-secondary);
+  cursor: pointer;
+}
+
+.orion-admin-table-actions-btn:hover {
+  background: var(--oat-row-hover);
+  color: var(--oat-text);
+}
+
+/* Densité */
+.orion-admin-table-card.is-compact {
+  --oat-row-h: 48px;
+}
+
+.orion-admin-table-card.is-compact .orion-admin-table td,
+.orion-admin-table-card.is-compact .orion-admin-table th {
+  padding: 8px 12px;
+}
+
+.orion-admin-table-card.is-comfortable {
+  --oat-row-h: 64px;
+}
+
+/* Empty / loading */
+.orion-admin-table-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--oat-text-secondary);
+}
+
+.orion-admin-table-skeleton {
+  padding: 1rem 1.25rem;
+}
+
+.orion-admin-table-skeleton-line {
+  height: 12px;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--oat-row-hover) 25%, var(--oat-border) 50%, var(--oat-row-hover) 75%);
+  background-size: 200% 100%;
+  animation: orion-admin-shimmer 1.2s infinite;
+}
+
+@keyframes orion-admin-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Legacy wraps — héritage sans filets jaunes */
+.mp-table-wrap,
+.ab2-table-wrap,
+.ab2-chips-table-wrap,
+.ab2-dt-wrap {
+  border-radius: var(--oat-radius, 7px);
+  overflow: hidden;
+  border: 1px solid var(--app-border, rgba(148, 163, 184, 0.2)) !important;
+  background: var(--app-surface, #ffffff) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.dark .mp-table-wrap,
+.dark .ab2-table-wrap,
+.dark .ab2-chips-table-wrap,
+.dark .ab2-dt-wrap {
+  border-color: var(--app-border, #12213D) !important;
+  background: var(--app-surface, #081426) !important;
+  box-shadow: 0 4px 24px rgba(1, 2, 8, 0.45);
+}
+
+.mp-table th,
+.mp-table td,
+.ab2-table th,
+.ab2-table td,
+.ab2-chips-table th,
+.ab2-chips-table td {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.mp-table tbody tr.has-anomaly td {
+  box-shadow: inset 2px 0 0 rgba(248, 113, 113, 0.5) !important;
+}
+
+.mp-table tbody tr.is-draft td,
+.ab2-table tr.dirty td {
+  background: color-mix(in srgb, #f59e0b 8%, var(--app-surface, #ffffff)) !important;
+}
+
+/* Vue Prix — masquer colonnes hors prix */
+.orion-admin-table--pricing [data-col="details"],
+.orion-admin-table--pricing [data-col="unit"],
+.orion-admin-table--pricing [data-col="stock"],
+.orion-admin-table--pricing [data-col="pos"],
+.orion-admin-table--pricing [data-col="article"] {
+  display: none;
+}
+
+/* Vue Stock */
+.orion-admin-table--stock [data-col="purchase"],
+.orion-admin-table--stock [data-col="base"],
+.orion-admin-table--stock [data-col="max"],
+.orion-admin-table--stock [data-col="margin"],
+.orion-admin-table--stock [data-col="pos"],
+.orion-admin-table--stock [data-col="details"],
+.orion-admin-table--stock [data-col="unit"] {
+  display: none;
+}
+
+/* Chips table — vue essentielle : masquer colonnes secondaires */
+.ab2-chips-table--essential [data-col="stock"],
+.ab2-chips-table--essential [data-col="prod"],
+.ab2-chips-table--essential [data-col="indicative"],
+.ab2-chips-table--essential [data-col="archived"],
+.ab2-chips-table--essential [data-col="source"] {
+  display: none;
+}
+
+.ab2-th-toggle-label {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Legacy — conservé pour compat */
+.orion-admin-table.ab2-chips-table--essential .col-toggle:nth-child(n+8),
+.orion-admin-table.ab2-chips-table--essential .col-source {
+  display: none;
+}
+
+/* Light variant */
+.orion-admin-table-root.is-light .orion-admin-table-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Actions colonne + bulk (modèle Matières) ─── */
+.orion-admin-actions-th {
+  text-align: center !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.65rem !important;
+  font-weight: 700;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.orion-admin-actions-td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.orion-admin-bulk-bar {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.orion-admin-bulk-select-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.orion-admin-bulk-select-all input {
+  border-radius: 3px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: transparent;
+}
+
+.orion-admin-bulk-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #e2e8f0;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.orion-admin-bulk-delete:hover:not(:disabled) {
+  border-color: rgba(248, 113, 113, 0.45);
+  background: rgba(204, 0, 51, 0.12);
+  color: #ff8fa8;
+}
+
+.orion-admin-bulk-delete:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.orion-admin-bulk-count {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+/* Hub Administration — onglets module (même accent que sous-vues) */
+.orion-admin-hub-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.orion-admin-hub-tabs button {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.orion-admin-hub-tabs button:hover {
+  color: #0f172a;
+  border-color: rgba(148, 163, 184, 0.35);
+  background: #f1f5f9;
+}
+
+.orion-admin-hub-tabs button.active {
+  color: #C91443;
+  background: #ffe8ef;
+  border-color: rgba(255, 23, 77, 0.28);
+}
+
+.dark .orion-admin-hub-tabs button:hover {
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.2);
+  background: transparent;
+}
+
+.dark .orion-admin-hub-tabs button.active {
+  color: #f8fafc;
+  background: rgba(204, 0, 51,.22);
+  border-color: rgba(204, 0, 51, 0.45);
+}

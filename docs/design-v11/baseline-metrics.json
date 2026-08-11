@@ -1,0 +1,188 @@
+{
+  "measuredAt": "2026-08-02T18:45:27.252Z",
+  "cssFiles": 55,
+  "cssLines": 42814,
+  "important": 2844,
+  "hexInCss": 3358,
+  "radiusLiteralCss": 464,
+  "globalsImports": 30,
+  "globalsLines": 2460,
+  "pages": 137,
+  "uiComponents": 77,
+  "roundedInTsx": 706,
+  "inlineStyleTsx": 372,
+  "textXs": 1269,
+  "hexInTsx": 995,
+  "topCss": [
+    {
+      "f": "components/admin/catalogue-prix-stock/catalogue-prix-stock-light.css",
+      "lc": 4427
+    },
+    {
+      "f": "styles/pos-soft-ui.css",
+      "lc": 4174
+    },
+    {
+      "f": "components/ans-talk/ans-talk.css",
+      "lc": 3017
+    },
+    {
+      "f": "app/globals.css",
+      "lc": 2460
+    },
+    {
+      "f": "components/backoffice-v2/admin-backoffice.css",
+      "lc": 2387
+    },
+    {
+      "f": "components/admin/pricing-v4/pricing-admin.css",
+      "lc": 2166
+    },
+    {
+      "f": "components/admin/catalogue-prix-stock/formules-moteurs.css",
+      "lc": 2037
+    },
+    {
+      "f": "components/backoffice-v2/admin-backoffice-layout.css",
+      "lc": 1448
+    },
+    {
+      "f": "components/administration/production-flux/production-flux.css",
+      "lc": 1381
+    },
+    {
+      "f": "components/backoffice-v2/ui/master-data.css",
+      "lc": 1341
+    },
+    {
+      "f": "components/admin/formula-workspace/formula-workspace.css",
+      "lc": 1325
+    },
+    {
+      "f": "components/admin/catalogue-prix-stock/ans-articles-table.css",
+      "lc": 991
+    }
+  ],
+  "monoliths500": [
+    {
+      "f": "components/admin/catalogue-prix-stock/FormulesMoteursWorkspace.tsx",
+      "lc": 3153
+    },
+    {
+      "f": "app/(app)/pos/[id]/page.tsx",
+      "lc": 3006
+    },
+    {
+      "f": "components/clients/clients-page.tsx",
+      "lc": 1893
+    },
+    {
+      "f": "components/administration/prix-articles/PrixArticlesWorkspace.tsx",
+      "lc": 1463
+    },
+    {
+      "f": "components/administration/catalogue-prix-stock/CataloguePrixStockWorkspace.tsx",
+      "lc": 1278
+    },
+    {
+      "f": "components/administration/prix-matieres-stock/PrixMatieresStockWorkspace.tsx",
+      "lc": 1174
+    },
+    {
+      "f": "components/article-mockups.tsx",
+      "lc": 1072
+    },
+    {
+      "f": "app/(app)/planning/page.tsx",
+      "lc": 1059
+    },
+    {
+      "f": "components/backoffice-v2/pricing-custom/MaterialMasterDataTable.tsx",
+      "lc": 1053
+    },
+    {
+      "f": "components/pos/pos-summary-content.tsx",
+      "lc": 1047
+    },
+    {
+      "f": "components/backoffice-v2/pricing-custom/material-prices/MaterialSheet.tsx",
+      "lc": 986
+    },
+    {
+      "f": "components/backoffice-v2/pricing-custom/BaseMaterialPricesTable.tsx",
+      "lc": 950
+    },
+    {
+      "f": "components/ans-talk/ans-talk-app.tsx",
+      "lc": 869
+    },
+    {
+      "f": "app/login/page.tsx",
+      "lc": 832
+    },
+    {
+      "f": "app/(app)/dashboard/page.tsx",
+      "lc": 818
+    },
+    {
+      "f": "components/planning/production-gantt.tsx",
+      "lc": 748
+    },
+    {
+      "f": "app/(app)/devis/page.tsx",
+      "lc": 741
+    },
+    {
+      "f": "components/backoffice-v2/options/OptionsChipsWorkspace.tsx",
+      "lc": 740
+    },
+    {
+      "f": "app/(app)/stock/page.tsx",
+      "lc": 733
+    },
+    {
+      "f": "components/stock/StockItemCompleteModal.tsx",
+      "lc": 721
+    },
+    {
+      "f": "components/admin/pricing-v4/catalog/article-catalog-page.tsx",
+      "lc": 713
+    },
+    {
+      "f": "components/admin/fusion-admin-panels.tsx",
+      "lc": 669
+    },
+    {
+      "f": "app/(app)/pos/conception/page.tsx",
+      "lc": 661
+    },
+    {
+      "f": "components/administration/overview/OverviewUnifiedWorkspace.tsx",
+      "lc": 661
+    },
+    {
+      "f": "components/backoffice-v2/pricing-custom/CustomPricingWorkspace.tsx",
+      "lc": 652
+    },
+    {
+      "f": "components/administration/production-flux/ProductionFluxUnifiedWorkspace.tsx",
+      "lc": 639
+    },
+    {
+      "f": "components/administration/materials/MaterialsUnifiedWorkspace.tsx",
+      "lc": 632
+    },
+    {
+      "f": "components/devis/devis-validation-panel.tsx",
+      "lc": 631
+    },
+    {
+      "f": "components/admin/article-pricing-card.tsx",
+      "lc": 623
+    },
+    {
+      "f": "components/admin/formula-workspace/FormulaEditorCore.tsx",
+      "lc": 612
+    }
+  ]
+}

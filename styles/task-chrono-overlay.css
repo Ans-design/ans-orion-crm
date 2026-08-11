@@ -1,0 +1,198 @@
+/**
+ * Chrono atelier + Gantt just-placed â€” polish HTML v29.
+ */
+
+@keyframes ganttBlockPlace {
+  0% {
+    transform: scaleY(1.12);
+    filter: brightness(1.15);
+  }
+  100% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+}
+
+.gg-block.just-placed {
+  animation: ganttBlockPlace 0.35s ease;
+  z-index: 25 !important;
+}
+
+.gantt-now-line::before {
+  content: attr(data-now);
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #3f75f3;
+  white-space: nowrap;
+  background: color-mix(in srgb, #fff 88%, #3f75f3);
+  border: 1px solid color-mix(in srgb, #3f75f3 35%, transparent);
+  border-radius: 7px;
+  padding: 1px 5px;
+  line-height: 1.2;
+}
+
+html.dark .gantt-now-line::before {
+  background: #0e1d2f;
+  color: #8eb4ff;
+  border-color: rgba(63, 117, 243, 0.45);
+}
+
+/* â”€â”€ Chrono overlay â”€â”€ */
+.task-chrono-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(5, 12, 24, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.task-chrono-card {
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+  color: #fff;
+  border-radius: 7px;
+  padding: 2rem 1.75rem 1.5rem;
+  background: #0e1d2f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.task-chrono-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 0.75rem;
+}
+
+.task-chrono-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+  line-height: 1.35;
+}
+
+.task-chrono-dig-wrap {
+  background: #fff;
+  border-radius: 7px;
+  padding: 1.25rem 1.5rem;
+  margin: 0 auto 1.5rem;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.task-chrono-dig {
+  display: block;
+  font-size: clamp(2.4rem, 8vw, 3.75rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, 'JetBrains Mono', monospace;
+  color: #0d1b2a;
+  line-height: 1;
+}
+
+.task-chrono-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.task-chrono-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 132px;
+  min-height: 44px;
+  padding: 0.7rem 1.1rem;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.14s ease, filter 0.14s ease;
+}
+
+.task-chrono-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.task-chrono-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.task-chrono-btn--pause {
+  background: #e8a020;
+  color: #fff;
+}
+
+.task-chrono-btn--done,
+.btn-task-done {
+  background: #27ae60;
+  color: #fff;
+}
+
+.task-chrono-btn--resume {
+  background: var(--brand-primary, #FF174D);
+  color: #fff;
+}
+
+.task-chrono-minimize {
+  margin-top: 1rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.task-chrono-hint {
+  margin-top: 0.75rem;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.task-paused-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 7px;
+  border: 1.5px solid rgba(245, 158, 11, 0.35);
+  background: #fff7ed;
+}
+
+.dark .task-paused-banner {
+  background: #2d1800;
+  border-color: #5a3010;
+  color: #fde68a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gg-block.just-placed {
+    animation: none;
+  }
+}

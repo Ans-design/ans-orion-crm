@@ -1,0 +1,1143 @@
+{
+  "generatedAt": "2026-07-30T20:03:14.961Z",
+  "source": "docs/references/catalogue-2026-prix-exacts.xlsx",
+  "byExcelId": {
+    "100": {
+      "name": "PCB 300g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "101": {
+      "name": "PCB 350g",
+      "printPrice": 2000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "102": {
+      "name": "PCB 600g",
+      "printPrice": 2500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "103": {
+      "name": "PCB 700g",
+      "printPrice": 3500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "104": {
+      "name": "PCB 900g",
+      "printPrice": 5000,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "105": {
+      "name": "PCB 90g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "112": {
+      "name": "PCM 115g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "113": {
+      "name": "PCM 130g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "114": {
+      "name": "PCM 135g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "115": {
+      "name": "PCM 150g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "116": {
+      "name": "PCM 170g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "117": {
+      "name": "PCM 250g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "118": {
+      "name": "PCM 300g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "123": {
+      "name": "PCM 90g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "124": {
+      "name": "PVC opaque",
+      "printPrice": 12000,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "125": {
+      "name": "PVC translucide",
+      "printPrice": 4500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "126": {
+      "name": "Papier adhestor",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "127": {
+      "name": "Papier autocollant",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "128": {
+      "name": "Papier collant glossy",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "129": {
+      "name": "Papier contre-collé 600g",
+      "printPrice": 2500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "130": {
+      "name": "Papier contre-collé 700g",
+      "printPrice": 3500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "131": {
+      "name": "Papier cover luxe 900g",
+      "printPrice": 5000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "132": {
+      "name": "Papier indéchirable 120g",
+      "printPrice": 2200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "133": {
+      "name": "Papier indéchirable 150g",
+      "printPrice": 2200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "134": {
+      "name": "Papier indéchirable 200g",
+      "printPrice": 2200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "138": {
+      "name": "Papier mat 115g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "139": {
+      "name": "Papier mat 130g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "140": {
+      "name": "Papier mat 150g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "141": {
+      "name": "Papier mat 170g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "142": {
+      "name": "Papier mat 250g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "143": {
+      "name": "Papier mat 300g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "144": {
+      "name": "Papier mat 80g",
+      "printPrice": 600,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "145": {
+      "name": "Papier mat 90g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "154": {
+      "name": "Papier sublimation",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "155": {
+      "name": "Spécial invitation 300g",
+      "printPrice": 2000,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "156": {
+      "name": "Spécial invitation 325g",
+      "printPrice": 2000,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "158": {
+      "name": "Standard / Offset 80g",
+      "printPrice": 600,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "160": {
+      "name": "Texturé 250g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "161": {
+      "name": "Toile fin 270g",
+      "printPrice": 2500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Petit format"
+    },
+    "022": {
+      "name": "Acrylic 3mm",
+      "printPrice": 200000,
+      "blankPrice": null,
+      "unit": "plaque",
+      "family": "Grand format"
+    },
+    "025": {
+      "name": "Bâche 340g",
+      "printPrice": 20000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "026": {
+      "name": "Bâche 440g",
+      "printPrice": 20000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "027": {
+      "name": "Bâche 510g",
+      "printPrice": 20000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "001": {
+      "name": "Carton rigide 350g",
+      "printPrice": 350,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "002": {
+      "name": "Carton rigide 600g",
+      "printPrice": 500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "062": {
+      "name": "Couché mat 120g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "063": {
+      "name": "Couché mat 130g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "064": {
+      "name": "Couché mat 150g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "065": {
+      "name": "Couché mat 170g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "066": {
+      "name": "Couché mat 200g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "067": {
+      "name": "Couché mat 250g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "068": {
+      "name": "Couché mat 300g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "032": {
+      "name": "Dos bleu 120g",
+      "printPrice": 23000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "033": {
+      "name": "Film réfléchissant 140g",
+      "printPrice": 46000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "036": {
+      "name": "Frosted film sablé 140g",
+      "printPrice": 46000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "070": {
+      "name": "Glossy 120g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "071": {
+      "name": "Glossy 140g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "072": {
+      "name": "Glossy 160g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "073": {
+      "name": "Glossy 180g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "074": {
+      "name": "Glossy 250g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "075": {
+      "name": "Glossy 300g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "004": {
+      "name": "Invitation luxe 180g",
+      "printPrice": 300,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "005": {
+      "name": "Invitation luxe 200g",
+      "printPrice": 300,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "006": {
+      "name": "Invitation luxe 250g",
+      "printPrice": 300,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "007": {
+      "name": "Invitation luxe 300g",
+      "printPrice": 300,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "008": {
+      "name": "Invitation luxe 325g",
+      "printPrice": 300,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "092": {
+      "name": "Offset 80g",
+      "printPrice": 600,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "037": {
+      "name": "One-Way Vision 140g",
+      "printPrice": 30000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "014": {
+      "name": "Papier pelliculé brillant 320g",
+      "printPrice": 450,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "015": {
+      "name": "Papier pelliculé brillant 370g",
+      "printPrice": 600,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "016": {
+      "name": "Papier pelliculé mat 320g",
+      "printPrice": 450,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "017": {
+      "name": "Papier pelliculé mat 370g",
+      "printPrice": 600,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "045": {
+      "name": "Papier photo 140g",
+      "printPrice": 25000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "018": {
+      "name": "Papier texturé avec motif 250g",
+      "printPrice": 200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "019": {
+      "name": "Papier texturé avec motif 300g",
+      "printPrice": 200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "020": {
+      "name": "Papier texturé avec motif 350g",
+      "printPrice": 200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "094": {
+      "name": "PCB 115g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "095": {
+      "name": "PCB 130g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "096": {
+      "name": "PCB 135g",
+      "printPrice": 1000,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "097": {
+      "name": "PCB 150g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "098": {
+      "name": "PCB 170g",
+      "printPrice": 1200,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "099": {
+      "name": "PCB 250g",
+      "printPrice": 1500,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Petit format"
+    },
+    "046": {
+      "name": "Plexi 3mm",
+      "printPrice": 200000,
+      "blankPrice": null,
+      "unit": "plaque",
+      "family": "Grand format"
+    },
+    "047": {
+      "name": "Plexi 5mm",
+      "printPrice": 240000,
+      "blankPrice": null,
+      "unit": "plaque",
+      "family": "Grand format"
+    },
+    "038": {
+      "name": "PP film indéchirable 140g",
+      "printPrice": 20000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "039": {
+      "name": "PVC 3mm",
+      "printPrice": 110000,
+      "blankPrice": null,
+      "unit": "plaque",
+      "family": "Grand format"
+    },
+    "012": {
+      "name": "PVC opaque 1mm",
+      "printPrice": 1300,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Carte"
+    },
+    "043": {
+      "name": "PVC rigide 3mm",
+      "printPrice": 110000,
+      "blankPrice": null,
+      "unit": "plaque",
+      "family": "Grand format"
+    },
+    "013": {
+      "name": "PVC translucide 1mm",
+      "printPrice": 500,
+      "blankPrice": null,
+      "unit": "feuille",
+      "family": "Carte"
+    },
+    "021": {
+      "name": "Toile fin 270g",
+      "printPrice": 300,
+      "blankPrice": null,
+      "unit": "rame",
+      "family": "Carte"
+    },
+    "048": {
+      "name": "Vinyle blanc brillant 140g",
+      "printPrice": 20000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "049": {
+      "name": "Vinyle blanc mat 140g",
+      "printPrice": 20000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "050": {
+      "name": "Vinyle monomère 140g",
+      "printPrice": 20000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "051": {
+      "name": "Vinyle polymère 140g",
+      "printPrice": 20000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    },
+    "052": {
+      "name": "Vinyle transparent 100g",
+      "printPrice": 22000,
+      "blankPrice": null,
+      "unit": "rouleau",
+      "family": "Grand format"
+    }
+  },
+  "byName": {
+    "acrylic 3mm": {
+      "printPrice": 200000,
+      "blankPrice": null,
+      "excelRowId": "022"
+    },
+    "bache 340g": {
+      "printPrice": 20000,
+      "blankPrice": null,
+      "excelRowId": "025"
+    },
+    "bache 440g": {
+      "printPrice": 20000,
+      "blankPrice": null,
+      "excelRowId": "026"
+    },
+    "bache 510g": {
+      "printPrice": 20000,
+      "blankPrice": null,
+      "excelRowId": "027"
+    },
+    "carton rigide 350g": {
+      "printPrice": 350,
+      "blankPrice": null,
+      "excelRowId": "001"
+    },
+    "carton rigide 600g": {
+      "printPrice": 500,
+      "blankPrice": null,
+      "excelRowId": "002"
+    },
+    "couche mat 120g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "062"
+    },
+    "couche mat 130g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "063"
+    },
+    "couche mat 150g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "064"
+    },
+    "couche mat 170g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "065"
+    },
+    "couche mat 200g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "066"
+    },
+    "couche mat 250g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "067"
+    },
+    "couche mat 300g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "068"
+    },
+    "dos bleu 120g": {
+      "printPrice": 23000,
+      "blankPrice": null,
+      "excelRowId": "032"
+    },
+    "film reflechissant 140g": {
+      "printPrice": 46000,
+      "blankPrice": null,
+      "excelRowId": "033"
+    },
+    "frosted film sable 140g": {
+      "printPrice": 46000,
+      "blankPrice": null,
+      "excelRowId": "036"
+    },
+    "glossy 120g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "070"
+    },
+    "glossy 140g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "071"
+    },
+    "glossy 160g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "072"
+    },
+    "glossy 180g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "073"
+    },
+    "glossy 250g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "074"
+    },
+    "glossy 300g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "075"
+    },
+    "invitation luxe 180g": {
+      "printPrice": 300,
+      "blankPrice": null,
+      "excelRowId": "004"
+    },
+    "invitation luxe 200g": {
+      "printPrice": 300,
+      "blankPrice": null,
+      "excelRowId": "005"
+    },
+    "invitation luxe 250g": {
+      "printPrice": 300,
+      "blankPrice": null,
+      "excelRowId": "006"
+    },
+    "invitation luxe 300g": {
+      "printPrice": 300,
+      "blankPrice": null,
+      "excelRowId": "007"
+    },
+    "invitation luxe 325g": {
+      "printPrice": 300,
+      "blankPrice": null,
+      "excelRowId": "008"
+    },
+    "offset 80g": {
+      "printPrice": 600,
+      "blankPrice": null,
+      "excelRowId": "092"
+    },
+    "one way vision 140g": {
+      "printPrice": 30000,
+      "blankPrice": null,
+      "excelRowId": "037"
+    },
+    "papier adhestor": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "126"
+    },
+    "papier autocollant": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "127"
+    },
+    "papier collant glossy": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "128"
+    },
+    "papier contre colle 600g": {
+      "printPrice": 2500,
+      "blankPrice": null,
+      "excelRowId": "129"
+    },
+    "papier contre colle 700g": {
+      "printPrice": 3500,
+      "blankPrice": null,
+      "excelRowId": "130"
+    },
+    "papier cover luxe 900g": {
+      "printPrice": 5000,
+      "blankPrice": null,
+      "excelRowId": "131"
+    },
+    "papier indechirable 120g": {
+      "printPrice": 2200,
+      "blankPrice": null,
+      "excelRowId": "132"
+    },
+    "papier indechirable 150g": {
+      "printPrice": 2200,
+      "blankPrice": null,
+      "excelRowId": "133"
+    },
+    "papier indechirable 200g": {
+      "printPrice": 2200,
+      "blankPrice": null,
+      "excelRowId": "134"
+    },
+    "papier mat 115g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "138"
+    },
+    "papier mat 130g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "139"
+    },
+    "papier mat 150g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "140"
+    },
+    "papier mat 170g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "141"
+    },
+    "papier mat 250g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "142"
+    },
+    "papier mat 300g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "143"
+    },
+    "papier mat 80g": {
+      "printPrice": 600,
+      "blankPrice": null,
+      "excelRowId": "144"
+    },
+    "papier mat 90g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "145"
+    },
+    "papier pellicule brillant 320g": {
+      "printPrice": 450,
+      "blankPrice": null,
+      "excelRowId": "014"
+    },
+    "papier pellicule brillant 370g": {
+      "printPrice": 600,
+      "blankPrice": null,
+      "excelRowId": "015"
+    },
+    "papier pellicule mat 320g": {
+      "printPrice": 450,
+      "blankPrice": null,
+      "excelRowId": "016"
+    },
+    "papier pellicule mat 370g": {
+      "printPrice": 600,
+      "blankPrice": null,
+      "excelRowId": "017"
+    },
+    "papier photo 140g": {
+      "printPrice": 25000,
+      "blankPrice": null,
+      "excelRowId": "045"
+    },
+    "papier sublimation": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "154"
+    },
+    "papier texture avec motif 250g": {
+      "printPrice": 200,
+      "blankPrice": null,
+      "excelRowId": "018"
+    },
+    "papier texture avec motif 300g": {
+      "printPrice": 200,
+      "blankPrice": null,
+      "excelRowId": "019"
+    },
+    "papier texture avec motif 350g": {
+      "printPrice": 200,
+      "blankPrice": null,
+      "excelRowId": "020"
+    },
+    "pcb 115g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "094"
+    },
+    "pcb 130g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "095"
+    },
+    "pcb 135g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "096"
+    },
+    "pcb 150g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "097"
+    },
+    "pcb 170g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "098"
+    },
+    "pcb 250g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "099"
+    },
+    "pcb 300g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "100"
+    },
+    "pcb 350g": {
+      "printPrice": 2000,
+      "blankPrice": null,
+      "excelRowId": "101"
+    },
+    "pcb 600g": {
+      "printPrice": 2500,
+      "blankPrice": null,
+      "excelRowId": "102"
+    },
+    "pcb 700g": {
+      "printPrice": 3500,
+      "blankPrice": null,
+      "excelRowId": "103"
+    },
+    "pcb 900g": {
+      "printPrice": 5000,
+      "blankPrice": null,
+      "excelRowId": "104"
+    },
+    "pcb 90g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "105"
+    },
+    "pcm 115g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "112"
+    },
+    "pcm 130g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "113"
+    },
+    "pcm 135g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "114"
+    },
+    "pcm 150g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "115"
+    },
+    "pcm 170g": {
+      "printPrice": 1200,
+      "blankPrice": null,
+      "excelRowId": "116"
+    },
+    "pcm 250g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "117"
+    },
+    "pcm 300g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "118"
+    },
+    "pcm 90g": {
+      "printPrice": 1000,
+      "blankPrice": null,
+      "excelRowId": "123"
+    },
+    "plexi 3mm": {
+      "printPrice": 200000,
+      "blankPrice": null,
+      "excelRowId": "046"
+    },
+    "plexi 5mm": {
+      "printPrice": 240000,
+      "blankPrice": null,
+      "excelRowId": "047"
+    },
+    "pp film indechirable 140g": {
+      "printPrice": 20000,
+      "blankPrice": null,
+      "excelRowId": "038"
+    },
+    "pvc 3mm": {
+      "printPrice": 110000,
+      "blankPrice": null,
+      "excelRowId": "039"
+    },
+    "pvc opaque": {
+      "printPrice": 12000,
+      "blankPrice": null,
+      "excelRowId": "124"
+    },
+    "pvc opaque 1mm": {
+      "printPrice": 1300,
+      "blankPrice": null,
+      "excelRowId": "012"
+    },
+    "pvc rigide 3mm": {
+      "printPrice": 110000,
+      "blankPrice": null,
+      "excelRowId": "043"
+    },
+    "pvc translucide": {
+      "printPrice": 4500,
+      "blankPrice": null,
+      "excelRowId": "125"
+    },
+    "pvc translucide 1mm": {
+      "printPrice": 500,
+      "blankPrice": null,
+      "excelRowId": "013"
+    },
+    "special invitation 300g": {
+      "printPrice": 2000,
+      "blankPrice": null,
+      "excelRowId": "155"
+    },
+    "special invitation 325g": {
+      "printPrice": 2000,
+      "blankPrice": null,
+      "excelRowId": "156"
+    },
+    "standard offset 80g": {
+      "printPrice": 600,
+      "blankPrice": null,
+      "excelRowId": "158"
+    },
+    "texture 250g": {
+      "printPrice": 1500,
+      "blankPrice": null,
+      "excelRowId": "160"
+    },
+    "toile fin 270g": {
+      "printPrice": 2500,
+      "blankPrice": null,
+      "excelRowId": "161"
+    },
+    "vinyle blanc brillant 140g": {
+      "printPrice": 20000,
+      "blankPrice": null,
+      "excelRowId": "048"
+    },
+    "vinyle blanc mat 140g": {
+      "printPrice": 20000,
+      "blankPrice": null,
+      "excelRowId": "049"
+    },
+    "vinyle monomere 140g": {
+      "printPrice": 20000,
+      "blankPrice": null,
+      "excelRowId": "050"
+    },
+    "vinyle polymere 140g": {
+      "printPrice": 20000,
+      "blankPrice": null,
+      "excelRowId": "051"
+    },
+    "vinyle transparent 100g": {
+      "printPrice": 22000,
+      "blankPrice": null,
+      "excelRowId": "052"
+    }
+  }
+}

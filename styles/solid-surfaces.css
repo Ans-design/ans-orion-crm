@@ -1,0 +1,190 @@
+/**
+ * ANS ORION — Surfaces unies (zéro dégradé chromatique)
+ * Couche finale : remplace rouge→rose, pastels KPI, pills marque, etc.
+ * Conservé : masques alpha de scroll (ticker fade) si déjà opaque→transparent.
+ */
+
+:root {
+  --gradient-brand: none;
+  --gradient-brand-shine: none;
+  --gradient-gold: none;
+  --gradient-surface-soft: none;
+  --orion-gradient-red: var(--primary, #ff174d);
+  --orion-gradient-yellow: var(--warning, #facc15);
+  --ans-gradient-main: var(--primary, #ff174d);
+  --ans-gradient-secondary: var(--primary, #ff174d);
+  --ans-gradient-gold: var(--warning, #facc15);
+}
+
+/* ── Boutons primaires / marque ── */
+.orion-viewport button.bg-primary:not(:disabled),
+.orion-viewport a.bg-primary,
+.orion-viewport [class*='bg-primary'].text-primary-foreground:not(:disabled):not([class*='bg-primary/']),
+.orion-viewport button.bg-primary:not(:disabled):hover,
+.orion-viewport a.bg-primary:hover {
+  background-image: none !important;
+  background-color: var(--primary, #ff174d) !important;
+}
+
+.orion-viewport button.bg-primary:not(:disabled):hover,
+.orion-viewport a.bg-primary:hover {
+  background-color: var(--primary-hover, #ff3366) !important;
+}
+
+/* ── Sidebar univers actif ── */
+.orion-sidebar-v2 .orion-sb-universe-btn-open,
+.orion-sidebar-v2 .orion-sb-universe-btn-active,
+.orion-sidebar .orion-sb-universe-btn-open,
+.orion-sidebar .orion-sb-universe-btn-active,
+.orion-sidebar-v2 .orion-sb-universe-mini-active {
+  background-image: none !important;
+  background-color: var(--primary, #ff174d) !important;
+}
+
+/* ── Alert ticker LIVE ── */
+.orion-alert-ticker__brand {
+  background-image: none !important;
+  background-color: var(--primary, #ff174d) !important;
+}
+
+/* ── ANS Talk ── */
+.talk-bubble-mine,
+.talk-new-btn,
+.talk-btn-primary,
+.talk-announce-publish,
+.talk-send-btn {
+  background-image: none !important;
+  background-color: var(--primary, #ff174d) !important;
+}
+
+.talk-avatar--client,
+.talk-avatar--tone-neutral {
+  background-image: none !important;
+  background-color: #64748b !important;
+}
+
+.talk-avatar--tone-brand {
+  background-image: none !important;
+  background-color: var(--primary, #ff174d) !important;
+}
+
+.talk-avatar--tone-warning,
+.talk-avatar--tone-gold {
+  background-image: none !important;
+  background-color: #f59e0b !important;
+}
+
+.talk-avatar--tone-info {
+  background-image: none !important;
+  background-color: #0ea5e9 !important;
+}
+
+.talk-avatar--tone-success {
+  background-image: none !important;
+  background-color: #64748b !important; /* pas de vert — slate */
+}
+
+/* Annonces : fond uni (plus de lueur dégradée) */
+.talk-announce-row {
+  background: color-mix(in srgb, var(--talk-warning, #f59e0b) 10%, var(--talk-surface-soft, var(--bg-card-soft))) !important;
+}
+
+.talk-announce-row::after,
+.talk-announce-row:hover::after {
+  display: none !important;
+  background: none !important;
+}
+
+.talk-announce-icon {
+  background-image: none !important;
+  background-color: color-mix(in srgb, var(--talk-warning, #f59e0b) 18%, transparent) !important;
+}
+
+html.dark .talk-order-card,
+.dark .talk-order-card {
+  background-image: none !important;
+  background-color: var(--talk-surface-soft, var(--bg-card-soft)) !important;
+}
+
+/* ── KPI Direction / SaaS metrics ── */
+html:not(.dark) body .orion-kpi-tint-brand,
+html:not(.dark) body .orion-kpi-tint-danger {
+  background-image: none !important;
+  background-color: #fff5f8 !important;
+}
+
+html:not(.dark) body .orion-kpi-tint-success {
+  background-image: none !important;
+  background-color: #f1f5f9 !important; /* slate — pas vert */
+}
+
+html:not(.dark) body .orion-kpi-tint-gold {
+  background-image: none !important;
+  background-color: #fffbeb !important;
+}
+
+html:not(.dark) body .orion-kpi-tint-info {
+  background-image: none !important;
+  background-color: #f0f7ff !important;
+}
+
+html:not(.dark) body .orion-kpi-tint-neutral {
+  background-image: none !important;
+  background-color: #f8fafc !important;
+}
+
+html.dark body .orion-kpi-tint-brand,
+html.dark body .orion-kpi-tint-danger {
+  background-image: none !important;
+  background-color: color-mix(in srgb, var(--bg-card, #0b1220) 92%, #ff1e56 8%) !important;
+}
+
+html.dark body .orion-kpi-tint-success,
+html.dark body .orion-kpi-tint-neutral {
+  background-image: none !important;
+  background-color: color-mix(in srgb, var(--bg-card, #0b1220) 94%, #64748b 6%) !important;
+}
+
+html.dark body .orion-kpi-tint-gold {
+  background-image: none !important;
+  background-color: color-mix(in srgb, var(--bg-card, #0b1220) 92%, #f59e0b 8%) !important;
+}
+
+html.dark body .orion-kpi-tint-info {
+  background-image: none !important;
+  background-color: color-mix(in srgb, var(--bg-card, #0b1220) 92%, #2563eb 8%) !important;
+}
+
+/* ── Cartes Soft UI : jamais de dégradé surface ── */
+html .orion-viewport :is(
+  .orion-card,
+  .orion-card-interactive,
+  .orion-kpi-saas,
+  .dashboard-chart-card,
+  .cockpit-quick-card,
+  .cps-kpi-card,
+  .orion-ds-metric,
+  .ans-card-premium,
+  [data-slot='card']
+) {
+  background-image: none !important;
+}
+
+/* ── Pills / chips / login ── */
+.orion-live-chip__dot,
+.login-role-pill--active,
+.orion-role-pill-active {
+  background-image: none !important;
+}
+
+/* ── Heart / icônes marque : fill uni ── */
+.talk-msg-actions svg[class*='fill-'],
+.talk-msg-actions .text-primary,
+button[aria-label*='J’aime'] svg,
+button[aria-label*="J'aime"] svg,
+button[title*='J’aime'] svg,
+button[title*="J'aime"] svg {
+  fill: var(--primary, #ff174d);
+  stroke: var(--primary, #ff174d);
+  background-image: none !important;
+}

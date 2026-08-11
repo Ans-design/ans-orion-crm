@@ -1,0 +1,240 @@
+PROMPT GLOBAL — MODULE POS “BOÎTE PERSONNALISÉE” — ANS ORION
+
+Travaille sur le module POS “Boîte personnalisée” dans ANS ORION.
+Le but est de rendre le calcul matière, prix, surface, format, stock, production, cockpit, admin, devis, commande et facture fiable et synchronisé.
+
+IMPORTANT :
+Ne corrige pas seulement l’interface POS.
+Chaque règle doit être appliquée dans :
+- POS
+- Base de données
+- Admin / Back-office
+- Prix
+- Stock
+- Devis
+- Commande
+- Facture
+- Production
+- Cockpit
+- Seeds
+- Tests
+
+OBJECTIF MÉTIER :
+Une boîte personnalisée ne doit jamais être calculée comme un simple rectangle visible.
+Elle doit être calculée comme un packaging à plat, selon son développé réel.
+
+CHAMPS OBLIGATOIRES DANS LE POS :
+- Structure de boîte
+- Longueur intérieure L en mm
+- Largeur / profondeur P en mm
+- Hauteur H en mm
+- Matière
+- Grammage
+- Épaisseur estimée
+- Quantité
+- Impression : recto / recto-verso
+- Finition
+- Collage
+- Marge de sécurité design
+- Fond perdu / bleed
+- Marge de chute matière
+- Développé net
+- Dimension brute finale
+- Surface brute unitaire
+- Conversion format international
+- Poses par feuille
+- Surface facturée unitaire
+- Taux de chute
+- Poids matière estimé
+
+UNITÉ :
+Toutes les dimensions du module Boîte personnalisée doivent être en millimètres (mm).
+
+MARGES À SÉPARER :
+1. Marge de sécurité design :
+   - Zone intérieure pour éviter que le texte/logo soit trop près des plis ou coupes.
+   - Ne modifie pas la surface matière.
+
+2. Fond perdu / bleed :
+   - Par défaut : 3 mm autour.
+   - S’ajoute au développé net.
+
+3. Marge de chute matière :
+   - Obligatoire : +50 mm sur chacun des 4 côtés.
+   - Donc +100 mm en largeur et +100 mm en hauteur.
+   - Cette marge sert à éviter les pertes de calcul liées aux déchets, prise machine, calage, coupe et manipulation.
+   - Elle ne remplace pas la marge de sécurité ni le fond perdu.
+
+4. Marge de pliage :
+   - Dépend de l’épaisseur matière.
+   - Doit être configurable dans l’admin.
+
+5. Patte de collage :
+   - Par défaut : 15 mm.
+   - Doit être configurable dans l’admin.
+
+FORMULE GLOBALE :
+- développé_net_largeur = formule selon structure
+- développé_net_hauteur = formule selon structure
+- largeur_imprimable = développé_net_largeur + 2 × bleed
+- hauteur_imprimable = développé_net_hauteur + 2 × bleed
+- largeur_brute_finale = largeur_imprimable + 100 mm
+- hauteur_brute_finale = hauteur_imprimable + 100 mm
+- surface_brute_m2 = largeur_brute_finale × hauteur_brute_finale / 1 000 000
+- poids_matiere_g = surface_brute_m2 × grammage
+
+STRUCTURES À AJOUTER :
+- Boîte rabats droits / Straight Tuck End
+- Boîte rabats inversés / Reverse Tuck End
+- Boîte fond automatique / Auto Bottom / Crash Lock
+- Boîte fond 1-2-3 / Snap Lock Bottom
+- Fourreau / Sleeve
+- Boîte tiroir
+- Boîte fond + couvercle
+- Plateau ouvert / Tray
+- Boîte oreiller / Pillow Box
+
+MATIÈRES À AJOUTER :
+Dans Boîte personnalisée, proposer uniquement des matières supérieures à 250g.
+Ne pas afficher 130g, 170g, 200g ni 250g.
+
+Ajouter :
+- PCB 300g, 350g, 400g
+- PCM 300g, 350g, 400g
+- Glossy / papier brillant 300g, 350g, 400g
+- Papier spécial invitation 300g, 350g, 400g
+- Carte ivoire / SBS 300g, 350g, 400g
+- FBB / carton couché packaging 300g, 350g, 400g
+- Kraft épais 300g, 350g, 400g
+
+ÉPAISSEUR ESTIMÉE :
+Ajouter une table configurable dans l’admin :
+- 300g : environ 0,38 à 0,42 mm
+- 350g : environ 0,45 à 0,50 mm
+- 400g : environ 0,50 à 0,56 mm
+
+FORMATS INTERNATIONAUX À INTÉGRER :
+- A4 = 210 × 297 mm
+- A3 = 297 × 420 mm
+- A2 = 420 × 594 mm
+- A1 = 594 × 841 mm
+- A0 = 841 × 1189 mm
+- 2A0 = 1189 × 1682 mm
+- 4A0 = 1682 × 2378 mm
+
+ALGORITHME FORMAT :
+Après calcul de largeur_brute_finale et hauteur_brute_finale :
+- Tester chaque format en portrait et en paysage.
+- Choisir le plus petit format compatible.
+- Si aucun format ne convient, afficher : “Format personnalisé / grand format”.
+
+POSES PAR FEUILLE :
+poses_orientation_1 = floor(format_largeur / brute_largeur) × floor(format_hauteur / brute_hauteur)
+poses_orientation_2 = floor(format_largeur / brute_hauteur) × floor(format_hauteur / brute_largeur)
+poses_par_feuille = max(poses_orientation_1, poses_orientation_2)
+
+surface_feuille = format_largeur × format_hauteur / 1 000 000
+surface_facturee_unitaire = surface_feuille / poses_par_feuille
+
+taux_chute = 1 - ((poses_par_feuille × surface_brute_unitaire) / surface_feuille)
+
+RÉCAPITULATIF POS / DEVIS / COMMANDE / FACTURE / PRODUCTION :
+Afficher :
+- Article : Boîte personnalisée
+- Structure choisie
+- Dimensions intérieures L × P × H en mm
+- Matière
+- Grammage
+- Épaisseur estimée
+- Développé net
+- Fond perdu
+- Marge de chute matière
+- Dimension brute finale
+- Surface brute unitaire
+- Format compatible
+- Poses par feuille
+- Surface facturée unitaire
+- Taux de chute
+- Poids matière estimé
+- Options finition
+- Prix unitaire
+- Total
+
+BASE DE DONNÉES :
+Créer ou corriger :
+- BoxStructure
+- BoxMaterial
+- BoxFormula
+- BoxCalculationSnapshot
+- ProductOptionGroup
+- ProductOptionValue
+- PriceFormula
+- StockRule
+- ProductionTask
+- QuoteLine
+- OrderLine
+- InvoiceLine
+
+Chaque devis doit sauvegarder un snapshot complet du calcul.
+Un changement futur de formule ne doit jamais modifier les anciens devis.
+
+ADMIN :
+Permettre de modifier :
+- matières disponibles
+- grammages
+- épaisseurs estimées
+- prix au m²
+- formats feuilles disponibles
+- marge de chute par défaut
+- bleed par défaut
+- patte de colle par défaut
+- coefficients par structure
+- activation/désactivation de chaque structure
+
+STOCK :
+Le stock doit être impacté par :
+- matière
+- grammage
+- format feuille
+- surface consommée
+- quantité
+- taux de chute
+
+Alerte avant ajout panier :
+- matière indisponible
+- grammage indisponible
+- format insuffisant
+- quantité insuffisante
+- boîte trop grande pour les formats disponibles
+
+COCKPIT :
+Mettre à jour les KPI :
+- consommation matière packaging
+- chute/déchet estimé
+- top structures de boîte
+- marge par type de boîte
+- alertes stock carton
+- commandes boîte en production
+- quantité par matière et grammage
+
+TESTS :
+Créer des tests pour :
+- chaque structure
+- calcul développé
+- marge +50 mm sur les 4 côtés
+- conversion A4/A3/A2/A1/A0
+- poses par feuille
+- surface facturée
+- matière >250g uniquement
+- snapshot devis
+- stock
+- cockpit
+- build final
+
+Exécuter :
+- npm run lint
+- npm run build
+- tests disponibles
+
+RÉSULTAT ATTENDU :
+Le module Boîte personnalisée doit produire un calcul fiable, clair, professionnel et synchronisé avec POS, base de données, admin, stock, cockpit, devis, commande, facture et production.

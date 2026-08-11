@@ -1,0 +1,169 @@
+/**
+ * Pastilles rÃ´le login â€” inspirÃ© HTML v29 lf-roles-grid.
+ * Radius ORION 7px, rouge marque.
+ */
+
+.login-role-pills {
+  margin-bottom: 1.25rem;
+}
+
+.login-role-pills__label {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--login-panel-muted, #64748b);
+  margin-bottom: 0.5rem;
+}
+
+.login-role-pills__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.login-role-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 8px 4px;
+  border-radius: 7px;
+  border: 1.5px solid var(--border-soft, #e2e8f0);
+  background: var(--bg-card, #fff);
+  color: var(--login-panel-muted, #64748b);
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+  font-family: inherit;
+}
+
+.login-role-pill:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  color: var(--login-panel-title, #0f172a);
+}
+
+.login-role-pill:focus-visible {
+  outline: 2px solid rgba(204, 0, 51, 0.45);
+  outline-offset: 2px;
+}
+
+.login-role-pill:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-role-pill__name {
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.login-role-pill__mat {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+  opacity: 0.75;
+  letter-spacing: 0.02em;
+}
+
+.login-role-pill--dir {
+  border-color: #fecaca;
+  background: linear-gradient(160deg, #fff5f5, #fff);
+}
+.login-role-pill--dir:hover:not(:disabled) {
+  background: #FF174D;
+  border-color: #FF174D;
+  color: #fff;
+}
+
+.login-role-pill--adm {
+  border-color: #bfdbfe;
+  background: linear-gradient(160deg, #eff6ff, #fff);
+}
+.login-role-pill--adm:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #fff;
+}
+
+.login-role-pill--des {
+  border-color: #e9d5ff;
+  background: linear-gradient(160deg, #faf5ff, #fff);
+}
+.login-role-pill--des:hover:not(:disabled) {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: #fff;
+}
+
+.login-role-pill--vte {
+  border-color: #99f6e4;
+  background: linear-gradient(160deg, #f0fdfa, #fff);
+}
+.login-role-pill--vte:hover:not(:disabled) {
+  background: #0d9488;
+  border-color: #0d9488;
+  color: #fff;
+}
+
+.login-role-pill--liv {
+  border-color: #fed7aa;
+  background: linear-gradient(160deg, #fff7ed, #fff);
+}
+.login-role-pill--liv:hover:not(:disabled) {
+  background: #ea580c;
+  border-color: #ea580c;
+  color: #fff;
+}
+
+.login-role-pill--fac {
+  border-color: #bbf7d0;
+  background: linear-gradient(160deg, #f0fdf4, #fff);
+}
+.login-role-pill--fac:hover:not(:disabled) {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #fff;
+}
+
+.login-role-pill--cm {
+  border-color: #ddd6fe;
+  background: linear-gradient(160deg, #f5f3ff, #fff);
+}
+.login-role-pill--cm:hover:not(:disabled) {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: #fff;
+}
+
+.login-role-pill--tech {
+  border-color: #e2e8f0;
+  background: linear-gradient(160deg, #f8fafc, #fff);
+}
+.login-role-pill--tech:hover:not(:disabled) {
+  background: #475569;
+  border-color: #475569;
+  color: #fff;
+}
+
+.dark .login-role-pill {
+  background: rgba(30, 33, 48, 0.9);
+  border-color: #2a2d3e;
+  color: #9da3b4;
+}
+
+.dark .login-role-pill:hover:not(:disabled) {
+  color: #fff;
+}
+
+@media (max-width: 420px) {
+  .login-role-pills__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

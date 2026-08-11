@@ -1,0 +1,359 @@
+/**
+ * Densité téléphone — corps encore réduits, plancher 8px.
+ * • Body / titres / labels moyens → diminués
+ * • Détails déjà mini (8px, badges, kicks, footers) → non réduits
+ * Desktop / tablette ≥ 768 : inchangés.
+ */
+
+@media (max-width: 767.98px) {
+  :root {
+    /* Floors — lisibles sur phone (industrie, pas micro 9px corps) */
+    --phone-font-floor: 0.5625rem;   /* 9px micro */
+    --phone-font-body: 0.6875rem;    /* 11px corps */
+    --phone-font-label: 0.75rem;     /* 12px labels */
+    --phone-font-section: 0.8125rem; /* 13px sections */
+    --phone-font-title: 0.9375rem;   /* 15px titres */
+    --phone-font-accent: 0.875rem;   /* 14px KPI */
+
+    --text-display: var(--phone-font-title);
+    --text-title: var(--phone-font-title);
+    --text-accent: var(--phone-font-accent);
+    --text-body: var(--phone-font-body);
+    --text-detail: var(--phone-font-floor);
+
+    --line-height-tight: 1.15;
+    --line-height-snug: 1.25;
+    --line-height-normal: 1.35;
+    --line-height-relaxed: 1.4;
+
+    --shell-pad-x: 0.65rem;
+    --shell-pad-y: 0.45rem;
+    --shell-pad-x-sm: 0.65rem;
+    --stack-gap-xs: 0.3rem;
+    --stack-gap-sm: 0.4rem;
+    --stack-gap: 0.5rem;
+    --stack-gap-lg: 0.65rem;
+    --stack-gap-xl: 0.75rem;
+    --grid-gap: 0.4rem;
+    --grid-gap-lg: 0.5rem;
+    --rect-pad-x: 8px;
+    --align-title-size: var(--phone-font-title);
+    --align-page-title: var(--phone-font-title);
+    --align-shell-title: 0.8125rem; /* 13 */
+    --orion-page-gutter-phone: 8px;
+  }
+
+  /* Viewport base = corps 9px */
+  .orion-viewport:not(:has(.pos-soft-shell)),
+  main.orion-viewport:not(:has(.pos-soft-shell)) {
+    font-size: var(--phone-font-body) !important;
+    line-height: var(--line-height-normal) !important;
+  }
+
+  /* Titres page : 14px */
+  .orion-viewport:not(:has(.pos-soft-shell)) :is(
+    h1, h2,
+    .orion-page-title,
+    .orion-ds-page-title,
+    .orion-admin-page-title,
+    .text-page-title,
+    .orion-text-page-title
+  ) {
+    font-size: var(--phone-font-title) !important;
+    line-height: 1.18 !important;
+    letter-spacing: -0.02em;
+  }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) :is(
+    h3:not(.orion-text-kpi-value):not(.orion-kpi-value),
+    h4, h5,
+    .orion-section-title,
+    .orion-ds-section-title,
+    .orion-card-title,
+    .dashboard-chart-card-title
+  ) {
+    font-size: var(--phone-font-section) !important;
+    line-height: 1.18 !important;
+  }
+
+  /* Corps + labels moyens (11–14 → 9) */
+  .orion-viewport:not(:has(.pos-soft-shell)) :is(
+    p, label, li, td, th,
+    .text-sm, .text-base, .text-\[12px\], .text-\[13px\], .text-\[14px\], .text-\[11px\],
+    .orion-text-body, .orion-text-label, .text-body,
+    button:not(.orion-header-icon-btn):not([class*='icon']),
+    input, select, textarea
+  ) {
+    font-size: var(--phone-font-body) !important;
+    line-height: var(--line-height-normal) !important;
+  }
+
+  /* KPI / montants 12px */
+  .orion-viewport:not(:has(.pos-soft-shell)) :is(
+    .orion-price, .orion-amount, [data-price],
+    .kpi-value, .orion-kpi-value, .orion-text-kpi-value,
+    .text-body-l, .orion-text-body-l, .text-accent
+  ) {
+    font-size: var(--phone-font-accent) !important;
+  }
+
+  /*
+   * Plancher 8px — uniquement les micro-textes déjà au plus petit format.
+   * (Ne pas y mettre 9/10px : ce sont des corps moyens, passés à 9 via --text-body.)
+   */
+  .orion-viewport :is(
+    .text-meta, .orion-text-meta, .text-detail, .orion-text-detail,
+    small, time, .field-hint, .form-hint, .form-description,
+    .orion-help-text, .text-xs, .text-\[8px\],
+    .orion-sb-role-label, .orion-sb-user-role,
+    .orion-live-chip, kbd, .orion-sb-kbd, .orion-cockpit-search__kbd,
+    .pos-cat-nav__family, .pos-cat-nav__kicker, .pos-cat-nav__footer
+  ) {
+    font-size: var(--phone-font-floor) !important;
+    line-height: 1.25 !important;
+  }
+
+  /* 9–10px existants : rester à 9 (corps), pas forcer 8 */
+  .orion-viewport :is(.text-\[9px\], .text-\[10px\]) {
+    font-size: var(--phone-font-body) !important;
+  }
+
+  /* Crumb shell : déjà ultra-compact → plancher fixé */
+  .orion-cockpit-header .orion-shell-crumb {
+    font-size: var(--phone-font-floor) !important;
+  }
+
+  /* Labels moyens 10px (chips) */
+  .orion-viewport:not(:has(.pos-soft-shell)) :is(
+    .badge:not(.text-meta),
+    .orion-status-chip,
+    .orion-surface-chip,
+    .cps-pill
+  ) {
+    font-size: var(--phone-font-label) !important;
+  }
+
+  /* Paragraphes d’aide : max 2 lignes, taille plancher */
+  .orion-viewport:not(:has(.pos-soft-shell)) :is(
+    .orion-section-desc,
+    .orion-admin-page-desc,
+    .text-muted-foreground,
+    p.text-muted,
+    p.text-\[var\(--text-muted\)\],
+    .orion-help-text
+  ) {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+    max-height: 2.55em;
+    margin-bottom: 0.3rem !important;
+    font-size: var(--phone-font-floor) !important;
+  }
+
+  main.orion-viewport,
+  .orion-viewport.orion-shell-pad {
+    padding-left: var(--shell-pad-x) !important;
+    padding-right: var(--shell-pad-x) !important;
+    padding-top: 0.4rem !important;
+    /* Stack bas : --orion-inset-bottom (tab + ticker) — voir mobile-responsive-fixes */
+    padding-bottom: calc(var(--orion-inset-bottom, 0px) + var(--orion-content-ticker-gap, 5mm)) !important;
+  }
+
+  .orion-cockpit-header {
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+    min-height: 2.4rem !important;
+  }
+
+  .orion-header-icon-btn {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    min-width: 2.25rem !important;
+    min-height: 2.25rem !important;
+  }
+
+  /* Titre shell phone (page) : 12px, lisible, pas plancher micro */
+  .orion-shell-page-solo {
+    font-size: 0.75rem !important;
+  }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) :is(
+    .orion-card,
+    .orion-card-interactive,
+    .dashboard-chart-card,
+    .cockpit-quick-card,
+    [data-slot='card'],
+    .orion-ds-metric,
+    .cps-kpi-card
+  ) {
+    padding: 0.45rem 0.55rem !important;
+  }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) :is(
+    .orion-page,
+    .orion-page-stack,
+    .orion-section-stack,
+    .dashboard-full,
+    .orion-module-page
+  ) {
+    gap: var(--stack-gap) !important;
+  }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.55rem !important;
+  }
+  .orion-viewport:not(:has(.pos-soft-shell)) .space-y-5 > :not([hidden]) ~ :not([hidden]),
+  .orion-viewport:not(:has(.pos-soft-shell)) .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.45rem !important;
+  }
+  .orion-viewport:not(:has(.pos-soft-shell)) .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.35rem !important;
+  }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) .gap-6 { gap: 0.55rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .gap-5,
+  .orion-viewport:not(:has(.pos-soft-shell)) .gap-4 { gap: 0.4rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .gap-3 { gap: 0.35rem !important; }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) .p-6 { padding: 0.55rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .p-5 { padding: 0.45rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .p-4 { padding: 0.4rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .px-6 { padding-left: 0.55rem !important; padding-right: 0.55rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .py-6 { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .py-5,
+  .orion-viewport:not(:has(.pos-soft-shell)) .py-4 { padding-top: 0.35rem !important; padding-bottom: 0.35rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .mb-6 { margin-bottom: 0.55rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .mb-5,
+  .orion-viewport:not(:has(.pos-soft-shell)) .mb-4 { margin-bottom: 0.4rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .mt-6 { margin-top: 0.55rem !important; }
+  .orion-viewport:not(:has(.pos-soft-shell)) .mt-4 { margin-top: 0.4rem !important; }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) tbody td {
+    padding-top: 0.28rem !important;
+    padding-bottom: 0.28rem !important;
+  }
+
+  .orion-viewport:not(:has(.pos-soft-shell)) .min-h-\[112px\] {
+    min-height: 68px !important;
+  }
+  .orion-viewport:not(:has(.pos-soft-shell)) .min-h-\[96px\] {
+    min-height: 60px !important;
+  }
+
+  /* Lanceur : titres modules 10px ; meta déjà mini → plancher */
+  .orion-mnav .orion-mnav-module {
+    min-height: 80px;
+    padding: 7px 8px;
+  }
+  .orion-mnav .orion-mnav-module h3 {
+    font-size: 10px !important;
+  }
+  .orion-mnav .orion-mnav-chip {
+    min-height: 52px;
+    padding: 6px;
+  }
+  .orion-mnav .orion-mnav-chip span,
+  .orion-mnav .orion-mnav-chip small {
+    font-size: var(--phone-font-floor) !important;
+  }
+
+  /* ── POS Soft : densifier corps moyens uniquement ── */
+  .pos-soft-shell .pos-ed-tools label > span,
+  .pos-soft-shell .pos-ed-tools input,
+  .pos-soft-shell .pos-ed-section__meta,
+  .pos-soft-shell .pos-ed-card__body,
+  .pos-soft-shell .pos-ed-card p:not(.pos-catalog-hero__eyebrow) {
+    font-size: var(--phone-font-body) !important;
+  }
+
+  /* Déjà mini : plancher 8px */
+  .pos-soft-shell .pos-ed-section__kicker,
+  .pos-soft-shell .pos-ed-card__family p,
+  .pos-soft-shell .pos-cat-nav__family,
+  .pos-soft-shell .pos-cat-nav__kicker,
+  .pos-soft-shell .pos-cat-nav__footer,
+  .pos-soft-shell .pos-catalog-hero__eyebrow,
+  .pos-soft-shell .pos-ed-count--inline {
+    font-size: var(--phone-font-floor) !important;
+  }
+
+  .pos-soft-shell .pos-cat-nav__name {
+    font-size: var(--phone-font-label) !important; /* 10 — already compact, not floor */
+  }
+  .pos-soft-shell .pos-cat-nav__title {
+    font-size: 0.75rem !important; /* 12 */
+  }
+  .pos-soft-shell .pos-cat-nav__search {
+    font-size: var(--phone-font-body) !important;
+  }
+
+  .pos-soft-shell .pos-catalog-hero h1,
+  .pos-soft-shell .pos-module-header .orion-module-header__title {
+    font-size: 0.8125rem !important; /* 13 */
+  }
+  .pos-soft-shell .pos-catalog-hero__lead,
+  .pos-soft-shell .pos-module-header .orion-module-header__desc {
+    font-size: var(--phone-font-body) !important;
+  }
+  .pos-soft-shell .pos-module-header .orion-module-header__kicker {
+    font-size: var(--phone-font-floor) !important;
+  }
+
+  /*
+   * Anti « chasse à la ligne » (toolbars / chips) :
+   * une seule rangée + scroll horizontal plutôt que wrap multi-lignes.
+   */
+  .orion-viewport :is(
+    .orion-filter-chips,
+    .orion-toolbar-chips,
+    .orion-status-tabs,
+    .cps-pill-row,
+    [data-phone-scroll-row]
+  ) {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 0.3rem !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .orion-viewport :is(
+    .orion-filter-chips,
+    .orion-toolbar-chips,
+    .orion-status-tabs,
+    .cps-pill-row,
+    [data-phone-scroll-row]
+  )::-webkit-scrollbar {
+    display: none;
+  }
+
+  .orion-viewport :is(
+    .orion-filter-chips,
+    .orion-toolbar-chips,
+    .orion-status-tabs,
+    .cps-pill-row,
+    [data-phone-scroll-row]
+  ) > * {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+
+  /* Lignes d’actions / filtres : 2 colonnes max plutôt qu’empilement full-width */
+  .orion-viewport .orion-filter-row,
+  .orion-viewport [data-phone-dense-row] {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    min-width: 0;
+  }
+
+  .orion-viewport .orion-filter-row > *,
+  .orion-viewport [data-phone-dense-row] > * {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+}

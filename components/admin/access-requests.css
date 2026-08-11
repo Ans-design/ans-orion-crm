@@ -1,0 +1,344 @@
+/**
+ * Permissions modules / demandes d'accès — Soft UI densifié
+ */
+
+.acc-page {
+  --acc-ink: #17213a;
+  --acc-muted: #7c879c;
+  --acc-line: #e5e9f1;
+  --acc-soft: #f7f8fb;
+  --acc-paper: #ffffff;
+  --acc-navy: #18223a;
+  --acc-accent: #ff174d;
+  --acc-radius: 7px;
+  --acc-radius-card: 12px;
+  --acc-shadow: 0 8px 22px rgba(31, 42, 71, 0.06);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+  margin-inline: 0;
+  min-width: 0;
+  color: var(--acc-ink);
+}
+
+html.dark .acc-page,
+.dark .acc-page {
+  --acc-ink: #e8eef8;
+  --acc-muted: #94a3b8;
+  --acc-line: rgba(148, 163, 184, 0.18);
+  --acc-soft: #0b1528;
+  --acc-paper: #071021;
+  --acc-navy: #0b1220;
+  --acc-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
+.acc-card {
+  background: var(--acc-paper);
+  border: 1px solid var(--acc-line);
+  border-radius: var(--acc-radius-card);
+  box-shadow: var(--acc-shadow);
+  padding: 14px 16px;
+  min-width: 0;
+}
+
+.acc-card h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+
+.acc-brand-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.acc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--acc-muted);
+}
+
+.acc-field.is-full {
+  grid-column: 1 / -1;
+}
+
+.acc-field input[type='text'],
+.acc-field input[type='email'] {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--acc-line);
+  border-radius: var(--acc-radius);
+  background: var(--acc-soft);
+  color: var(--acc-ink);
+  font-size: 12px;
+  font-weight: 600;
+  outline: none;
+}
+
+.acc-field input:focus {
+  border-color: color-mix(in srgb, var(--acc-accent) 45%, var(--acc-line));
+  background: var(--acc-paper);
+  box-shadow: 0 0 0 3px rgba(255, 23, 77, 0.08);
+}
+
+.acc-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-column: 1 / -1;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--acc-ink);
+  cursor: pointer;
+}
+
+.acc-check input {
+  accent-color: var(--acc-accent);
+}
+
+.acc-card-foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.acc-btn {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--acc-radius);
+  border: 1px solid var(--acc-line);
+  background: var(--acc-paper);
+  color: var(--acc-ink);
+  font-size: 11px;
+  font-weight: 750;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.acc-btn:hover {
+  background: var(--acc-soft);
+}
+
+.acc-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.acc-btn--accent {
+  background: var(--acc-accent);
+  border-color: var(--acc-accent);
+  color: #fff;
+}
+
+.acc-btn--accent:hover {
+  background: var(--acc-accent);
+  filter: brightness(1.05);
+}
+
+.acc-btn--ghost {
+  color: var(--acc-muted);
+}
+
+.acc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.acc-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
+
+.acc-chip {
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--acc-line);
+  background: var(--acc-paper);
+  color: var(--acc-muted);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.acc-chip:hover {
+  background: var(--acc-soft);
+  color: var(--acc-ink);
+}
+
+.acc-chip.is-active {
+  background: color-mix(in srgb, var(--acc-accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--acc-accent) 40%, var(--acc-line));
+  color: var(--acc-accent);
+}
+
+.acc-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.acc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.acc-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--acc-line);
+  border-radius: var(--acc-radius);
+  background: var(--acc-soft);
+}
+
+.acc-item-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.acc-item-name {
+  font-size: 13px;
+  font-weight: 750;
+  color: var(--acc-ink);
+}
+
+.acc-item-email {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--acc-muted);
+  font-weight: 500;
+}
+
+.acc-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: var(--acc-radius);
+  font-size: 10px;
+  font-weight: 750;
+  text-transform: lowercase;
+}
+
+.acc-badge.is-wait {
+  background: color-mix(in srgb, #d97706 14%, transparent);
+  color: #b45309;
+}
+
+.acc-badge.is-ok {
+  background: color-mix(in srgb, #16a34a 14%, transparent);
+  color: #15803d;
+}
+
+.acc-badge.is-bad {
+  background: color-mix(in srgb, #dc2626 14%, transparent);
+  color: #b91c1c;
+}
+
+html.dark .acc-badge.is-wait,
+.dark .acc-badge.is-wait {
+  color: #fbbf24;
+}
+
+html.dark .acc-badge.is-ok,
+.dark .acc-badge.is-ok {
+  color: #34d399;
+}
+
+html.dark .acc-badge.is-bad,
+.dark .acc-badge.is-bad {
+  color: #f87171;
+}
+
+.acc-item-meta {
+  margin: 0;
+  font-size: 11px;
+  color: var(--acc-muted);
+  line-height: 1.35;
+}
+
+.acc-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.acc-item-actions .acc-btn {
+  height: 28px;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.acc-item-actions .is-ok-btn {
+  border-color: color-mix(in srgb, #16a34a 40%, var(--acc-line));
+  color: #15803d;
+}
+
+.acc-item-actions .is-bad-btn {
+  border-color: color-mix(in srgb, #dc2626 40%, var(--acc-line));
+  color: #b91c1c;
+}
+
+.acc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 120px;
+  max-height: 180px;
+  padding: 24px 16px;
+  border: 1px dashed var(--acc-line);
+  border-radius: var(--acc-radius-card);
+  background: var(--acc-soft);
+  text-align: center;
+  color: var(--acc-muted);
+  font-size: 12px;
+}
+
+.acc-empty b {
+  font-size: 13px;
+  font-weight: 750;
+  color: var(--acc-ink);
+}
+
+.acc-loading {
+  display: flex;
+  justify-content: center;
+  padding: 28px;
+  color: var(--acc-muted);
+}
+
+@media (max-width: 720px) {
+  .acc-brand-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .acc-field.is-full,
+  .acc-check {
+    grid-column: auto;
+  }
+}

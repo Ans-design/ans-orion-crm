@@ -1,0 +1,4 @@
+ALTER TABLE "Facture" ADD COLUMN "sousTotalAriary" INTEGER;
+ALTER TABLE "Facture" ADD COLUMN "remiseAriary" INTEGER;
+ALTER TABLE "Facture" ADD COLUMN "totalHTAriary" INTEGER;
+ALTER TABLE "Facture" ADD COLUMN "totalTTCAriary" INTEGER;

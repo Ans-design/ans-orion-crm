@@ -1,0 +1,323 @@
+PROMPT GLOBAL — POS : RÉORGANISER TOUS LES GRAMMAGES, FORMATS ET DIMENSIONS DU PLUS PETIT AU PLUS GRAND — ANS ORION
+
+Objectif unique :
+Dans toute la POS ANS ORION, tous les grammages, formats et dimensions doivent être réorganisés du plus petit au plus grand, surtout dans les articles du Point de Vente.
+
+IMPORTANT :
+Ne pas corriger seulement l’affichage frontend.
+Cette règle doit être synchronisée partout :
+- POS
+- Base de données
+- Admin / Back-office
+- ProductOptionGroup
+- ProductOptionValue
+- ProductVariant
+- FormatConfig
+- MaterialConfig
+- GrammageConfig
+- PriceFormula
+- BusinessRule
+- StockRule
+- Seeds
+- Panier
+- Devis
+- Commande
+- Facture
+- Fiche production
+- Cockpit
+- Exports PDF
+- Tests
+
+============================================================
+1. RÈGLE GLOBALE DE TRI
+============================================================
+
+Tous les choix de grammage, format et dimension doivent être triés du plus petit au plus grand.
+
+Règles :
+- Les grammages doivent être triés par valeur numérique croissante.
+- Les formats doivent être triés par surface croissante.
+- Les dimensions personnalisées prédéfinies doivent être triées par surface croissante.
+- Les options “Autres”, “Format personnalisé”, “Dimension personnalisée”, “Sur mesure” doivent toujours être placées à la fin.
+- Ne pas trier par ordre alphabétique si cela casse l’ordre logique.
+- Ne pas laisser A7 après A4 ou A4+.
+- Ne pas laisser 350g avant 250g.
+- Ne pas laisser un format grand avant un format plus petit.
+
+============================================================
+2. TRI DES GRAMMAGES
+============================================================
+
+Tous les grammages doivent être affichés du plus petit au plus grand.
+
+Exemple d’ordre correct :
+- 70g
+- 80g
+- 90g
+- 100g
+- 115g
+- 120g
+- 130g
+- 135g
+- 150g
+- 170g
+- 200g
+- 230g
+- 250g
+- 300g
+- 350g
+- 400g
+- 600g
+- 700g
+
+Règles :
+- Utiliser la valeur numérique du grammage pour trier.
+- Ne pas trier comme texte, sinon 100g peut passer avant 90g ou 300g avant 70g selon erreur.
+- Les grammages interdits par article ne doivent pas être affichés.
+- Les grammages autorisés doivent rester triés correctement.
+- Si un article autorise seulement les matières épaisses, afficher uniquement les grammages autorisés, mais toujours du plus petit au plus grand.
+
+Exemple :
+Pour un article qui accepte seulement 230g et plus :
+230g → 250g → 300g → 350g → 400g
+
+Pour un article qui accepte seulement plus de 250g :
+300g → 350g → 400g → 600g → 700g
+
+============================================================
+3. TRI DES FORMATS ISO / STANDARDS
+============================================================
+
+Tous les formats standards doivent être affichés du plus petit au plus grand.
+
+Ordre recommandé :
+- A7 = 74 × 105 mm
+- A6 = 105 × 148 mm
+- A5 = 148 × 210 mm
+- A4 = 210 × 297 mm
+- A4+ = dimensions configurables admin
+- A3 = 297 × 420 mm
+- A3+ = dimensions configurables admin
+- A2 = 420 × 594 mm
+- A1 = 594 × 841 mm
+- A0 = 841 × 1189 mm
+- 2A0 = 1189 × 1682 mm
+- 4A0 = 1682 × 2378 mm
+- Format personnalisé
+
+Règles :
+- Trier par surface réelle en mm².
+- “Format personnalisé” doit être à la fin.
+- “Autres” doit être à la fin.
+- Remplacer le libellé SRA3 par A3+ dans toute la POS.
+- Si la base garde une valeur technique SRA3, l’interface doit afficher A3+.
+- Éviter les doublons entre SRA3 et A3+.
+
+============================================================
+4. TRI DES FORMATS NON ISO
+============================================================
+
+Pour les formats comme :
+- DL
+- 10 × 15 cm
+- 15 × 20 cm
+- 20 × 30 cm
+- 30 × 40 cm
+- 40 × 60 cm
+- formats marque-page
+- formats cartes
+- formats autocollants
+- formats calendriers
+- formats PLV
+- formats textiles
+- formats packaging
+
+Le tri doit être basé sur la surface réelle.
+
+Formule :
+surface = largeur × hauteur
+
+Règle :
+- Convertir toutes les dimensions dans la même unité avant de trier.
+- Pour petit format : utiliser mm.
+- Pour grand format : utiliser cm selon la règle du projet, mais convertir pour comparer si nécessaire.
+- Les formats doivent s’afficher du plus petit au plus grand.
+- Les formats personnalisés doivent rester en dernier.
+
+============================================================
+5. TRI DES DIMENSIONS PERSONNALISÉES PRÉDÉFINIES
+============================================================
+
+Si un article propose plusieurs dimensions prédéfinies, elles doivent être ordonnées par surface croissante.
+
+Exemple :
+50 × 150 mm
+60 × 180 mm
+70 × 200 mm
+A7
+A6
+A5
+A4
+Format personnalisé
+
+Règles :
+- Ne pas mélanger une petite dimension après un grand format.
+- Ne pas afficher une dimension personnalisée prédéfinie sans calcul de surface.
+- Chaque dimension doit avoir largeur, hauteur, unité et surface calculable.
+
+============================================================
+6. UNITÉS
+============================================================
+
+Respecter la règle globale du projet :
+- Grand Format : dimensions en cm.
+- Petit format / formats standards / articles hors grand format : dimensions en mm.
+
+Règles :
+- Ne pas mélanger cm et mm dans une même interface sans conversion explicite.
+- Pour le tri, convertir les valeurs dans une unité commune.
+- Afficher clairement l’unité dans le POS, devis, facture et production.
+- Les formats standards doivent rester en mm.
+- Les grands formats peuvent rester en cm, mais leur tri doit rester logique par surface.
+
+============================================================
+7. ADMIN / BACK-OFFICE
+============================================================
+
+Dans l’admin, ajouter ou corriger les champs :
+- sort_order
+- width_mm
+- height_mm
+- width_cm si grand format
+- height_cm si grand format
+- surface_mm2
+- surface_cm2
+- surface_m2
+- grammage_value
+- display_label
+- technical_label
+- is_custom
+- is_active
+
+Règles admin :
+- L’admin peut modifier l’ordre manuellement si nécessaire.
+- Par défaut, l’ordre doit être automatique par valeur numérique ou surface.
+- Les options inactives ne doivent pas apparaître dans la POS.
+- Les options désactivées ne doivent pas revenir après seed ou redéploiement.
+
+============================================================
+8. BASE DE DONNÉES
+============================================================
+
+Mettre à jour les tables ou modèles équivalents :
+- ProductOptionGroup
+- ProductOptionValue
+- ProductVariant
+- FormatConfig
+- MaterialConfig
+- GrammageConfig
+- PriceFormula
+- BusinessRule
+- StockRule
+- SeedData
+
+Chaque option de format doit contenir :
+- label
+- display_label
+- width
+- height
+- unit
+- surface
+- sort_order
+- is_custom
+- is_active
+
+Chaque grammage doit contenir :
+- label
+- value_gsm
+- sort_order
+- is_active
+
+Ne pas dépendre uniquement du texte affiché pour trier.
+
+============================================================
+9. POS / UX
+============================================================
+
+Dans le POS :
+- Les chips de formats doivent être affichés du plus petit au plus grand.
+- Les chips de grammages doivent être affichés du plus petit au plus grand.
+- Les listes déroulantes doivent respecter le même ordre.
+- Les filtres doivent respecter le même ordre.
+- Les récapitulatifs doivent garder le même libellé que le choix POS.
+- Les formats personnalisés doivent toujours être à la fin.
+- L’ordre doit être cohérent sur tous les articles.
+
+============================================================
+10. DEVIS / FACTURE / PRODUCTION
+============================================================
+
+Les devis, factures et fiches production doivent afficher les formats et grammages avec les bons libellés.
+
+Règles :
+- SRA3 ne doit plus être affiché côté utilisateur.
+- A3+ doit être affiché à la place.
+- Les snapshots historiques peuvent conserver l’ancienne valeur technique, mais l’affichage utilisateur doit rester propre si possible.
+- Les nouvelles commandes doivent utiliser les nouvelles valeurs normalisées.
+
+============================================================
+11. COCKPIT
+============================================================
+
+Le cockpit doit utiliser les formats et grammages normalisés.
+
+À vérifier :
+- top formats
+- top grammages
+- consommation matière par format
+- consommation matière par grammage
+- alertes stock
+- statistiques POS
+- marges par article
+
+Ne pas afficher des doublons comme :
+- SRA3 et A3+
+- 300 g et 300g
+- A4 + et A4+
+
+============================================================
+12. TESTS OBLIGATOIRES
+============================================================
+
+Créer ou corriger les tests suivants :
+- Les grammages sont triés par valeur numérique croissante.
+- Les formats sont triés par surface croissante.
+- A7 apparaît avant A6, A5, A4, A3, A2.
+- A3+ remplace SRA3 dans toute la POS.
+- Format personnalisé est toujours en dernier.
+- Les formats non ISO sont triés par surface.
+- Les dimensions personnalisées prédéfinies sont triées par surface.
+- Les options inactives ne s’affichent pas.
+- L’ordre reste correct après refresh.
+- L’ordre reste correct après seed.
+- L’ordre reste correct après build.
+- Les devis et factures utilisent les bons libellés.
+- Le cockpit n’affiche pas de doublons.
+
+Exécuter :
+- npm run lint
+- npm run build
+- tests disponibles
+
+============================================================
+13. RÉSULTAT ATTENDU
+============================================================
+
+Après correction :
+- tous les grammages sont organisés du plus petit au plus grand ;
+- tous les formats sont organisés du plus petit au plus grand ;
+- toutes les dimensions prédéfinies sont organisées du plus petit au plus grand ;
+- A3+ remplace SRA3 partout côté utilisateur ;
+- les formats personnalisés sont toujours en dernier ;
+- l’ordre est cohérent dans POS, admin, devis, facture, production et cockpit ;
+- aucune option ne revient dans le mauvais ordre après refresh, seed ou redéploiement.

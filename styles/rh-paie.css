@@ -1,0 +1,539 @@
+/* Paie & salaires — densifié unifié RH */
+
+.rh-paie-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+}
+
+.rh-paie-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.rh-paie-actions a,
+.rh-paie-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.28rem 0.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+}
+
+.rh-paie-actions a:hover,
+.rh-paie-chip-btn:hover {
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+}
+
+.rh-paie-kpi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+@media (min-width: 720px) {
+  .rh-paie-kpi {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .rh-paie-kpi {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.rh-paie-advances {
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, #eab308 10%, var(--bg-card-soft, #fffbeb));
+}
+
+.rh-paie-advances h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.rh-paie-advances__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
+}
+
+@media (min-width: 700px) {
+  .rh-paie-advances__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.rh-paie-advance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-card-soft, #fff) 70%, transparent);
+}
+
+.rh-paie-advance .name {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.rh-paie-advance .amt {
+  margin: 0.1rem 0 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #a16207;
+}
+
+.rh-paie-advance .motif {
+  margin: 0.1rem 0 0;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.rh-paie-advance button {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #0284c7;
+  cursor: pointer;
+  padding: 0;
+}
+
+.rh-paie-toolbar h2 {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.rh-paie-toolbar p {
+  margin: 0.1rem 0 0;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.rh-paie-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+@media (min-width: 700px) {
+  .rh-paie-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .rh-paie-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.rh-paie-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 0.8rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  min-width: 0;
+}
+
+.rh-paie-card__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.rh-paie-avatar {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+  background: var(--primary, #cc0033);
+}
+
+.rh-paie-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.rh-paie-card__meta .mat {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.rh-paie-card__meta .dept {
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--text-muted) 12%, transparent);
+  color: var(--text-muted);
+}
+
+.rh-paie-card__name {
+  margin: 0.1rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rh-paie-card__poste {
+  margin: 0.08rem 0 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rh-paie-card__metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 0.45rem;
+}
+
+.rh-paie-card__metrics .lbl {
+  display: block;
+  font-size: 0.52rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.rh-paie-card__metrics .val {
+  display: block;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rh-paie-card__metrics .val.is-muted {
+  color: var(--text-muted);
+}
+
+.rh-paie-card__metrics .val.is-avance {
+  color: #a16207;
+}
+
+.rh-paie-card__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.45rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 55%, transparent);
+}
+
+.rh-paie-card__foot .lbl {
+  display: block;
+  font-size: 0.52rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.rh-paie-card__foot .net {
+  display: block;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0284c7;
+}
+
+.rh-paie-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rh-paie-card__actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border: none;
+  background: transparent;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #0284c7;
+  cursor: pointer;
+  padding: 0;
+}
+
+.rh-paie-card__actions button:last-child {
+  color: var(--text-muted);
+}
+
+.rh-paie-card__actions button:last-child:hover {
+  color: #0284c7;
+}
+
+/* Modals */
+.rh-paie-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: color-mix(in srgb, #0f172a 45%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.rh-paie-modal {
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1rem 1.05rem;
+  border-radius: var(--radius-overlay, 16px);
+  background: var(--bg-card, #fff);
+  box-shadow: 0 16px 40px color-mix(in srgb, #0f172a 22%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.rh-paie-modal--wide {
+  max-width: 640px;
+}
+
+.rh-paie-modal h2 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.rh-paie-modal__sub {
+  margin: -0.35rem 0 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.rh-paie-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.rh-paie-modal input,
+.rh-paie-modal select {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 70%, transparent);
+  outline: none;
+}
+
+.rh-paie-modal input:focus,
+.rh-paie-modal select:focus {
+  box-shadow: var(--focus-ring-field, 0 0 0 2px color-mix(in srgb, #64748b 28%, transparent));
+}
+
+.rh-paie-modal__actions {
+  display: flex;
+  gap: 0.45rem;
+  margin-top: 0.15rem;
+}
+
+.rh-paie-bulletin__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.rh-paie-bulletin__head button {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
+.rh-paie-bulletin__loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.rh-paie-bulletin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+}
+
+.rh-paie-bulletin__co {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 60%, transparent);
+}
+
+.rh-paie-bulletin__co strong {
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.rh-paie-bulletin__emp {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.rh-paie-bulletin__emp > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.rh-paie-bulletin__emp .right {
+  text-align: right;
+}
+
+.rh-paie-bulletin table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.7rem;
+}
+
+.rh-paie-bulletin th,
+.rh-paie-bulletin td {
+  padding: 0.4rem 0.45rem;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--border-soft, #e2e8f0) 55%, transparent);
+}
+
+.rh-paie-bulletin th {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+.rh-paie-bulletin td:nth-child(2),
+.rh-paie-bulletin td:nth-child(3),
+.rh-paie-bulletin th:nth-child(2),
+.rh-paie-bulletin th:nth-child(3) {
+  text-align: center;
+}
+
+.rh-paie-bulletin td:last-child,
+.rh-paie-bulletin th:last-child {
+  text-align: right;
+  font-weight: 700;
+}
+
+.rh-paie-bulletin__note {
+  margin: 0;
+  font-size: 0.6rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Dark */
+html.dark .rh-paie-actions a,
+.dark .rh-paie-actions a,
+html.dark .rh-paie-chip-btn,
+.dark .rh-paie-chip-btn,
+html.dark .rh-paie-card,
+.dark .rh-paie-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .rh-paie-advances,
+.dark .rh-paie-advances {
+  background: color-mix(in srgb, #eab308 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .rh-paie-advance,
+.dark .rh-paie-advance {
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 55%, transparent);
+}
+
+html.dark .rh-paie-modal,
+.dark .rh-paie-modal {
+  background: var(--bg-card, #1e293b);
+}
+
+html.dark .rh-paie-modal input,
+.dark .rh-paie-modal input,
+html.dark .rh-paie-modal select,
+.dark .rh-paie-modal select {
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 70%, transparent);
+}
+
+html.dark .rh-paie-card__foot .net,
+.dark .rh-paie-card__foot .net,
+html.dark .rh-paie-card__actions button,
+.dark .rh-paie-card__actions button,
+html.dark .rh-paie-advance button,
+.dark .rh-paie-advance button {
+  color: #38bdf8;
+}
+
+html.dark .rh-paie-advance .amt,
+.dark .rh-paie-advance .amt,
+html.dark .rh-paie-card__metrics .val.is-avance,
+.dark .rh-paie-card__metrics .val.is-avance {
+  color: #fde68a;
+}

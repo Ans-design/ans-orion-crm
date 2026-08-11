@@ -1,0 +1,159 @@
+/**
+ * ANS ORION — Rayons rectangles unifiés = 7px
+ * Une seule valeur pour cartes, panels, inputs, modales, shells.
+ *
+ * Exceptions (non forcés) :
+ *  · boutons (button, .ans-btn, .btn, chips cliquables, CTA)
+ *  · pills / badges plein (9999 / --radius-pill)
+ *  · cercles purs (50%, avatars ronds)
+ */
+
+:root,
+html,
+html.dark {
+  --radius-rect: 7px;
+  --radius: 7px !important;
+  --radius-sm: 7px !important;
+  --radius-md: 7px !important;
+  --radius-lg: 7px !important;
+  --radius-xl: 7px !important;
+  --radius-2xl: 7px !important;
+  --radius-ui: 7px !important;
+  --radius-control: 7px !important;
+  --radius-card: 7px !important;
+  --radius-overlay: 7px !important;
+  --orion-radius: 7px !important;
+  --orion-radius-sm: 7px !important;
+  --orion-radius-md: 7px !important;
+  --orion-radius-lg: 7px !important;
+  --sb-radius: 7px !important;
+  --sb-shell-radius: 7px !important;
+  --orion-ticker-radius: 7px !important;
+  --pos-ed-radius: 7px !important;
+  --pcn-radius: 7px !important;
+  --pos-soft-radius: 7px !important;
+  --pos-soft-radius-sm: 7px !important;
+  --lar-radius: 7px !important;
+  --lar-radius-sm: 7px !important;
+}
+
+/* ── Surfaces / chrome / champs (pas les boutons) ── */
+html body :is(
+  .orion-card,
+  .ans-card-premium,
+  .orion-surface-card,
+  .orion-surface-card-soft,
+  .orion-surface-panel,
+  .orion-surface-card-elevated,
+  [data-orion-card],
+  [data-slot='card'],
+  .orion-sidebar-card,
+  .orion-sidebar-card--mini,
+  .orion-sb-widget,
+  .orion-sb-search-panel,
+  .orion-sb-user-panel,
+  .orion-sb-mini-expand,
+  .orion-alert-ticker,
+  .module-date-filter,
+  .module-date-filter__chip,
+  .module-date-filter__input,
+  .orion-mnav-chrome,
+  .orion-mnav-chip,
+  .orion-mnav-tile,
+  .orion-mnav-module,
+  .orion-module-header,
+  .orion-cockpit-header,
+  .cockpit-search,
+  .pos-soft-shell .pos-ed-card,
+  .pos-soft-shell .pos-section-card,
+  .pos-soft-shell .pos-summary-soft,
+  .pos-soft-shell .pos-field-nest,
+  .pos-soft-shell .pos-status-card,
+  .pos-soft-shell .items-wrap,
+  .pos-config-main .bg-card,
+  .SheetContent,
+  [data-radix-dialog-content],
+  [data-radix-popper-content-wrapper] > *,
+  .orion-slide-panel,
+  .dashboard-chart-card,
+  .orion-kpi-saas,
+  .cps-kpi-card,
+  .clients-card,
+  .commande-card,
+  .devis-card,
+  .facture-card,
+  .stock-inv-card,
+  .livraison-card,
+  .metier-task-card,
+  .cm-campagne-card,
+  .ans-surface,
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='button']):not([type='submit']):not([type='reset']),
+  select,
+  textarea,
+  .orion-search-field__input,
+  .ab2-input,
+  .orion-achat-input,
+  .fc
+):not(button):not([type='button']):not([type='submit']):not([type='reset']):not(.ans-btn):not(.btn):not(.pos-chip):not(.orion-sb-universe-mini) {
+  border-radius: var(--radius-rect, 7px) !important;
+}
+
+/* Tailwind rounded-* → même rayon surface (hors boutons / pills) */
+html body .orion-viewport :is(
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-\[6px\],
+  .rounded-\[7px\],
+  .rounded-\[8px\],
+  .rounded-\[9px\],
+  .rounded-\[10px\],
+  .rounded-\[12px\],
+  .rounded-\[14px\],
+  .rounded-\[16px\],
+  .rounded-\[18px\],
+  .rounded-\[20px\],
+  .rounded-\[24px\]
+):not(button):not([type='button']):not([type='submit']):not([type='reset']):not(.ans-btn):not(.btn):not(.pos-chip):not(.rounded-full):not(.orion-sb-universe-mini):not(.orion-sb-mini-avatar) {
+  border-radius: var(--radius-rect, 7px) !important;
+}
+
+/* Sidebar mini — cartes / expand (pas les pastilles icônes) */
+html body .orion-sidebar-mini .orion-sidebar-card--mini,
+html body .orion-sidebar-mini .orion-sb-mini-expand {
+  border-radius: var(--radius-rect, 7px) !important;
+}
+
+/* KPI / pages métier qui forcent 10–14px */
+html body :is(
+  .orion-kpi-saas,
+  .cps-kpi-card,
+  .mes-equip-card,
+  .stock-inv-card,
+  .studio-brief-card,
+  .gpao-dossier-card
+) {
+  border-radius: var(--radius-rect, 7px) !important;
+}
+
+/* Parcours commande / finalize / Talk — surfaces (pas CTA / toggles / pills) */
+html body :is(
+  .cmd-guided__header,
+  .cmd-guided__panel,
+  .cmd-guided__status,
+  .cmd-guided__more-body,
+  .cmd-guided__metrics > div,
+  .cmd-node-rail--shell,
+  .ops-prog__head,
+  .cmd-finalize,
+  .cmd-finalize__icon-wrap,
+  .cmd-finalize__textarea,
+  .cmd-talk-banner,
+  .cmd-list-hero,
+  .cmd-list-toolbar
+) {
+  border-radius: var(--radius-rect, 7px) !important;
+}

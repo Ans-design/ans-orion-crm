@@ -1,0 +1,541 @@
+/**
+ * Dossiers GPAO — grille organisable · stepper compact · pastels
+ */
+
+.gpao-dossiers-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: none;
+}
+
+.gpao-dossiers-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gpao-dossiers-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+}
+
+@media (min-width: 900px) {
+  .gpao-dossiers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gpao-dossier-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  border: none !important;
+  border-radius: var(--radius-card, 12px);
+  overflow: hidden;
+  background: var(--bg-card, #fff);
+  box-shadow: none;
+}
+
+html:not(.dark) .gpao-dossier-card {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.03),
+    0 8px 20px -14px rgba(15, 23, 42, 0.16);
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #64748b 7%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #f8fafc 100%);
+}
+
+html.dark .gpao-dossier-card {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 94%, #fff 2.5%);
+}
+
+html:not(.dark) .gpao-dossier-card--danger {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #ef4444 12%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #fff1f2 60%, #ffe4e6 100%);
+}
+html:not(.dark) .gpao-dossier-card--run {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #2563eb 12%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #f0f7ff 60%, #e8f1fe 100%);
+}
+html:not(.dark) .gpao-dossier-card--ok {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #10b981 12%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #f0fdf6 60%, #e8faf0 100%);
+}
+html:not(.dark) .gpao-dossier-card--gold {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #eab308 14%, transparent), transparent 55%),
+    linear-gradient(165deg, #ffffff 0%, #fffbeb 60%, #fef9c3 100%);
+}
+
+html.dark .gpao-dossier-card--danger {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #ef4444 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #ef4444 4%);
+}
+html.dark .gpao-dossier-card--run {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #2563eb 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #2563eb 4%);
+}
+html.dark .gpao-dossier-card--ok {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #10b981 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #10b981 4%);
+}
+html.dark .gpao-dossier-card--gold {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, #eab308 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--bg-card, #0b1220) 90%, #eab308 4%);
+}
+
+@media (min-width: 900px) {
+  .gpao-dossier-card--open {
+    grid-column: 1 / -1;
+  }
+}
+
+.gpao-dossier-card__head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.85rem 0.95rem 0.55rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.gpao-dossier-card__top {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.gpao-dossier-card__num {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  font-weight: 750;
+  color: var(--text-muted, #64748b);
+  margin-right: auto;
+}
+
+.gpao-dossier-status {
+  display: inline-flex;
+  padding: 0.12rem 0.45rem;
+  border-radius: 9999px;
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: none !important;
+}
+
+.gpao-dossier-card__title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .gpao-dossier-card__title {
+  color: #f1f5f9;
+}
+
+.gpao-dossier-card__client {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+}
+
+.gpao-dossier-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 650;
+  color: var(--text-muted, #64748b);
+}
+
+.gpao-dossier-card__audit {
+  font-weight: 700;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .gpao-dossier-card__audit {
+  color: #e2e8f0;
+}
+
+.gpao-dossier-card__inc {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: #dc2626;
+  font-weight: 750;
+}
+
+html.dark .gpao-dossier-card__inc {
+  color: #f87171;
+}
+
+.gpao-dossier-card__bar {
+  height: 5px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--text-muted, #64748b) 12%, transparent);
+  overflow: hidden;
+}
+
+.gpao-dossier-card__bar > div {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #fb7185, var(--brand-primary, #cc0033));
+}
+
+.gpao-dossier-card__quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0 0.95rem 0.75rem;
+}
+
+.gpao-dossier-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 9999px;
+  border: none !important;
+  font-size: 0.65rem;
+  font-weight: 750;
+  text-decoration: none;
+  color: #1d4ed8;
+  background: color-mix(in srgb, #2563eb 12%, transparent);
+  cursor: pointer;
+}
+
+.gpao-dossier-chip--talk {
+  color: #0e7490;
+  background: color-mix(in srgb, #06b6d4 14%, transparent);
+}
+
+.gpao-dossier-chip--dashed {
+  color: var(--text-muted, #64748b);
+  background: color-mix(in srgb, var(--text-muted, #64748b) 8%, transparent);
+}
+
+html.dark .gpao-dossier-chip { color: #93c5fd; }
+html.dark .gpao-dossier-chip--talk { color: #67e8f9; }
+
+.gpao-dossier-card__detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0 0.75rem 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 7px);
+  border: none !important;
+  background: color-mix(in srgb, var(--text-muted, #64748b) 5%, transparent);
+}
+
+html.dark .gpao-dossier-card__detail {
+  background: color-mix(in srgb, #fff 4%, transparent);
+}
+
+.gpao-dossier-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.gpao-section-lab {
+  margin: 0;
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted, #64748b);
+}
+
+.gpao-dossier-incidents {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.gpao-incident-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: var(--radius-card, 7px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: color-mix(in srgb, #ef4444 10%, transparent);
+  border: none !important;
+}
+
+.gpao-incident-row em {
+  font-style: normal;
+  opacity: 0.75;
+}
+
+.gpao-etapes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
+
+@media (min-width: 700px) {
+  .gpao-etapes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gpao-etape-row {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-card, 7px);
+  border: none !important;
+  background: var(--bg-card, #fff);
+}
+
+html.dark .gpao-etape-row {
+  background: color-mix(in srgb, var(--bg-card, #0b1220) 88%, #fff 4%);
+}
+
+.gpao-etape-row__ord {
+  font-size: 0.65rem;
+  font-weight: 750;
+  color: var(--text-muted, #64748b);
+  font-variant-numeric: tabular-nums;
+}
+
+.gpao-etape-row__main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.gpao-etape-row__name {
+  font-size: 0.72rem;
+  font-weight: 650;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gpao-etape-row__mod {
+  font-size: 0.62rem;
+  font-weight: 750;
+  color: var(--primary, #ff174d);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gpao-etape-row__mod:hover {
+  text-decoration: underline;
+}
+
+.gpao-etape-row__select {
+  max-width: 7.5rem;
+}
+
+.gpao-etape-row__dur {
+  grid-column: 2 / -1;
+  font-size: 0.6rem;
+  color: var(--text-muted, #64748b);
+}
+
+.gpao-dossiers-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+}
+
+/* Stepper compact */
+.gpao-step-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.gpao-step-mini__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.gpao-step-mini__current {
+  font-size: 0.7rem;
+  font-weight: 750;
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .gpao-step-mini__current {
+  color: #e2e8f0;
+}
+
+.gpao-step-mini__current--blocked { color: #dc2626; }
+.gpao-step-mini__current--active { color: var(--brand-primary, #cc0033); }
+html.dark .gpao-step-mini__current--blocked { color: #f87171; }
+
+.gpao-step-mini__count {
+  font-size: 0.65rem;
+  font-weight: 750;
+  color: var(--text-muted, #64748b);
+}
+
+.gpao-step-mini__rail {
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.gpao-step-mini__dot {
+  height: 5px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--text-muted, #64748b) 18%, transparent);
+}
+
+.gpao-step-mini__dot--done {
+  background: #10b981;
+}
+.gpao-step-mini__dot--active {
+  background: var(--brand-primary, #cc0033);
+}
+.gpao-step-mini__dot--blocked {
+  background: #ef4444;
+}
+
+/* Timeline expanded */
+.gpao-step-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-height: 14rem;
+  overflow: auto;
+}
+
+@media (min-width: 900px) {
+  .gpao-step-timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 0.75rem;
+    max-height: none;
+  }
+}
+
+.gpao-step-timeline__item {
+  display: flex;
+  gap: 0.55rem;
+  min-height: 2.4rem;
+}
+
+.gpao-step-timeline__axis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1.15rem;
+  flex-shrink: 0;
+}
+
+.gpao-step-timeline__node {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+  background: color-mix(in srgb, var(--text-muted, #64748b) 14%, transparent);
+  color: var(--text-muted, #64748b);
+}
+
+.gpao-step-timeline__node--done {
+  background: color-mix(in srgb, #10b981 18%, transparent);
+  color: #059669;
+}
+.gpao-step-timeline__node--active {
+  background: color-mix(in srgb, var(--brand-primary, #cc0033) 16%, transparent);
+  color: var(--brand-primary, #cc0033);
+}
+.gpao-step-timeline__node--blocked {
+  background: color-mix(in srgb, #ef4444 16%, transparent);
+  color: #dc2626;
+}
+
+.gpao-step-timeline__line {
+  width: 1px;
+  flex: 1;
+  min-height: 0.4rem;
+  margin: 0.15rem 0;
+  background: color-mix(in srgb, var(--text-muted, #64748b) 20%, transparent);
+}
+
+.gpao-step-timeline__body {
+  min-width: 0;
+  padding-bottom: 0.45rem;
+}
+
+.gpao-step-timeline__name {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.gpao-step-timeline__name--link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.gpao-step-timeline__name--link:hover {
+  color: var(--primary, #ff174d);
+}
+
+.gpao-step-timeline__module {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--text-muted, #64748b);
+}
+
+.gpao-step-timeline__badge {
+  display: inline-flex;
+  margin-top: 0.15rem;
+  padding: 0.08rem 0.35rem;
+  border-radius: 9999px;
+  font-size: 0.58rem;
+  font-weight: 750;
+  border: none !important;
+}

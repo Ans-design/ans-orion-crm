@@ -1,0 +1,1013 @@
+ULTRAPROMPT CURSOR — REFONTE DESIGN GLOBALE ANS ORION
+COHÉRENCE VISUELLE, HARMONIE, UI/UX PREMIUM, TOUS MODULES, DESIGN SYSTEM COMPLET
+
+RÔLE
+Tu es un expert senior UI/UX Designer, Product Designer SaaS/ERP, Directeur artistique digital, Design System Architect, Typographe, spécialiste colorimétrie, iconographie, mise en page, ergonomie, React / Next.js / TypeScript / Tailwind, CRM, ERP, POS, GPAO, Backoffice, Finance, Stock, Production, Logistique, RH et messagerie métier.
+
+MISSION GLOBALE
+Faire une refonte / mise au point complète du design de ANS ORION afin d’obtenir une interface premium, harmonieuse, moderne, professionnelle, cohérente et digne d’un SaaS / CRM / ERP d’imprimerie et d’agence design.
+
+Tous les modules doivent être revus côté design avec cohérence visuelle et harmonie globale.
+
+IMPORTANT
+Ne pas casser les fonctionnalités existantes.
+Ne pas modifier les règles métier validées.
+Ne pas casser les routes.
+Ne pas casser les API.
+Ne pas casser Prisma.
+Ne pas supprimer les éléments utiles.
+Ne pas refaire le projet depuis zéro.
+Ne pas supprimer bêtement des modules, champs, boutons, onglets ou actions.
+Toute amélioration design doit préserver ou mieux organiser les fonctionnalités existantes.
+
+OBJECTIF FINAL
+ANS ORION doit devenir une application visuellement très professionnelle :
+- plus belle ;
+- plus cohérente ;
+- plus harmonieuse ;
+- plus facile à lire ;
+- plus facile à manipuler ;
+- plus premium ;
+- plus moderne ;
+- plus stable visuellement ;
+- plus proche des meilleurs standards SaaS / CRM / ERP / design agency entre 2020 et 2026.
+
+Le design doit être digne d’une œuvre réalisée par un vrai professionnel UI/UX, colorimétrie, typographie, iconographie et mise en page.
+
+==================================================
+ÉTAPE 0 — AUDIT AVANT MODIFICATION
+==================================================
+
+Avant de modifier le code, faire un audit complet du design existant.
+
+Créer un fichier :
+docs/DESIGN_GLOBAL_AUDIT.md
+
+Ce document doit contenir :
+1. Les incohérences visuelles détectées.
+2. Les modules les plus faibles visuellement.
+3. Les problèmes de couleurs.
+4. Les problèmes de fonds / surfaces.
+5. Les problèmes de typographie.
+6. Les problèmes d’icônes / pictogrammes.
+7. Les problèmes de marges / gouttières / blancs.
+8. Les problèmes de cartes imbriquées.
+9. Les problèmes d’arrondis.
+10. Les éléments disparus à réintégrer si nécessaire.
+11. Les composants UI à standardiser.
+12. L’ordre de correction recommandé.
+
+Ne pas commencer par modifier massivement sans ce plan.
+
+==================================================
+ÉTAPE 1 — INSPIRATION ET DIRECTION DESIGN
+==================================================
+
+Étudier les meilleurs standards UI/UX modernes sur :
+- Behance ;
+- Dribbble ;
+- Pinterest ;
+- Figma Community ;
+- Mobbin ;
+- Linear ;
+- Stripe Dashboard ;
+- Shopify Admin ;
+- Notion ;
+- Airtable ;
+- ClickUp ;
+- Monday ;
+- HubSpot ;
+- Odoo ;
+- Sage ;
+- ERPNext ;
+- Apple Human Interface Guidelines ;
+- Material Design ;
+- Atlassian Design System.
+
+Ne pas copier directement.
+S’inspirer uniquement des principes :
+- cohérence ;
+- hiérarchie visuelle ;
+- surfaces modernes ;
+- typographie claire ;
+- composants réutilisables ;
+- micro-interactions discrètes ;
+- navigation fluide ;
+- réduction de charge cognitive ;
+- esthétique SaaS premium ;
+- confort d’utilisation quotidien.
+
+Direction artistique ANS ORION :
+- agence design / imprimerie moderne ;
+- ERP haut de gamme ;
+- cockpit professionnel ;
+- sombre premium ;
+- rouge ANS vif ;
+- dégradé rouge / rose / framboise ;
+- jaune orangé / doré ;
+- surfaces bleu nuit / encre / prune ;
+- mode clair ivoire / crème / blanc chaud.
+
+==================================================
+ÉTAPE 2 — DESIGN SYSTEM GLOBAL
+==================================================
+
+Créer ou renforcer un design system commun.
+
+Composants à standardiser :
+- PageContainer ;
+- ModuleShell ;
+- ModuleHeader ;
+- SectionHeader ;
+- SectionBlock ;
+- SectionCard ;
+- SimplePanel ;
+- MetricGrid ;
+- MetricCard ;
+- KpiGrid ;
+- KpiCard ;
+- DataTable ;
+- Toolbar ;
+- FilterBar ;
+- SearchInput ;
+- AppButton ;
+- ActionIconButton ;
+- AppInput ;
+- AppSelect ;
+- AppTextarea ;
+- AppTabs ;
+- StatusBadge ;
+- PriorityBadge ;
+- EmptyState ;
+- LoadingSkeleton ;
+- ErrorState ;
+- Drawer ;
+- Modal ;
+- Popover ;
+- ActionMenu ;
+- Timeline ;
+- Stepper ;
+- ContextPanel ;
+- AlertCard ;
+- StatusPill.
+
+Règle :
+Même type de composant = même style partout.
+
+Ne pas laisser chaque module avoir son propre style isolé.
+
+==================================================
+ÉTAPE 3 — RÈGLE GLOBALE DES ARRONDIS
+==================================================
+
+Règle obligatoire :
+Tous les rectangles arrondis doivent utiliser un rayon uniforme de 10 px.
+
+Créer un token global :
+--radius-ui: 10px;
+
+Dans Tailwind :
+- rounded-[10px]
+ou
+- rounded-ui si configuré.
+
+Appliquer 10 px à :
+- cartes ;
+- panneaux ;
+- boutons ;
+- inputs ;
+- selects ;
+- textareas ;
+- modales ;
+- drawers ;
+- popovers ;
+- chips ;
+- badges rectangulaires ;
+- tabs ;
+- toolbars ;
+- lignes sélectionnées ;
+- items de listes ;
+- cartes KPI ;
+- cartes commandes ;
+- blocs formulaire ;
+- blocs dashboard ;
+- panneaux ANS Talk ;
+- sections Backoffice ;
+- composants POS ;
+- composants Devis ;
+- composants Commandes.
+
+Éviter :
+- rounded-sm ;
+- rounded-md ;
+- rounded-lg ;
+- rounded-xl ;
+- rounded-2xl ;
+- rounded-3xl ;
+- rounded-full pour les rectangles.
+
+Exceptions autorisées :
+- avatars circulaires ;
+- pastilles de statut rondes ;
+- boutons icône circulaires si intentionnels ;
+- logos ronds.
+
+==================================================
+ÉTAPE 4 — HARMONISATION DES COULEURS ET FONDS
+==================================================
+
+Le mode sombre est prioritaire.
+
+Problème à corriger :
+Il y a trop de variations de fond : noir, gris noir, bleu marine, bleu nuit, surfaces très différentes selon les modules.
+
+Objectif :
+Unifier toute l’ambiance visuelle du projet.
+
+Mode sombre :
+Créer une seule famille chromatique :
+- bleu nuit profond ;
+- encre bleutée ;
+- prune / aubergine très subtil ;
+- rouge ANS en accent ;
+- jaune orangé / doré en accent secondaire ;
+- vert uniquement pour succès.
+
+Palette sombre recommandée :
+--bg-app: #07111F;
+--bg-page: #0A1424;
+--bg-panel: #0E1A2D;
+--bg-card: #121E31;
+--bg-card-soft: #142238;
+--bg-card-elevated: #17243A;
+--bg-warm-subtle: #1A1628;
+--bg-hover: #1B2A42;
+--bg-active-soft: rgba(231, 25, 79, 0.12);
+--bg-selected-soft: rgba(231, 25, 79, 0.16);
+--border-soft: rgba(196, 210, 235, 0.10);
+--border-standard: rgba(196, 210, 235, 0.16);
+--border-active: rgba(231, 25, 79, 0.65);
+--text-main: #F8F4EE;
+--text-muted: #BFC7D8;
+--text-subtle: #8F9AB3;
+--primary: #E7194F;
+--primary-soft: #F72565;
+--warning: #FFB21A;
+--success: #19C37D;
+--danger: #FF3B5C;
+
+Mode clair :
+--bg-app: #FFF8F0;
+--bg-page: #FFF4EA;
+--bg-panel: #FFFDF8;
+--bg-card: #FFFFFF;
+--bg-card-soft: #FFF7F1;
+--bg-card-elevated: #FFF0F4;
+--bg-hover: #FFF1E3;
+--border-soft: rgba(111, 79, 93, 0.10);
+--border-standard: rgba(111, 79, 93, 0.16);
+--text-main: #251322;
+--text-muted: #6F4F5D;
+--text-subtle: #94727E;
+
+Interdiction :
+- bg-black dominant ;
+- bg-gray-950 ;
+- bg-neutral-950 ;
+- bg-zinc-950 ;
+- bg-slate-950 ;
+- surfaces non harmonisées selon module ;
+- patchwork de couleurs.
+
+Toutes les couleurs doivent passer par des tokens.
+
+==================================================
+ÉTAPE 5 — SURFACES, TRAMES, BLUR ET PROFONDEUR
+==================================================
+
+Objectif :
+Rendre l’interface plus riche, mais subtile.
+
+Ajouter si pertinent :
+- fonds légèrement différenciés ;
+- trames arrondies discrètes ;
+- texture grille ultra faible ;
+- blur léger sur topbar / sidebar / overlays ;
+- micro-gradients discrets ;
+- hover doux ;
+- selected state clair ;
+- lignes alternées dans tableaux.
+
+Règles :
+- ultra subtil ;
+- lisibilité d’abord ;
+- pas d’effet gadget ;
+- pas de glassmorphism excessif ;
+- pas de gros shadow noir ;
+- pas de texture qui gêne le texte.
+
+Texture possible sur fond global uniquement :
+background-image:
+  linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+background-size: 32px 32px;
+
+Glow très subtil possible :
+radial-gradient(circle at top left, rgba(231,25,79,0.10), transparent 35%),
+radial-gradient(circle at bottom right, rgba(255,178,26,0.06), transparent 30%);
+
+==================================================
+ÉTAPE 6 — ANTI “CARD DANS CARD DANS CARD”
+==================================================
+
+Règle stricte :
+Maximum 1 niveau de carte dans une carte.
+
+Interdit :
+Page → Card → Card → Card.
+
+Toléré :
+Page → SectionCard → contenu simple.
+
+Préférer :
+- sections ouvertes ;
+- dividers subtils ;
+- grids ;
+- lignes ;
+- tabs ;
+- panels simples ;
+- badges ;
+- états sélectionnés.
+
+À corriger en priorité :
+- Backoffice ;
+- Commandes ;
+- ANS Talk ;
+- POS ;
+- Devis ;
+- Panier ;
+- CRM.
+
+Ne pas utiliser une carte uniquement pour créer de l’espace.
+Utiliser plutôt : gap, grid, padding, divider, section header.
+
+==================================================
+ÉTAPE 7 — MISE EN PAGE, MARGES, GOUTTIÈRES, BLANCS
+==================================================
+
+Mission :
+Unifier tous les espaces avant/après, marges, paddings, gaps, gouttières et blancs.
+
+Règle fondamentale :
+Même niveau = même espacement.
+
+Échelle recommandée :
+- 4 px / gap-1 : micro éléments ;
+- 8 px / gap-2 : icône + texte, badges ;
+- 12 px / gap-3 : groupes compacts ;
+- 16 px / gap-4 : cartes, formulaires, sections internes ;
+- 24 px / gap-6 : grandes sections ;
+- 32 px / gap-8 : séparation majeure uniquement.
+
+Page :
+- px-4 md:px-6 xl:px-8 ;
+- py-4 ou py-6 ;
+- space-y-6 entre grandes sections.
+
+Cartes :
+- compactes : p-3 ;
+- standard : p-4 ;
+- importantes : p-5 ;
+- ne pas mélanger p-2, p-6, p-8 dans un même groupe.
+
+Grids :
+- KPI : gap-4 ;
+- cartes : gap-4 ;
+- compact : gap-3 ;
+- formulaires : gap-x-4 gap-y-4 ;
+- layout deux colonnes : gap-4 ou gap-5.
+
+Tables :
+- cellule : px-3 ou px-4 ;
+- cellule : py-3 ;
+- toolbar vers tableau : mt-4.
+
+Tabs :
+- tabs vers contenu : mt-4 ;
+- gap entre tabs : gap-1 ou gap-2 ;
+- padding tab : px-3 py-2.
+
+À corriger :
+- grands vides non justifiés ;
+- éléments collés ;
+- marges aléatoires ;
+- gouttières irrégulières ;
+- axes d’alignement incohérents.
+
+==================================================
+ÉTAPE 8 — TYPOGRAPHIE PROFESSIONNELLE
+==================================================
+
+Objectif :
+Typographie digne d’un CRM d’imprimerie / agence design.
+
+Police UI principale :
+- Manrope, Geist Sans ou Inter.
+
+Police mono :
+- uniquement pour codes, références, IDs, numéros commande, logs.
+
+Échelle :
+- titre page : text-2xl font-semibold tracking-tight ;
+- titre section : text-lg font-semibold ;
+- titre carte : text-base font-semibold ;
+- corps : text-sm ou text-base ;
+- meta : text-xs ou text-sm muted ;
+- bouton : text-sm font-semibold ;
+- badge : text-xs font-medium ;
+- KPI : text-xl ou text-2xl font-semibold tabular-nums ;
+- montants : tabular-nums.
+
+À éviter :
+- trop de tailles différentes ;
+- text-xs pour contenu principal ;
+- text-3xl abusif ;
+- font-bold partout ;
+- uppercase excessif ;
+- titres trop grands.
+
+Règles françaises :
+- espace avant : ; ? ! ;
+- espace entre nombre et unité : 120 cm, 300 mm, 50 % ;
+- montants : 86 216 Ar ;
+- accents sur majuscules : À, É, État ;
+- points de suspension : … ;
+- apostrophe typographique si possible : aujourd’hui.
+
+==================================================
+ÉTAPE 9 — ICONOGRAPHIE ET PICTOGRAMMES
+==================================================
+
+Objectif :
+Créer une iconographie unifiée, simple, lisible et premium.
+
+Style :
+- outline / contour ;
+- Lucide React recommandé ;
+- pas de mélange PNG / emoji / icône 3D ;
+- même action = même icône partout.
+
+Tailles :
+- sidebar parent : 18 px ;
+- sidebar enfant : 16 px ;
+- bouton : 16 ou 18 px ;
+- action tableau : 16 px ;
+- KPI : 20 px maximum ;
+- empty state : 40 à 56 px.
+
+Créer un fichier central :
+components/ui/app-icons.tsx
+ou
+lib/app-icons.ts
+
+Mapping obligatoire :
+- Modifier = Pencil ;
+- Supprimer = Trash2 ;
+- Voir = Eye ;
+- Dupliquer = Copy ;
+- Rechercher = Search ;
+- Filtrer = Filter ;
+- Télécharger = Download ;
+- Envoyer = Send ;
+- Commandes = ClipboardList ou PackageCheck ;
+- Devis = FileText ;
+- Facture = ReceiptText ;
+- Production = Factory ;
+- Livraison = Truck ;
+- Stock = Boxes ;
+- ANS Talk = MessageSquare.
+
+Supprimer les icônes inutiles ou ambiguës.
+Une icône doit guider, pas décorer.
+
+==================================================
+ÉTAPE 10 — CHIPS, BADGES, TAGS, STATUTS
+==================================================
+
+Tous les chips et badges doivent être harmonisés.
+
+Règles :
+- radius 10 px ;
+- text-xs ;
+- font-medium ;
+- padding cohérent ;
+- fond subtil ;
+- border discrète si utile ;
+- état actif clair ;
+- couleurs maîtrisées.
+
+Statuts :
+- À planifier ;
+- En cours ;
+- À faire ;
+- Terminé ;
+- Bloqué ;
+- Payé ;
+- Reste à payer ;
+- Livré ;
+- Brouillon ;
+- Publié.
+
+Éviter :
+- trop de couleurs agressives ;
+- tailles différentes ;
+- rounded-full sur badges rectangulaires ;
+- badges trop nombreux.
+
+==================================================
+ÉTAPE 11 — TABLEAUX, LISTES, LIGNES ALTERNÉES
+==================================================
+
+Objectif :
+Rendre les tableaux et listes plus lisibles et premium.
+
+À appliquer :
+- zebra rows très subtils ;
+- hover doux ;
+- selected row clair ;
+- headers lisibles ;
+- padding cellule cohérent ;
+- actions alignées ;
+- chiffres alignés à droite ;
+- badges lisibles ;
+- aucune ligne trop haute inutilement.
+
+Lignes de liste :
+- fond subtil ;
+- radius 10 px si item encadré ;
+- séparation douce ;
+- item actif visible ;
+- item hover élégant.
+
+Ne pas avoir des listes plates sans rythme visuel.
+
+==================================================
+ÉTAPE 12 — BOUTONS, FORMULAIRES, INPUTS
+==================================================
+
+Boutons :
+- radius 10 px ;
+- hauteur cohérente ;
+- text-sm font-semibold ;
+- hover premium ;
+- focus visible ;
+- bouton principal rouge ANS ou dégradé rouge / framboise ;
+- bouton secondaire surface subtile ;
+- bouton icône carré radius 10 px.
+
+Formulaires :
+- radius 10 px ;
+- input h-10 ;
+- label text-sm font-medium ;
+- aide text-xs muted ;
+- erreur proche du champ ;
+- focus rouge ANS subtil ;
+- grille 2 colonnes si pertinent ;
+- sections regroupées.
+
+Même niveau = même hauteur, même padding, même radius.
+
+==================================================
+ÉTAPE 13 — NAVIGATION, SIDEBAR, TOPBAR
+==================================================
+
+Sidebar :
+- moins longue ;
+- groupes par flow métier ;
+- un seul groupe ouvert si possible ;
+- active state premium ;
+- hover doux ;
+- sous-modules mieux hiérarchisés ;
+- radius 10 px sur items actifs / hover ;
+- couleurs harmonisées.
+
+Flow commercial obligatoire :
+CRM Clients → Catalogue POS → Panier / Devis → Devis → Commandes → Réclamations.
+
+Topbar :
+- fond harmonisé ;
+- blur léger si utile ;
+- border-bottom subtile ;
+- recherche claire ;
+- actions alignées.
+
+La navigation doit être rapide, claire, compacte et professionnelle.
+
+==================================================
+ÉTAPE 14 — ANS TALK — PRIORITÉ DESIGN
+==================================================
+
+ANS Talk doit être revu fortement.
+
+Problèmes à corriger :
+- design trop médiocre ;
+- typographies trop grandes ;
+- trop de variations de taille ;
+- fonds incohérents ;
+- sensation de module flottant ;
+- cadres imbriqués ;
+- liste messages confuse avec sidebar ;
+- panneau contexte trop brut.
+
+Structure demandée :
+- contexte métier à gauche ;
+- conversation / chat au centre ;
+- liste conversations à droite.
+
+Objectif :
+Éviter la confusion avec la sidebar principale déjà à gauche.
+
+ANS Talk doit avoir :
+- couleurs harmonisées ;
+- panneaux non flottants ;
+- pas de grand rectangle englobant ;
+- typographie calme ;
+- radius 10 px ;
+- liste conversations plus élégante ;
+- panneau contexte plus utile ;
+- empty state premium ;
+- zone chat centrale valorisée ;
+- actions mieux hiérarchisées.
+
+ANS Talk doit ressembler à un vrai hub collaboratif métier premium, inspiré de Slack / Messenger / WhatsApp Web / Linear / Intercom, mais adapté à ANS ORION.
+
+==================================================
+ÉTAPE 15 — COMMANDES — MODULE VITRINE QUALITÉ
+==================================================
+
+Commandes doit être une vitrine de la qualité de service.
+
+À appliquer :
+- header compact ;
+- numéro commande, résumé et QR code regroupés ;
+- QR code intégré, pas flottant ;
+- KPI utiles seulement ;
+- prochaine action claire ;
+- onglets : Synthèse, Production, BAT & Studio, Logistique, Finance, Timeline ;
+- production en stepper / loading multi-lignes ;
+- finance claire ;
+- logistique claire ;
+- timeline utile ;
+- pas de redondance ;
+- surfaces harmonisées ;
+- radius 10 px partout ;
+- une seule action principale visible.
+
+Supprimer :
+- grands vides ;
+- répétitions ;
+- card dans card ;
+- zéros sans signification.
+
+Remplacer les zéros par des états utiles :
+- Livraison : à planifier ;
+- Facture : à générer ;
+- Production : non lancée ;
+- BAT : à créer / non requis.
+
+==================================================
+ÉTAPE 16 — BACKOFFICE / ADMIN — PRIORITÉ DESIGN
+==================================================
+
+Backoffice doit devenir plus professionnel.
+
+À corriger :
+- trop de cadres imbriqués ;
+- fonds incohérents ;
+- KPI trop dispersés ;
+- sections trop techniques ;
+- informations non hiérarchisées.
+
+À appliquer :
+- sections simples ;
+- KPI directs ;
+- santé système claire ;
+- alertes directes ;
+- tabs lisibles ;
+- surfaces harmonisées ;
+- radius 10 px ;
+- pas de grand cadre parent contenant trop de sous-cadres.
+
+Terminologie :
+Remplacer “Production Hostinger / Neon” si obsolète par :
+- Environnement local / base de données ;
+ou
+- Runtime local / DB connectée.
+
+==================================================
+ÉTAPE 17 — FLOW COMMERCIAL : CRM, POS, PANIER, DEVIS
+==================================================
+
+CRM Clients :
+- fiche client plus propre ;
+- liste plus lisible ;
+- actions uniformisées ;
+- formulaire en sections ;
+- badge Client fidèle ;
+- historique accessible ;
+- suppression / corbeille claire.
+
+Catalogue POS :
+- client obligatoire avant articles ;
+- bouton “Commencer une nouvelle commande” ;
+- articles mieux présentés ;
+- catégories lisibles ;
+- configurateur propre ;
+- chips harmonisés ;
+- alerte stock ;
+- badge panier = nombre de lignes/types d’articles.
+
+Panier / Devis :
+- récap client clair ;
+- lignes articles propres ;
+- résumé dynamique selon vraies variables ;
+- modifier / dupliquer / supprimer cohérents ;
+- bouton “Ajouter article” ;
+- bouton “Créer devis / proforma”.
+
+Devis / Proforma :
+- paiement premium ;
+- logistique claire ;
+- Mobile Money avec couleurs opérateurs maîtrisées ;
+- virement bancaire ;
+- référence obligatoire selon mode ;
+- heure de paiement ;
+- date livraison ;
+- délai exécution ;
+- reste à payer ;
+- bouton “Valider commande” bien hiérarchisé.
+
+==================================================
+ÉTAPE 18 — PRODUCTION / GPAO / STUDIO / BAT
+==================================================
+
+Production :
+- Kanban plus lisible ;
+- statuts clairs ;
+- cartes compactes ;
+- planning lisible ;
+- stepper par dossier ;
+- blocage visible ;
+- contrôle qualité clair ;
+- actions opérateur faciles.
+
+Studio & BAT :
+- briefs clients ;
+- fichiers sources ;
+- versions BAT ;
+- commentaires ;
+- validation ;
+- historique ;
+- design plus créatif, mais sobre.
+
+Éviter :
+- fichiers mélangés ;
+- statuts peu visibles ;
+- trop de cartes répétitives.
+
+==================================================
+ÉTAPE 19 — STOCK / LOGISTIQUE / FINANCE / RH
+==================================================
+
+Stock & Achats :
+- stock plus lisible ;
+- alertes rupture/faible ;
+- mouvements clairs ;
+- fournisseurs structurés ;
+- achats accessibles.
+
+Logistique :
+- livraisons faciles à planifier ;
+- adresse, axe, livreur, date visibles ;
+- statuts : à planifier, en préparation, en route, livré, problème ;
+- action contextuelle claire.
+
+Finance :
+- paiement clair ;
+- factures visibles ;
+- reste à encaisser ;
+- caisse et dépenses lisibles ;
+- chiffres alignés et hiérarchisés.
+
+RH :
+- employés ;
+- pointage ;
+- congés ;
+- paie ;
+- performances ;
+- organisation propre et lisible.
+
+==================================================
+ÉTAPE 20 — RÉINTÉGRATION DES ÉLÉMENTS DISPARUS
+==================================================
+
+Après refonte, vérifier qu’aucun élément utile n’a disparu.
+
+Créer :
+docs/MISSING_ELEMENTS_AUDIT.md
+
+Auditer :
+- boutons ;
+- champs ;
+- onglets ;
+- cartes ;
+- KPI ;
+- actions ;
+- filtres ;
+- liens ;
+- tableaux ;
+- colonnes ;
+- statuts ;
+- badges ;
+- sections ;
+- données métier.
+
+Principe :
+Le design ne doit jamais supprimer une fonctionnalité utile.
+
+Si un élément est utile mais alourdit l’interface, le réintégrer via :
+- menu “Plus” ;
+- drawer ;
+- accordéon ;
+- onglet ;
+- panneau repliable ;
+- action secondaire ;
+- résumé compact.
+
+Ne pas revenir à l’ancien désordre.
+Réintégrer intelligemment.
+
+==================================================
+ÉTAPE 21 — TESTS DES FLOWS PRINCIPAUX
+==================================================
+
+Tester obligatoirement :
+
+Flow commercial :
+CRM Clients → Catalogue POS → Panier → Devis → Paiement → Commandes.
+
+Flow commande :
+Commande → Production → BAT → Logistique → Finance → Timeline.
+
+Flow admin :
+Backoffice → Articles → Variables → Prix → Synchronisation.
+
+Flow communication :
+ANS Talk → conversation → fichier → lien commande.
+
+Flow stock :
+Stock → mouvement → alerte.
+
+Flow finance :
+Facture → paiement → reste à payer.
+
+Commandes terminal :
+npm run dev
+npm run build
+
+Si nécessaire :
+npx prisma generate
+
+==================================================
+ÉTAPE 22 — MÉTHODE DE TRAVAIL CURSOR
+==================================================
+
+Procéder en plusieurs étapes pour obtenir le meilleur résultat :
+
+1. Audit global design.
+2. Création / harmonisation des tokens design.
+3. Correction des couleurs / surfaces.
+4. Correction des arrondis 10 px.
+5. Correction des marges / gouttières / blancs.
+6. Correction typographique.
+7. Correction des icônes / pictogrammes.
+8. Correction chips / badges / statuts.
+9. Correction tableaux / listes.
+10. Correction boutons / formulaires.
+11. Correction sidebar / topbar.
+12. Correction ANS Talk en priorité.
+13. Correction Commandes en priorité.
+14. Correction Backoffice en priorité.
+15. Correction CRM / POS / Panier / Devis.
+16. Correction Production / Studio / Stock / Finance / Logistique / RH.
+17. Audit des éléments disparus.
+18. Réintégration propre.
+19. Vérification responsive.
+20. Build final.
+
+Ne pas modifier tout le projet de manière aveugle.
+Prioriser les composants réutilisables et appliquer ensuite partout.
+
+==================================================
+ÉTAPE 23 — CLASSES À SURVEILLER ET REMPLACER
+==================================================
+
+Arrondis :
+- rounded-sm ;
+- rounded-md ;
+- rounded-lg ;
+- rounded-xl ;
+- rounded-2xl ;
+- rounded-3xl ;
+- rounded-full sur rectangles.
+
+Remplacer par :
+- rounded-[10px]
+ou
+- rounded-ui.
+
+Couleurs :
+- bg-black ;
+- bg-gray-950 ;
+- bg-neutral-950 ;
+- bg-zinc-950 ;
+- bg-slate-950 ;
+- border-gray-800 ;
+- text-gray-400 froid dominant.
+
+Remplacer par tokens :
+- bg-app ;
+- bg-page ;
+- bg-panel ;
+- bg-card ;
+- bg-card-soft ;
+- border-soft ;
+- text-main ;
+- text-muted ;
+- text-subtle.
+
+Espacements :
+- p-8 sans justification ;
+- gap-8 dans groupes compacts ;
+- mt-12 / mb-12 inutiles ;
+- marges compensatoires ml / mr injustifiées.
+
+Typographie :
+- text-xs pour contenu principal ;
+- text-3xl abusif ;
+- font-bold partout ;
+- uppercase excessif.
+
+Cards :
+- Card dans Card dans Card.
+
+==================================================
+ÉTAPE 24 — CRITÈRES DE VALIDATION FINALE
+==================================================
+
+La refonte design est réussie si :
+
+- tous les modules ont une cohérence visuelle ;
+- les couleurs sont harmonisées ;
+- les fonds sont unifiés ;
+- le mode sombre ne mélange plus noir / gris noir / bleu incohérents ;
+- les surfaces sont plus premium ;
+- tous les rectangles arrondis utilisent 10 px ;
+- les marges et gouttières sont régulières ;
+- la typographie est disciplinée ;
+- les icônes sont harmonisées ;
+- les chips et badges sont cohérents ;
+- les tableaux sont lisibles ;
+- les formulaires sont propres ;
+- la sidebar est plus claire ;
+- ANS Talk est beaucoup plus professionnel ;
+- Commandes est une vitrine qualité ;
+- Backoffice est mieux structuré ;
+- CRM / POS / Panier / Devis sont cohérents ;
+- il n’y a plus de card dans card dans card ;
+- les éléments utiles disparus sont réintégrés ;
+- les flows principaux fonctionnent ;
+- le responsive reste propre ;
+- le build fonctionne ;
+- aucune fonctionnalité métier importante n’est cassée.
+
+==================================================
+PRIORITÉ FINALE
+==================================================
+
+Faire d’ANS ORION une application ERP / CRM / POS / GPAO visuellement premium, cohérente et professionnelle.
+
+Tous les modules doivent être revus avec :
+- harmonie visuelle ;
+- cohérence des couleurs ;
+- typographie maîtrisée ;
+- iconographie unifiée ;
+- arrondis 10 px ;
+- marges et gouttières régulières ;
+- surfaces riches mais subtiles ;
+- hiérarchie claire ;
+- appartenance visuelle forte ;
+- zéro redondance inutile ;
+- zéro suppression de fonctionnalités utiles.
+
+Le résultat doit être digne d’un SaaS moderne, d’un CRM professionnel, d’un ERP de production et d’une agence design / imprimerie haut de gamme.

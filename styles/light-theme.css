@@ -1,0 +1,134 @@
+/**
+ * ANS ORION — Mode clair harmonisé (même identité que le dark)
+ * Cool slate · accents rouge/or uniquement · pas de panneau blanc isolé
+ */
+
+:root:not(.dark) {
+  --ans-muted: var(--text-muted);
+  --ans-text-muted: var(--text-subtle);
+  --orion-muted: var(--text-muted);
+  --orion-warning: var(--ans-warning, #FACC15);
+  --orion-red: var(--ans-primary, #FF174D);
+  --shadow-opacity: 0.10;
+  --shadow-card: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+  --shadow-hover: 0 6px 10px -2px rgba(15, 23, 42, 0.05), 0 14px 22px -4px rgba(15, 23, 42, 0.1);
+  --shadow-card-unified: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+}
+
+:root:not(.dark) body,
+:root:not(.dark) .orion-viewport {
+  background: #f4f7fb;
+  color: var(--text-main);
+}
+
+/* Sidebar = blanc unifié (carte seule en mode desktop flottant) */
+:root:not(.dark) .orion-sidebar:not(.orion-sidebar-desktop),
+:root:not(.dark) .orion-sidebar-v2:not(.orion-sidebar-desktop) {
+  background: #ffffff !important;
+  border-right-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+:root:not(.dark) .orion-sidebar.orion-sidebar-desktop,
+:root:not(.dark) .orion-sidebar-v2.orion-sidebar-desktop {
+  background: transparent !important;
+  border-right-color: transparent !important;
+}
+
+:root:not(.dark) .orion-cockpit-header {
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom-color: rgba(15, 23, 42, 0.06);
+}
+
+:root:not(.dark) .orion-card,
+:root:not(.dark) .ans-card-premium,
+:root:not(.dark) .dashboard-chart-card {
+  background: #ffffff;
+  border-color: transparent;
+  box-shadow: var(--shadow-card-unified);
+}
+
+:root:not(.dark) .orion-nav-item {
+  color: var(--text-muted);
+}
+
+:root:not(.dark) .orion-nav-item:hover {
+  color: var(--text-main);
+  background: var(--bg-hover);
+}
+
+:root:not(.dark) .orion-nav-item-active {
+  color: #fff !important;
+  background: var(--ans-primary, #FF174D) !important;
+}
+
+:root:not(.dark) .orion-nav-ico {
+  background: var(--bg-card-soft);
+  color: var(--text-muted);
+}
+
+:root:not(.dark) .orion-nav-item-active .orion-nav-ico,
+:root:not(.dark) .orion-nav-tile-active .orion-nav-ico {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+:root:not(.dark) .orion-sb-section-label {
+  color: var(--text-subtle);
+}
+
+:root:not(.dark) .cockpit-search {
+  background: var(--bg-card);
+  border-color: var(--border-standard);
+}
+
+:root:not(.dark) .cockpit-search input::placeholder {
+  color: var(--text-placeholder);
+}
+
+:root:not(.dark) .orion-table-wrap thead,
+:root:not(.dark) .orion-table-enriched thead {
+  background: var(--bg-card-soft) !important;
+  color: var(--text-muted);
+}
+
+:root:not(.dark) .orion-table-wrap thead th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+:root:not(.dark) .orion-table-enriched {
+  border-color: var(--border-standard);
+}
+
+/* Badges — texte foncé sur fond pastel (lisibilité) */
+:root:not(.dark) [class*='bg-amber-'],
+:root:not(.dark) [class*='bg-yellow-'] {
+  color: #92400E !important;
+}
+
+:root:not(.dark) [class*='bg-emerald-'],
+:root:not(.dark) [class*='bg-green-'] {
+  color: #166534 !important;
+}
+
+:root:not(.dark) [class*='bg-red-'],
+:root:not(.dark) [class*='bg-rose-'] {
+  color: #C91443 !important;
+}
+
+/* CPS light — fond page, pas de carte blanche flottante */
+:root:not(.dark) .cps-theme {
+  background: var(--bg-app) !important;
+}
+
+:root:not(.dark) .cps-theme .cps-panel-surface,
+:root:not(.dark) .cps-theme .cps-card {
+  background: var(--bg-card);
+  border-color: var(--border-standard);
+  box-shadow: var(--shadow-card);
+}
+
+:root:not(.dark) .ab2-shell {
+  background: var(--bg-app);
+  color: var(--text-main);
+}

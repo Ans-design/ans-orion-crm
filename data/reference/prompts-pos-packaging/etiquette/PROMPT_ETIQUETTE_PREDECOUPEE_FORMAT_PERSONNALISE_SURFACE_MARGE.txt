@@ -1,0 +1,387 @@
+PROMPT — ÉTIQUETTE PRÉDÉCOUPÉE + FORMAT PERSONNALISÉ GLOBAL — ANS ORION
+
+Contexte :
+On travaille sur le POS ANS ORION, notamment l’article “Étiquette prédécoupée” et tous les articles qui utilisent des dimensions personnalisées.
+
+Objectif :
+Corriger l’interface, les règles métier, les calculs automatiques, la matière brute, les marges, le prix, le récapitulatif, la base de données, l’admin, le stock, la production, les devis, les factures et le cockpit.
+
+IMPORTANT :
+Ne pas corriger seulement le frontend.
+Toute correction doit être synchronisée avec :
+- POS
+- Base de données
+- Admin / Back-office
+- ProductOptionGroup
+- ProductOptionValue
+- PriceFormula
+- BusinessRule
+- StockRule
+- Panier
+- Devis
+- Commande
+- Facture
+- Production
+- Cockpit
+- Seeds
+- Tests
+
+============================================================
+1. ARTICLE : ÉTIQUETTE PRÉDÉCOUPÉE
+============================================================
+
+Dans l’article POS “Étiquette prédécoupée”, ajouter un choix de type/matière :
+
+Types obligatoires :
+- Vinyle blanc
+- Vinyle transparent
+- Autres
+
+Règle d’affichage :
+- Si l’utilisateur choisit “Vinyle blanc” : ne pas afficher de grand champ détail inutile.
+- Si l’utilisateur choisit “Vinyle transparent” : ne pas afficher de grand champ détail inutile.
+- Si l’utilisateur choisit “Autres” : afficher un champ “Détails du type” pour préciser la matière, la référence, la contrainte ou la demande spéciale.
+
+Libellé du champ si “Autres” :
+“Détails du type d’étiquette”
+
+Placeholder :
+“Instructions spéciales, références, détails…”
+
+Le champ “Détails du type” doit apparaître uniquement si “Autres” est sélectionné.
+
+Ne pas afficher ce champ inutilement pour tous les types.
+
+============================================================
+2. FORMAT PERSONNALISÉ — CORRECTION GLOBALE
+============================================================
+
+Sur tous les articles qui utilisent un format personnalisé, sauf le module “Boîte personnalisée”, supprimer le bloc inutile “Dimensions personnalisées” qui contient :
+- un champ texte “Format”
+- une zone texte “Autres précisions : forme, contraintes de production…”
+- tout champ libre de dimensions redondant
+
+Ce bloc correspond à la partie inutile vue dans la capture :
+“Dimensions personnalisées”
+“Format”
+“Autres précisions : forme, contraintes de production…”
+
+Il faut le supprimer partout où les dimensions personnalisées sont déjà saisies avec :
+- Longueur L (mm)
+- Largeur l (mm)
+
+Règle :
+Les dimensions personnalisées doivent être saisies uniquement avec les champs numériques :
+- Longueur L
+- Largeur l
+
+Ne pas demander une troisième fois le format dans un champ texte.
+
+Articles concernés :
+- Étiquette prédécoupée
+- Autocollant prédécoupé
+- Autocollant personnalisé
+- Sticker
+- Vinyle
+- Pose vinyle
+- Flyers ou supports avec format personnalisé
+- Cartes avec format personnalisé
+- Livres avec format personnalisé
+- Couvertures personnalisées
+- Tout autre article POS utilisant Longueur × Largeur personnalisées
+
+Exception :
+- Boîte personnalisée garde son propre système de dimensions et de développé, car elle utilise des formules packaging spécifiques.
+
+============================================================
+3. SUPPRESSION DU PRIX FORCÉ OBLIGATOIRE
+============================================================
+
+Supprimer l’alerte ou règle :
+“Prix forcé obligatoire pour cette option”
+
+Le prix ne doit pas être forcé manuellement pour les formats personnalisés.
+
+Le prix doit être calculé automatiquement selon :
+- Longueur
+- Largeur
+- Surface réelle
+- Marge de chute matière
+- Matière
+- Quantité
+- Impression
+- Finition
+- Prix au m² ou prix par feuille
+- Taux de chute
+- Minimum de production si applicable
+
+Le prix forcé manuel doit rester seulement une option admin spéciale, non obligatoire, utilisée uniquement en cas d’exception commerciale validée.
+
+============================================================
+4. CALCUL AUTOMATIQUE DE SURFACE
+============================================================
+
+Pour tous les articles avec dimensions personnalisées :
+
+Entrées :
+- L = longueur en mm
+- l = largeur en mm
+- Quantité
+- Matière
+- Prix au m² ou prix par feuille
+
+Formule surface réelle :
+surface_reelle_m2 = L × l / 1 000 000
+
+Marge de chute matière obligatoire :
+- +50 mm à gauche
+- +50 mm à droite
+- +50 mm en haut
+- +50 mm en bas
+
+Donc :
+largeur_brute_finale = l + 100 mm
+longueur_brute_finale = L + 100 mm
+
+surface_brute_m2 = longueur_brute_finale × largeur_brute_finale / 1 000 000
+
+Surface totale :
+surface_totale_reelle = surface_reelle_m2 × quantité
+surface_totale_brute = surface_brute_m2 × quantité
+
+Prix automatique :
+prix_matiere = surface_totale_brute × prix_m2_matiere
+
+Puis ajouter selon article :
+- impression
+- découpe
+- prédécoupe
+- pelliculage
+- vernis
+- dorure
+- façonnage
+- pose
+- minimum de production
+- marge commerciale
+
+============================================================
+5. RÉCAPITULATIF MATIÈRE BRUTE
+============================================================
+
+Dans le récapitulatif POS, panier, devis, commande, production et facture, afficher automatiquement :
+
+- Dimensions client : L × l mm
+- Surface réelle unitaire : x m²
+- Marge de chute matière : +50 mm sur chaque côté
+- Dimensions brutes calculées : (L + 100) × (l + 100) mm
+- Surface brute unitaire : x m²
+- Quantité
+- Surface réelle totale : x m²
+- Surface brute totale : x m²
+- Matière
+- Prix matière
+- Finition
+- Prix final automatique
+
+Exemple d’affichage :
+Dimensions client : 100 × 80 mm
+Marge de chute : +50 mm sur les 4 côtés
+Dimensions brutes : 200 × 180 mm
+Surface réelle : 0,008 m²
+Surface brute : 0,036 m²
+Quantité : 100
+Surface brute totale : 3,6 m²
+
+============================================================
+6. APPLICATION DE LA MARGE +50 MM SUR TOUS LES ARTICLES
+============================================================
+
+La marge de chute matière +50 mm sur les 4 côtés doit être appliquée sur tous les articles utilisant des dimensions personnalisées.
+
+Cette règle concerne aussi :
+- autocollants
+- étiquettes
+- stickers
+- vinyle
+- bâche si format personnalisé
+- supports personnalisés
+- livres
+- couvertures de livres
+- chemises personnalisées
+- cartes personnalisées
+- tout article avec longueur × largeur saisies manuellement
+
+Exception :
+- Boîte personnalisée possède déjà son propre calcul de développé + marge de chute.
+- Ne pas doubler la marge sur Boîte personnalisée.
+
+Important :
+Cette marge n’est pas une marge de sécurité graphique.
+Cette marge n’est pas le fond perdu.
+Cette marge est une marge matière / chute / calage / déchet.
+
+Il faut donc distinguer :
+- marge de sécurité design
+- fond perdu / bleed
+- marge de chute matière +50 mm
+- marge machine si nécessaire
+
+============================================================
+7. CAS PARTICULIER : LIVRES
+============================================================
+
+Pour les livres avec format personnalisé, ne pas utiliser un champ texte libre “format”.
+Utiliser uniquement :
+- Longueur
+- Largeur
+- Nombre de pages ou feuilles
+- Recto / recto-verso
+- Matière intérieure
+- Matière couverture
+- Reliure
+- Finition
+
+La marge +50 mm sur les 4 côtés doit être appliquée aux calculs matière lorsqu’un format personnalisé est utilisé.
+
+Pour un livre, séparer :
+- calcul matière des pages intérieures
+- calcul matière de la couverture
+- calcul finition couverture
+- calcul reliure
+- calcul façonnage
+
+Ne pas casser les règles déjà existantes :
+- feuilles vs pages
+- recto / recto-verso
+- piqûre à cheval multiple de 4
+- dos carré collé non autorisé si nombre de feuilles insuffisant
+- épaisseur du dos calculée
+
+============================================================
+8. BASE DE DONNÉES
+============================================================
+
+Mettre à jour ou créer les champs suivants :
+
+Pour les articles à dimensions personnalisées :
+- length_mm
+- width_mm
+- real_surface_m2
+- waste_margin_mm
+- gross_length_mm
+- gross_width_mm
+- gross_surface_m2
+- real_total_surface_m2
+- gross_total_surface_m2
+- auto_price_enabled
+- forced_price_enabled
+- calculation_snapshot
+
+Pour Étiquette prédécoupée :
+- label_type
+- label_type_details
+- show_type_details_only_if_other
+
+Valeurs label_type :
+- vinyl_white
+- vinyl_transparent
+- other
+
+Règle :
+label_type_details doit être obligatoire uniquement si label_type = other.
+
+============================================================
+9. ADMIN / BACK-OFFICE
+============================================================
+
+Dans l’admin, permettre de configurer :
+- marge de chute par défaut : 50 mm
+- activation / désactivation de la marge par article
+- prix au m² par matière
+- prix de découpe
+- prix de prédécoupe
+- prix de finition
+- minimum de production
+- activation prix forcé uniquement par rôle admin
+- liste des types d’étiquette prédécoupée
+
+Ne pas laisser les utilisateurs simples forcer le prix.
+
+============================================================
+10. STOCK
+============================================================
+
+Le stock doit être calculé avec la surface brute, pas seulement avec la surface réelle.
+
+Stock consommé :
+stock_consomme = surface_brute_m2 × quantité
+
+Alerte avant ajout panier :
+- matière indisponible
+- surface brute totale supérieure au stock disponible
+- quantité impossible
+- format incompatible
+- prix matière manquant
+
+============================================================
+11. COCKPIT
+============================================================
+
+Mettre à jour les KPI :
+- consommation matière réelle
+- consommation matière brute
+- chute estimée
+- taux de chute
+- ventes par article personnalisé
+- marge par article personnalisé
+- alertes stock matière
+- commandes avec dimensions personnalisées
+- commandes avec prix forcé exceptionnel
+- commandes sans prix automatique
+
+Le cockpit doit utiliser les vraies données, pas des données mockées.
+
+============================================================
+12. TESTS OBLIGATOIRES
+============================================================
+
+Créer ou mettre à jour les tests :
+
+Étiquette prédécoupée :
+- Vinyle blanc n’affiche pas “Détails du type”.
+- Vinyle transparent n’affiche pas “Détails du type”.
+- Autres affiche “Détails du type”.
+- Le champ détail est obligatoire uniquement pour “Autres”.
+
+Format personnalisé :
+- Le bloc “Dimensions personnalisées” avec champ texte “Format” est supprimé.
+- Les champs Longueur et Largeur restent visibles.
+- La surface réelle est calculée automatiquement.
+- La surface brute applique +50 mm sur les 4 côtés.
+- Le prix automatique est calculé.
+- L’alerte “Prix forcé obligatoire” n’apparaît plus.
+- Le récapitulatif matière brute est affiché.
+- Le devis reprend le snapshot complet.
+- La facture reprend les dimensions et surfaces calculées.
+- Le stock est décrémenté selon la surface brute.
+- Le cockpit affiche les bonnes valeurs.
+
+Commandes à exécuter :
+- npm run lint
+- npm run build
+- tests disponibles
+
+============================================================
+13. RÉSULTAT ATTENDU
+============================================================
+
+Après correction :
+- Étiquette prédécoupée contient les types : Vinyle blanc, Vinyle transparent, Autres.
+- Le champ “Détails du type” s’affiche seulement pour “Autres”.
+- Le bloc inutile “Dimensions personnalisées” avec champ texte est supprimé partout.
+- Les formats personnalisés utilisent uniquement Longueur × Largeur.
+- Le prix n’est plus forcé.
+- Le calcul de surface est automatique.
+- La marge de chute +50 mm sur les 4 côtés est appliquée.
+- Le récapitulatif matière brute affiche les surfaces réelles et brutes.
+- Les devis, commandes, factures, production, stock, admin et cockpit sont synchronisés.

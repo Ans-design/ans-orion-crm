@@ -1,0 +1,234 @@
+/**
+ * Marque ORION — monogramme | filet | titre + sous-titre
+ * Aligné maquette sidebar brand.
+ */
+
+.orion-logo {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+  max-width: 100%;
+  line-height: 1;
+}
+
+/* Zone monogramme */
+.orion-logo__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.orion-logo__img,
+.orion-logo__mono,
+.orion-logo .orion-ans-monogram {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Filet vertical de séparation */
+.orion-logo__filet {
+  flex-shrink: 0;
+  width: 1px;
+  align-self: stretch;
+  margin-left: 0.55rem;
+  margin-right: 0.6rem;
+  min-height: 100%;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brand-primary, #ff174d) 25%, transparent) 0%,
+    color-mix(in srgb, #8b1530 85%, var(--brand-primary, #ff174d)) 15%,
+    color-mix(in srgb, #8b1530 90%, #000) 50%,
+    color-mix(in srgb, #8b1530 85%, var(--brand-primary, #ff174d)) 85%,
+    color-mix(in srgb, var(--brand-primary, #ff174d) 25%, transparent) 100%
+  );
+  border-radius: 1px;
+  opacity: 0.95;
+}
+
+/* Fallback couleur plate si besoin contraste simplifié */
+html.dark .orion-logo__filet {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, #ff5a7e 55%, transparent) 12%,
+    color-mix(in srgb, #ff174d 70%, #fff) 50%,
+    color-mix(in srgb, #ff5a7e 55%, transparent) 88%,
+    transparent 100%
+  );
+  opacity: 0.85;
+}
+
+.orion-logo__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 0;
+  gap: 0.2rem;
+  padding-top: 1px;
+}
+
+.orion-logo__title {
+  margin: 0;
+  display: block;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--text-main, #0f172a);
+  white-space: nowrap;
+}
+
+.orion-logo__sub {
+  margin: 0;
+  display: block;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  color: var(--text-muted, #64748b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 11.5rem;
+}
+
+html.dark .orion-logo__title {
+  color: #f1f5f9;
+}
+
+html.dark .orion-logo__sub {
+  color: #94a3b8;
+}
+
+/* ── sm (sidebar) : un peu plus grand ── */
+.orion-logo--sm .orion-logo__mark,
+.orion-logo__mark--sm {
+  width: 2.85rem; /* ~46px */
+  height: 2.85rem;
+}
+
+.orion-logo--sm .orion-logo__title {
+  font-size: 0.95rem !important; /* ~15px — un peu plus compact */
+}
+
+.orion-logo--sm .orion-logo__sub {
+  font-size: 0.5625rem !important; /* 9px */
+  letter-spacing: 0.08em;
+  max-width: 10.5rem;
+}
+
+.orion-logo__sub-ans {
+  font-weight: 800;
+  color: inherit;
+}
+
+.orion-logo__sub-design {
+  font-weight: 700;
+  color: var(--brand-primary, #cc0033);
+}
+
+.orion-logo__sub-rest {
+  font-weight: 600;
+  color: inherit;
+}
+
+html.dark .orion-logo__sub-design {
+  color: #ff1e56;
+}
+
+.orion-logo--sm .orion-logo__filet {
+  margin-left: 0.5rem;
+  margin-right: 0.55rem;
+  min-height: 2.5rem;
+  height: 2.5rem;
+  align-self: center;
+}
+
+/* ── md (sidebar) ── légèrement compact ── */
+.orion-logo--md .orion-logo__mark,
+.orion-logo__mark--md {
+  width: 2.875rem; /* 46px */
+  height: 2.875rem;
+}
+
+.orion-logo--md .orion-logo__title {
+  font-size: 1.0625rem !important; /* 17px */
+}
+
+.orion-logo--md .orion-logo__sub {
+  font-size: 0.5rem !important; /* 8px */
+  letter-spacing: 0.07em;
+  max-width: 11rem;
+}
+
+.orion-logo--md .orion-logo__text {
+  gap: 0.12rem;
+}
+
+.orion-logo--md .orion-logo__filet {
+  min-height: 2.35rem;
+  height: 2.35rem;
+  align-self: center;
+  margin-left: 0.5rem;
+  margin-right: 0.55rem;
+}
+
+/* ── lg ── */
+.orion-logo--lg .orion-logo__mark,
+.orion-logo__mark--lg {
+  width: 3.75rem; /* 60px */
+  height: 3.75rem;
+}
+
+.orion-logo--lg .orion-logo__title {
+  font-size: 1.5rem !important;
+}
+
+.orion-logo--lg .orion-logo__sub {
+  font-size: 0.6875rem !important;
+  max-width: 14rem;
+}
+
+.orion-logo--lg .orion-logo__filet {
+  min-height: 3.15rem;
+  height: 3.15rem;
+  align-self: center;
+  margin-left: 0.7rem;
+  margin-right: 0.75rem;
+  width: 1.5px;
+}
+
+/* Sidebar desktop : monogramme encore un cran + alignement monobloc */
+@media (min-width: 1280px) {
+  html body .orion-sb-brand-outside .orion-logo--sm .orion-logo__mark,
+  html body .orion-sb-brand-outside .orion-logo--sm .orion-ans-monogram {
+    width: 3rem !important; /* 48px */
+    height: 3rem !important;
+    min-width: 3rem !important;
+    min-height: 3rem !important;
+  }
+
+  html body .orion-sb-brand-outside .orion-logo--sm .orion-logo__title {
+    font-size: 1.125rem !important; /* 18px */
+  }
+
+  html body .orion-sb-brand-outside .orion-logo--sm .orion-logo__sub {
+    font-size: 0.5625rem !important;
+    letter-spacing: 0.09em !important;
+  }
+
+  html body .orion-sb-brand-outside .orion-logo--sm .orion-logo__filet {
+    height: 2.65rem !important;
+    min-height: 2.65rem !important;
+  }
+}

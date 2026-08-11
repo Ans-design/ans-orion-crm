@@ -1,0 +1,430 @@
+﻿/* Logistique & Livraisons — densifié, sans filets dilués */
+
+.livraisons-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+}
+
+.livraisons-page .orion-filter-toolbar {
+  gap: 0.45rem;
+  padding: 0.55rem 0.65rem;
+  border: none;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  box-shadow: none;
+}
+
+.livraisons-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.livraisons-filter {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--bg-app, #e2e8f0) 55%, transparent);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.livraisons-filter:hover {
+  background: color-mix(in srgb, var(--primary, #cc0033) 8%, var(--bg-card-soft, #f8fafc));
+  color: var(--text-main);
+}
+
+.livraisons-filter.is-active {
+  background: var(--primary, #cc0033);
+  color: #fff;
+}
+
+.livraisons-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .livraisons-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+  }
+}
+
+.livraisons-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.livraisons-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .livraisons-side {
+    position: sticky;
+    top: 0.75rem;
+  }
+}
+
+.livraisons-panel {
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 92%, transparent);
+  border: none;
+  box-shadow: none;
+}
+
+.livraisons-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.livraisons-panel__head h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.livraisons-panel__badge {
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--primary, #cc0033) 12%, transparent);
+  color: var(--primary, #cc0033);
+}
+
+/* Tournee empty — bandeau compact, pas un vide géant */
+.tournee-empty {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, #0ea5e9 8%, var(--bg-card-soft, #f0f9ff));
+  border: none;
+}
+
+.tournee-empty__icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  color: #fff;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+.tournee-empty__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.tournee-empty__desc {
+  margin: 0.15rem 0 0;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.tournee-card {
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tournee-card__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.tournee-stops {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.tournee-stops li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 55%, transparent);
+  font-size: 0.72rem;
+}
+
+/* Dispatch board */
+.dispatch-board {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.dispatch-kanban {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .dispatch-kanban {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .dispatch-kanban {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.dispatch-col {
+  padding: 0.55rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 88%, transparent);
+  border: none;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.dispatch-col__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem;
+}
+
+.dispatch-col__count {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.dispatch-card {
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+  border-radius: var(--radius-card, 7px);
+  border: none;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 60%, transparent);
+  cursor: pointer;
+  color: inherit;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+
+.dispatch-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--primary, #cc0033) 7%, var(--bg-card-soft, #f8fafc));
+}
+
+.dispatch-card__num {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #0284c7;
+}
+
+.dispatch-card__client {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 0.1rem;
+}
+
+.dispatch-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.45rem;
+  margin-top: 0.25rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.dispatch-card__action {
+  margin-top: 0.35rem;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: var(--primary, #cc0033);
+  cursor: pointer;
+}
+
+.dispatch-map {
+  position: relative;
+  border-radius: var(--radius-card, 7px);
+  overflow: hidden;
+  min-height: 140px;
+  background: linear-gradient(145deg, #0f172a, #1e3a5f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+}
+
+.dispatch-map__grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--primary, #ff174d) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--primary, #ff174d) 35%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.dispatch-map__body {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.dispatch-map__body p {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.dispatch-map__hint {
+  font-size: 0.6rem !important;
+  color: #7dd3fc !important;
+  font-weight: 600 !important;
+}
+
+.dispatch-driver {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-app, #f1f5f9) 55%, transparent);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.livraisons-list-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 700px) {
+  .livraisons-list-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.livraison-list-card {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--radius-card, 12px);
+  background: color-mix(in srgb, var(--bg-card-soft, #f8fafc) 90%, transparent);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  color: inherit;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.livraison-list-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--primary, #cc0033) 6%, var(--bg-card-soft, #f8fafc));
+}
+
+.livraison-list-card__icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  color: #fff;
+  background: linear-gradient(135deg, #cc0033, #ff1e56);
+}
+
+html.dark .livraisons-page .orion-filter-toolbar,
+.dark .livraisons-page .orion-filter-toolbar,
+html.dark .livraisons-panel,
+.dark .livraisons-panel,
+html.dark .dispatch-col,
+.dark .dispatch-col,
+html.dark .tournee-card,
+.dark .tournee-card,
+html.dark .livraison-list-card,
+.dark .livraison-list-card {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 92%, transparent);
+}
+
+html.dark .tournee-empty,
+.dark .tournee-empty {
+  background: color-mix(in srgb, #0ea5e9 14%, var(--bg-card-soft, #1e293b));
+}
+
+html.dark .dispatch-card,
+.dark .dispatch-card,
+html.dark .dispatch-driver,
+.dark .dispatch-driver,
+html.dark .tournee-stops li,
+.dark .tournee-stops li {
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 70%, transparent);
+}
+
+html.dark .dispatch-card__num,
+.dark .dispatch-card__num {
+  color: #38bdf8;
+}
+
+html.dark .livraisons-filter,
+.dark .livraisons-filter {
+  background: color-mix(in srgb, var(--bg-card-soft, #1e293b) 88%, transparent);
+}

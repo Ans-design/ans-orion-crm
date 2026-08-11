@@ -1,0 +1,575 @@
+/**
+ * Tâches métier — Soft UI densifié · grille 4 cols · CTA contraste fort
+ */
+
+.metier-taches-page {
+  --mt-ink: #17213a;
+  --mt-muted: #64748b;
+  --mt-line: #e5e9f1;
+  --mt-soft: #f7f8fb;
+  --mt-paper: #ffffff;
+  --mt-accent: #ff174d;
+  --mt-accent-deep: #cc0033;
+  --mt-radius: 7px;
+  --mt-radius-card: 12px;
+  --mt-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: none; /* pleine largeur ERP */
+  margin-inline: auto;
+  min-width: 0;
+  color: var(--mt-ink);
+}
+
+html.dark .metier-taches-page {
+  --mt-ink: #e8eef8;
+  --mt-muted: #94a3b8;
+  --mt-line: rgba(148, 163, 184, 0.18);
+  --mt-soft: #0b1528;
+  --mt-paper: #071021;
+}
+
+.metier-filters {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--mt-line);
+  border-radius: var(--mt-radius-card);
+  background: var(--mt-paper);
+  box-shadow: 0 6px 18px rgba(31, 42, 71, 0.05);
+}
+
+html.dark .metier-filters {
+  background: var(--mt-paper);
+  box-shadow: none;
+}
+
+@media (min-width: 900px) {
+  .metier-filters {
+    grid-template-columns: 1fr 1.15fr;
+    gap: 0.75rem;
+    align-items: start;
+  }
+}
+
+.metier-filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.metier-filters__lab {
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--mt-muted);
+}
+
+.metier-filters__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.metier-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--mt-line);
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--mt-muted);
+  background: var(--mt-soft);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.metier-chip:hover {
+  color: var(--mt-ink);
+  border-color: color-mix(in srgb, var(--mt-accent) 30%, var(--mt-line));
+}
+
+.metier-chip.is-active.is-type {
+  color: #fff;
+  border-color: #ea580c;
+  background: #ea580c;
+}
+
+.metier-chip.is-active.is-status {
+  color: #fff;
+  border-color: var(--mt-accent-deep);
+  background: var(--mt-accent);
+}
+
+.metier-assignee-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .metier-assignee-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .metier-assignee-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.metier-assignee-card {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--mt-line);
+  border-radius: var(--mt-radius);
+  background: color-mix(in srgb, #2563eb 8%, var(--mt-paper));
+}
+
+html.dark .metier-assignee-card {
+  background: color-mix(in srgb, #2563eb 12%, var(--mt-paper));
+}
+
+.metier-assignee-card__name {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 750;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metier-assignee-card__sub {
+  margin: 0.12rem 0 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--mt-muted);
+}
+
+.metier-assignee-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--mt-muted);
+}
+
+/* —— Grille tâches : jusqu’à 4 colonnes —— */
+.metier-tasks-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .metier-tasks-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .metier-tasks-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .metier-tasks-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+}
+
+.metier-cmd-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.metier-cmd-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.metier-cmd-group__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 0.65rem;
+  padding: 0.1rem 0.1rem 0.35rem;
+  border-bottom: 1px solid var(--mt-line);
+}
+
+.metier-cmd-group__link {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.55rem;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.metier-cmd-group__num {
+  font-family: var(--mt-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--mt-accent-deep);
+}
+
+html.dark .metier-cmd-group__num {
+  color: #ff667f;
+}
+
+.metier-cmd-group__art {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--mt-ink);
+}
+
+.metier-cmd-group__count {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--mt-muted);
+}
+
+/* —— Cartes densifiées —— */
+.metier-task-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid var(--mt-line);
+  border-radius: var(--mt-radius-card);
+  overflow: hidden;
+  background: var(--mt-paper);
+  box-shadow: 0 6px 16px rgba(31, 42, 71, 0.05);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.metier-task-card:hover {
+  border-color: color-mix(in srgb, var(--mt-accent) 28%, var(--mt-line));
+  box-shadow: 0 8px 20px rgba(31, 42, 71, 0.08);
+}
+
+.metier-task-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+html:not(.dark) .metier-task-card--startable {
+  border-color: color-mix(in srgb, var(--mt-accent) 22%, var(--mt-line));
+  background: linear-gradient(180deg, #fff 0%, #fff8fa 100%);
+}
+
+html:not(.dark) .metier-task-card--run {
+  border-color: color-mix(in srgb, #f59e0b 35%, var(--mt-line));
+  background: linear-gradient(180deg, #fff 0%, #fffbeb 100%);
+}
+
+html:not(.dark) .metier-task-card--gold {
+  border-color: color-mix(in srgb, #eab308 35%, var(--mt-line));
+  background: linear-gradient(180deg, #fff 0%, #fffef5 100%);
+}
+
+html:not(.dark) .metier-task-card--ok {
+  border-color: color-mix(in srgb, #10b981 30%, var(--mt-line));
+  background: linear-gradient(180deg, #fff 0%, #f0fdf6 100%);
+}
+
+html:not(.dark) .metier-task-card--danger {
+  border-color: color-mix(in srgb, #ef4444 30%, var(--mt-line));
+  background: linear-gradient(180deg, #fff 0%, #fff5f5 100%);
+}
+
+html.dark .metier-task-card {
+  background: var(--mt-paper);
+  box-shadow: none;
+}
+
+html.dark .metier-task-card--run {
+  background: color-mix(in srgb, #f59e0b 8%, var(--mt-paper));
+}
+html.dark .metier-task-card--gold {
+  background: color-mix(in srgb, #eab308 8%, var(--mt-paper));
+}
+html.dark .metier-task-card--ok {
+  background: color-mix(in srgb, #10b981 8%, var(--mt-paper));
+}
+html.dark .metier-task-card--danger {
+  background: color-mix(in srgb, #ef4444 8%, var(--mt-paper));
+}
+html.dark .metier-task-card--startable {
+  background: color-mix(in srgb, var(--mt-accent) 7%, var(--mt-paper));
+}
+
+.metier-task-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  width: 100%;
+  padding: 0.55rem 0.6rem 0.3rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.metier-task-card__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.metier-task-status,
+.metier-task-type,
+.metier-task-urgent {
+  display: inline-flex;
+  padding: 0.1rem 0.35rem;
+  border-radius: 9999px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.metier-task-status--neutral {
+  background: #eef2f7;
+  border-color: #d8dee8;
+  color: #334155;
+}
+.metier-task-status--run {
+  background: #ffedd5;
+  border-color: #fdba74;
+  color: #9a3412;
+}
+.metier-task-status--gold {
+  background: #fef9c3;
+  border-color: #fde047;
+  color: #854d0e;
+}
+.metier-task-status--ok {
+  background: #d1fae5;
+  border-color: #6ee7b7;
+  color: #047857;
+}
+.metier-task-status--danger {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+.metier-task-type {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+
+.metier-task-urgent {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #b91c1c;
+}
+
+html.dark .metier-task-status--neutral {
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #cbd5e1;
+}
+html.dark .metier-task-status--run {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fdba74;
+}
+html.dark .metier-task-status--gold {
+  background: rgba(234, 179, 8, 0.15);
+  border-color: rgba(234, 179, 8, 0.35);
+  color: #facc15;
+}
+html.dark .metier-task-status--ok {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+html.dark .metier-task-status--danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+html.dark .metier-task-type {
+  background: rgba(37, 99, 235, 0.18);
+  border-color: rgba(96, 165, 250, 0.35);
+  color: #93c5fd;
+}
+html.dark .metier-task-urgent {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(248, 113, 113, 0.4);
+  color: #fca5a5;
+}
+
+.metier-task-card__title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--mt-ink);
+}
+
+.metier-task-card__desc {
+  margin: 0;
+  font-size: 0.65rem;
+  line-height: 1.3;
+  color: var(--mt-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.metier-task-card__problem {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 650;
+  color: #dc2626;
+}
+
+html.dark .metier-task-card__problem {
+  color: #f87171;
+}
+
+.metier-task-card__timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  margin-top: 0.05rem;
+  font-size: 0.75rem;
+  font-weight: 750;
+  font-family: var(--mt-mono);
+  color: #c2410c;
+}
+
+.metier-task-card__timer.is-over {
+  color: #dc2626;
+}
+
+html.dark .metier-task-card__timer {
+  color: #fdba74;
+}
+html.dark .metier-task-card__timer.is-over {
+  color: #f87171;
+}
+
+.metier-task-card__est {
+  font-size: 0.6rem;
+  font-weight: 650;
+  color: var(--mt-muted);
+  font-family: inherit;
+}
+
+.metier-task-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.25rem 0.55rem 0.55rem;
+  margin-top: auto;
+}
+
+.metier-task-card__run-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+/* CTA — contraste forcé (anti styles globaux clairs) */
+.metier-taches-page .metier-start-btn,
+button.metier-start-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 2.15rem;
+  padding: 0.4rem 0.75rem;
+  border: none !important;
+  border-radius: var(--mt-radius);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #ff174d 0%, #cc0033 100%) !important;
+  box-shadow: 0 4px 12px -4px rgba(204, 0, 51, 0.55);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.metier-taches-page .metier-start-btn:hover:not(:disabled),
+button.metier-start-btn:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #ff3366 0%, #e60039 100%) !important;
+}
+
+.metier-taches-page .metier-start-btn:disabled,
+button.metier-start-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.metier-taches-page .metier-start-btn--resume,
+button.metier-start-btn--resume {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%) !important;
+  box-shadow: 0 4px 12px -4px rgba(234, 88, 12, 0.5);
+}
+
+.metier-taches-page .metier-problem-btn,
+button.metier-problem-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 100%;
+  min-height: 1.7rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid color-mix(in srgb, #f59e0b 35%, transparent);
+  border-radius: var(--mt-radius);
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #9a3412 !important;
+  background: #ffedd5 !important;
+}
+
+html.dark .metier-taches-page .metier-problem-btn,
+html.dark button.metier-problem-btn {
+  color: #fdba74 !important;
+  background: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metier-start-btn:hover:not(:disabled) {
+    transform: none;
+  }
+}
