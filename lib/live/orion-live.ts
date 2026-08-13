@@ -261,7 +261,7 @@ export async function liveFetch(
   input: RequestInfo | URL,
   init?: RequestInit,
 ): Promise<Response> {
-  const res = await fetch(input, init);
+  const res = await fetch(input, { ...init, credentials: init?.credentials ?? 'include' });
   if (!res.ok) return res;
   const method = (init?.method ?? (typeof input !== 'string' && 'method' in input ? input.method : 'GET') ?? 'GET')
     .toString()

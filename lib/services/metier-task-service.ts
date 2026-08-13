@@ -383,10 +383,9 @@ export async function getMetierTaskKpis(limit = 8) {
 
 export async function getDailyTaskResume(assigneeId?: string, assigneeName?: string) {
   const { derivePosteLabels } = await import('@/lib/metier/poste-labels');
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const end = new Date(start);
-  end.setDate(end.getDate() + 1);
+  const { startOfBusinessDay, addBusinessDays } = await import('@/lib/kpi/business-clock');
+  const start = startOfBusinessDay(new Date());
+  const end = addBusinessDays(start, 1);
 
   const mineFilter =
     assigneeId || assigneeName
@@ -424,7 +423,7 @@ export async function getDailyTaskResume(assigneeId?: string, assigneeName?: str
       timerStatus: true,
       completedAt: true,
     },
-  });
+  }).catch(() => []);
 
   const byName = new Map<string, typeof tasks>();
   for (const t of tasks) {

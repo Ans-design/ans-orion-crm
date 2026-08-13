@@ -263,7 +263,7 @@ export function healCustomStepsForPlanning(config: ProductionFluxConfig): {
   let changed = false;
   const steps = config.steps.map((s) => {
     if (DEFAULT_PRODUCTION_FLUX_STEP_IDS.has(s.id)) return s;
-    if (s.visiblePlanning) return s;
+    if (s.visiblePlanning || s.linkedModules.includes('planning')) return s;
     changed = true;
     return prepareNewFluxStep(s);
   });

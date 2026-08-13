@@ -20,6 +20,7 @@ import {
   AppListSkeleton,
 } from '@/components/ui/app-ui';
 import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
+import { unwrapApiData } from '@/lib/api-client';
 
 type Row = {
   id: string;
@@ -82,16 +83,20 @@ export default function RhPerformancePage() {
   const load = useCallback(() => {
     setLoading(true);
     const q = qDebounced ? `?q=${encodeURIComponent(qDebounced)}` : '';
-    fetch(`/api/rh/performance${q}`)
+    fetch(`/api/rh/performance${q}`, { credentials: 'include', cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : { rows: [], leaderboard: [] }))
-      .then((d) => {
+      .then((body) => {
+        const d = unwrapApiData<{ rows?: typeof rows; leaderboard?: typeof leaderboard }>(body);
         setRows(d.rows ?? []);
         setLeaderboard(d.leaderboard ?? []);
       })
       .finally(() => setLoading(false));
-    fetch('/api/equipe/taches?resume=today')
+    fetch('/api/equipe/taches?resume=today', { credentials: 'include', cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : { resume: [] }))
-      .then((d: { resume?: typeof chronoResume }) => setChronoResume(d.resume ?? []))
+      .then((body) => {
+        const d = unwrapApiData<{ resume?: typeof chronoResume }>(body);
+        setChronoResume(d.resume ?? []);
+      })
       .catch(() => setChronoResume([]));
   }, [qDebounced]);
 

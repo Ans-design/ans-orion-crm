@@ -1,5 +1,7 @@
 /** Bandeau Live : tâches du poste (Moi) vs messages destinés à tous. */
 
+import { startOfBusinessDay, zonedParts } from '@/lib/kpi/business-clock';
+
 export type PosteTickerSeverity = 'info' | 'warn' | 'critical';
 
 export type PosteTickerTask = {
@@ -43,17 +45,16 @@ function isOverdue(due?: Date | string | null): boolean {
   if (!due) return false;
   const d = due instanceof Date ? due : new Date(due);
   if (Number.isNaN(d.getTime())) return false;
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  return d.getTime() < start.getTime();
+  return d.getTime() < startOfBusinessDay(new Date()).getTime();
 }
 
 function isDueToday(due?: Date | string | null): boolean {
   if (!due) return false;
   const d = due instanceof Date ? due : new Date(due);
   if (Number.isNaN(d.getTime())) return false;
-  const n = new Date();
-  return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && d.getDate() === n.getDate();
+  const a = zonedParts(d);
+  const b = zonedParts(new Date());
+  return a.year === b.year && a.month === b.month && a.day === b.day;
 }
 
 function taskRef(task: PosteTickerTask): string {

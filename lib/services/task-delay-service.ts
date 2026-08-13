@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { CommandeStatut } from '@prisma/client';
 import { createNotification } from '@/lib/services/notification-service';
 import {
+  delayMachineFromTask,
   delaySlotTitle,
   formatExtraHours,
   nextWorkExtensionWindow,
@@ -58,7 +59,7 @@ export async function declareTaskProductionDelay(input: {
       title: delaySlotTitle(task.title, extraMin),
       productionId: task.productionId,
       commandeId: task.commandeId,
-      machine: originalSlot?.machine ?? task.type,
+      machine: delayMachineFromTask(task, originalSlot?.machine),
       operateur: originalSlot?.operateur ?? task.assigneeName,
       startAt,
       endAt,

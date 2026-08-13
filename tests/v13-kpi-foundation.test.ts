@@ -4,6 +4,7 @@ import {
   resolveBusinessPeriod,
   startOfBusinessDay,
   prismaDateRangeFilter,
+  atBusinessHour,
 } from '@/lib/kpi/business-clock';
 import { kpiFresh, kpiForbidden, kpiNoData, kpiZeroFresh } from '@/lib/kpi/envelope';
 import { buildKpiQueryContext } from '@/lib/kpi/context';
@@ -29,6 +30,11 @@ describe('V13 BusinessClock', () => {
   it('startOfBusinessDay is stable for UTC noon', () => {
     const d = startOfBusinessDay(new Date('2026-08-02T12:00:00.000Z'));
     expect(d.toISOString()).toMatch(/2026-08-0[12]/);
+  });
+
+  it('atBusinessHour maps 08:00 Tana to 05:00 UTC', () => {
+    const d = atBusinessHour(new Date('2026-08-13T17:30:00+03:00'), 8, 0, 1);
+    expect(d.toISOString()).toBe('2026-08-14T05:00:00.000Z');
   });
 });
 

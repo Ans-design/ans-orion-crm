@@ -23,11 +23,11 @@ docs/
 *.pdf
 *.zip
 *.db
+!prisma/demo.db
 *.db-journal
 *.db-wal
 *.db-shm
 prisma/dev.db*
-prisma/demo.db*
 prisma/prisma/
 orion.env
 .api-token

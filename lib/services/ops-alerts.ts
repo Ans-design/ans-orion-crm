@@ -14,6 +14,7 @@ import {
   planifierCommandeStatuts,
   unpaidFactureStatuts,
 } from '@/lib/server/data/prisma-statut-bridge';
+import { startOfBusinessDay } from '@/lib/kpi/business-clock';
 
 export type TickerAlert = {
   id: string;
@@ -142,7 +143,7 @@ async function getOperationalTickerAlerts(): Promise<TickerAlert[]> {
     prisma.metierTask.count({
       where: {
         extraMin: { gt: 0 },
-        delayDeclaredAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
+        delayDeclaredAt: { gte: startOfBusinessDay(new Date()) },
       },
     }).catch(() => 0),
     getSyncDriftTickerAlerts().catch(() => []),

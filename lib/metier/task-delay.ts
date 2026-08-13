@@ -1,5 +1,7 @@
 /** Retard de prod : créneau Gantt dépassé → motif + rajout de temps. */
 
+import { atBusinessHour } from '@/lib/kpi/business-clock';
+
 export const DELAY_EXTRA_PRESETS_MIN = [30, 60, 120, 180, 240, 360, 480] as const;
 export const DELAY_MOTIF_MIN = 10;
 export const DELAY_EXTRA_MIN = 30;
@@ -36,9 +38,7 @@ export function needsDelayDeclaration(task: DelayTaskRef, now = Date.now()): boo
 
 export function nextWorkExtensionWindow(extraMin: number, from = new Date()): { startAt: Date; endAt: Date } {
   const minutes = Math.min(DELAY_EXTRA_MAX, Math.max(DELAY_EXTRA_MIN, Math.round(extraMin)));
-  const startAt = new Date(from);
-  startAt.setDate(startAt.getDate() + 1);
-  startAt.setHours(8, 0, 0, 0);
+  const startAt = atBusinessHour(from, 8, 0, 1);
   const endAt = new Date(startAt.getTime() + minutes * 60_000);
   return { startAt, endAt };
 }
@@ -51,6 +51,20 @@ export function formatExtraHours(min: number): string {
 
 export function delaySlotTitle(taskTitle: string, extraMin: number): string {
   return `Suite +${formatExtraHours(extraMin)} — ${taskTitle}`.slice(0, 200);
+}
+
+/** Rangée Gantt = nom d’étape Flux, jamais le type métier (graphisme, production…). */
+export function delayMachineFromTask(
+  task: { title: string; type?: string | null },
+  originalMachine?: string | null,
+): string | null {
+  const fromSlot = originalMachine?.trim();
+  if (fromSlot) return fromSlot;
+  const head = task.title.split('—')[0]?.trim() || '';
+  if (head && head.length > 1 && head.length < 80 && !head.toLowerCase().startsWith('suite')) {
+    return head;
+  }
+  return null;
 }
 
 export function validateDelayInput(motif: string, extraMin: number): string | null {

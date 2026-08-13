@@ -82,4 +82,15 @@ describe('Planning Gantt ↔ Production & Flux', () => {
     expect(healed.config.steps.find((s) => s.id === 'step-andrana')?.active).toBe(false);
     expect(pickPlanningEtapes(healed.config.steps)).toHaveLength(15);
   });
+
+  it('ne ré-héale pas une étape déjà liée au module planning', () => {
+    const config = buildDefaultProductionFluxConfig();
+    config.steps.push(customStep({
+      active: false,
+      visiblePlanning: false,
+      linkedModules: ['commande', 'planning'],
+    }));
+    const healed = healCustomStepsForPlanning(config);
+    expect(healed.changed).toBe(false);
+  });
 });

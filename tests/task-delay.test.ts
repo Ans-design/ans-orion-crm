@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  delayMachineFromTask,
   delaySlotTitle,
   needsDelayDeclaration,
   nextWorkExtensionWindow,
@@ -33,13 +34,18 @@ describe('retard de prod → Gantt', () => {
     ).toBe(false);
   });
 
-  it('place le rajout demain matin', () => {
-    const from = new Date(2026, 7, 13, 17, 30, 0);
+  it('place le rajout demain 8h Tana (pas l’heure du serveur Vercel)', () => {
+    const from = new Date('2026-08-13T17:30:00+03:00');
     const w = nextWorkExtensionWindow(120, from);
-    expect(w.startAt.getDate()).toBe(14);
-    expect(w.startAt.getHours()).toBe(8);
+    expect(w.startAt.toISOString()).toBe('2026-08-14T05:00:00.000Z');
     expect((w.endAt.getTime() - w.startAt.getTime()) / 60_000).toBe(120);
     expect(delaySlotTitle('Graphisme — CMD-1', 120)).toContain('Suite +2 h');
+  });
+
+  it('range le rajout sur l’étape Gantt, pas le type métier', () => {
+    expect(delayMachineFromTask({ title: 'andrana — CMD-1', type: 'graphisme' }, null)).toBe('andrana');
+    expect(delayMachineFromTask({ title: 'X', type: 'graphisme' }, 'Graphisme')).toBe('Graphisme');
+    expect(delayMachineFromTask({ title: 'Suite +2 h — Impression — CMD', type: 'production' }, null)).toBeNull();
   });
 
   it('refuse un motif trop court', () => {

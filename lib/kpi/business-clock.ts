@@ -61,6 +61,19 @@ export function addBusinessDays(start: Date, days: number, timeZone = DEFAULT_BU
   return new Date(utcMs);
 }
 
+/** Instant UTC pour une heure civile Tana (ex. demain 08:00). */
+export function atBusinessHour(
+  date: Date,
+  hour: number,
+  minute = 0,
+  dayOffset = 0,
+  timeZone = DEFAULT_BUSINESS_TIMEZONE,
+): Date {
+  const p = zonedParts(date, timeZone);
+  const utcMs = Date.UTC(p.year, p.month - 1, p.day + dayOffset, hour, minute, 0, 0) - TANA_OFFSET_MS;
+  return new Date(utcMs);
+}
+
 export function resolveBusinessPeriod(input: {
   preset?: BusinessPeriodPreset;
   fromIso?: string;

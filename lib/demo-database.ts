@@ -3,7 +3,11 @@ import os from 'os';
 import path from 'path';
 import { isLocalAppEnv } from '@/lib/local-dev';
 
-const TMP_DB = path.join(os.tmpdir(), 'ans-orion-demo.db');
+/** Un fichier /tmp par déploiement Vercel — évite un SQLite périmé (colonnes pause/delay absentes). */
+export function demoTmpDbPath(deployId = process.env.VERCEL_DEPLOYMENT_ID || 'local'): string {
+  const safe = String(deployId).replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 64) || 'local';
+  return path.join(os.tmpdir(), `ans-orion-demo.${safe}.db`);
+}
 
 function seedPath(): string {
   return path.join(process.cwd(), 'prisma', 'demo.db');
@@ -34,16 +38,14 @@ export function prepareDemoDatabase(): string | null {
 
   if (useTmp) {
     try {
-      const needsCopy =
-        !fs.existsSync(TMP_DB) ||
-        (fs.existsSync(seed) && fs.statSync(TMP_DB).size < 1024);
-
-      if (needsCopy && fs.existsSync(seed)) {
-        fs.copyFileSync(seed, TMP_DB);
+      const tmp = demoTmpDbPath();
+      const seedExists = fs.existsSync(seed);
+      const tmpOk = fs.existsSync(tmp) && fs.statSync(tmp).size >= 1024;
+      if (seedExists && !tmpOk) {
+        fs.copyFileSync(seed, tmp);
       }
-
-      if (fs.existsSync(TMP_DB)) {
-        const url = `file:${TMP_DB.replace(/\\/g, '/')}`;
+      if (fs.existsSync(tmp)) {
+        const url = `file:${tmp.replace(/\\/g, '/')}`;
         process.env.DATABASE_URL = url;
         return url;
       }

@@ -4,6 +4,9 @@ import { resolveDatabaseUrl } from '@/lib/database-url';
 import { getNextAuthSecret } from '@/lib/auth-secret';
 
 /** Bootstrap env serveur — importé avant Prisma/NextAuth (ordre garanti). */
+if (!process.env.TZ?.trim()) {
+  process.env.TZ = 'Indian/Antananarivo';
+}
 loadBundledProductionEnv();
 ensureAuthRuntimeEnv();
 resolveDatabaseUrl();

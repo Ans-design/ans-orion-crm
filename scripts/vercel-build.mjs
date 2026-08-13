@@ -43,9 +43,16 @@ function normalizePostgresUrl() {
 normalizePostgresUrl();
 
 if (process.env.VERCEL) {
+  if (!process.env.TZ?.trim()) process.env.TZ = 'Indian/Antananarivo';
   process.env.AUTH_TRUST_HOST = 'true';
-  if (!process.env.NEXTAUTH_URL && process.env.VERCEL_URL) {
-    process.env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
+  if (!process.env.NEXTAUTH_URL) {
+    const stable =
+      process.env.NEXT_PUBLIC_APP_URL
+      || (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : '');
+    const fallback = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
+    if (stable || fallback) process.env.NEXTAUTH_URL = stable || fallback;
   }
 }
 
@@ -123,28 +130,24 @@ try {
 
     } catch (e) {
 
-      if (process.env.ALLOW_VERCEL_DB_PUSH_DATA_LOSS === 'true') {
-
-        console.warn(
-          'migrate deploy échoué — ALLOW_VERCEL_DB_PUSH_DATA_LOSS=true → db push --accept-data-loss',
-        );
-
-        run('npx prisma db push --accept-data-loss');
-
-      } else {
-
-        console.error(
-          'ERREUR: prisma migrate deploy a échoué. Pas de repli db push --accept-data-loss.',
-        );
-
-        console.error(
-          'Corrigez les migrations, ou (jetable uniquement) ALLOW_VERCEL_DB_PUSH_DATA_LOSS=true.',
-        );
-
-        console.error(e?.message || e);
-
-        process.exit(1);
-
+      // Neon souvent non-baseliné (P3005) : db push additif, sans destruction.
+      console.warn('migrate deploy échoué — prisma db push additif (sans --accept-data-loss)');
+      try {
+        run('npx prisma db push --skip-generate');
+      } catch (pushErr) {
+        if (process.env.ALLOW_VERCEL_DB_PUSH_DATA_LOSS === 'true') {
+          console.warn(
+            'db push additif échoué — ALLOW_VERCEL_DB_PUSH_DATA_LOSS=true → db push --accept-data-loss',
+          );
+          run('npx prisma db push --accept-data-loss');
+        } else {
+          console.error(
+            'ERREUR: prisma migrate deploy + db push additif ont échoué.',
+          );
+          console.error(e?.message || e);
+          console.error(pushErr?.message || pushErr);
+          process.exit(1);
+        }
       }
 
     }

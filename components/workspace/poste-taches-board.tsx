@@ -10,7 +10,7 @@ import { TaskChronoOverlay, TaskPausedBanner } from '@/components/equipe/task-ch
 import { DelayDeclarationModal } from '@/components/workspace/delay-declaration-modal';
 import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 import { liveFetch } from '@/lib/live/orion-live';
-import { unwrapListItems } from '@/lib/api-client';
+import { unwrapApiData, unwrapListItems } from '@/lib/api-client';
 import { uxToast } from '@/lib/ux/feedback';
 import { cn } from '@/lib/utils';
 import { derivePosteLabels } from '@/lib/metier/poste-labels';
@@ -88,7 +88,7 @@ export function PosteTachesBoard({ type, title = 'Tâches du jour' }: Props) {
   const load = useCallback(() => {
     const q = new URLSearchParams({ mine: '1' });
     if (type) q.set('type', type);
-    fetch(`/api/equipe/taches?${q}`)
+    fetch(`/api/equipe/taches?${q}`, { credentials: 'include', cache: 'no-store' })
       .then(async (r) => {
         if (!r.ok) throw new Error('load');
         return unwrapListItems<TaskRow>(await r.json());
@@ -96,9 +96,12 @@ export function PosteTachesBoard({ type, title = 'Tâches du jour' }: Props) {
       .then(setTasks)
       .catch(() => setTasks([]))
       .finally(() => setLoading(false));
-    fetch('/api/equipe/taches?mine=1&resume=today')
+    fetch('/api/equipe/taches?mine=1&resume=today', { credentials: 'include', cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : { resume: [] }))
-      .then((d: { resume?: ResumeRow[] }) => setResume(d.resume?.[0] ?? null))
+      .then((body) => {
+        const d = unwrapApiData<{ resume?: ResumeRow[] }>(body);
+        setResume(d?.resume?.[0] ?? null);
+      })
       .catch(() => setResume(null));
   }, [type]);
 
