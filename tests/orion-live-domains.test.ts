@@ -39,6 +39,11 @@ describe('orion-live pricing/stock domains', () => {
     expect(d).toEqual(expect.arrayContaining(['pricing', 'catalogue', 'sync']));
   });
 
+  it('mappe production-flux → Planning / Production live', () => {
+    const d = inferLiveDomainsFromUrl('/api/admin-backoffice/production-flux');
+    expect(d).toEqual(expect.arrayContaining(['production', 'sync', 'commandes']));
+  });
+
   it('mappe tout admin-backoffice → domaines opérationnels', () => {
     const d = inferLiveDomainsFromUrl('/api/admin-backoffice/options/chips/xyz');
     expect(d).toEqual(expect.arrayContaining(['pricing', 'catalogue', 'sync']));

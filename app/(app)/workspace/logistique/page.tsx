@@ -10,6 +10,7 @@ import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner'
 import { WorkspaceFilteredViewBanner } from '@/components/workspace/workspace-filtered-view-banner';
 import { AppResponsiveKpiGrid, AppStickyActionBar, AppButton } from '@/components/ui/app-ui';
 import { PageHeader } from '@/components/layouts/page-header';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 
 type LivRow = { id: string; client: string; statut: string; datePrevue?: string };
 
@@ -24,6 +25,8 @@ export default function LogistiqueWorkspacePage() {
       <WorkspaceFilteredViewBanner moduleLabel="Livraisons" href="/livraisons" />
 
       {error && <CockpitErrorBanner onRetry={reload} />}
+
+      <PosteTachesBoard type="logistique" title="Mes livraisons / tâches du jour" />
 
       <AppResponsiveKpiGrid columns={4} phoneMax={3}>
         <KpiCard label="Tâches logistique" value={kpis.tachesOuvertes || 0} icon={ListTodo} color={ANS.orange} onClick={() => router.push('/equipe/taches?type=logistique')} />

@@ -8,6 +8,7 @@ import { ANS, ANS_KPI_COLORS } from '@/lib/ans-colors';
 import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
 import { PageHeader } from '@/components/layouts/page-header';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 
 export default function FaconnageWorkspacePage() {
   const router = useRouter();
@@ -44,6 +45,8 @@ export default function FaconnageWorkspacePage() {
       <PageHeader title="Façonnage — Mon poste" kicker="Mon espace" compact icon={Scissors} />
 
       {error && <CockpitErrorBanner onRetry={reload} />}
+
+      <PosteTachesBoard type="finition" title="Mes tâches façonnage du jour" />
 
       <div className="grid gap-3 kpi-grid">
         <KpiCard label="Tâches façonnage" value={kpis.tachesOuvertes ?? 0} icon={ListTodo} color="#2e7d32" onClick={() => router.push('/equipe/taches?type=production')} />

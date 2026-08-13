@@ -50,7 +50,7 @@ export function TaskChronoOverlay({
             onClick={onFinish}
           >
             <CheckCircle2 size={16} aria-hidden />
-            Finie
+            Terminé
           </button>
         </div>
         {onMinimize ? (
@@ -103,7 +103,7 @@ export function TaskPausedBanner({
           onClick={onFinish}
         >
           <CheckCircle2 size={14} aria-hidden />
-          Finie
+          Terminé
         </button>
       </div>
     </div>

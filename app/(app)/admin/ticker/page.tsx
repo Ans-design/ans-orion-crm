@@ -67,7 +67,9 @@ export default function AdminTickerPage() {
       <header className="flex flex-wrap justify-between items-center gap-3 pb-4 border-b border-border">
         <div>
           <h1 className="font-display text-2xl font-bold">📢 Gestion des Alertes & Bandeau Info</h1>
-          <p className="text-sm text-muted-foreground">Messages affichés en bas de l&apos;écran pour toute l&apos;équipe</p>
+          <p className="text-sm text-muted-foreground">
+            Messages destinés à toute l&apos;équipe (bandeau Live). Les tâches de chaque poste s&apos;affichent automatiquement en plus, uniquement pour l&apos;employé concerné.
+          </p>
         </div>
       </header>
 

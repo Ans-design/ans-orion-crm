@@ -31,6 +31,7 @@ import { OrionErrorBoundary } from '@/components/shared/orion-error-boundary';
 import { ANS } from '@/lib/ans-colors';
 import { statusBadgeClass, ACTION_INFO_CLASS } from '@/lib/ui/status-styles';
 import { useResponsiveMode } from '@/lib/responsive/use-responsive-mode';
+import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 
 const ProductionKanban = dynamic(
   () => import('@/components/production-kanban').then((m) => m.ProductionKanban),
@@ -87,6 +88,7 @@ function ProductionPage() {
   const [viewMode, setViewMode] = useState<'list' | 'kanban' | 'workflow' | 'atelier' | 'calendar'>('atelier');
   const [nf, setNf] = useState({ commandeId: '', priorite: 'Normal', operateur: '', machine: '' });
   const { mode, ready } = useResponsiveMode();
+  const liveTick = useOrionLiveRevision(['production', 'commandes'], { debounceMs: 450 });
 
   useEffect(() => {
     if (!ready) return;
@@ -139,6 +141,10 @@ function ProductionPage() {
   }, [list, sort]);
 
   useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    if (liveTick === 0) return;
+    void load();
+  }, [liveTick, load]);
 
   const loadCmds = async () => {
     const r = await fetch('/api/commandes?paginated=1&pageSize=50');

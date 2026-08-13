@@ -1585,9 +1585,15 @@ model MetierTask {
   createdByName  String?
   estimatedMin   Int?
   elapsedSec     Int         @default(0)
+  pauseSec       Int         @default(0)
+  pauseCount     Int         @default(0)
+  lastPausedAt   DateTime?
   timerStartedAt DateTime?
   timerStatus    String      @default("idle")
   problemNote    String?
+  delayMotif     String?
+  extraMin       Int?
+  delayDeclaredAt DateTime?
   dueDate        DateTime?
   completedAt    DateTime?
   checklist      Json?

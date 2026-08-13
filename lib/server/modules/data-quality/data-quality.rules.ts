@@ -10,7 +10,7 @@ export type DataQualityRule = {
 
 export const DATA_QUALITY_RULES: DataQualityRule[] = [
   { id: 'client-no-phone', module: 'CRM', label: 'Client sans téléphone', severity: 'medium', description: 'tel et whatsapp vides' },
-  { id: 'client-no-nif', module: 'CRM', label: 'Client actif sans NIF', severity: 'high', description: 'NIF vide sur client non archivé' },
+  { id: 'client-no-nif', module: 'CRM', label: 'Client sans NIF (facultatif)', severity: 'low', description: 'NIF non renseigné — normal pour un particulier' },
   { id: 'commande-no-client', module: 'Commandes', label: 'Commande sans client', severity: 'high', description: 'clientId null' },
   { id: 'commande-reste-negative', module: 'Commandes', label: 'Reste négatif', severity: 'critical', description: 'reste < 0' },
   { id: 'devis-no-lines', module: 'Devis', label: 'Devis sans lignes', severity: 'high', description: 'aucune DevisLigne' },

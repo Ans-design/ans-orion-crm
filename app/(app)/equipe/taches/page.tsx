@@ -10,6 +10,7 @@ import { TaskDetailModal } from '@/components/equipe/task-detail-modal';
 import { TaskChronoOverlay, TaskPausedBanner } from '@/components/equipe/task-chrono-overlay';
 import { CommandeDeepLinkBanner } from '@/components/commandes/commande-deep-link-banner';
 import { useCommandeDeepLink } from '@/lib/hooks/use-commande-deep-link';
+import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 import {
   TASK_STATUSES,
   TASK_TYPES,
@@ -98,6 +99,7 @@ function groupTasksByCommande(tasks: TaskRow[]): TaskGroup[] {
 function EquipeTachesContent() {
   const searchParams = useSearchParams();
   const { commandeId, info: commandeInfo } = useCommandeDeepLink();
+  const liveTick = useOrionLiveRevision(['commandes', 'production'], { debounceMs: 500 });
   const [tasks, setTasks] = useState<TaskRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState(searchParams.get('type') || 'tous');
@@ -134,6 +136,10 @@ function EquipeTachesContent() {
   }, [typeFilter, statusFilter, commandeId]);
 
   useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    if (liveTick === 0) return;
+    load();
+  }, [liveTick, load]);
   useEffect(() => {
     const tacheId = searchParams.get('tache');
     if (tacheId) setDetailId(tacheId);

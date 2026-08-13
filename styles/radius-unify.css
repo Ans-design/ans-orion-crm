@@ -1,11 +1,9 @@
 /**
  * ANS ORION — Rayons rectangles unifiés = 7px
- * Une seule valeur pour cartes, panels, inputs, modales, shells.
+ * Cartes, panels, inputs, boutons, chips, badges, cadres.
  *
- * Exceptions (non forcés) :
- *  · boutons (button, .ans-btn, .btn, chips cliquables, CTA)
- *  · pills / badges plein (9999 / --radius-pill)
- *  · cercles purs (50%, avatars ronds)
+ * Exceptions (cercles purs) :
+ *  · avatars, pastilles status 6–8px, radio/checkbox
  */
 
 :root,
@@ -29,6 +27,8 @@ html.dark {
   --sb-radius: 7px !important;
   --sb-shell-radius: 7px !important;
   --orion-ticker-radius: 7px !important;
+  --radius-pill: 7px !important;
+  --chip-radius: 7px !important;
   --pos-ed-radius: 7px !important;
   --pcn-radius: 7px !important;
   --pos-soft-radius: 7px !important;
@@ -156,4 +156,77 @@ html body :is(
   .cmd-list-toolbar
 ) {
   border-radius: var(--radius-rect, 7px) !important;
+}
+
+/* ── Boutons / chips / badges / kbd : rectangle 7px (plus de pilule) ── */
+html body :is(
+  button,
+  [type='button'],
+  [type='submit'],
+  [type='reset'],
+  a.btn,
+  .ans-btn,
+  .btn,
+  .btn-sm,
+  .badge,
+  .orion-chip,
+  .orion-status-chip,
+  .orion-surface-chip,
+  .orion-surface-chip--active,
+  .cps-pill,
+  .pos-chip,
+  .app-filter-chip,
+  .cockpit-period-btn,
+  .cockpit-alert,
+  .module-date-filter__chip,
+  .orion-live-chip,
+  .orion-sb-kbd,
+  .orion-sb-badge,
+  .orion-sb-env-badge,
+  .orion-sb-universe-mini-badge,
+  .orion-header-cart-badge,
+  .orion-cockpit-search__kbd,
+  .orion-cmd__kbd,
+  .gantt-now-badge,
+  .gantt-now-badge span,
+  .orion-kpi-icon,
+  kbd
+):not(input[type='radio']):not(input[type='checkbox']):not(.orion-live-chip__dot):not(.orion-sb-mini-avatar) {
+  border-radius: var(--radius-rect, 7px) !important;
+}
+
+html body .rounded-full:not(img):not(svg):not(input):not(.orion-live-chip__dot):not(.orion-sb-mini-avatar):not([class*='avatar']):not(.orion-sb-universe-active-dot) {
+  border-radius: var(--radius-rect, 7px) !important;
+}
+
+.gantt-now-line::before {
+  border-radius: var(--radius-rect, 7px) !important;
+}
+
+/* Texte blanc sur fond accent / primary (évite le noir hérité du viewport) */
+html body :is(
+  .orion-on-dark-fill,
+  .bg-primary,
+  .ans-btn-primary,
+  .btn-primary,
+  .text-primary-foreground,
+  [class*='bg-[var(--primary)]'],
+  [class*='bg-[var(--accent-primary'],
+  [class*='bg-[var(--brand-primary'],
+  [class*='bg-[var(--ans-primary']
+):not(:disabled):not([aria-disabled='true']) {
+  color: #ffffff !important;
+}
+
+html body :is(
+  .orion-on-dark-fill,
+  .bg-primary,
+  .ans-btn-primary,
+  [class*='bg-[var(--primary)]']
+):not(:disabled) :is(svg, span, i) {
+  color: #ffffff !important;
+}
+
+html body .orion-entity-data-toolbar [aria-pressed='true'] {
+  color: #ffffff !important;
 }

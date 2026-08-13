@@ -32,14 +32,16 @@ export async function acceptDevisToCommande(
     });
 
     if (!devis) return { error: 'NOT_FOUND' as const };
-    if (devis.statut === DevisStatut.Accepte) return { error: 'ALREADY_ACCEPTED' as const };
     if (devis.lignes.length === 0) return { error: 'NO_LIGNES' as const };
 
     const existingCmd = await tx.commande.findFirst({
       where: { devisId },
-      select: { id: true },
+      select: { id: true, numero: true },
     });
-    if (existingCmd) return { error: 'ALREADY_ACCEPTED' as const };
+    if (existingCmd) {
+      return { already: true as const, devis, created: existingCmd, ligneCount: devis.lignes.length, stockReservations: [] as Awaited<ReturnType<typeof reserveStockForDevisAccept>> };
+    }
+    if (devis.statut === DevisStatut.Accepte) return { error: 'ALREADY_ACCEPTED' as const };
 
     const check = assertDevisAcceptable(devis);
     if (!check.ok) {
@@ -174,6 +176,16 @@ export async function acceptDevisToCommande(
     return { ok: false, code: 'REFUSED', message: 'Devis refusé' };
   }
 
+  if ('already' in result && result.already) {
+    return {
+      ok: true,
+      devis: { id: result.devis.id, numero: result.devis.numero },
+      commande: { id: result.created.id, numero: result.created.numero },
+      ligneCount: result.ligneCount,
+      stockReservations: result.stockReservations,
+    };
+  }
+
   const reservedCount = result.stockReservations.filter((r) => r.status === 'reserved').length;
   const skippedCount = result.stockReservations.filter((r) => r.status === 'skipped').length;
   const stockNote =
@@ -218,9 +230,6 @@ export async function acceptDevisToCommande(
       userName: opts?.userName,
       priorite: result.created.priorite,
     });
-
-    const { schedulePlanningSlotForCommande } = await import('@/lib/services/planning-commande-service');
-    await schedulePlanningSlotForCommande(result.created.id).catch(() => {});
 
     const hasInsufficientStock = shouldSetEnAttenteStock(result.stockReservations);
     // Mapping introuvable ≠ rupture stock : ne pas bloquer injustement en « En attente stock ».

@@ -42,6 +42,7 @@ type ListFilters = {
   assigneeId?: string;
   mine?: boolean;
   userId?: string;
+  userName?: string;
   limit?: number;
 };
 
@@ -50,8 +51,14 @@ export async function listMetierTasks(filters: ListFilters = {}) {
   if (filters.type && filters.type !== 'tous') where.type = filters.type;
   if (filters.status && filters.status !== 'tous') where.status = filters.status;
   if (filters.commandeId) where.commandeId = filters.commandeId;
-  if (filters.mine && filters.userId) where.assigneeId = filters.userId;
-  else if (filters.assigneeId) where.assigneeId = filters.assigneeId;
+  if (filters.mine && (filters.userId || filters.userName)) {
+    const or: Record<string, unknown>[] = [];
+    if (filters.userId) or.push({ assigneeId: filters.userId });
+    if (filters.userName) or.push({ assigneeName: filters.userName });
+    where.OR = or;
+  } else if (filters.assigneeId) {
+    where.assigneeId = filters.assigneeId;
+  }
 
   return prisma.metierTask.findMany({
     where,
@@ -250,26 +257,44 @@ export async function applyTimerAction(
       const elapsedSec = await accumulateTimer(task);
       updated = await prisma.metierTask.update({
         where: { id },
-        data: { elapsedSec, timerStatus: 'paused', status: 'En pause' },
+        data: {
+          elapsedSec,
+          timerStatus: 'paused',
+          status: 'En pause',
+          lastPausedAt: new Date(),
+          pauseCount: { increment: 1 },
+        },
       });
       break;
     }
     case 'resume': {
       if (task.status === 'Terminée') throw new Error('Tâche terminée');
+      let pauseSec = task.pauseSec ?? 0;
+      if (task.lastPausedAt) {
+        pauseSec += Math.max(0, Math.floor((Date.now() - task.lastPausedAt.getTime()) / 1000));
+      }
       updated = await prisma.metierTask.update({
         where: { id },
         data: {
           timerStartedAt: new Date(),
           timerStatus: 'running',
           status: 'En cours',
+          pauseSec,
+          lastPausedAt: null,
         },
       });
       break;
     }
     case 'finish': {
       const elapsedSec = await accumulateTimer(task);
+      let pauseSec = task.pauseSec ?? 0;
+      if (task.timerStatus === 'paused' && task.lastPausedAt) {
+        pauseSec += Math.max(0, Math.floor((Date.now() - task.lastPausedAt.getTime()) / 1000));
+      }
       const patch: Record<string, unknown> = {
         elapsedSec,
+        pauseSec,
+        lastPausedAt: null,
         timerStatus: 'idle',
         timerStartedAt: null,
         status: 'Terminée',
@@ -354,4 +379,87 @@ export async function getMetierTaskKpis(limit = 8) {
     orderBy: { completedAt: 'desc' },
   });
   return aggregateTaskKpis(tasks).slice(0, limit);
+}
+
+export async function getDailyTaskResume(assigneeId?: string, assigneeName?: string) {
+  const { derivePosteLabels } = await import('@/lib/metier/poste-labels');
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+
+  const mineFilter =
+    assigneeId || assigneeName
+      ? {
+          OR: [
+            ...(assigneeId ? [{ assigneeId }] : []),
+            ...(assigneeName ? [{ assigneeName }] : []),
+          ],
+        }
+      : {};
+
+  const tasks = await prisma.metierTask.findMany({
+    where: {
+      AND: [
+        mineFilter,
+        {
+          OR: [
+            { timerStartedAt: { gte: start, lt: end } },
+            { lastPausedAt: { gte: start, lt: end } },
+            { completedAt: { gte: start, lt: end } },
+            { dueDate: { gte: start, lt: end } },
+            { status: { in: ['En cours', 'En pause'] } },
+          ],
+        },
+      ],
+    },
+    select: {
+      assigneeId: true,
+      assigneeName: true,
+      elapsedSec: true,
+      pauseSec: true,
+      pauseCount: true,
+      estimatedMin: true,
+      status: true,
+      timerStatus: true,
+      completedAt: true,
+    },
+  });
+
+  const byName = new Map<string, typeof tasks>();
+  for (const t of tasks) {
+    const key = t.assigneeName || t.assigneeId || '—';
+    const list = byName.get(key) ?? [];
+    list.push(t);
+    byName.set(key, list);
+  }
+
+  return [...byName.entries()].map(([assigneeName, list]) => {
+    const workSec = list.reduce((s, t) => s + (t.elapsedSec || 0), 0);
+    const pauseSec = list.reduce((s, t) => s + (t.pauseSec || 0), 0);
+    const pauseCount = list.reduce((s, t) => s + (t.pauseCount || 0), 0);
+    const estimatedSec = list.reduce((s, t) => s + (t.estimatedMin || 0) * 60, 0) || null;
+    const openCount = list.filter((t) => !['Terminée', 'Annulée'].includes(t.status)).length;
+    const finishedToday = list.filter(
+      (t) => t.status === 'Terminée' && t.completedAt && t.completedAt >= start,
+    ).length;
+    const running = list.some((t) => t.timerStatus === 'running');
+    return {
+      assigneeName,
+      workSec,
+      pauseSec,
+      pauseCount,
+      openCount,
+      finishedToday,
+      labels: derivePosteLabels({
+        workSec,
+        pauseSec,
+        pauseCount,
+        estimatedSec,
+        openCount,
+        finishedToday,
+        running,
+      }),
+    };
+  });
 }

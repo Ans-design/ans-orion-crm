@@ -625,7 +625,7 @@ html:not(.dark) .orion-sb-sublist {
 
 html.dark .orion-sb-sub-row.is-active {
   background: color-mix(in srgb, var(--primary, #FF174D) 22%, transparent);
-  box-shadow: none;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary, #FF174D) 28%, transparent);
 }
 
 .orion-sb-sub-link {
@@ -1045,4 +1045,103 @@ html body .orion-sidebar .orion-sb-sub-label,
 html body .orion-sidebar-v2 .orion-nav-strip-compact {
   font-size: 12px !important;
   font-weight: 500 !important;
+}
+
+/* Géométrie identique clair / sombre (padding, hauteurs, bordures, typos) */
+html body aside.orion-sidebar,
+html.dark body aside.orion-sidebar {
+  --sb-item-h: 40px;
+  --sb-sub-h: 36px;
+}
+
+html body aside.orion-sidebar .orion-sb-universe-btn,
+html.dark body aside.orion-sidebar .orion-sb-universe-btn {
+  height: var(--sb-item-h) !important;
+  min-height: var(--sb-item-h) !important;
+  padding: 0 10px !important;
+  gap: 10px !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  border-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+html body aside.orion-sidebar .orion-sb-universe-icon,
+html.dark body aside.orion-sidebar .orion-sb-universe-icon {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+}
+
+html body aside.orion-sidebar .orion-sb-sub-row,
+html.dark body aside.orion-sidebar .orion-sb-sub-row {
+  min-height: var(--sb-sub-h) !important;
+  height: var(--sb-sub-h) !important;
+  padding: 2px 4px 2px 6px !important;
+  margin: 1px 0 !important;
+  box-sizing: border-box !important;
+}
+
+html body aside.orion-sidebar .orion-sb-search-trigger,
+html.dark body aside.orion-sidebar .orion-sb-search-trigger {
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 12px !important;
+  border-width: 1px !important;
+  box-sizing: border-box !important;
+}
+
+html body aside.orion-sidebar .orion-sb-kbd,
+html.dark body aside.orion-sidebar .orion-sb-kbd {
+  font-size: 8px !important;
+  padding: 2px 6px !important;
+  line-height: 1 !important;
+  border-width: 1px !important;
+}
+
+html body aside.orion-sidebar .orion-sb-env-badge,
+html.dark body aside.orion-sidebar .orion-sb-env-badge,
+html body aside.orion-sidebar .orion-sb-collapse-btn,
+html.dark body aside.orion-sidebar .orion-sb-collapse-btn {
+  box-sizing: border-box !important;
+  border-width: 1px !important;
+}
+
+html body aside.orion-sidebar .orion-sb-collapse-btn,
+html.dark body aside.orion-sidebar .orion-sb-collapse-btn {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+html body aside.orion-sidebar .orion-sb-div,
+html.dark body aside.orion-sidebar .orion-sb-div {
+  height: 1px !important;
+  margin: 10px 4px !important;
+  border: none !important;
+}
+
+html body aside.orion-sidebar .orion-sb-quick-tabs,
+html.dark body aside.orion-sidebar .orion-sb-quick-tabs {
+  padding: 3px !important;
+  margin-bottom: 8px !important;
+  border-width: 1px !important;
+  box-sizing: border-box !important;
+}
+
+html body aside.orion-sidebar .orion-sb-quick-tab,
+html.dark body aside.orion-sidebar .orion-sb-quick-tab {
+  height: 30px !important;
+  min-height: 30px !important;
+}
+
+html body aside.orion-sidebar .orion-sb-badge,
+html.dark body aside.orion-sidebar .orion-sb-badge {
+  min-width: 16px !important;
+  height: 16px !important;
+  padding: 0 4px !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  border-width: 1px !important;
+  box-sizing: border-box !important;
 }

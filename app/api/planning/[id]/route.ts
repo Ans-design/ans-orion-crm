@@ -36,7 +36,31 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } | Pr
       where: { id: id },
       data,
     });
-    return NextResponse.json(slot);
+    if (
+      slot.commandeId
+      && slot.operateur
+      && (
+        parsed.data.operateur !== undefined
+        || parsed.data.machine !== undefined
+        || parsed.data.startAt !== undefined
+        || parsed.data.endAt !== undefined
+        || parsed.data.title !== undefined
+      )
+    ) {
+      const { syncPlanningSlotToMetierTasks } = await import('@/lib/services/planning-task-sync');
+      await syncPlanningSlotToMetierTasks({
+        id: slot.id,
+        title: slot.title,
+        commandeId: slot.commandeId,
+        machine: slot.machine,
+        operateur: slot.operateur,
+        startAt: slot.startAt,
+        endAt: slot.endAt,
+        assignedBy: auth.userName,
+      }).catch(() => {});
+    }
+    const { jsonWithLiveDomains } = await import('@/lib/live/live-response');
+    return jsonWithLiveDomains(slot, ['commandes', 'production', 'nav', 'rh']);
   } catch (error) {
     return apiError(safeErrorMessage(error, 'Erreur mise à jour'), 500);
   }

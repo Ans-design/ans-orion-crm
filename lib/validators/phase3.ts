@@ -35,7 +35,7 @@ export const planningSlotSchema = z.object({
   productionId: z.string().optional().nullable(),
   commandeId: z.string().optional().nullable(),
   machine: z.string().max(100).optional().nullable(),
-  operateur: z.string().max(100).optional().nullable(),
+  operateur: z.string().max(400).optional().nullable(),
   startAt: z.string().datetime(),
   endAt: z.string().datetime(),
   statut: z.enum(['Planifié', 'En cours', 'Terminé', 'Annulé']).optional(),

@@ -4,6 +4,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { requirePermission } from '@/lib/auth-utils';
 import { ok } from '@/lib/server/http/api-response';
+import { attachLiveDomains } from '@/lib/live/live-response';
+
+const FLUX_LIVE_DOMAINS = ['production', 'sync', 'commandes'] as const;
 import { parseOr400 } from '@/lib/validators/parse';
 import { setWorkflowRuleEnabled } from '@/lib/services/workflow-transition-service';
 import {
@@ -43,7 +46,7 @@ export async function POST(req: NextRequest) {
       userId: admin.userId,
       userName: admin.userName,
     });
-    return ok({ config });
+    return attachLiveDomains(ok({ config }), FLUX_LIVE_DOMAINS);
   }
 
   if (action === 'toggle-workflow-rule') {
@@ -63,7 +66,7 @@ export async function POST(req: NextRequest) {
       userId: admin.userId,
       userName: admin.userName,
     });
-    return ok(result);
+    return attachLiveDomains(ok(result), FLUX_LIVE_DOMAINS);
   }
 
   if (action === 'sync-planning') {
@@ -73,7 +76,7 @@ export async function POST(req: NextRequest) {
       userId: admin.userId,
       userName: admin.userName,
     });
-    return ok(result);
+    return attachLiveDomains(ok(result), FLUX_LIVE_DOMAINS);
   }
 
   if (action === 'simulate') {

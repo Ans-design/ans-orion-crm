@@ -160,10 +160,19 @@ export function isStandbyCommande(statut: string | null | undefined): boolean {
   );
 }
 
+/** Au moins un créneau (mémoire Gantt) pour cette commande. */
+export function commandeHasPlanningMemory(slots: PoolSlot[], commandeId: string): boolean {
+  return slots.some(
+    (s) => s.commandeId === commandeId && isConsumedPlanningStatut(s.statut),
+  );
+}
+
 /**
- * Visible dans le pool Commandes :
- * - durée restante > 0
- * - et pas déjà sur le Gantt du jour (sauf standby → forcé visible)
+ * Visible dans le pool Commandes (sélection d’une tâche) :
+ * - durée restante > 0, ou déjà des créneaux (pour recharger la mémoire)
+ * - standby toujours visible
+ * Le Gantt est dédié à la commande sélectionnée : on ne masque plus la carte
+ * dès le premier glisser (plusieurs étapes / plusieurs personnes).
  */
 export function isInCommandePool(opts: {
   commandeId: string;
@@ -172,9 +181,26 @@ export function isInCommandePool(opts: {
   day: Date;
   remainingMin: number;
 }): boolean {
-  if (opts.remainingMin <= 0) return false;
   if (isStandbyCommande(opts.statut)) return true;
-  return !hasActiveSlotOnDay(opts.slots, opts.commandeId, opts.day);
+  if (opts.remainingMin > 0) return true;
+  return commandeHasPlanningMemory(opts.slots, opts.commandeId);
+}
+
+export function joinOperatorNames(names: string[]): string {
+  return names
+    .map((n) => n.trim())
+    .filter(Boolean)
+    .filter((n, i, all) => all.findIndex((x) => x.toLowerCase() === n.toLowerCase()) === i)
+    .join(' · ')
+    .slice(0, 400);
+}
+
+export function splitOperatorNames(raw: string | null | undefined): string[] {
+  if (!raw?.trim()) return [];
+  return raw
+    .split(/\s*[·,;/|]\s*/)
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
 export function formatDurationFr(totalMin: number): string {

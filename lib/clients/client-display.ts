@@ -18,9 +18,10 @@ export function isClientFidele(client: {
   return nombreCommandes >= 5 || caNum >= 5_000_000;
 }
 
+/** NIF optionnel — un particulier n’en a pas toujours. Si renseigné : chiffres uniquement. */
 export function validateNif(nif: string): string | null {
   const trimmed = nif.trim();
-  if (!trimmed) return 'Le NIF est obligatoire';
+  if (!trimmed) return null;
   if (!/^\d+$/.test(trimmed)) return 'Le NIF ne doit contenir que des chiffres';
   return null;
 }

@@ -62,6 +62,17 @@ export async function POST(req: NextRequest) {
         userId: auth.userId,
         userName: auth.userName,
       }).catch(() => {});
+      const { syncPlanningSlotToMetierTasks } = await import('@/lib/services/planning-task-sync');
+      await syncPlanningSlotToMetierTasks({
+        id: slot.id,
+        title: slot.title,
+        commandeId: slot.commandeId,
+        machine: slot.machine,
+        operateur: slot.operateur,
+        startAt: slot.startAt,
+        endAt: slot.endAt,
+        assignedBy: auth.userName,
+      }).catch(() => {});
       await logAudit({
         userId: auth.userId,
         userName: auth.userName,
@@ -73,7 +84,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return created(slot);
+    const { attachLiveDomains } = await import('@/lib/live/live-response');
+    return attachLiveDomains(created(slot), ['commandes', 'production', 'nav', 'rh']);
   } catch (error) {
     return apiError(safeErrorMessage(error, 'Erreur création créneau'), 500);
   }

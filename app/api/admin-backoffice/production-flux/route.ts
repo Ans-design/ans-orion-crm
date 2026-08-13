@@ -19,6 +19,9 @@ import {
   updateProductionFluxTransition,
 } from '@/lib/services/production-flux-service';
 import { invalidateSyncDiagnosticsCache } from '@/lib/services/sync.service';
+import { attachLiveDomains } from '@/lib/live/live-response';
+
+const FLUX_LIVE_DOMAINS = ['production', 'sync', 'commandes'] as const;
 
 export async function GET() {
   const auth = await requirePermission('config:view');
@@ -104,7 +107,7 @@ export async function POST(req: NextRequest) {
       transitionMode: stepBody.transitionMode,
     });
     invalidateSyncDiagnosticsCache();
-    return created({ config });
+    return attachLiveDomains(created({ config }), FLUX_LIVE_DOMAINS);
   }
 
   if (type === 'delete-step') {
@@ -114,7 +117,7 @@ export async function POST(req: NextRequest) {
         userName: auth.userName,
       });
       invalidateSyncDiagnosticsCache();
-      return ok({ config });
+      return attachLiveDomains(ok({ config }), FLUX_LIVE_DOMAINS);
     } catch (e) {
       return NextResponse.json(
         { ok: false, error: { message: e instanceof Error ? e.message : 'Suppression impossible' } },
@@ -128,12 +131,12 @@ export async function POST(req: NextRequest) {
       userId: auth.userId,
     });
     invalidateSyncDiagnosticsCache();
-    return created({ config });
+    return attachLiveDomains(created({ config }), FLUX_LIVE_DOMAINS);
   }
 
   const config = await updateProductionFluxRule(parsed.data.data as ProductionFluxRule, {
     userId: auth.userId,
   });
   invalidateSyncDiagnosticsCache();
-  return created({ config });
+  return attachLiveDomains(created({ config }), FLUX_LIVE_DOMAINS);
 }

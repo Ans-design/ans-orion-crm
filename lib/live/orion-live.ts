@@ -169,7 +169,7 @@ export function inferLiveDomainsFromUrl(url: string): OrionLiveDomain[] {
       || path.includes('/estimation-temps')
       || path.includes('/gpao')
     ) {
-      return ['production', 'sync', 'pricing'];
+      return ['production', 'sync', 'commandes', 'pricing'];
     }
     // Stock / matières
     if (
@@ -238,6 +238,7 @@ export function inferLiveDomainsFromUrl(url: string): OrionLiveDomain[] {
   if (path.includes('/api/achats') || path.includes('/api/purchase') || path.includes('/api/suppliers')) {
     return ['achats', 'stock'];
   }
+  if (path.includes('/api/equipe/taches')) return ['commandes', 'production', 'rh', 'nav'];
   if (path.includes('/api/rh') || path.includes('/api/employees') || path.includes('/api/equipe/employes')) {
     return ['rh'];
   }

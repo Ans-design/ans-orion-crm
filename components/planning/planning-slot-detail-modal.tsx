@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import type { GanttSlot } from '@/components/planning/production-gantt';
+import { joinOperatorNames, splitOperatorNames } from '@/lib/planning/planning-pool';
 import {
   resolveGanttSlotProgress,
   planningGradientForCommande,
@@ -136,6 +137,7 @@ export function PlanningSlotDetailModal({
 }: Props) {
   const open = Boolean(slot);
   const assignee = edit.operateur.trim();
+  const selectedOps = splitOperatorNames(assignee);
   const knownOp = operators.find((o) => o.name === assignee);
 
   const titleParts = useMemo(() => {
@@ -378,8 +380,37 @@ export function PlanningSlotDetailModal({
                     Intervenant
                   </strong>
                 </div>
-                <span className="text-[10px] text-[#97a2b4]">Responsable du créneau</span>
+                <span className="text-[10px] text-[#97a2b4]">Une ou plusieurs personnes</span>
               </div>
+              {operators.length > 0 ? (
+                <div className="px-3.5 pt-3 flex flex-wrap gap-1.5">
+                  {operators.map((op) => {
+                    const on = selectedOps.some((n) => n.toLowerCase() === op.name.toLowerCase());
+                    return (
+                      <button
+                        key={op.id}
+                        type="button"
+                        onClick={() => {
+                          const next = on
+                            ? selectedOps.filter((n) => n.toLowerCase() !== op.name.toLowerCase())
+                            : [...selectedOps, op.name];
+                          const operateur = joinOperatorNames(next);
+                          onEditChange({ operateur });
+                          onApplyMeta?.({ operateur });
+                        }}
+                        className={cn(
+                          'rounded-[7px] px-2 py-1 text-[10px] font-bold border',
+                          on
+                            ? 'bg-[#e9efff] border-[#3b72f2] text-[#3769db]'
+                            : 'bg-white border-[#e7ebf3] text-[#64718a] dark:bg-card dark:border-border',
+                        )}
+                      >
+                        {op.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
               <div className="px-3.5 pt-3.5 pb-2 grid grid-cols-[38px_1fr] gap-2.5 items-end">
                 <div
                   className="flex h-[38px] w-[38px] items-center justify-center rounded-[7px] text-[12px] font-extrabold"

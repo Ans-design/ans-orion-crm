@@ -23,15 +23,16 @@ export type NextActionContext = {
 const DEVIS_ACTIONS: Record<string, NextAction> = {
   Brouillon: {
     id: 'devis-send',
-    label: 'Envoyer au client',
+    label: 'Enregistrer / envoyer le proforma',
+    description: 'Le devis reste ici tant qu’aucun paiement n’est enregistré',
     href: '/devis',
     module: 'devis',
     priority: 'high',
   },
   Accepté: {
     id: 'devis-to-commande',
-    label: 'Créer commande',
-    description: 'Transformer le devis accepté en commande',
+    label: 'Suivre la commande',
+    description: 'Paiement reçu — la commande est validée, suite en Production',
     href: '/commandes',
     module: 'commande',
     priority: 'high',
@@ -201,17 +202,17 @@ const FACTURE_ACTIONS: Record<string, NextAction> = {
 const CLIENT_ACTIONS: Record<string, NextAction> = {
   CRM: {
     id: 'client-devis',
-    label: 'Créer un devis',
-    description: 'Démarrer la chaîne commerciale pour ce client',
-    href: '/devis',
-    module: 'devis',
+    label: 'Configurer au catalogue vente',
+    description: 'Choisir le client puis personnaliser la commande au POS',
+    href: '/pos',
+    module: 'pos',
     priority: 'high',
   },
   Prospect: {
     id: 'client-qualifier',
-    label: 'Qualifier et devis',
-    href: '/devis',
-    module: 'devis',
+    label: 'Qualifier puis catalogue vente',
+    href: '/pos',
+    module: 'pos',
     priority: 'high',
   },
   Actif: {
@@ -238,7 +239,13 @@ const CLIENT_ACTIONS: Record<string, NextAction> = {
 };
 
 function withClientDeepLink(action: NextAction, clientId: string): NextAction {
-  if (action.href.startsWith('/clients/') || action.href.includes('?')) {
+  if (
+    action.href.startsWith('/pos')
+    || action.href.startsWith('/panier')
+    || action.href.startsWith('/devis')
+    || action.href.startsWith('/clients/')
+    || action.href.includes('?')
+  ) {
     return action;
   }
   return { ...action, href: `/clients/${encodeURIComponent(clientId)}` };

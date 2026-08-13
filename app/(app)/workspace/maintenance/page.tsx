@@ -9,6 +9,7 @@ import { ANS, ANS_KPI_COLORS } from '@/lib/ans-colors';
 import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
 import { PageHeader } from '@/components/layouts/page-header';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 
 const DAILY_CHECKLIST = [
   'Vérifier niveaux encre machines principales',
@@ -62,6 +63,8 @@ export default function MaintenanceWorkspacePage() {
       <PageHeader title="Maintenance — Mon espace" kicker="Mon espace" compact icon={Wrench} />
 
       {error && <CockpitErrorBanner onRetry={reload} />}
+
+      <PosteTachesBoard title="Mes interventions / tâches du jour" />
 
       {machinesDown > 0 && (
         <div className="rounded-[7px] border border-red-200 bg-red-50 dark:bg-red-950/30 dark:border-red-900 p-4">

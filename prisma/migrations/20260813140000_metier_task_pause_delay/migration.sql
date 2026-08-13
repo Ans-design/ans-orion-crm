@@ -1,0 +1,7 @@
+-- Chrono pause + déclaration de retard (Gantt lendemain) — MetierTask
+ALTER TABLE "MetierTask" ADD COLUMN IF NOT EXISTS "pauseSec" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "MetierTask" ADD COLUMN IF NOT EXISTS "pauseCount" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "MetierTask" ADD COLUMN IF NOT EXISTS "lastPausedAt" TIMESTAMP(3);
+ALTER TABLE "MetierTask" ADD COLUMN IF NOT EXISTS "delayMotif" TEXT;
+ALTER TABLE "MetierTask" ADD COLUMN IF NOT EXISTS "extraMin" INTEGER;
+ALTER TABLE "MetierTask" ADD COLUMN IF NOT EXISTS "delayDeclaredAt" TIMESTAMP(3);

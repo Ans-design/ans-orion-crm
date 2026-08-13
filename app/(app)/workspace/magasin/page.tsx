@@ -8,6 +8,7 @@ import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
 import { AppResponsiveKpiGrid, AppStickyActionBar, AppButton } from '@/components/ui/app-ui';
 import { PageHeader } from '@/components/layouts/page-header';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 
 /** Espace magasinier / responsable stock — audit item 11 */
 export default function MagasinWorkspacePage() {
@@ -19,6 +20,8 @@ export default function MagasinWorkspacePage() {
       <PageHeader title="Mon Magasin" kicker="Mon espace" compact icon={Package} />
 
       {error && <CockpitErrorBanner onRetry={reload} />}
+
+      <PosteTachesBoard title="Mes tâches magasin du jour" />
 
       <AppResponsiveKpiGrid columns={4} phoneMax={3}>
         <KpiCard label="Références actives" value={kpis.stockReferences ?? 0} icon={Package} color={ANS.orange} onClick={() => router.push('/stock')} />

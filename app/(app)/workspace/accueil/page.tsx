@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 import '@/styles/workspace-accueil.css';
 
 type VisiteRow = { heure?: string; nom?: string; type?: string; label?: string };
@@ -78,6 +79,8 @@ export default function AccueilWorkspacePage() {
       </header>
 
       {error ? <CockpitErrorBanner onRetry={reload} /> : null}
+
+      <PosteTachesBoard title="Mes tâches du jour (planifiées)" />
 
       <section className="ws-accueil__kpis" aria-label="Indicateurs">
         {KPIS.map(({ key, label, href, Icon }) => (

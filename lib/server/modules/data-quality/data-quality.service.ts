@@ -382,7 +382,7 @@ export async function runDataQualityScan(): Promise<DataQualityReport> {
 
   push('client-no-phone', clientsNoPhone, 'Compléter tel ou WhatsApp sur la fiche client');
 
-  push('client-no-nif', clientsNoNif, 'Saisir NIF ou archiver prospect');
+  push('client-no-nif', clientsNoNif, 'NIF facultatif — à saisir seulement si le client en a un');
 
   push('commande-no-client', commandesNoClient, 'Lier un client à la commande');
 

@@ -7,6 +7,7 @@ import { ANS, ANS_KPI_COLORS } from '@/lib/ans-colors';
 import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
 import { PageHeader } from '@/components/layouts/page-header';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 
 export default function CmWorkspacePage() {
   const router = useRouter();
@@ -17,6 +18,8 @@ export default function CmWorkspacePage() {
       <PageHeader title="Espace CM" kicker="Community Manager" compact icon={Smartphone} />
 
       {error && <CockpitErrorBanner onRetry={reload} />}
+
+      <PosteTachesBoard title="Mes tâches du jour (planifiées)" />
 
       <div className="grid gap-3 kpi-grid">
         <KpiCard label="Commandes actives" value={kpis.cmdActives || 0} icon={ClipboardList} color="#7b1fa2" onClick={() => router.push('/commandes')} />

@@ -515,7 +515,7 @@ export function ProductionGantt({
           ) : null}
         </span>
         {showMeta ? (
-          <span className="shrink-0 rounded-full bg-white/90 px-1.5 py-1 text-[9px] font-extrabold tabular-nums text-[#455069] pointer-events-none">
+          <span className="shrink-0 rounded-[7px] bg-white/90 px-1.5 py-1 text-[9px] font-extrabold tabular-nums text-[#455069] pointer-events-none">
             {progress}%
           </span>
         ) : null}

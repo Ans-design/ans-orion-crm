@@ -8,6 +8,7 @@ import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
 import { WorkspaceFilteredViewBanner } from '@/components/workspace/workspace-filtered-view-banner';
 import { PageHeader } from '@/components/layouts/page-header';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 
 export default function FinanceWorkspacePage() {
   const router = useRouter();
@@ -19,6 +20,8 @@ export default function FinanceWorkspacePage() {
       <WorkspaceFilteredViewBanner moduleLabel="Finance" href="/factures" />
 
       {error && <CockpitErrorBanner onRetry={reload} />}
+
+      <PosteTachesBoard title="Mes tâches finance du jour" />
 
       <div className="grid gap-3 kpi-grid">
         <KpiCard label="Trésorerie mois" value={kpis.tresorerieMois || 0} icon={TrendingUp} color={ANS_KPI_COLORS.success} format="price" onClick={() => router.push('/finance/charges')} />

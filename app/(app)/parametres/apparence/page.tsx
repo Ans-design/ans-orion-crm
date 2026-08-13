@@ -187,7 +187,7 @@ export default function ApparencePage() {
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm font-semibold">{label}</span>
                     {selected ? (
-                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent-primary,#FF174D)] text-[var(--on-primary,#fff)]">
+                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-[7px] bg-[var(--accent-primary,#FF174D)] text-white">
                         <Check size={12} strokeWidth={3} aria-hidden />
                       </span>
                     ) : null}
@@ -213,7 +213,7 @@ export default function ApparencePage() {
           <p className="text-xs text-muted-foreground">
             Change les boutons, sidebar, ticker LIVE, ANS Talk, fonds légers — partout dans ORION.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5">
             {ACCENT_OPTIONS.map((opt) => {
               const selected = prefs.accent === opt.id;
               return (

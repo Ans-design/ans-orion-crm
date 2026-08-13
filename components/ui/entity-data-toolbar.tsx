@@ -29,7 +29,7 @@ const toggleClass = (active: boolean) =>
   cn(
     'px-3 min-h-[44px] h-11 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]',
     active
-      ? 'bg-[var(--primary)] text-[var(--on-primary,#fff)]'
+      ? 'orion-on-dark-fill bg-[var(--primary)] text-white'
       : 'bg-card text-muted-foreground hover:bg-accent',
   );
 

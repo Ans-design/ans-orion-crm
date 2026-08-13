@@ -13,6 +13,7 @@ import { ANS } from '@/lib/ans-colors';
 import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
 import { PageHeader } from '@/components/layouts/page-header';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 
 type MachineRow = {
   id: string;
@@ -94,6 +95,8 @@ export default function ConducteurWorkspacePage() {
       />
 
       {(error || machinesError) && <CockpitErrorBanner onRetry={reload} />}
+
+      <PosteTachesBoard type="production" title="Mes tâches machine du jour" />
 
       <AppResponsiveKpiGrid columns={4} phoneMax={3}>
         <KpiCard label="En production" value={kpis.enProduction ?? 0} icon={Play} color={ANS.orange} onClick={() => router.push('/production')} />

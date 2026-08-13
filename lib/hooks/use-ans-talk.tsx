@@ -7,6 +7,7 @@ import { ANS_TALK_POLL_MS, nextTalkPollDelayMs } from '@/lib/ans-talk/polling';
 import { connectTalkStream } from '@/lib/ans-talk/talk-stream-client';
 import { getApiErrorMessage, unwrapApiData } from '@/lib/api-client';
 import type { TalkConversation, TalkMessage, TalkUser } from '@/lib/ans-talk/talk-types';
+import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 
 export type { TalkConversation, TalkMessage, TalkUser } from '@/lib/ans-talk/talk-types';
 
@@ -310,6 +311,11 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
     }
   }, [loadConversations, activateDemoMode, applyMessages]);
 
+  const liveTick = useOrionLiveRevision(['commandes', 'production', 'nav'], {
+    debounceMs: 500,
+    pollMs: 0,
+  });
+
   const reload = useCallback(async (): Promise<boolean> => {
     if (demoModeRef.current) {
       setConversations(DEMO_CONVERSATIONS);
@@ -333,6 +339,11 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
       reloadInFlightRef.current = false;
     }
   }, [loadConversations, loadMessages, loadUnread]);
+
+  useEffect(() => {
+    if (liveTick === 0) return;
+    void reload();
+  }, [liveTick, reload]);
 
   useEffect(() => {
     setLoading(true);

@@ -19,6 +19,7 @@ import {
 import { formatPrice } from '@/lib/data/catalogue';
 import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 import { WorkspaceFilteredViewBanner } from '@/components/workspace/workspace-filtered-view-banner';
 import { unwrapApiData } from '@/lib/api-client';
 import { AppStickyActionBar, AppButton } from '@/components/ui/app-ui';
@@ -136,6 +137,8 @@ export default function CommercialWorkspacePage() {
       <WorkspaceFilteredViewBanner moduleLabel="Commercial (Devis / Commandes / Clients)" href="/commandes" />
 
       {error ? <CockpitErrorBanner onRetry={reload} /> : null}
+
+      <PosteTachesBoard type="commercial" title="Mes tâches commerciales du jour" />
 
       <section className="ws-vente__kpis" aria-label="Indicateurs vente">
         {kpiItems.map(({ label, value, href, Icon, format }) => (

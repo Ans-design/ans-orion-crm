@@ -8,6 +8,7 @@ import {
 import { DOSSIER_STATUTS, ETAPE_STATUTS, deriveGpaoAuditStatut } from '@/lib/constants/gpao-dossier';
 import { CommandeDeepLinkBanner } from '@/components/commandes/commande-deep-link-banner';
 import { useCommandeDeepLink } from '@/lib/hooks/use-commande-deep-link';
+import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 import { FlowPageBanner } from '@/components/flow/flow-page-banner';
 import { AppPageHeader, AppEmptyState, AppRouteLoading, AppKpiCard, AppButton } from '@/components/ui/app-ui';
 import { LoadingState } from '@/components/ui/loading-state';
@@ -63,6 +64,7 @@ export default function ProductionDossiersPage() {
 
 function ProductionDossiersInner() {
   const { commandeId, info: commandeInfo } = useCommandeDeepLink();
+  const liveTick = useOrionLiveRevision(['commandes', 'production'], { debounceMs: 500 });
   const [dossiers, setDossiers] = useState<Dossier[]>([]);
   const [stats, setStats] = useState<GpaoStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -102,6 +104,10 @@ function ProductionDossiersInner() {
 
   useEffect(() => { setPage(1); }, [filtre, commandeId]);
   useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    if (liveTick === 0) return;
+    load();
+  }, [liveTick, load]);
 
   const sortedDossiers = useMemo(() => {
     const list = [...dossiers];

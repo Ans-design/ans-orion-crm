@@ -75,6 +75,16 @@ describe('validators CRM', () => {
     expect(r.success).toBe(false);
   });
 
+  it('accepte un client sans NIF ni STAT', () => {
+    const r = createClientSchema.safeParse({ name: 'Jean Rakoto' });
+    expect(r.success).toBe(true);
+  });
+
+  it('accepte NIF vide et STAT vide', () => {
+    const r = createClientSchema.safeParse({ name: 'Marie', nif: '', statNumber: '' });
+    expect(r.success).toBe(true);
+  });
+
   it('rejette paiement sans facture ni commande', () => {
     const r = createPaiementSchema.safeParse({ montant: 1000 });
     expect(r.success).toBe(false);

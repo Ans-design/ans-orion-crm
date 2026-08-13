@@ -14,6 +14,8 @@ import { ROLE_LABELS } from '@/lib/auth/permissions';
 import {
   PRODUCTION_FLUX_CONFIG_KEY,
   buildDefaultProductionFluxConfig,
+  healCustomStepsForPlanning,
+  prepareNewFluxStep,
   type ProductionFluxConfig,
   type ProductionFluxRule,
   type ProductionFluxStep,
@@ -95,7 +97,15 @@ export async function getProductionFluxConfig(): Promise<ProductionFluxConfig> {
     const row = await prisma.systemConfig.findUnique({ where: { configKey: PRODUCTION_FLUX_CONFIG_KEY } });
     if (row?.data && typeof row.data === 'object') {
       const data = row.data as ProductionFluxConfig;
-      if (Array.isArray(data.steps) && data.steps.length > 0) return data;
+      if (Array.isArray(data.steps) && data.steps.length > 0) {
+        const healed = healCustomStepsForPlanning(data);
+        if (!healed.changed) return healed.config;
+        try {
+          return await saveProductionFluxConfig(healed.config);
+        } catch {
+          return healed.config;
+        }
+      }
     }
   } catch {
     /* fallback */
@@ -278,15 +288,16 @@ export async function upsertProductionFluxStep(
   const idx = config.steps.findIndex((s) => s.id === step.id);
   const oldValue = idx >= 0 ? config.steps[idx] : null;
   const isCreate = idx < 0;
+  const nextStep = isCreate ? prepareNewFluxStep(step) : step;
 
-  if (idx >= 0) config.steps[idx] = step;
-  else config.steps.push(step);
+  if (idx >= 0) config.steps[idx] = nextStep;
+  else config.steps.push(nextStep);
 
   // Nouvelle étape → créer aussi une transition (reproduite dans le tableau Transitions)
   if (isCreate) {
     const defaultFrom =
       [...config.steps]
-        .filter((s) => s.id !== step.id)
+        .filter((s) => s.id !== nextStep.id)
         .sort((a, b) => a.sortOrder - b.sortOrder)
         .at(-1)?.id
       ?? null;
@@ -295,24 +306,24 @@ export async function upsertProductionFluxStep(
         ? opts.linkFromStepId
         : defaultFrom;
 
-    if (linkFrom && linkFrom !== step.id) {
+    if (linkFrom && linkFrom !== nextStep.id) {
       const fromStep = config.steps.find((s) => s.id === linkFrom);
       const already = config.transitions.some(
-        (t) => t.fromStepId === linkFrom && t.toStepId === step.id,
+        (t) => t.fromStepId === linkFrom && t.toStepId === nextStep.id,
       );
       if (fromStep && !already) {
         const mode = opts?.transitionMode ?? 'manual';
         config.transitions.push({
-          id: `t-${linkFrom}-${step.id}`,
+          id: `t-${linkFrom}-${nextStep.id}`,
           fromStepId: linkFrom,
-          toStepId: step.id,
-          condition: `Passage vers ${step.name}`,
-          authorizedRole: step.responsibleRole,
+          toStepId: nextStep.id,
+          condition: `Passage vers ${nextStep.name}`,
+          authorizedRole: nextStep.responsibleRole,
           mode,
-          generatesTask: step.generatesTask,
-          updatesPlanning: step.visiblePlanning,
-          active: step.active,
-          label: `${fromStep.name} → ${step.name}`,
+          generatesTask: nextStep.generatesTask,
+          updatesPlanning: true,
+          active: true,
+          label: `${fromStep.name} → ${nextStep.name}`,
         });
       }
     }
@@ -323,9 +334,9 @@ export async function upsertProductionFluxStep(
   await prisma.ruleVersion.create({
     data: {
       entityType: 'production-flux',
-      entityId: step.id,
+      entityId: nextStep.id,
       oldValue: oldValue as object | undefined,
-      newValue: step as object,
+      newValue: nextStep as object,
       reason: isCreate ? 'Nouvelle étape' : 'Mise à jour étape',
       userId: opts?.userId,
     },
@@ -336,10 +347,10 @@ export async function upsertProductionFluxStep(
     userName: opts?.userName,
     action: isCreate ? 'PRODUCTION_FLUX_STEP_CREATE' : 'PRODUCTION_FLUX_STEP_UPDATE',
     entity: 'ProductionFluxStep',
-    entityId: step.id,
-    entityLabel: step.name,
+    entityId: nextStep.id,
+    entityLabel: nextStep.name,
     oldValue: oldValue ?? undefined,
-    newValue: step as unknown as Record<string, unknown>,
+    newValue: nextStep as unknown as Record<string, unknown>,
   });
 
   return saved;

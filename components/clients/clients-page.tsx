@@ -223,7 +223,7 @@ function payloadFromForm(form: ClientFormState, isUpdate = false) {
     ville: form.ville.trim() || null,
     canalVente: canalStoredValue(form.canalVente, form.canalVenteAutre),
     canalDecouverte: canalStoredValue(form.canalDecouverte, form.canalDecouverteAutre),
-    nif: form.nif.trim(),
+    nif: form.nif.trim() || null,
     statNumber: form.statNumber.trim() || null,
     commercialName: form.commercialName.trim() || null,
     charte: serializeClientCharte({
@@ -516,10 +516,12 @@ export function ClientsPage({ mode }: ClientsPageProps) {
     }
   }, [selectedClient?.id]);
 
-  const handleSubmit = async (opts?: { forceDuplicate?: boolean }) => {
+  const handleSubmit = async (opts?: { forceDuplicate?: boolean; continueToPos?: boolean }) => {
     if (!form.name.trim()) { uxToast.error('Le nom est requis'); return; }
-    const nifErr = validateNif(form.nif);
-    if (nifErr) { uxToast.error(nifErr); return; }
+    if (form.nif.trim()) {
+      const nifErr = validateNif(form.nif);
+      if (nifErr) { uxToast.error(nifErr); return; }
+    }
     if (form.type === 'Autre' && !form.typeAutre.trim()) {
       uxToast.error('Précisez le type de client');
       return;
@@ -566,6 +568,10 @@ export function ClientsPage({ mode }: ClientsPageProps) {
           fetchClientDetail(editedId);
         } else if (!editedId && saved?.id) {
           setSelectedClient(saved);
+        }
+        if (opts?.continueToPos && saved?.id) {
+          selectClientForPos(saved);
+          return;
         }
       } else {
         const err = await res.json().catch(() => ({}));
@@ -1597,7 +1603,7 @@ export function ClientsPage({ mode }: ClientsPageProps) {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="text-xs font-semibold text-muted-foreground mb-1 block">NIF *</label>
+                        <label className="text-xs font-semibold text-muted-foreground mb-1 block">NIF</label>
                         <input
                           type="text"
                           inputMode="numeric"
@@ -1605,13 +1611,12 @@ export function ClientsPage({ mode }: ClientsPageProps) {
                           value={form.nif}
                           onChange={e => setForm(f => ({ ...f, nif: e.target.value.replace(/\D/g, '') }))}
                           className="w-full bg-background border border-border rounded-[7px] px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/30"
-                          placeholder="Chiffres uniquement"
-                          required
+                          placeholder="Optionnel — chiffres uniquement"
                         />
                       </div>
                       <div>
                         <label className="text-xs font-semibold text-muted-foreground mb-1 block">STAT</label>
-                        <input type="text" value={form.statNumber} onChange={e => setForm(f => ({ ...f, statNumber: e.target.value }))} className="w-full bg-background border border-border rounded-[7px] px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/30" placeholder="N° STAT" />
+                        <input type="text" value={form.statNumber} onChange={e => setForm(f => ({ ...f, statNumber: e.target.value }))} className="w-full bg-background border border-border rounded-[7px] px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/30" placeholder="Optionnel — N° STAT" />
                       </div>
                     </div>
                     <div>
@@ -1798,11 +1803,18 @@ export function ClientsPage({ mode }: ClientsPageProps) {
                 )}
               </div>
 
-              <div className="flex gap-3 p-5 pt-0 border-t border-border mt-auto">
-                <AppButton type="button" variant="outline" onClick={() => setShowForm(false)} className="flex-1">Annuler</AppButton>
-                <AppButton type="button" onClick={() => handleSubmit()} className="flex-1">
-                  <Check size={16} /> {editingClient ? 'Enregistrer' : 'Créer le client'}
-                </AppButton>
+              <div className="flex flex-col gap-2 p-5 pt-0 border-t border-border mt-auto">
+                <div className="flex gap-3">
+                  <AppButton type="button" variant="outline" onClick={() => setShowForm(false)} className="flex-1">Annuler</AppButton>
+                  <AppButton type="button" onClick={() => handleSubmit()} className="flex-1">
+                    <Check size={16} /> {editingClient ? 'Enregistrer' : 'Créer le client'}
+                  </AppButton>
+                </div>
+                {!editingClient ? (
+                  <AppButton type="button" variant="outline" onClick={() => handleSubmit({ continueToPos: true })}>
+                    <Package size={16} /> Créer et catalogue vente
+                  </AppButton>
+                ) : null}
               </div>
             </motion.div>
           </motion.div>

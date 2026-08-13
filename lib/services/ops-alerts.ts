@@ -3,6 +3,11 @@ import { getStockAlerts } from '@/lib/services/stock-service';
 import { listActiveTickerTexts } from '@/lib/services/ticker-admin-service';
 import { getSyncDriftTickerAlerts } from '@/lib/services/sync-drift-service';
 import {
+  formatBroadcastTickerLabel,
+  formatPosteTickerAlert,
+  rankPosteTickerTask,
+} from '@/lib/metier/poste-ticker';
+import {
   commandeRetardStatut,
   completedCommandeStatuts,
   pendingDevisStatuts,
@@ -18,14 +23,69 @@ export type TickerAlert = {
   severity: 'info' | 'warn' | 'critical';
 };
 
+export type TickerViewer = {
+  userId?: string;
+  userName?: string;
+  role?: string;
+};
+
 function severityForType(type: string): TickerAlert['severity'] {
   if (type === 'urgent' || type === 'retard' || type === 'machine-down' || type === 'task-blocked' || type === 'sync-drift-critical') return 'critical';
-  if (type === 'facture' || type === 'reclamation' || type === 'maintenance' || type === 'sync-drift') return 'warn';
+  if (type === 'facture' || type === 'reclamation' || type === 'maintenance' || type === 'sync-drift' || type === 'retard-prod') return 'warn';
   return 'info';
 }
 
-/** Alertes bandeau temps réel — cockpit direction + GPAO */
-export async function getTickerAlerts(): Promise<TickerAlert[]> {
+function broadcastSeverity(text: string): TickerAlert['severity'] {
+  if (text.includes('🚨')) return 'critical';
+  if (text.includes('⚠')) return 'warn';
+  return 'info';
+}
+
+async function getBroadcastTickerAlerts(): Promise<TickerAlert[]> {
+  const custom = await listActiveTickerTexts().catch(() => []);
+  return custom.map((text, i) => ({
+    id: `broadcast-${i}`,
+    type: 'broadcast',
+    label: formatBroadcastTickerLabel(text),
+    href: '/dashboard',
+    severity: broadcastSeverity(text),
+  }));
+}
+
+async function getMinePosteTickerAlerts(viewer?: TickerViewer): Promise<TickerAlert[]> {
+  if (!viewer?.userId && !viewer?.userName) return [];
+  const or: { assigneeId?: string; assigneeName?: string }[] = [];
+  if (viewer.userId) or.push({ assigneeId: viewer.userId });
+  if (viewer.userName) or.push({ assigneeName: viewer.userName });
+
+  const tasks = await prisma.metierTask.findMany({
+    where: {
+      status: { notIn: ['Terminée', 'Annulée'] },
+      OR: or,
+    },
+    orderBy: [{ priorite: 'asc' }, { dueDate: 'asc' }, { createdAt: 'asc' }],
+    take: 16,
+    select: {
+      id: true,
+      title: true,
+      type: true,
+      status: true,
+      priorite: true,
+      dueDate: true,
+      timerStatus: true,
+      extraMin: true,
+      delayMotif: true,
+      commande: { select: { numero: true, article: true } },
+    },
+  }).catch(() => []);
+
+  return [...tasks]
+    .sort((a, b) => rankPosteTickerTask(a) - rankPosteTickerTask(b))
+    .map((t) => formatPosteTickerAlert(t, viewer.role));
+}
+
+/** Compteurs direction / GPAO (pas les messages « tous »). */
+async function getOperationalTickerAlerts(): Promise<TickerAlert[]> {
   const now = new Date();
   const weekAhead = new Date(now);
   weekAhead.setDate(weekAhead.getDate() + 7);
@@ -41,6 +101,7 @@ export async function getTickerAlerts(): Promise<TickerAlert[]> {
     reclamationsOuvertes,
     machines,
     tasksBlocked,
+    delayDeclared,
     syncDriftAlerts,
   ] = await Promise.all([
     prisma.commande.count({
@@ -78,6 +139,12 @@ export async function getTickerAlerts(): Promise<TickerAlert[]> {
       take: 20,
     }).catch(() => []),
     prisma.metierTask.count({ where: { status: 'Bloquée' } }).catch(() => 0),
+    prisma.metierTask.count({
+      where: {
+        extraMin: { gt: 0 },
+        delayDeclaredAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
+      },
+    }).catch(() => 0),
     getSyncDriftTickerAlerts().catch(() => []),
   ]);
 
@@ -98,9 +165,10 @@ export async function getTickerAlerts(): Promise<TickerAlert[]> {
     ...(stockCritique > 0 ? [{ type: 'stock', label: `${stockCritique} article(s) stock critique`, href: '/stock?critical=1' }] : []),
     ...(reclamationsOuvertes > 0 ? [{ type: 'reclamation', label: `${reclamationsOuvertes} réclamation(s) client ouverte(s)`, href: '/clients' }] : []),
     ...(tasksBlocked > 0 ? [{ type: 'task-blocked', label: `${tasksBlocked} tâche(s) bloquée(s)`, href: '/equipe/taches?status=Bloquée' }] : []),
+    ...(delayDeclared > 0 ? [{ type: 'retard-prod', label: `${delayDeclared} retard(s) prod à replanifier (Gantt)`, href: '/planning' }] : []),
     ...machinesDown.map((m) => ({
       type: 'machine-down',
-      label: `Machine hors service : ${m.name}`,
+      label: `Tous · Machine hors service : ${m.name}`,
       href: '/machines',
     })),
     ...machinesMaint
@@ -118,43 +186,35 @@ export async function getTickerAlerts(): Promise<TickerAlert[]> {
     })),
   ];
 
-  if (raw.length === 0) {
-    const custom = await listActiveTickerTexts().catch(() => []);
-    if (custom.length === 0) {
-      return [{
-        id: 'ok',
-        type: 'info',
-        label: 'Aucune alerte critique — production nominal',
-        href: '/dashboard',
-        severity: 'info',
-      }];
-    }
-    return custom.map((text, i) => ({
-      id: `custom-${i}`,
-      type: 'custom',
-      label: text,
-      href: '/admin/ticker',
-      severity: text.includes('🚨') ? 'critical' as const : text.includes('⚠') ? 'warn' as const : 'info' as const,
-    }));
-  }
-
-  const customMsgs = await listActiveTickerTexts().catch(() => []);
-  const merged = [
-    ...customMsgs.map((text, i) => ({
-      type: 'custom',
-      label: text,
-      href: '/admin/ticker',
-    })),
-    ...raw,
-  ];
-
-  return merged.map((a, i) => ({
+  return raw.map((a, i) => ({
     id: `${a.type}-${i}`,
     ...a,
-    severity: a.type === 'custom'
-      ? (a.label.includes('🚨') ? 'critical' : a.label.includes('⚠') ? 'warn' : 'info')
-      : severityForType(a.type),
+    severity: severityForType(a.type),
   }));
+}
+
+/** Alertes bandeau — tâches du poste + messages pour tous + ops (direction). */
+export async function getTickerAlerts(viewer?: TickerViewer): Promise<TickerAlert[]> {
+  const [mine, broadcast, ops] = await Promise.all([
+    getMinePosteTickerAlerts(viewer),
+    getBroadcastTickerAlerts(),
+    getOperationalTickerAlerts(),
+  ]);
+
+  const isLead = !viewer?.role || viewer.role === 'admin' || viewer.role === 'manager';
+  const opsVisible = isLead ? ops : ops.filter((a) => a.type === 'machine-down');
+  const merged = [...mine, ...broadcast, ...opsVisible];
+
+  if (merged.length === 0) {
+    return [{
+      id: 'ok',
+      type: 'info',
+      label: 'Aucune alerte — poste à jour',
+      href: '/dashboard',
+      severity: 'info',
+    }];
+  }
+  return merged;
 }
 
 /** KPIs direction complémentaires */

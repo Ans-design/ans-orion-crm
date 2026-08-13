@@ -13,8 +13,8 @@
 @import '../styles/dropdown-theme.css';
 @import '../styles/anti-contours.css';
 @import '../styles/orion-ui-ux-complete.css';
-@import '../styles/light-white-only.css';
 @import '../styles/light-saas-premium.css';
+@import '../styles/light-white-only.css';
 @import '../styles/alignment-system.css';
 @import '../styles/typography-scale.css';
 @import '../styles/phone-density.css';
@@ -355,18 +355,10 @@ html:not(.dark) .orion-viewport::before {
   display: none;
 }
 
-/* Mode sombre : halo doux uniquement (pas de grille) */
+/* Mode sombre : pas de halo / trame sur le viewport */
 html.dark .orion-viewport::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.45;
-  background-image:
-    radial-gradient(circle at 0% 0%, rgba(231, 25, 79, 0.08), transparent 38%),
-    radial-gradient(circle at 100% 100%, rgba(255, 178, 26, 0.05), transparent 32%);
-  background-size: 100% 100%, 100% 100%;
+  content: none;
+  display: none;
 }
 
 /* ── Utilitaires surfaces ── */

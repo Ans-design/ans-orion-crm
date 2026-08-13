@@ -92,3 +92,6 @@ provision-exit.txt
 .env.vercel.parity.secrets
 .env.verify.prod
 
+# Uploads Talk locaux
+data/talk-files/
+

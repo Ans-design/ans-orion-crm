@@ -199,12 +199,30 @@ function PaiementsPageInner() {
     });
     if (r.ok) {
       const data = unwrapApiData<{
-        devisConversion?: { converted?: boolean; commande?: { numero?: string } };
+        devisConversion?: { converted?: boolean; alreadyConverted?: boolean; commande?: { id?: string; numero?: string } };
+        commandeId?: string | null;
         factureId?: string | null;
         printFormat?: string;
       }>(await r.json());
-      if (data.devisConversion?.converted) {
-        uxToast.success(`Acompte enregistré — commande ${data.devisConversion.commande?.numero ?? ''} créée`);
+      const convertedCmd = data.devisConversion?.commande;
+      if (data.devisConversion?.converted && convertedCmd) {
+        uxToast.success(`Paiement enregistré — commande ${convertedCmd.numero ?? ''} créée`);
+        void import('@/lib/commercial/commercial-journey-store').then(({ emitCommercialJourney }) => {
+          emitCommercialJourney('devis_confirmed', {
+            lastDevisId: nf.devisId || null,
+            lastCommandeId: convertedCmd.id ?? data.commandeId ?? null,
+            cartCount: 0,
+          });
+        });
+      } else if (convertedCmd) {
+        uxToast.success(`Paiement enregistré — commande ${convertedCmd.numero ?? ''} à jour`);
+        void import('@/lib/commercial/commercial-journey-store').then(({ emitCommercialJourney }) => {
+          emitCommercialJourney('devis_confirmed', {
+            lastDevisId: nf.devisId || null,
+            lastCommandeId: convertedCmd.id ?? data.commandeId ?? null,
+            cartCount: 0,
+          });
+        });
       } else {
         uxToast.success('Paiement enregistré');
       }

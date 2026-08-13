@@ -8,6 +8,7 @@ import { useCockpitStats } from '@/lib/hooks/use-cockpit-kpis';
 import { CockpitErrorBanner } from '@/components/workspace/cockpit-error-banner';
 import { WorkspaceFilteredViewBanner } from '@/components/workspace/workspace-filtered-view-banner';
 import { PageHeader } from '@/components/layouts/page-header';
+import { PosteTachesBoard } from '@/components/workspace/poste-taches-board';
 
 export default function ProductionWorkspacePage() {
   const router = useRouter();
@@ -19,6 +20,8 @@ export default function ProductionWorkspacePage() {
       <WorkspaceFilteredViewBanner moduleLabel="Production / GPAO" href="/production" />
 
       {error && <CockpitErrorBanner onRetry={reload} />}
+
+      <PosteTachesBoard type="production" title="Mes tâches atelier du jour" />
 
       <div className="grid gap-3 kpi-grid">
         <KpiCard label="En production" value={kpis.enProduction || 0} icon={Factory} color={ANS.orange} onClick={() => router.push('/production')} />

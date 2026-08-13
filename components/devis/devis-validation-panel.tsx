@@ -177,33 +177,48 @@ export function DevisValidationPanel({
       await saveMeta({ ...meta, montantPaye: enriched.montantPaye, resteAPayer: enriched.resteAPayer });
       await maybeSaveAddressToClient();
 
-      if (clientId && (enriched.montantPaye ?? 0) > 0) {
-        const modeLabel =
-          meta.paymentMode === 'Especes' ? 'Espèces'
-          : meta.paymentMode === 'Cheque' ? 'Chèque'
-          : meta.paymentMode === 'Virement' ? `Virement${meta.bankName ? ` (${meta.bankName})` : ''}`
-          : meta.mobileMoneyProvider ?? 'Mobile Money';
+      const montantPaye = enriched.montantPaye ?? 0;
+      const paymentPayload = clientId && montantPaye > 0
+        ? {
+            montant: montantPaye,
+            mode:
+              meta.paymentMode === 'Especes' ? 'Espèces'
+              : meta.paymentMode === 'Cheque' ? 'Chèque'
+              : meta.paymentMode === 'Virement' ? 'Virement'
+              : meta.mobileMoneyProvider ?? 'Mobile Money',
+            reference: meta.referencePaiement?.trim() || undefined,
+            type: (enriched.resteAPayer ?? 0) > 0 ? 'Acompte' : 'Solde',
+            notes: [meta.paymentTime ? `Heure: ${meta.paymentTime}` : '', meta.paymentNote].filter(Boolean).join(' · ') || 'Encaissement validation commande',
+            clientId,
+            mobileMoneyProvider: meta.mobileMoneyProvider || undefined,
+            bankName: meta.bankName || undefined,
+            paymentTime: meta.paymentTime || undefined,
+          }
+        : null;
+
+      let paymentRecorded = false;
+      if (paymentPayload) {
         const payRes = await fetch('/api/paiements', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            devisId,
-            clientId,
-            montant: enriched.montantPaye,
-            mode: modeLabel,
-            reference: meta.referencePaiement?.trim() || undefined,
-            type: (enriched.resteAPayer ?? 0) > 0 ? 'Acompte' : 'Paiement',
-            notes: [meta.paymentTime ? `Heure: ${meta.paymentTime}` : '', meta.paymentNote].filter(Boolean).join(' · ') || 'Encaissement validation commande',
-          }),
+          body: JSON.stringify({ devisId, ...paymentPayload }),
         });
-        if (!payRes.ok) {
+        if (payRes.ok) {
+          paymentRecorded = true;
+        } else if (payRes.status !== 401 && payRes.status !== 403) {
           const err = await payRes.json().catch(() => ({}));
           uxToast.error((err as { error?: string }).error, 'Enregistrement du paiement impossible');
           return;
         }
       }
 
-      const res = await fetch(`/api/devis/${devisId}/accept`, { method: 'POST' });
+      const res = await fetch(`/api/devis/${devisId}/accept`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(
+          !paymentRecorded && paymentPayload ? { payment: paymentPayload } : {},
+        ),
+      });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         uxToast.error((data as { error?: string }).error, 'Validation impossible');
@@ -211,7 +226,11 @@ export function DevisValidationPanel({
       }
       const commandeId = (data as { commande?: { id: string; numero: string } }).commande?.id;
       const numero = (data as { commande?: { numero: string } }).commande?.numero;
-      uxToast.success(numero ? `Commande ${numero} créée` : 'Commande validée');
+      uxToast.success(
+        numero
+          ? `Commande ${numero} validée — disponible en Production`
+          : 'Commande validée — disponible en Production',
+      );
       void import('@/lib/commercial/commercial-journey-store').then(({ emitCommercialJourney }) => {
         emitCommercialJourney('devis_confirmed', {
           lastDevisId: devisId,

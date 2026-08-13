@@ -19,6 +19,7 @@ import {
   AppEmptyState,
   AppListSkeleton,
 } from '@/components/ui/app-ui';
+import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 
 type Row = {
   id: string;
@@ -56,6 +57,13 @@ function scoreTone(v: number) {
 }
 
 export default function RhPerformancePage() {
+  const [chronoResume, setChronoResume] = useState<{
+    assigneeName: string;
+    workSec: number;
+    pauseSec: number;
+    pauseCount: number;
+    labels: string[];
+  }[]>([]);
   const [rows, setRows] = useState<Row[]>([]);
   const [leaderboard, setLeaderboard] = useState<Row[]>([]);
   const [search, setSearch] = useState('');
@@ -64,6 +72,7 @@ export default function RhPerformancePage() {
   const [saving, setSaving] = useState(false);
   const [evaluating, setEvaluating] = useState<Row | null>(null);
   const [form, setForm] = useState({ ponctualite: 0, qualite: 0, consignes: 0 });
+  const liveTick = useOrionLiveRevision(['rh', 'production', 'commandes'], { debounceMs: 500 });
 
   useEffect(() => {
     const t = setTimeout(() => setQDebounced(search.trim()), 280);
@@ -80,11 +89,20 @@ export default function RhPerformancePage() {
         setLeaderboard(d.leaderboard ?? []);
       })
       .finally(() => setLoading(false));
+    fetch('/api/equipe/taches?resume=today')
+      .then((r) => (r.ok ? r.json() : { resume: [] }))
+      .then((d: { resume?: typeof chronoResume }) => setChronoResume(d.resume ?? []))
+      .catch(() => setChronoResume([]));
   }, [qDebounced]);
 
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (liveTick === 0) return;
+    load();
+  }, [liveTick, load]);
 
   const kpis = useMemo(() => {
     const evaluated = rows.filter((r) => r.evaluated || r.total !== 0).length;
@@ -142,6 +160,29 @@ export default function RhPerformancePage() {
         <AppKpiCard label="Moyenne" value={kpis.avg} icon={Target} tone="brand" hint={`/${PERF_MAX}`} />
         <AppKpiCard label="Top score" value={kpis.top} icon={Trophy} tone="warning" hint={`/${PERF_MAX}`} />
       </div>
+
+      {chronoResume.length > 0 ? (
+        <div className="rounded-[7px] border border-[#e8edf5] bg-white p-3 grid gap-2 dark:bg-card dark:border-border">
+          <p className="m-0 text-[10px] font-extrabold uppercase tracking-wide text-[#71809a]">
+            Chrono atelier du jour (play / pause)
+          </p>
+          {chronoResume.slice(0, 8).map((r) => (
+            <div key={r.assigneeName} className="flex flex-wrap items-center gap-2 text-[11px]">
+              <strong className="min-w-[8rem]">{r.assigneeName}</strong>
+              <span className="text-[#71809a]">
+                Travail {Math.round(r.workSec / 60)} min · Pause {Math.round(r.pauseSec / 60)} min ({r.pauseCount})
+              </span>
+              <span className="flex flex-wrap gap-1">
+                {r.labels.map((l) => (
+                  <span key={l} className="rounded-[7px] px-1.5 py-0.5 text-[9px] font-bold bg-[#eef3ff] text-[#3769db]">
+                    {l}
+                  </span>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       <div className="rh-perf-layout">
         <section className="rh-perf-list">

@@ -186,26 +186,24 @@ html.dark .cps-theme :is(input, .orion-material-input, .cps-field) {
   background: color-mix(in srgb, #0a101c 90%, #fff 4%) !important;
 }
 
-/* ── Sidebar / shell ── */
+/* ── Sidebar / shell — couleurs uniquement, mêmes tailles qu’en clair ── */
 html.dark aside.orion-sidebar,
 html.dark .orion-sidebar-v2,
 html.dark .orion-sidebar-card,
 html.dark .orion-sb-widget,
-html.dark .orion-sb-div,
 html.dark .orion-sb-search-panel,
 html.dark .orion-phone-tabbar {
-  border-color: transparent !important;
-  box-shadow: none !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 html.dark .orion-sb-div {
-  height: 0 !important;
-  margin: 4px 0 !important;
-  background: transparent !important;
+  height: 1px !important;
+  margin: 10px 4px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
 }
 
 html.dark .orion-sidebar-desktop .orion-sidebar-card {
-  border: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
   box-shadow: 0 12px 40px -16px rgba(0, 0, 0, 0.55) !important;
 }
 

@@ -60,6 +60,19 @@ describe('next-action flow', () => {
     expect(action?.href).toBe('/clients/cli-42');
   });
 
+  it('client Actif / CRM → catalogue vente (pas devis direct)', () => {
+    const actif = getNextAction({ entity: 'client', status: 'Actif', entityId: 'cli-1' });
+    expect(actif?.href).toBe('/pos');
+    const crm = getNextAction({ entity: 'client', status: 'CRM', entityId: 'cli-1' });
+    expect(crm?.href).toBe('/pos');
+  });
+
+  it('devis brouillon reste en proforma (Devis)', () => {
+    const action = getNextAction({ entity: 'devis', status: 'Brouillon', entityId: 'dv-1' });
+    expect(action?.id).toBe('devis-send');
+    expect(action?.href).toContain('/devis');
+  });
+
   it('hub commande En finition → CQ', () => {
     const action = resolveCommandeNextAction({
       ...baseCmd,

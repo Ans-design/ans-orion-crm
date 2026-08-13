@@ -128,7 +128,17 @@ export function ProductionFluxUnifiedWorkspace({ canEdit }: Props) {
   ) => {
     setBusy(true);
     try {
-      const payload = { ...step, active: mode === 'active' ? true : step.active };
+      const linked = new Set(step.linkedModules);
+      if (mode === 'active') {
+        linked.add('planning');
+        linked.add('taches');
+      }
+      const payload = {
+        ...step,
+        linkedModules: [...linked] as typeof step.linkedModules,
+        active: mode === 'active' ? true : step.active,
+        visiblePlanning: mode === 'active' ? true : step.visiblePlanning,
+      };
       const r = await fetch('/api/admin-backoffice/production-flux', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

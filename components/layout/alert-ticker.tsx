@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AlertTriangle, Info, Radio } from 'lucide-react';
 import { unwrapApiData } from '@/lib/api-client';
 import { useBottomActionStackOptional } from '@/components/responsive/bottom-action-stack';
+import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 
 type TickerAlert = {
   id: string;
@@ -22,6 +23,9 @@ export function AlertTicker() {
   const stack = useBottomActionStackOptional();
   const setLayerHeight = stack?.setLayerHeight;
   const offsetAbove = stack?.offsetAbove;
+  const liveTick = useOrionLiveRevision(['commandes', 'production', 'nav', 'rh'], {
+    debounceMs: 500,
+  });
 
   const load = useCallback(async () => {
     if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
@@ -51,6 +55,11 @@ export function AlertTicker() {
       document.removeEventListener('visibilitychange', onVisibility);
     };
   }, [load]);
+
+  useEffect(() => {
+    if (liveTick === 0) return;
+    void load();
+  }, [liveTick, load]);
 
   const visible = alertes.length > 0;
 
@@ -91,7 +100,7 @@ export function AlertTicker() {
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         role="region"
-        aria-label="Alertes opérationnelles"
+        aria-label="Alertes du poste et messages équipe"
       >
         <div className="orion-alert-ticker__inner">
           <div className="orion-alert-ticker__brand" title="Alertes live">

@@ -12,7 +12,7 @@
   --chip-h: 32px;
   --control-h: 32px;
   --chip-pad-x: 16px;
-  --chip-radius: 10px;
+  --chip-radius: 7px;
   --rect-pad-x: 16px;
 
   /* Accents UI : bleu/cyan → rouge ANS (chips, liens, pastilles) */

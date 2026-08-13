@@ -18,11 +18,17 @@ import {
 } from '@/lib/server/modules/equipe/metier-tasks.validation';
 
 export async function GET(req: NextRequest) {
-  const auth = await requireAnyPermission('commandes:read', 'production:read', 'production:write');
+  const auth = await requireAnyPermission('commandes:read', 'production:read', 'production:write', 'rh:read');
   if ('error' in auth) return auth.error;
 
   return runApiHandler('equipe/taches GET', async () => {
     const query = parseMetierTaskListQuery(req.nextUrl.searchParams);
+
+    if (query.resume) {
+      const { getDailyTaskResume } = await import('@/lib/services/metier-task-service');
+      const resume = await getDailyTaskResume(query.mine ? auth.userId : undefined, query.mine ? auth.userName : undefined);
+      return NextResponse.json({ resume });
+    }
 
     if (query.statsOnly) {
       const roleTypeMap: Record<string, string | undefined> = {
@@ -49,6 +55,7 @@ export async function GET(req: NextRequest) {
       commandeId: query.commandeId,
       mine: query.mine,
       userId: auth.userId,
+      userName: auth.userName,
     });
 
     return NextResponse.json(tasks);

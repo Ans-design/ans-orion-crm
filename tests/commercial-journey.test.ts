@@ -48,6 +48,8 @@ describe('commercial-journey', () => {
     snap = applyJourneyEvent(snap, 'devis_confirmed', { lastCommandeId: 'cmd1' });
     expect(snap.currentStep).toBe('commandes');
     expect(stepsDoneUpTo(snap.furthestStep).has('devis')).toBe(true);
+    expect(stepsDoneUpTo(snap.furthestStep).has('panier')).toBe(true);
+    expect(stepsDoneUpTo(snap.furthestStep).has('pos')).toBe(true);
 
     snap = applyJourneyEvent(snap, 'manual', {
       lastCommandeId: 'cmd1',

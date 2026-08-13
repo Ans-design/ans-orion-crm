@@ -11,6 +11,27 @@ const mgaAmountSchema = z
   .transform((v) => roundMga(v))
   .refine((v) => Number.isInteger(v) && v > 0, 'Montant Ariary invalide');
 
+/** NIF / STAT facultatifs — un particulier n’en a pas forcément. */
+const emptyToNull = (v: unknown) => {
+  if (v === undefined) return undefined;
+  if (v == null || (typeof v === 'string' && v.trim() === '')) return null;
+  return v;
+};
+
+const optionalNifSchema = z.preprocess(
+  emptyToNull,
+  z
+    .string()
+    .regex(/^\d+$/, 'NIF : chiffres uniquement')
+    .nullable()
+    .optional(),
+);
+
+const optionalStatSchema = z.preprocess(
+  emptyToNull,
+  z.string().trim().max(50).nullable().optional(),
+);
+
 export const createClientSchema = z.object({
   name: z.string().trim().min(1, 'Nom requis').max(200),
   tel: z.string().trim().max(30).optional().nullable(),
@@ -25,8 +46,8 @@ export const createClientSchema = z.object({
   notes: z.string().trim().max(2000).optional().nullable(),
   tags: z.array(z.string().max(50)).max(20).optional(),
   charte: z.string().trim().max(32000).optional().nullable(),
-  nif: z.string().trim().min(1, 'NIF requis').regex(/^\d+$/, 'NIF : chiffres uniquement'),
-  statNumber: z.string().trim().max(50).optional().nullable(),
+  nif: optionalNifSchema,
+  statNumber: optionalStatSchema,
   commercialName: z.string().trim().max(120).optional().nullable(),
   categorie: z.enum(['Prospect', 'Client', 'VIP']).optional(),
   relanceAt: z.union([z.string(), z.date()]).optional().nullable(),
@@ -43,14 +64,7 @@ export const quickCreateClientSchema = z.object({
   name: z.string().trim().min(1, 'Nom requis').max(200),
   tel: z.string().trim().max(30).optional().nullable(),
   email: z.string().trim().email('Email invalide').max(255).optional().nullable().or(z.literal('')).transform((v) => (v === '' ? null : v)),
-  nif: z
-    .string()
-    .trim()
-    .optional()
-    .nullable()
-    .or(z.literal(''))
-    .transform((v) => (v === '' ? null : v))
-    .refine((v) => v == null || /^\d+$/.test(v), 'NIF : chiffres uniquement'),
+  nif: optionalNifSchema,
   adresse: z.string().trim().max(500).optional().nullable(),
   axeLivraison: z.string().trim().max(80).optional().nullable(),
 });

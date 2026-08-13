@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 import Link from 'next/link';
 import {
   Factory, FileCheck, Truck, Printer, Receipt, Banknote,
@@ -59,6 +60,7 @@ export function AnsTalkContextPanel({
   const [tab, setTab] = useState<CtxTab>('info');
   const [busyUserId, setBusyUserId] = useState<string | null>(null);
   const [taskAssigneeIds, setTaskAssigneeIds] = useState<string[]>([]);
+  const liveTick = useOrionLiveRevision(['commandes', 'production', 'nav'], { debounceMs: 400 });
   const badge = orderCtx ? orderStatusBadge(orderCtx.statut) : null;
   const showActions = Boolean(conv.commandeId);
 
@@ -71,6 +73,7 @@ export function AnsTalkContextPanel({
     fetch(`/api/equipe/taches?commandeId=${encodeURIComponent(conv.commandeId)}`, {
       credentials: 'include',
       signal: ac.signal,
+      cache: 'no-store',
     })
       .then(async (r) => (r.ok ? r.json() : null))
       .then((body) => {
@@ -93,7 +96,7 @@ export function AnsTalkContextPanel({
         if (!ac.signal.aborted) setTaskAssigneeIds([]);
       });
     return () => ac.abort();
-  }, [conv.commandeId]);
+  }, [conv.commandeId, liveTick]);
 
   const featuredUserIds = useMemo(
     () =>

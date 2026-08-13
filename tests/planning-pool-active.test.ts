@@ -3,6 +3,8 @@ import {
   hasActiveSlotOnDay,
   isActivePlanningStatut,
   isInCommandePool,
+  joinOperatorNames,
+  splitOperatorNames,
 } from '@/lib/planning/planning-pool';
 
 describe('planning board — créneaux actifs seulement', () => {
@@ -40,7 +42,7 @@ describe('planning board — créneaux actifs seulement', () => {
     ).toBe(true);
   });
 
-  it('un créneau En cours garde la commande hors du pool', () => {
+  it('un créneau En cours laisse la commande dans le pool (autres étapes / personnes)', () => {
     const day = new Date(2026, 7, 10, 12, 0, 0);
     const slots = [
       {
@@ -61,6 +63,42 @@ describe('planning board — créneaux actifs seulement', () => {
         day,
         remainingMin: 60,
       }),
+    ).toBe(true);
+  });
+
+  it('durée épuisée sans créneau → hors pool ; avec mémoire → encore sélectionnable', () => {
+    const day = new Date(2026, 7, 10, 12, 0, 0);
+    expect(
+      isInCommandePool({
+        commandeId: 'c1',
+        statut: 'À planifier',
+        slots: [],
+        day,
+        remainingMin: 0,
+      }),
     ).toBe(false);
+    expect(
+      isInCommandePool({
+        commandeId: 'c1',
+        statut: 'En production',
+        slots: [
+          {
+            id: 's1',
+            commandeId: 'c1',
+            machine: 'BAT',
+            startAt: new Date(2026, 7, 10, 9, 0, 0).toISOString(),
+            endAt: new Date(2026, 7, 10, 12, 0, 0).toISOString(),
+            statut: 'Planifié',
+          },
+        ],
+        day,
+        remainingMin: 0,
+      }),
+    ).toBe(true);
+  });
+
+  it('join / split plusieurs intervenants', () => {
+    expect(joinOperatorNames(['Alice', 'Bob', 'Alice'])).toBe('Alice · Bob');
+    expect(splitOperatorNames('Alice · Bob, Cara')).toEqual(['Alice', 'Bob', 'Cara']);
   });
 });

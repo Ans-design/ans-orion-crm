@@ -45,6 +45,7 @@ export const patchMetierTaskSchema = z.object({
 export type MetierTaskListQuery = {
   statsOnly?: boolean;
   kpi?: boolean;
+  resume?: boolean;
   type?: string;
   status?: string;
   commandeId?: string;
@@ -55,6 +56,7 @@ export function parseMetierTaskListQuery(params: URLSearchParams): MetierTaskLis
   return {
     statsOnly: params.get('stats') === '1',
     kpi: params.get('kpi') === '1',
+    resume: params.get('resume') === '1' || params.get('resume') === 'today',
     type: params.get('type') || undefined,
     status: params.get('status') || undefined,
     commandeId: params.get('commandeId') || params.get('commande') || undefined,

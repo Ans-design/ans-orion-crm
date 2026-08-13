@@ -13,6 +13,7 @@ import {
   Plus,
   Trash2,
   RefreshCw,
+  Users,
 } from 'lucide-react';
 import { uxToast } from '@/lib/ux/feedback';
 import { unwrapListItems, unwrapApiData, getApiErrorMessage } from '@/lib/api-client';
@@ -36,6 +37,7 @@ import {
 } from '@/components/planning/planning-slot-detail-modal';
 import { CommandeDeepLinkBanner } from '@/components/commandes/commande-deep-link-banner';
 import { useCommandeDeepLink } from '@/lib/hooks/use-commande-deep-link';
+import { useOrionLiveRevision } from '@/lib/hooks/use-orion-live-revision';
 import { cn } from '@/lib/utils';
 import { computeCommandeAvancementFromTasks } from '@/lib/commande/commande-task-avancement';
 import {
@@ -53,10 +55,14 @@ import {
   hoursFromMinutes,
   isActivePlanningStatut,
   isInCommandePool,
+  joinOperatorNames,
   maxRemainingAcrossEtapes,
   remainingForEtape,
+  splitOperatorNames,
   PLANNING_MIN_SLOT_MIN,
 } from '@/lib/planning/planning-pool';
+
+const PLANNING_FOCUS_KEY = 'orion-planning-focus-cmd';
 
 type Slot = GanttSlot;
 type Commande = {
@@ -149,6 +155,9 @@ function cmdFilterMatch(cmd: Commande, filter: string): boolean {
 export default function PlanningPage() {
   const router = useRouter();
   const { commandeId, info: commandeInfo } = useCommandeDeepLink();
+  const liveTick = useOrionLiveRevision(['commandes', 'production', 'paiements', 'devis', 'sync'], {
+    debounceMs: 400,
+  });
   const [slots, setSlots] = useState<Slot[]>([]);
   const [commandes, setCommandes] = useState<Commande[]>([]);
   /** commandeId → % calculé depuis les tâches métier */
@@ -187,13 +196,42 @@ export default function PlanningPage() {
     endTime: '12:00',
   });
   const [selectedCmdId, setSelectedCmdId] = useState<string | null>(null);
+  /** Intervenants choisis pour la tâche focus (plusieurs personnes). */
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
   /** Créneau mis en focus (1 clic) — pour teintes de la carte. */
   const [focusedSlot, setFocusedSlot] = useState<Slot | null>(null);
+
+  useEffect(() => {
+    if (commandeId) return;
+    try {
+      const saved = sessionStorage.getItem(PLANNING_FOCUS_KEY);
+      if (saved) setSelectedCmdId(saved);
+    } catch {
+      /* ignore */
+    }
+  }, [commandeId]);
+
+  useEffect(() => {
+    try {
+      if (selectedCmdId) sessionStorage.setItem(PLANNING_FOCUS_KEY, selectedCmdId);
+      else sessionStorage.removeItem(PLANNING_FOCUS_KEY);
+    } catch {
+      /* ignore */
+    }
+  }, [selectedCmdId]);
 
   const etapes = useMemo(
     () => (etapesMeta.length > 0 ? etapesMeta.map((e) => e.name) : ['Impression', 'Façonnage', 'Contrôle qualité']),
     [etapesMeta],
   );
+
+  const etapeHints = useMemo(() => {
+    const hints: Record<string, string> = {};
+    for (const e of etapesMeta) {
+      if (e.responsibleRole) hints[e.name] = e.responsibleRole;
+    }
+    return hints;
+  }, [etapesMeta]);
 
   const range = useMemo(() => {
     const from = new Date();
@@ -204,14 +242,14 @@ export default function PlanningPage() {
     return { from: from.toISOString(), to: to.toISOString() };
   }, []);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (opts?: { silent?: boolean }) => {
+    if (!opts?.silent) setLoading(true);
     try {
       const p = new URLSearchParams({ from: range.from, to: range.to });
       const [sr, cr, rr, tr] = await Promise.all([
-        fetch(`/api/planning?${p}`),
-        fetch('/api/commandes?paginated=1&pageSize=100'),
-        fetch('/api/planning/resources'),
+        fetch(`/api/planning?${p}`, { cache: 'no-store' }),
+        fetch('/api/commandes?all=1', { cache: 'no-store' }),
+        fetch('/api/planning/resources', { cache: 'no-store' }),
         fetch('/api/equipe/taches', { credentials: 'include', cache: 'no-store' }),
       ]);
       if (sr.ok) setSlots(unwrapListItems(await sr.json()));
@@ -265,6 +303,11 @@ export default function PlanningPage() {
   }, [load]);
 
   useEffect(() => {
+    if (liveTick === 0) return;
+    void load({ silent: true });
+  }, [liveTick, load]);
+
+  useEffect(() => {
     if (!commandeId || commandes.length === 0) return;
     const cmd = commandes.find((c) => c.id === commandeId);
     if (cmd) {
@@ -284,14 +327,11 @@ export default function PlanningPage() {
     });
   }, [commandeId]);
 
-  /** Gantt / liste : uniquement Planifié & En cours (Terminé / Annulé hors board). */
+  /** Gantt dédié à UNE commande : vierge si aucune sélection / mémoire si déjà planifiée. */
   const displaySlots = useMemo(() => {
+    const focusId = selectedCmdId ?? commandeId;
     const active = slots.filter((s) => isActivePlanningStatut(normalizeSlotStatut(s.statut)));
-    const base = (() => {
-      if (!commandeId) return active;
-      const filtered = active.filter((s) => s.commandeId === commandeId);
-      return filtered.length > 0 ? filtered : active;
-    })();
+    const base = focusId ? active.filter((s) => s.commandeId === focusId) : [];
     const cmdById = new Map(commandes.map((c) => [c.id, c]));
     return base.map((s) => {
       const cmd = s.commandeId ? cmdById.get(s.commandeId) : undefined;
@@ -303,7 +343,7 @@ export default function PlanningPage() {
       });
       return { ...s, progress };
     });
-  }, [slots, commandeId, commandes, taskProgressByCmd]);
+  }, [slots, commandeId, selectedCmdId, commandes, taskProgressByCmd]);
 
   useEffect(() => {
     const d = ganttDate.toISOString().slice(0, 10);
@@ -323,7 +363,8 @@ export default function PlanningPage() {
         body: JSON.stringify({
           title: form.title,
           machine: form.machine || etapes[0] || null,
-          operateur: form.operateur || null,
+          operateur: form.operateur
+            || (selectedAssignees.length ? joinOperatorNames(selectedAssignees) : null),
           startAt,
           endAt,
           commandeId: selectedCmdId,
@@ -378,7 +419,8 @@ export default function PlanningPage() {
       body: JSON.stringify({
         title: `${cmd.numero} · ${cmd.article}`,
         machine: etape || null,
-        operateur: opts.operateur ?? null,
+        operateur: opts.operateur
+          ?? (selectedAssignees.length ? joinOperatorNames(selectedAssignees) : null),
         commandeId: cmd.id,
         startAt: opts.startAt,
         endAt,
@@ -586,7 +628,7 @@ export default function PlanningPage() {
           || (c.client?.name || '').toLowerCase().includes(q),
       );
     }
-    return list.slice(0, 40);
+    return list.slice(0, 80);
   }, [commandes, cmdFilter, commandeId, cmdQuery, slots, ganttDate, cmdRemaining]);
 
   const draggingDropHours = useMemo(() => {
@@ -598,6 +640,31 @@ export default function PlanningPage() {
     () => commandes.find((c) => c.id === (selectedCmdId ?? commandeId)) ?? null,
     [commandes, selectedCmdId, commandeId],
   );
+
+  const focusCommande = useCallback((cmd: Commande | null) => {
+    if (!cmd) {
+      setSelectedCmdId(null);
+      setSelectedAssignees([]);
+      setFocusedSlot(null);
+      return;
+    }
+    setSelectedCmdId(cmd.id);
+    setFocusedSlot(null);
+    const remembered = slots
+      .filter((s) => s.commandeId === cmd.id)
+      .flatMap((s) => splitOperatorNames(s.operateur));
+    setSelectedAssignees(
+      remembered.filter((n, i, all) => all.findIndex((x) => x.toLowerCase() === n.toLowerCase()) === i),
+    );
+  }, [slots]);
+
+  const toggleAssignee = (name: string) => {
+    setSelectedAssignees((prev) =>
+      prev.some((n) => n.toLowerCase() === name.toLowerCase())
+        ? prev.filter((n) => n.toLowerCase() !== name.toLowerCase())
+        : [...prev, name],
+    );
+  };
 
   const focusGrad = useMemo(() => {
     if (focusedSlot) {
@@ -660,6 +727,7 @@ export default function PlanningPage() {
     e.dataTransfer.setData('text/plain', cmd.numero);
     e.dataTransfer.effectAllowed = 'move';
     setDraggingCmdId(cmd.id);
+    focusCommande(cmd);
   };
 
   const onSidebarDragOver = (e: React.DragEvent) => {
@@ -888,13 +956,22 @@ export default function PlanningPage() {
                       {focusPct}%
                     </strong>
                     {selectedCmd ? (
-                      <button
-                        type="button"
-                        onClick={() => router.push(`/commandes/${selectedCmd.id}`)}
-                        className="h-[34px] rounded-[7px] border border-[#e7ebf3] bg-white px-3 text-[11px] font-bold text-[#47536b]"
-                      >
-                        Ouvrir
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => router.push(`/commandes/${selectedCmd.id}`)}
+                          className="h-[34px] rounded-[7px] border border-[#e7ebf3] bg-white px-3 text-[11px] font-bold text-[#47536b]"
+                        >
+                          Ouvrir
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => focusCommande(null)}
+                          className="h-[34px] rounded-[7px] border border-[#e7ebf3] bg-white px-3 text-[11px] font-bold text-[#47536b]"
+                        >
+                          Nouvelle tâche
+                        </button>
+                      </>
                     ) : focusedSlot ? (
                       <button
                         type="button"
@@ -908,6 +985,51 @@ export default function PlanningPage() {
                 </div>
               ) : null}
 
+              {selectedCmd && operators.length > 0 ? (
+                <div className="mx-3 mb-2 px-3 py-2.5 rounded-[7px] border border-[#e7ebf3] bg-[#f8fafc] dark:bg-muted/20 dark:border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Users size={13} className="text-[#3b72f2] shrink-0" />
+                    <p className="m-0 text-[10px] font-extrabold uppercase tracking-wide text-[#71809a]">
+                      Qui occupe cette tâche
+                    </p>
+                    <span className="text-[10px] text-[#97a2b4]">
+                      {selectedAssignees.length > 0
+                        ? `${selectedAssignees.length} personne${selectedAssignees.length > 1 ? 's' : ''}`
+                        : 'plusieurs choix possibles'}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {operators.map((op) => {
+                      const on = selectedAssignees.some((n) => n.toLowerCase() === op.name.toLowerCase());
+                      return (
+                        <button
+                          key={op.id}
+                          type="button"
+                          onClick={() => toggleAssignee(op.name)}
+                          className={cn(
+                            'rounded-[7px] px-2 py-1 text-[10px] font-bold border transition-colors',
+                            on
+                              ? 'bg-[#e9efff] border-[#3b72f2] text-[#3769db]'
+                              : 'bg-white border-[#e7ebf3] text-[#64718a] hover:border-[#c5d0e0]',
+                          )}
+                        >
+                          {op.name}
+                          <span className="ml-1 font-semibold opacity-60">{op.role}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+
+              {!selectedCmd && !loading ? (
+                <div className="mx-3 mb-2 px-3.5 py-3 rounded-[7px] border border-dashed border-[#d5deea] bg-[#fbfcfe] text-[11px] text-[#71809a] leading-relaxed">
+                  Choisissez une commande dans le pool. Le Gantt affiche uniquement cette tâche — vierge
+                  si rien n’est encore planifié, ou la mémoire des étapes déjà posées. Glissez ensuite
+                  sur 01 Client, 02 Devis, BAT… (plusieurs étapes, plusieurs personnes).
+                </div>
+              ) : null}
+
               {loading ? (
                 <div className="p-14 text-center text-[#71809a] text-sm">Chargement Gantt…</div>
               ) : (
@@ -916,6 +1038,7 @@ export default function PlanningPage() {
                   date={ganttDate}
                   shiftMode={shiftMode}
                   resources={etapes}
+                  resourceHints={etapeHints}
                   onSlotClick={focusSlot}
                   onSlotDoubleClick={openSlotDetail}
                   onSlotUpdate={async (id, patch) => {
@@ -956,7 +1079,7 @@ export default function PlanningPage() {
                 <p className="text-[10px] text-[#71809a] mt-1 mb-3">
                   {draggingSlotId
                     ? 'Déposez ici pour déplanifier (durée rendue)'
-                    : 'Glissez ↔ Gantt · une tâche n’est jamais aux deux endroits'}
+                    : 'Sélectionnez une tâche · glissez les étapes sur le Gantt (plusieurs personnes)'}
                 </p>
                 <input
                   type="search"
@@ -1009,10 +1132,7 @@ export default function PlanningPage() {
                         setDraggingSlotId(null);
                         setSidebarDropActive(false);
                       }}
-                      onClick={() => {
-                        setSelectedCmdId(cmd.id);
-                        setFocusedSlot(null);
-                      }}
+                      onClick={() => focusCommande(cmd)}
                       style={{
                         background: cardTint.background,
                         borderColor: cardTint.border,
@@ -1079,7 +1199,9 @@ export default function PlanningPage() {
                   );
                 })}
                 {filteredCmds.length === 0 && (
-                  <p className="text-center text-[#71809a] py-10 text-xs">Aucune commande active</p>
+                  <p className="text-center text-[#71809a] py-10 text-xs px-3 leading-relaxed">
+                    Aucune commande à planifier. Une commande payée (Commercial) apparaît ici — cliquez pour ouvrir son Gantt, puis glissez sur les étapes.
+                  </p>
                 )}
               </div>
 

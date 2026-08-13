@@ -42,7 +42,7 @@ export function CartActions({
           {loadingAction === 'devis' ? 'Création…' : 'Créer devis / proforma'}
         </AppButton>
         <p className="orion-text-meta leading-4 px-0.5">
-          Panier → devis/proforma → validation → commande.
+          Panier → devis/proforma (reste en Devis si enregistré) → paiement → Commandes → Production.
         </p>
         <AppButton
           type="button"

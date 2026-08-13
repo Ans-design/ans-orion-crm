@@ -306,22 +306,12 @@ export async function afterCommandeCreated(
   await syncDossierForCommandeFromSync(commandeId, { priorite: opts?.priorite });
   await syncBriefForCommandeFromSync(commandeId);
 
-  const { schedulePlanningSlotForCommande } = await import('@/lib/services/planning-commande-service');
-  const slotResult = await schedulePlanningSlotForCommande(commandeId).catch((err) => {
-    console.error('[Planning] Échec slot auto commande:', commandeId, err);
-    return null;
-  });
-  if (slotResult?.created) {
-    const { logPosAudit } = await import('@/lib/pos-audit');
-    await logPosAudit({
-      userId: opts?.userId,
-      userName: opts?.userName,
-      action: 'PLANNING_SLOT_AUTO',
-      entity: 'ProductionSlot',
-      entityId: slotResult.slot.id,
-      entityLabel: slotResult.slot.title,
-      details: { commandeId },
-    }).catch(() => {});
+  /* Pas de créneau Gantt auto : l’organisateur glisse la commande depuis le pool Planning. */
+  try {
+    const { bumpLiveRevisions } = await import('@/lib/server/live/live-revision-bus');
+    bumpLiveRevisions(['commandes', 'devis', 'production', 'paiements', 'stock', 'nav']);
+  } catch {
+    /* ignore */
   }
 
   const { createOrderConversation } = await import('@/lib/messaging/messaging-service');

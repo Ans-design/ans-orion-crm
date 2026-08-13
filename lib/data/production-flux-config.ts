@@ -220,3 +220,73 @@ export function buildDefaultProductionFluxConfig(): ProductionFluxConfig {
     updatedAt: new Date().toISOString(),
   };
 }
+
+export const DEFAULT_PRODUCTION_FLUX_STEP_IDS = new Set(
+  DEFAULT_PRODUCTION_FLUX_STEPS.map((s) => s.id),
+);
+
+const ROLE_DEFAULT_TASK_TYPE: Record<string, string> = {
+  designer: 'graphisme',
+  commercial: 'commercial',
+  conducteur: 'production',
+  production: 'production',
+  faconnage: 'finition',
+  livraison: 'logistique',
+  finance: 'commercial',
+  manager: 'production',
+  admin: 'production',
+};
+
+/** Nouvelle étape de chaîne → active, visible Gantt, tâche métier. */
+export function prepareNewFluxStep(step: ProductionFluxStep): ProductionFluxStep {
+  const modules = new Set<FluxStepModule>(
+    step.linkedModules.length ? step.linkedModules : ['commande'],
+  );
+  modules.add('planning');
+  modules.add('taches');
+  return {
+    ...step,
+    active: true,
+    visiblePlanning: true,
+    generatesTask: true,
+    linkedModules: [...modules],
+    taskType: step.taskType || ROLE_DEFAULT_TASK_TYPE[step.responsibleRole] || 'production',
+    planningResource: (step.planningResource || '').trim() || step.code || step.name,
+  };
+}
+
+/** Étapes custom jamais branchées au Planning : une seule fois (respecte ensuite actif/inactif). */
+export function healCustomStepsForPlanning(config: ProductionFluxConfig): {
+  config: ProductionFluxConfig;
+  changed: boolean;
+} {
+  let changed = false;
+  const steps = config.steps.map((s) => {
+    if (DEFAULT_PRODUCTION_FLUX_STEP_IDS.has(s.id)) return s;
+    if (s.visiblePlanning) return s;
+    changed = true;
+    return prepareNewFluxStep(s);
+  });
+  return { config: changed ? { ...config, steps } : config, changed };
+}
+
+export type PlanningFluxEtape = {
+  id: string;
+  name: string;
+  code: string;
+  responsibleRole: string;
+  targetDelayHours: number;
+};
+
+/** Gantt = toute la chaîne Production & Flux (ajout / suppression inclus). */
+export function pickPlanningEtapes(steps: ProductionFluxStep[]): PlanningFluxEtape[] {
+  return [...steps]
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((s) => ({
+      id: s.id,
+      name: s.name,
+      code: s.code,
+      responsibleRole: s.responsibleRole,
+      targetDelayHours: s.targetDelayHours,
+    }));
+}

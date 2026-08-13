@@ -62,7 +62,19 @@ export async function tryAutoConvertDevisOnAcompte(params: {
     select: { id: true, numero: true, statut: true, totalTTC: true, notes: true, clientId: true },
   });
   if (!devis) return { converted: false as const, reason: 'devis_not_found' };
-  if (devis.statut === DevisStatut.Accepte) return { converted: false as const, reason: 'already_accepted' };
+
+  const existingCmd = await prisma.commande.findFirst({
+    where: { devisId: devis.id },
+    select: { id: true, numero: true },
+  });
+  if (existingCmd) {
+    await linkDevisPaymentsToCommande(params.devisId, existingCmd.id);
+    return { converted: false as const, alreadyConverted: true as const, commande: existingCmd };
+  }
+
+  if (devis.statut === DevisStatut.Accepte) {
+    return { converted: false as const, reason: 'already_accepted' };
+  }
   if (!pendingDevisStatuts().includes(devis.statut)) {
     return { converted: false as const, reason: 'invalid_statut' };
   }

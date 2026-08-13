@@ -30,7 +30,12 @@ function parseEnvFile(filePath) {
 
 function loadNeonUrl() {
   const merged = {};
-  for (const file of ['deploy/hostinger/database.bundled.env', '.env.vercel.production', '.env']) {
+  for (const file of [
+    'deploy/hostinger/database.bundled.env',
+    '.env.vercel.production',
+    '.env.ans-orion-crm.neon',
+    '.env',
+  ]) {
     Object.assign(merged, parseEnvFile(path.join(process.cwd(), file)));
   }
   const url =

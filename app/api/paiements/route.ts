@@ -78,12 +78,19 @@ export async function POST(req: NextRequest) {
           await syncCockpitOnPaiementComplete(commandeId).catch(() => {});
         }
 
-        return created({
-          ...paiement,
-          devisConversion,
-          printFormat,
-          factureId: factureId || paiement.factureId || null,
-        });
+        const { attachLiveDomains } = await import('@/lib/live/live-response');
+        return attachLiveDomains(
+          created({
+            ...paiement,
+            devisConversion,
+            printFormat,
+            commandeId,
+            factureId: factureId || paiement.factureId || null,
+          }),
+          devisConversion && 'commande' in devisConversion && devisConversion.commande
+            ? ['paiements', 'commandes', 'devis', 'production', 'caisse', 'nav']
+            : ['paiements', 'factures', 'caisse', 'commandes'],
+        );
       } catch (error) {
         return fromError(error);
       }

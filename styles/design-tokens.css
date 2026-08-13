@@ -66,7 +66,7 @@
   --border: var(--border-standard);
   --border-active: #FF174D;
   --border-active-soft: rgba(255, 23, 77, 0.28);
-  --radius-pill: 9999px;
+  --radius-pill: 7px;
   /* Unifié ORION : 7px partout (surfaces) — pills / full restent 9999 */
   --radius-control: 7px;
   --radius-card: 7px;
@@ -210,7 +210,7 @@
   --border: var(--ans-border-soft, #1A2F52);
   --border-active: var(--ans-primary, #FF174D);
   --border-active-soft: var(--ans-primary-soft, rgba(255, 23, 77, 0.16));
-  --radius-pill: 9999px;
+  --radius-pill: 7px;
 
   --orion-success: var(--ans-success, #22C55E);
   --orion-warning: var(--ans-warning, #FACC15);

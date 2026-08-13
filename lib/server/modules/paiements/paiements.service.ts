@@ -376,7 +376,7 @@ export async function createPaiementRecord(
     });
 
     let devisConversion: Awaited<ReturnType<typeof tryAutoConvertDevisOnAcompte>> | undefined;
-    if (devisId && payType === 'Acompte' && auth) {
+    if (devisId && payType !== 'Remboursement' && auth) {
       devisConversion = await tryAutoConvertDevisOnAcompte({
         devisId,
         montant,
@@ -385,12 +385,22 @@ export async function createPaiementRecord(
       });
     }
 
+    const convertedCommandeId =
+      devisConversion && 'commande' in devisConversion && devisConversion.commande
+        ? devisConversion.commande.id
+        : null;
+
     invalidateKpiCaches();
     return {
       ok: true as const,
       paiement,
       devisConversion,
-      commandeId: commandeId || paiement.facture?.commandeId || paiement.commandeId || null,
+      commandeId:
+        convertedCommandeId
+        || commandeId
+        || paiement.facture?.commandeId
+        || paiement.commandeId
+        || null,
       printFormat,
       factureId: paiement.factureId || resolvedFactureId || null,
     };
