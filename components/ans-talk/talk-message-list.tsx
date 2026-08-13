@@ -67,7 +67,7 @@ export function TalkMessageList({
         </div>
       )}
 
-      {loading ? (
+      {loading && messages.length === 0 ? (
         <div className="flex justify-center py-16">
           <Loader2 className="animate-spin text-muted-foreground" size={24} />
         </div>

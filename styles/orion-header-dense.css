@@ -105,6 +105,11 @@ html.dark .orion-app-header--fixed {
   overflow: hidden;
 }
 
+html:not(.dark) .orion-header-tool-cluster {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
 html.dark .orion-header-tool-cluster {
   background: color-mix(in srgb, var(--bg-card, #071021) 92%, transparent);
   border-color: rgba(255, 255, 255, 0.08);

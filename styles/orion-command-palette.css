@@ -1,0 +1,349 @@
+/**
+ * ANS ORION — Palette de commandes (Ctrl+K)
+ * Spotlight / Linear : suit le thème, radius 7px, accent marque.
+ */
+
+.orion-cmd {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14vh 1rem 2rem;
+}
+
+.orion-cmd__backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg-app, #0f172a) 42%, rgba(15, 23, 42, 0.38));
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+}
+
+html.dark .orion-cmd__backdrop {
+  background: rgba(2, 3, 13, 0.62);
+}
+
+.orion-cmd__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(36rem, calc(100vw - 1.5rem));
+  max-height: min(72vh, 34rem);
+  overflow: hidden;
+  border-radius: 7px;
+  background: var(--bg-card, #ffffff);
+  color: var(--text-main, #0f172a);
+  border: 1px solid var(--border-soft, #e2e8f0);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--primary, #ff174d) 55%, transparent),
+    0 18px 50px rgba(15, 23, 42, 0.18),
+    0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
+html.dark .orion-cmd__panel {
+  background: var(--bg-card, #071021);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--primary, #ff174d) 45%, transparent),
+    0 24px 56px rgba(0, 0, 0, 0.5);
+}
+
+.orion-cmd__search {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 0.95rem;
+  border-bottom: 1px solid var(--border-soft, #e2e8f0);
+  background: color-mix(in srgb, var(--bg-app, #f4f7fb) 55%, var(--bg-card, #fff));
+}
+
+html.dark .orion-cmd__search {
+  background: color-mix(in srgb, var(--bg-app, #02030d) 40%, transparent);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.orion-cmd__search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--primary, #ff174d) 12%, transparent);
+  color: var(--primary, #ff174d);
+}
+
+.orion-cmd__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text-main, #0f172a);
+  font-size: 0.9375rem;
+  font-weight: 550;
+  line-height: 1.3;
+  padding: 0;
+}
+
+.orion-cmd__input::placeholder {
+  color: var(--text-muted, #64748b);
+  font-weight: 500;
+}
+
+.orion-cmd__kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  height: 1.35rem;
+  padding: 0 0.4rem;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft, #e2e8f0);
+  background: var(--bg-chip, #f8fafc);
+  color: var(--text-muted, #64748b);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+html.dark .orion-cmd__kbd {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+.orion-cmd__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted, #64748b);
+  cursor: pointer;
+}
+
+.orion-cmd__close:hover {
+  background: var(--bg-hover, #f1f5f9);
+  color: var(--text-main, #0f172a);
+}
+
+html.dark .orion-cmd__close:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+}
+
+.orion-cmd__list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.4rem 0.45rem 0.55rem;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--primary, #ff174d) 28%, transparent) transparent;
+}
+
+.orion-cmd__group {
+  margin-bottom: 0.2rem;
+}
+
+.orion-cmd__group-label {
+  margin: 0;
+  padding: 0.45rem 0.7rem 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted, #64748b);
+}
+
+.orion-cmd__item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 2.75rem;
+  margin: 1px 0;
+  padding: 0.45rem 0.55rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-main, #0f172a);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.orion-cmd__item:hover {
+  background: var(--bg-hover, #f1f5f9);
+}
+
+.orion-cmd__item.is-active {
+  background: color-mix(in srgb, var(--primary, #ff174d) 12%, transparent);
+  color: var(--text-main, #0f172a);
+  box-shadow: inset 2px 0 0 var(--primary, #ff174d);
+}
+
+html.dark .orion-cmd__item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+html.dark .orion-cmd__item.is-active {
+  background: color-mix(in srgb, var(--primary, #ff174d) 16%, transparent);
+  color: #f8fafc;
+}
+
+.orion-cmd__item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: var(--bg-chip, #f1f5f9);
+  color: var(--text-secondary, #475569);
+}
+
+.orion-cmd__item.is-active .orion-cmd__item-icon {
+  background: color-mix(in srgb, var(--primary, #ff174d) 18%, transparent);
+  color: var(--primary, #ff174d);
+}
+
+html.dark .orion-cmd__item-icon {
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+}
+
+.orion-cmd__item-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.orion-cmd__item-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orion-cmd__item-sub {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--text-muted, #64748b);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orion-cmd__mark {
+  background: color-mix(in srgb, var(--primary, #ff174d) 18%, transparent);
+  color: inherit;
+  font-weight: 800;
+  border-radius: 3px;
+  padding: 0 0.08em;
+}
+
+.orion-cmd__enter {
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.orion-cmd__item.is-active .orion-cmd__enter {
+  opacity: 1;
+  transform: none;
+}
+
+.orion-cmd__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 2.25rem 1rem;
+  text-align: center;
+}
+
+.orion-cmd__empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0.25rem;
+  border-radius: 7px;
+  background: var(--bg-chip, #f1f5f9);
+  color: var(--text-muted, #64748b);
+}
+
+.orion-cmd__empty-title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-main, #0f172a);
+}
+
+.orion-cmd__empty-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+}
+
+.orion-cmd__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0.85rem;
+  border-top: 1px solid var(--border-soft, #e2e8f0);
+  background: color-mix(in srgb, var(--bg-app, #f4f7fb) 70%, var(--bg-card, #fff));
+  color: var(--text-muted, #64748b);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+html.dark .orion-cmd__footer {
+  background: color-mix(in srgb, var(--bg-app, #02030d) 50%, transparent);
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.orion-cmd__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.orion-cmd__count {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim, #94a3b8);
+}
+
+@media (max-width: 640px) {
+  .orion-cmd {
+    padding: 8vh 0.75rem 1rem;
+  }
+
+  .orion-cmd__panel {
+    max-height: min(82vh, 36rem);
+  }
+
+  .orion-cmd__kbd--esc {
+    display: none;
+  }
+}

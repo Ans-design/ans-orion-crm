@@ -22,6 +22,7 @@ import {
   THEME_STORAGE_KEY,
   applyAppearanceToDocument,
   persistLocalTheme,
+  applyThemeNow,
   type AccentId,
   type DarkPaletteId,
 } from '@/lib/settings-defaults';
@@ -96,7 +97,7 @@ export default function ApparencePage() {
   const selectTheme = (id: 'light' | 'dark') => {
     patch({ theme: id });
     setTheme(id);
-    persistLocalTheme(id);
+    applyThemeNow(id);
   };
 
   const save = async () => {
@@ -212,7 +213,7 @@ export default function ApparencePage() {
           <p className="text-xs text-muted-foreground">
             Change les boutons, sidebar, ticker LIVE, ANS Talk, fonds légers — partout dans ORION.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
             {ACCENT_OPTIONS.map((opt) => {
               const selected = prefs.accent === opt.id;
               return (
@@ -221,7 +222,7 @@ export default function ApparencePage() {
                   type="button"
                   onClick={() => patch({ accent: opt.id })}
                   className={cn(
-                    'flex items-center gap-3 rounded-[7px] border-2 p-3 text-left transition-all',
+                    'flex items-center gap-2.5 rounded-[7px] border-2 p-2.5 text-left transition-all min-h-[52px]',
                     selected
                       ? 'border-[var(--accent-primary,#FF174D)] bg-[color-mix(in_srgb,var(--accent-primary,#FF174D)_8%,transparent)]'
                       : 'border-border hover:border-muted-foreground/40',
@@ -230,18 +231,18 @@ export default function ApparencePage() {
                 >
                   <span
                     className={cn(
-                      'h-11 w-11 shrink-0 rounded-[7px] border-2 shadow-sm',
+                      'h-9 w-9 shrink-0 rounded-[7px] border-2 shadow-sm',
                       selected ? 'border-white ring-2 ring-offset-1 ring-offset-background' : 'border-black/10',
                     )}
                     style={{ background: opt.color, ['--tw-ring-color' as string]: opt.color }}
                     aria-hidden
                   />
                   <span className="min-w-0">
-                    <span className="block text-sm font-semibold truncate">{opt.label}</span>
-                    <span className="block text-[11px] text-muted-foreground truncate">{opt.hint}</span>
+                    <span className="block text-[13px] font-semibold truncate">{opt.label}</span>
+                    <span className="block text-[10px] text-muted-foreground truncate">{opt.hint}</span>
                   </span>
                   {selected ? (
-                    <Check size={16} className="ml-auto shrink-0 text-[var(--accent-primary,#FF174D)]" aria-hidden />
+                    <Check size={14} className="ml-auto shrink-0 text-[var(--accent-primary,#FF174D)]" aria-hidden />
                   ) : null}
                 </button>
               );

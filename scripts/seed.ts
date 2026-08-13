@@ -8,8 +8,10 @@ async function main() {
   console.log('Seeding database (local/dev only — never use known passwords in production)...');
 
   if (process.env.NODE_ENV === 'production' || process.env.HOSTINGER === 'true' || process.env.USE_PRODUCTION_DB === 'true') {
-    console.error('❌ scripts/seed.ts interdit en production. Utiliser: npm run seed:production + ORION_SEED_BOOTSTRAP_SECRET');
-    process.exit(1);
+    if (process.env.ALLOW_VERCEL_PARITY_SEED !== 'true') {
+      console.error('❌ scripts/seed.ts interdit en production. Utiliser: npm run seed:production + ORION_SEED_BOOTSTRAP_SECRET');
+      process.exit(1);
+    }
   }
 
   const adminEmail = process.env.SEED_ADMIN_EMAIL || 'john@doe.com';
@@ -17,11 +19,12 @@ async function main() {
   const demoEmail = process.env.SEED_DEMO_EMAIL || 'demo@example.local';
   const demoPassword = process.env.SEED_DEMO_PASSWORD || process.env.ORION_SEED_BOOTSTRAP_SECRET;
 
-  // E2E / SQLite local : seuil assoupli (mots de passe machine déjà présents) — prod reste ≥12
+  // E2E / SQLite local / parité Neon : seuil assoupli (mots de passe machine déjà présents) — prod reste ≥12
   const isLocalE2e =
     process.env.E2E_MODE === 'true'
     || process.env.APP_ENV === 'local'
     || process.env.LOCAL_DEV === 'true'
+    || process.env.ALLOW_VERCEL_PARITY_SEED === 'true'
     || Boolean(process.env.DATABASE_URL?.startsWith('file:'));
   const minPw = isLocalE2e ? 8 : 12;
 
@@ -231,9 +234,13 @@ async function main() {
   }
 
   try {
-    const { bootstrapTalkFromSeed } = await import('../lib/messaging/messaging-service');
-    await bootstrapTalkFromSeed();
-    console.log('ANS Talk : groupes service et commandes initialisés');
+    if (process.env.SKIP_TALK_BOOTSTRAP === 'true' || process.env.ALLOW_VERCEL_PARITY_SEED === 'true') {
+      console.log('ANS Talk bootstrap ignoré (parité / SKIP_TALK_BOOTSTRAP)');
+    } else {
+      const { bootstrapTalkFromSeed } = await import('../lib/messaging/messaging-service');
+      await bootstrapTalkFromSeed();
+      console.log('ANS Talk : groupes service et commandes initialisés');
+    }
   } catch (err) {
     console.log('ANS Talk bootstrap ignoré:', (err as Error).message?.slice(0, 120));
   }

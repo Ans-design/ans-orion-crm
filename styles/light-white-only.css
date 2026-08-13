@@ -845,3 +845,56 @@ html.dark .block-default {
   background: #091428 !important;
   color: #94a3b8 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   CLAIR — chrome (header / sidebar) sans navy résiduel après Sombre
+   ═══════════════════════════════════════════════════════════════ */
+html:not(.dark) .orion-header-tool-cluster {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .orion-header-icon-btn {
+  background: #f4f7fb !important;
+  color: #64748b !important;
+}
+
+html:not(.dark) .orion-header-tool-cluster .orion-header-icon-btn {
+  background: transparent !important;
+}
+
+html:not(.dark) .orion-live-chip {
+  background: #ffffff !important;
+  color: #475569 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .orion-sb-kbd,
+html:not(.dark) .orion-cockpit-search__kbd {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .orion-sb-collapse-btn {
+  background: #f4f7fb !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .orion-sb-env-badge {
+  background: #f8fafc !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .orion-sb-universe-icon {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+html:not(.dark) .orion-sb-universe-btn-open .orion-sb-universe-icon,
+html:not(.dark) .orion-sb-universe-btn-active .orion-sb-universe-icon {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+}

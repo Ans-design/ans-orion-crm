@@ -10,7 +10,19 @@ export type AccentId =
   | 'teal'
   | 'blue'
   | 'violet'
-  | 'rose';
+  | 'rose'
+  | 'coral'
+  | 'crimson'
+  | 'fuchsia'
+  | 'gold'
+  | 'lime'
+  | 'forest'
+  | 'sky'
+  | 'ice'
+  | 'indigo'
+  | 'navy'
+  | 'slate'
+  | 'burgundy';
 
 export type DarkPaletteId = 'midnight' | 'charcoal' | 'forest' | 'plum' | 'ocean';
 
@@ -54,14 +66,26 @@ type AccentDef = {
 export const ACCENT_DEFS: AccentDef[] = [
   { id: 'cyan', label: 'Rouge vif', hint: 'Actions principales', color: '#FF174D', hover: '#E0003B', deep: '#B80030' },
   { id: 'magenta', label: 'Rouge ANS', hint: 'Marque ORION', color: '#C91443', hover: '#A01036', deep: '#7A0C29' },
+  { id: 'crimson', label: 'Cramoisi', hint: 'Alerte forte', color: '#DC2626', hover: '#B91C1C', deep: '#991B1B' },
+  { id: 'burgundy', label: 'Bordeaux', hint: 'Prestige', color: '#7A1F3D', hover: '#5C1730', deep: '#3F1021' },
   { id: 'rose', label: 'Rose', hint: 'Créatif / studio', color: '#EC4899', hover: '#DB2777', deep: '#BE185D' },
+  { id: 'fuchsia', label: 'Fuchsia', hint: 'Studio expressif', color: '#C026D3', hover: '#A21CAF', deep: '#86198F' },
+  { id: 'coral', label: 'Corail', hint: 'Urgence atelier', color: '#FF5A36', hover: '#E03E1C', deep: '#B82E12' },
   { id: 'orange', label: 'Orange', hint: 'Énergie atelier', color: '#F97316', hover: '#EA580C', deep: '#C2410C' },
   { id: 'amber', label: 'Ambre', hint: 'Chaleur', color: '#F59E0B', hover: '#D97706', deep: '#B45309' },
+  { id: 'gold', label: 'Or', hint: 'Premium / BAT', color: '#C9A227', hover: '#A6851C', deep: '#7C6414' },
   { id: 'yellow', label: 'Jaune', hint: 'Alertes & focus', color: '#EAB308', hover: '#CA8A04', deep: '#A16207' },
+  { id: 'lime', label: 'Citron vert', hint: 'Prod vive', color: '#65A30D', hover: '#4D7C0F', deep: '#3F6212' },
   { id: 'emerald', label: 'Émeraude', hint: 'Prod / OK', color: '#10B981', hover: '#059669', deep: '#047857' },
+  { id: 'forest', label: 'Forêt', hint: 'Atelier vert', color: '#15803D', hover: '#166534', deep: '#14532D' },
   { id: 'teal', label: 'Sarcelle', hint: 'Frais', color: '#14B8A6', hover: '#0D9488', deep: '#0F766E' },
+  { id: 'ice', label: 'Glacier', hint: 'Cyan / frais', color: '#22D3EE', hover: '#06B6D4', deep: '#0E7490' },
+  { id: 'sky', label: 'Ciel', hint: 'Logistique', color: '#0EA5E9', hover: '#0284C7', deep: '#0369A1' },
   { id: 'blue', label: 'Bleu', hint: 'Pilotage', color: '#3B82F6', hover: '#2563EB', deep: '#1D4ED8' },
+  { id: 'navy', label: 'Marine', hint: 'Sérieux', color: '#1E4B8C', hover: '#163A6E', deep: '#0F2A52' },
+  { id: 'indigo', label: 'Indigo', hint: 'Direction', color: '#4F46E5', hover: '#4338CA', deep: '#3730A3' },
   { id: 'violet', label: 'Violet', hint: 'Premium', color: '#8B5CF6', hover: '#7C3AED', deep: '#6D28D9' },
+  { id: 'slate', label: 'Ardoise', hint: 'Neutre pro', color: '#475569', hover: '#334155', deep: '#1E293B' },
 ];
 
 export const ACCENT_COLORS: Record<AccentId, string> = Object.fromEntries(
@@ -229,6 +253,47 @@ function resolveDarkPalette(id?: string): DarkPaletteDef {
   return DARK_PALETTE_OPTIONS.find((d) => d.id === id) ?? DARK_PALETTE_OPTIONS[0]!;
 }
 
+/** Clés injectées en inline en mode sombre — à retirer au retour Clair. */
+const DARK_PALETTE_VAR_KEYS = Array.from(
+  new Set(DARK_PALETTE_OPTIONS.flatMap((p) => Object.keys(p.vars))),
+);
+
+/** Surfaces Clair (écrase les inline sombre, puis teinte --bg-app). */
+const LIGHT_SURFACE_VARS: Record<string, string> = {
+  '--bg-app': '#F4F7FB',
+  '--bg-page': '#F4F7FB',
+  '--bg-soft': '#F8FAFC',
+  '--bg-panel': '#FFFFFF',
+  '--bg-card': '#FFFFFF',
+  '--bg-card-soft': '#F1F5F9',
+  '--bg-card-elevated': '#FFFFFF',
+  '--bg-hover': '#F1F5F9',
+  '--bg-sidebar': '#FFFFFF',
+  '--bg-header': '#FFFFFF',
+  '--bg-chip': '#F8FAFC',
+  '--bg-chip-active': 'rgba(255, 23, 77, 0.1)',
+  '--ans-bg-main': '#F4F7FB',
+  '--ans-bg-sidebar': '#FFFFFF',
+  '--ans-bg-panel': '#FFFFFF',
+  '--ans-bg-card': '#FFFFFF',
+  '--ans-light-bg': '#F4F7FB',
+  '--ans-light-sidebar': '#FFFFFF',
+  '--ans-light-panel': '#FFFFFF',
+  '--ans-light-card': '#FFFFFF',
+  '--cockpit-surface': '#FFFFFF',
+  '--cockpit-surface-muted': '#F8FAFC',
+  '--orion-surface': '#FFFFFF',
+  '--orion-surface-soft': '#F8FAFC',
+  '--orion-surface-muted': '#FFFFFF',
+  '--orion-surface-hover': '#F1F5F9',
+  '--app-surface': '#FFFFFF',
+  '--app-surface-soft': '#F8FAFC',
+  '--bg-main': '#F4F7FB',
+  '--text-main': '#0F172A',
+  '--text-muted': '#64748B',
+  '--text-secondary': '#475569',
+};
+
 /** Applique accent / densités / palette sombre / barre CMJN (immédiat, sans reload). */
 export function applyAppearanceToDocument(prefs: {
   accent?: string;
@@ -297,11 +362,24 @@ export function applyAppearanceToDocument(prefs: {
     root.style.setProperty(k, v);
   }
 
+  if (prefs.theme === 'dark') {
+    root.classList.add('dark');
+  } else if (prefs.theme === 'light') {
+    root.classList.remove('dark');
+  }
+
   const isDark =
     prefs.theme === 'dark'
     || (prefs.theme !== 'light' && root.classList.contains('dark'));
 
+  root.style.colorScheme = isDark ? 'dark' : 'light';
+
   if (isDark) {
+    for (const k of Object.keys(LIGHT_SURFACE_VARS)) {
+      if (!DARK_PALETTE_VAR_KEYS.includes(k)) {
+        root.style.removeProperty(k);
+      }
+    }
     const palette = resolveDarkPalette(prefs.darkPalette);
     for (const [k, v] of Object.entries(palette.vars)) {
       root.style.setProperty(k, v);
@@ -310,10 +388,20 @@ export function applyAppearanceToDocument(prefs: {
     root.style.setProperty('--bg-active-soft', soft);
     root.dataset.darkPalette = palette.id;
   } else {
-    /* Teinte légère des fonds selon l’accent (ex. jaune → page tiédie). */
+    /* Retirer TOUTES les surfaces sombres inline, sinon --bg-card reste #071021. */
+    for (const k of DARK_PALETTE_VAR_KEYS) {
+      root.style.removeProperty(k);
+    }
+    for (const [k, v] of Object.entries(LIGHT_SURFACE_VARS)) {
+      root.style.setProperty(k, v);
+    }
+    /* Teinte légère des fonds page selon l’accent (cartes restent blanches). */
     root.style.setProperty('--bg-app', lightApp);
     root.style.setProperty('--bg-page', lightApp);
     root.style.setProperty('--ans-light-bg', lightApp);
+    root.style.setProperty('--ans-bg-main', lightApp);
+    root.style.setProperty('--bg-active', lightActive);
+    root.style.setProperty('--bg-active-soft', soft);
     root.dataset.darkPalette = '';
   }
 
@@ -340,7 +428,7 @@ export function applyStoredAppearanceHints(): void {
     const accent = localStorage.getItem(ACCENT_STORAGE_KEY) || undefined;
     const darkPalette = localStorage.getItem(DARK_PALETTE_STORAGE_KEY) || undefined;
     const theme = localStorage.getItem(THEME_STORAGE_KEY) || undefined;
-    if (!accent && !darkPalette) return;
+    if (!accent && !darkPalette && !theme) return;
     applyAppearanceToDocument({
       accent: accent ?? DEFAULT_APPEARANCE.accent,
       darkPalette: (darkPalette as DarkPaletteId) || DEFAULT_APPEARANCE.darkPalette,
@@ -359,6 +447,16 @@ export function persistLocalTheme(theme: 'light' | 'dark' | 'system'): void {
   } catch {
     /* ignore */
   }
+}
+
+/** Bascule header / Apparence : persiste + réapplique surfaces tout de suite. */
+export function applyThemeNow(theme: 'light' | 'dark'): void {
+  persistLocalTheme(theme);
+  if (typeof document !== 'undefined') {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.documentElement.style.colorScheme = theme;
+  }
+  applyStoredAppearanceHints();
 }
 
 export { THEME_STORAGE_KEY, ACCENT_STORAGE_KEY, DARK_PALETTE_STORAGE_KEY };

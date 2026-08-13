@@ -99,7 +99,10 @@ export function ThemePrefsLoader() {
     applyAppearanceToDocument({
       accent: local.accent,
       darkPalette: local.darkPalette,
-      theme: resolvedTheme === 'dark' ? 'dark' : 'light',
+      /* localStorage gagne : évite de réinjecter le sombre si next-themes est en retard. */
+      theme: local.theme === 'dark' || local.theme === 'light'
+        ? local.theme
+        : resolvedTheme === 'dark' ? 'dark' : 'light',
     });
   }, [resolvedTheme]);
 

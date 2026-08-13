@@ -76,6 +76,9 @@ function mapPoste(posteRaw: string): { poste: string; departement: string; authR
   if (/co-propri[eé]taire|directrice g[eé]n[eé]ral/i.test(p)) {
     return { poste, departement: 'Direction', authRole: 'manager' };
   }
+  if (/commercial|charg[eé] de client/i.test(p)) {
+    return { poste, departement: 'Commercial', authRole: 'commercial' };
+  }
   if (/accueil/i.test(p)) {
     return { poste, departement: 'Accueil', authRole: 'accueil' };
   }
@@ -123,7 +126,7 @@ export const ANS_EMPLOYEES_EXCEL_RAW = [
     birth: 37375,
     address: 'Sabotsy Namehana',
     hire: 46148,
-    poste: "Chargé d'accueil",
+    poste: 'Commercial',
     tel: '038 89 758 17',
   },
   {

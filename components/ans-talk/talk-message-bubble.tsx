@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import {
   Pin, Reply, Trash2, Edit2, CheckCheck, Download, ListTodo,
 } from 'lucide-react';
@@ -26,7 +27,7 @@ type Props = {
   commandeId?: string | null;
 };
 
-export function TalkMessageBubble({
+export const TalkMessageBubble = memo(function TalkMessageBubble({
   message: msg,
   sessionUserId,
   canModerate,
@@ -143,4 +144,4 @@ export function TalkMessageBubble({
       </div>
     </div>
   );
-}
+});

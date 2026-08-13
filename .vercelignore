@@ -44,3 +44,9 @@ npx
 /auth
 /auth-wal
 /auth-shm
+
+data/talk-files/
+tmp-pricing-dump.json
+*.xlsx
+!data/ANS_ORION_FUSION_METIER_POS_STOCK_PRIX_COMPLET.xlsx
+

@@ -83,3 +83,12 @@ provision-exit.txt
 
 .vercel
 .env*
+
+.vercel
+.env*
+
+.env.ans-orion-crm.neon
+.env.vercel.postgres.local
+.env.vercel.parity.secrets
+.env.verify.prod
+

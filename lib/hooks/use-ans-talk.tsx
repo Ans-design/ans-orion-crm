@@ -27,7 +27,7 @@ export type AnsTalkState = {
   sendMessage: (body: string, opts?: { replyToId?: string; attachmentIds?: string[] }) => Promise<boolean>;
   uploadFiles: (files: File[], onProgress?: (pct: number) => void) => Promise<string[]>;
   createPrivateChat: (targetUserId: string) => Promise<string | null>;
-  loadMessages: (convId: string, search?: string) => Promise<void>;
+  loadMessages: (convId: string, search?: string, opts?: { silent?: boolean }) => Promise<void>;
   loadOlderMessages: () => Promise<void>;
   hasOlderMessages: boolean;
   createGroupChat: (name: string, memberIds: string[]) => Promise<string | null>;
@@ -35,6 +35,29 @@ export type AnsTalkState = {
   /** Bulle ouverte ou panel actif → polling complet ; sinon badge non lus seulement. */
   setPollingActive: (active: boolean) => void;
 };
+
+function talkMessagesFingerprint(list: TalkMessage[]): string {
+  return list
+    .map((m) =>
+      [
+        m.id,
+        m.editedAt ?? '',
+        m.pinned ? '1' : '0',
+        m.body,
+        m.ackedBy.length,
+        JSON.stringify(m.reactions),
+        m.attachments.map((a) => a.id).join(','),
+      ].join(':'),
+    )
+    .join('|');
+}
+
+function mergeTalkMessages(server: TalkMessage[], prev: TalkMessage[]): TalkMessage[] {
+  const pending = prev.filter((m) => m.id.startsWith('pending-'));
+  if (!pending.length) return server;
+  const bodies = new Set(server.filter((m) => m.isMine).map((m) => m.body));
+  return [...server, ...pending.filter((p) => !bodies.has(p.body))];
+}
 
 const AnsTalkContext = createContext<AnsTalkState | null>(null);
 
@@ -97,6 +120,11 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
     setErrorDisplay(null);
   }, [publishUnreadTotal]);
   const messagesAbortRef = useRef<AbortController | null>(null);
+  const convFpRef = useRef<string>('');
+  const messagesFpRef = useRef<string>('');
+  const messagesCacheRef = useRef<Map<string, { messages: TalkMessage[]; attachments: TalkMessage['attachments'] }>>(
+    new Map(),
+  );
   const activeConvRef = useRef<string | null>(null);
   const reloadInFlightRef = useRef(false);
   const editingPausedRef = useRef(false);
@@ -153,7 +181,13 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
       activateDemoMode();
       return;
     }
-    setConversations(list);
+    const fp = list
+      .map((c) => `${c.id}:${c.updatedAt}:${c.unreadCount}:${c.lastMessage?.id ?? ''}`)
+      .join('|');
+    if (fp !== convFpRef.current) {
+      convFpRef.current = fp;
+      setConversations(list);
+    }
     setError(null);
     setErrorDisplay(null);
   }, [activateDemoMode]);
@@ -178,25 +212,49 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
     }
   }, []);
 
-  const loadMessages = useCallback(async (convId: string, search?: string) => {
+  const applyMessages = useCallback((convId: string, list: TalkMessage[], attachmentsIn: TalkMessage['attachments']) => {
+    if (activeConvRef.current !== convId) {
+      messagesCacheRef.current.set(convId, { messages: list, attachments: attachmentsIn });
+      return;
+    }
+    setMessages((prev) => {
+      const merged = mergeTalkMessages(list, prev);
+      const nextFp = talkMessagesFingerprint(merged);
+      if (nextFp === messagesFpRef.current) return prev;
+      messagesFpRef.current = nextFp;
+      messagesCacheRef.current.set(convId, { messages: merged, attachments: attachmentsIn });
+      return merged;
+    });
+    setAttachments((prev) => {
+      const prevIds = prev.map((a) => a.id).join(',');
+      const nextIds = attachmentsIn.map((a) => a.id).join(',');
+      return prevIds === nextIds ? prev : attachmentsIn;
+    });
+    setHasOlderMessages(list.length >= 100);
+  }, []);
+
+  const loadMessages = useCallback(async (convId: string, search?: string, opts?: { silent?: boolean }) => {
+    const silent = Boolean(opts?.silent);
+
     if (demoModeRef.current) {
-      setMessagesLoading(true);
       const msgs = getDemoMessages(convId);
       const filtered = search
         ? msgs.filter((m) => m.body.toLowerCase().includes(search.toLowerCase()))
         : msgs;
-      setMessages(filtered);
-      setAttachments(filtered.flatMap((m) => m.attachments));
+      applyMessages(convId, filtered, filtered.flatMap((m) => m.attachments));
       setMessagesLoading(false);
       setError(null);
       setErrorDisplay(null);
       return;
     }
 
-    messagesAbortRef.current?.abort();
-    const ac = new AbortController();
-    messagesAbortRef.current = ac;
-    setMessagesLoading(true);
+    if (!silent) {
+      messagesAbortRef.current?.abort();
+      const ac = new AbortController();
+      messagesAbortRef.current = ac;
+      setMessagesLoading(true);
+    }
+    const ac = silent ? null : messagesAbortRef.current;
     const qs = new URLSearchParams();
     if (search) qs.set('search', search);
     const qsStr = qs.toString() ? `?${qs.toString()}` : '';
@@ -204,10 +262,10 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
       const r = await fetch(`/api/messaging/conversations/${convId}/messages${qsStr}`, {
         credentials: 'include',
         cache: 'no-store',
-        signal: ac.signal,
+        signal: ac?.signal,
       });
       if (!r.ok) {
-        if (ac.signal.aborted) return;
+        if (ac?.signal.aborted) return;
         let msg = 'Impossible de charger les messages';
         try {
           const d = await r.json();
@@ -215,40 +273,42 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
           else if (d?.error === 'NOT_FOUND') msg = 'Conversation introuvable';
           else if (typeof d?.error === 'string') msg = d.error;
         } catch { /* ignore */ }
-        setError(msg);
-        setErrorDisplay(sanitizeTalkError(msg));
+        if (!silent) {
+          setError(msg);
+          setErrorDisplay(sanitizeTalkError(msg));
+        }
         if (r.status === 403 || r.status === 404) {
           setActiveConvId(null);
           setMessages([]);
           setAttachments([]);
+          messagesFpRef.current = '';
           await loadConversations();
         }
         return;
       }
       const d = await r.json();
-      if (ac.signal.aborted || activeConvRef.current !== convId) return;
-      const list = d.messages ?? [];
-      setMessages(list);
-      setAttachments(d.attachments ?? []);
-      setHasOlderMessages(list.length >= 100);
+      if (ac?.signal.aborted || activeConvRef.current !== convId) return;
+      applyMessages(convId, d.messages ?? [], d.attachments ?? []);
       setError(null);
     } catch (e) {
-      if (!ac.signal.aborted) {
+      if (!ac?.signal.aborted) {
         const msg = e instanceof Error ? e.message : 'Erreur réseau';
-        if (canUseTalkDemoFallback()) {
+        if (!silent && canUseTalkDemoFallback()) {
           activateDemoMode();
-          await loadMessages(convId, search);
+          await loadMessages(convId, search, opts);
           return;
         }
-        setError(msg);
-        setErrorDisplay(sanitizeTalkError(msg));
+        if (!silent) {
+          setError(msg);
+          setErrorDisplay(sanitizeTalkError(msg));
+        }
       }
     } finally {
-      if (!ac.signal.aborted && activeConvRef.current === convId) {
+      if (!silent && !ac?.signal.aborted && activeConvRef.current === convId) {
         setMessagesLoading(false);
       }
     }
-  }, [loadConversations, activateDemoMode]);
+  }, [loadConversations, activateDemoMode, applyMessages]);
 
   const reload = useCallback(async (): Promise<boolean> => {
     if (demoModeRef.current) {
@@ -265,7 +325,7 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
     try {
       await loadConversations();
       const unreadOk = await loadUnread();
-      if (activeConvRef.current) await loadMessages(activeConvRef.current);
+      if (activeConvRef.current) await loadMessages(activeConvRef.current, undefined, { silent: true });
       return unreadOk;
     } catch {
       return false;
@@ -284,17 +344,32 @@ function useAnsTalkInternal(variant: AnsTalkVariant): AnsTalkState {
     boot.finally(() => setLoading(false));
   }, [variant, loadConversations, loadUnread, loadUsers]);
 
+  const loadMessagesRef = useRef(loadMessages);
+  loadMessagesRef.current = loadMessages;
+
   useEffect(() => {
     if (!activeConvId) {
       setMessages([]);
       setAttachments([]);
+      messagesFpRef.current = '';
       setMessagesLoading(false);
+      return;
+    }
+    const cached = messagesCacheRef.current.get(activeConvId);
+    if (cached) {
+      messagesFpRef.current = talkMessagesFingerprint(cached.messages);
+      setMessages(cached.messages);
+      setAttachments(cached.attachments);
+      setMessagesLoading(false);
+      void loadMessagesRef.current(activeConvId, undefined, { silent: true });
       return;
     }
     setMessages([]);
     setAttachments([]);
-    loadMessages(activeConvId);
-  }, [activeConvId, loadMessages]);
+    messagesFpRef.current = '';
+    setMessagesLoading(true);
+    void loadMessagesRef.current(activeConvId);
+  }, [activeConvId]);
 
   const pollTick = useCallback(async (): Promise<boolean> => {
     if (sessionExpiredRef.current) return true;

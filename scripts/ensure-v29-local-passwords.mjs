@@ -29,6 +29,15 @@ const MATRICULES = [
   'CAISSE01',
   'FIN01',
   'LEC01',
+  'GRA02',
+  'FAC02',
+  'QUAL01',
+  'GRA03',
+  'COM02',
+  'FAC03',
+  'FAC04',
+  'ACC02',
+  'CM02',
 ];
 
 /** Alias obsolètes → matricule canonique. */

@@ -223,7 +223,7 @@ export function OrionSidebar({ role, compact, variant = 'desktop', onNavigate }:
             <span className="text-detail font-bold text-[var(--text-secondary)] tracking-wider uppercase truncate">
               {profile.label}
             </span>
-            <span className="text-detail text-[var(--text-muted)] font-mono bg-[var(--orion-surface-soft)] px-1.5 py-0.5 rounded-[6px] border border-[var(--border-subtle)] shrink-0">
+            <span className="orion-sb-env-badge shrink-0">
               ANS DESIGN
             </span>
           </div>

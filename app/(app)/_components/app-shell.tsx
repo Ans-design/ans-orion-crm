@@ -26,7 +26,7 @@ import { ModuleDateFilterBar } from '@/components/layout/module-date-filter-bar'
 import { resolveRoleProfile } from '@/lib/modules';
 import { ThemePrefsLoader } from '@/components/theme-prefs-loader';
 import { OrionFieldTabNav } from '@/components/ui/orion-field-tab-nav';
-import { persistLocalTheme } from '@/lib/settings-defaults';
+import { applyThemeNow } from '@/lib/settings-defaults';
 import { resolveNotificationHref } from '@/lib/notifications/resolve-href';
 import { fetchWithTimeout } from '@/lib/fetch-with-timeout';
 import { unwrapApiData } from '@/lib/api-client';
@@ -393,7 +393,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   onClick={() => {
                     const next = theme === 'dark' ? 'light' : 'dark';
                     setTheme(next);
-                    persistLocalTheme(next);
+                    applyThemeNow(next);
                   }}
                   className="orion-header-icon-btn"
                   aria-label="Basculer le thème"

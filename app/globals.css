@@ -49,6 +49,7 @@
 @import '../styles/orion-perf-runtime.css';
 /* Recherche + selects filtres unifiés (après couches projet) */
 @import '../styles/orion-search-filter.css';
+@import '../styles/orion-command-palette.css';
 /* Mode sombre : supprimer filets/contours blancs (après toutes les couches) */
 @import '../styles/dark-mode-no-white-borders.css';
 /* Couche finale clair+sombre : zéro cadre carte / table (sauf contrôles) */

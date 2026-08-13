@@ -2,6 +2,8 @@ https://ans-orion-crm.vercel.app
 https://ans-orion-crm-ans-design.vercel.app
 https://github.com/Ans-design/ans-orion-crm
 
-Login démo Vercel (seed build) :
-admin@ansdesign.mg / orion-vercel-demo-admin-12chars
-demo@ansdesign.mg / orion-vercel-demo-user-12chars
+Tous les comptes employï¿½s v29 sont seedï¿½s en ligne (email ou matricule).
+
+Comptes gï¿½nï¿½riques :
+admin@ansdesign.mg / Demo2026!
+demo@ansdesign.mg / Demo2026!

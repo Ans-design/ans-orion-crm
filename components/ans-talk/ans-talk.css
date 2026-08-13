@@ -53,7 +53,7 @@
   padding: 0;
   margin: 0;
   color: var(--talk-ink);
-  background: var(--talk-page);
+  background: #ffffff;
   overflow: hidden;
   max-height: 100%;
 }
@@ -112,7 +112,7 @@ body:has(.ans-talk-page--flush) .orion-viewport.orion-shell-pad {
   min-height: 0;
   width: 100%;
   overflow: hidden;
-  background: var(--talk-page);
+  background: #ffffff;
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -126,7 +126,7 @@ body:has(.ans-talk-page--flush) .orion-viewport.orion-shell-pad {
   height: 100%;
   max-height: 100%;
   position: relative;
-  background: var(--talk-page);
+  background: #ffffff;
   overflow: hidden;
 }
 
@@ -1455,9 +1455,14 @@ html.dark .talk-kind-chip--team,
   min-height: 0;
   overflow: auto;
   padding: 24px clamp(18px, 3.5vw, 56px) 36px;
-  scroll-behavior: smooth;
+  /* auto : smooth + polling provoquait un clignotement de toute la zone */
+  scroll-behavior: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--talk-line-strong) transparent;
+}
+
+.talk-msg-group {
+  contain: layout paint;
 }
 
 .talk-msg-fade {
@@ -2918,12 +2923,14 @@ html.dark .ans-talk-shell,
 .dark .ans-talk-page,
 .dark .ans-talk-shell {
   color: var(--talk-ink);
-  background: var(--talk-page);
+  background: #ffffff;
 }
 
 html.dark .talk-workspace,
-.dark .talk-workspace {
-  background: var(--talk-page);
+.dark .talk-workspace,
+html.dark .talk-workspace--with-context,
+.dark .talk-workspace--with-context {
+  background: #ffffff;
 }
 
 html.dark .talk-chat-zone,

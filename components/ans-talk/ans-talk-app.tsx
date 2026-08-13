@@ -295,18 +295,21 @@ export function AnsTalkApp({ initialConvId, compact }: Props) {
 
 
 
+  const prevMsgLenRef = useRef(0);
+  const prevConvForScrollRef = useRef<string | null>(null);
+
   useEffect(() => {
-
     const el = scrollRef.current;
-
     if (!el) return;
-
-    if (el.scrollHeight - el.scrollTop - el.clientHeight < 120) {
-
-      endRef.current?.scrollIntoView({ behavior: 'smooth' });
-
+    const convChanged = prevConvForScrollRef.current !== activeConvId;
+    const grew = messages.length > prevMsgLenRef.current;
+    prevConvForScrollRef.current = activeConvId;
+    prevMsgLenRef.current = messages.length;
+    if (!convChanged && !grew) return;
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 160;
+    if (convChanged || nearBottom) {
+      endRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
     }
-
   }, [messages.length, activeConvId]);
 
 

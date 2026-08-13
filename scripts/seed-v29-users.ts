@@ -22,10 +22,18 @@ export async function seedV29Users(prisma: PrismaClient) {
         password: hashed,
       },
     });
-    await prisma.employee.updateMany({
-      where: { matricule: acc.matricule },
-      data: { userId: user.id, email: acc.email.toLowerCase() },
-    });
+    // userId unique : détacher tous les liens, puis rattacher la fiche matricule
+    await prisma.$executeRawUnsafe(
+      `UPDATE "Employee" SET "userId" = NULL WHERE "userId" = ?`,
+      user.id,
+    );
+    const emp = await prisma.employee.findUnique({ where: { matricule: acc.matricule } });
+    if (emp) {
+      await prisma.employee.update({
+        where: { id: emp.id },
+        data: { userId: user.id, email: acc.email.toLowerCase() },
+      });
+    }
     created += 1;
   }
   console.log(`${created} utilisateurs v29 HTML upsertés (matricules + emails)`);
