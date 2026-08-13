@@ -225,7 +225,6 @@ export const ROLE_PROFILES: Record<string, RoleProfile> = {
       { type: 'link', moduleId: 'livraisons' },
       { type: 'link', moduleId: 'commandes' },
       { type: 'link', moduleId: 'clients' },
-      { type: 'link', moduleId: 'paiements' },
       { type: 'link', moduleId: 'equipe_taches' },
       { type: 'link', moduleId: 'rh_absences' },
       { type: 'divider' },

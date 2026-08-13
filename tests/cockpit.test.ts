@@ -21,6 +21,8 @@ describe('Cockpit architecture', () => {
     expect(getHomeRouteForDashboard('commercial')).toBe('/workspace/commercial');
     expect(getHomeRouteForDashboard('caisse')).toBe('/workspace/finance');
     expect(getHomeRouteForRole('caisse')).toBe('/workspace/finance');
+    expect(getHomeRouteForDashboard('finance')).toBe('/workspace/finance');
+    expect(getHomeRouteForRole('finance')).toBe('/workspace/finance');
   });
 
   it('registers finance workspace module', () => {

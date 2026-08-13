@@ -23,10 +23,10 @@ export async function seedV29Users(prisma: PrismaClient) {
       },
     });
     // userId unique : détacher tous les liens, puis rattacher la fiche matricule
-    await prisma.$executeRawUnsafe(
-      `UPDATE "Employee" SET "userId" = NULL WHERE "userId" = ?`,
-      user.id,
-    );
+    await prisma.employee.updateMany({
+      where: { userId: user.id },
+      data: { userId: null },
+    });
     const emp = await prisma.employee.findUnique({ where: { matricule: acc.matricule } });
     if (emp) {
       await prisma.employee.update({
